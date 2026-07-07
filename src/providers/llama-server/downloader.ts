@@ -3,7 +3,7 @@ import { createWriteStream } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { extract } from 'tar';
 import { join, dirname, basename } from 'node:path';
-import { mkdirSync, renameSync, existsSync, unlinkSync } from 'node:fs';
+import { mkdirSync, renameSync, existsSync, unlinkSync, rmSync } from 'node:fs';
 import { logger } from '../../utils/logger.js';
 
 export interface DownloadOptions {
@@ -97,7 +97,7 @@ export async function downloadAndExtract(
     logger.info(`Installed: ${finalPath}`);
     return finalPath;
   } finally {
-    // 清理临时文件
-    if (existsSync(tarPath)) unlinkSync(tarPath);
+    // 清理临时目录
+    if (existsSync(tempDir)) rmSync(tempDir, { recursive: true, force: true });
   }
 }

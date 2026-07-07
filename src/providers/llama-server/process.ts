@@ -14,6 +14,7 @@ import { existsSync } from 'node:fs';
 import { homedir, platform } from 'node:os';
 import { join } from 'node:path';
 import { logger } from '../../utils/logger.js';
+import { ensureLlamaServer } from './resolver.js';
 
 const SERVER_STARTUP_TIMEOUT = 60000;
 
@@ -56,7 +57,7 @@ export class LlamaServerProcess {
 
   async start(): Promise<void> {
     const { name, modelPath, mmprojPath, port, gpuLayers, threads, existingPid } = this.config;
-    const bin = resolveLlamaServerPath();
+    const bin = await ensureLlamaServer();
     this.attachedPid = existingPid ?? null;
 
     const args = [

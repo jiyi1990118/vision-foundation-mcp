@@ -1,0 +1,10 @@
+{
+  "name": "poster",
+  "description": "Analyze poster design and content",
+  "version": "1.0.0",
+  "inputs": { "required": ["image"], "optional": [] },
+  "outputs": ["theme", "elements"],
+  "supportedProviders": ["smolvlm", "gguf-smolvlm"],
+  "defaultTimeout": 30000,
+  "defaultRetry": { "max": 1, "strategy": "reprompt" }
+}

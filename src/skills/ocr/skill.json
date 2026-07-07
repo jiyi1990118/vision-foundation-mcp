@@ -1,0 +1,13 @@
+{
+  "name": "ocr",
+  "description": "Extract text content from an image",
+  "version": "1.0.0",
+  "inputs": {
+    "required": ["image"],
+    "optional": ["focus"]
+  },
+  "outputs": ["texts"],
+  "supportedProviders": ["smolvlm"],
+  "defaultTimeout": 30000,
+  "defaultRetry": { "max": 2, "strategy": "reprompt" }
+}

@@ -1,0 +1,12 @@
+allowBuilds:
+  esbuild: true
+  node-llama-cpp: true
+  onnxruntime-node: true
+  protobufjs: true
+  sharp: true
+onlyBuiltDependencies:
+  - esbuild
+  - node-llama-cpp
+  - onnxruntime-node
+  - protobufjs
+  - sharp

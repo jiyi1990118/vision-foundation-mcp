@@ -1,0 +1,10 @@
+node_modules/
+dist/
+*.js
+*.js.map
+*.d.ts
+!*.config.js
+.DS_Store
+*.log
+.env
+~/.vision-mcp/

@@ -1,0 +1,10 @@
+{
+  "name": "layout",
+  "description": "Analyze visual layout structure of an image",
+  "version": "1.0.0",
+  "inputs": { "required": ["image"], "optional": [] },
+  "outputs": ["layout"],
+  "supportedProviders": ["smolvlm", "gguf-smolvlm"],
+  "defaultTimeout": 30000,
+  "defaultRetry": { "max": 1, "strategy": "reprompt" }
+}

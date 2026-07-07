@@ -1,0 +1,1 @@
+Is this image safe for general viewing? Does it contain any violence, nudity, illegal content, or harmful material? Reply with "Safe" if the image is appropriate, or "Unsafe" followed by a brief reason if not.

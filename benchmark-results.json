@@ -1,0 +1,83 @@
+[
+  {
+    "provider": "gguf",
+    "image": "tests/fixtures/gguf-test.png",
+    "skill": "classify",
+    "run": 0,
+    "text": "Document.",
+    "durationMs": 278,
+    "loadedMs": 1082
+  },
+  {
+    "provider": "gguf",
+    "image": "tests/fixtures/gguf-test.png",
+    "skill": "describe",
+    "run": 0,
+    "text": "In this image, we can see a red color object and a blue color object.",
+    "durationMs": 165,
+    "loadedMs": 1082
+  },
+  {
+    "provider": "gguf",
+    "image": "tests/fixtures/gguf-test.png",
+    "skill": "ocr",
+    "run": 0,
+    "text": "Test.",
+    "durationMs": 46,
+    "loadedMs": 1082
+  },
+  {
+    "provider": "smolvlm2",
+    "image": "tests/fixtures/gguf-test.png",
+    "skill": "classify",
+    "run": 0,
+    "text": "dashboard.",
+    "durationMs": 224,
+    "loadedMs": 1039
+  },
+  {
+    "provider": "smolvlm2",
+    "image": "tests/fixtures/gguf-test.png",
+    "skill": "describe",
+    "run": 0,
+    "text": "In this image, there is a red square and a blue circle placed on a blue background. The red square is on the left side of the image, while the blue circle is on the right side. The red square is larger than the blue circle.",
+    "durationMs": 374,
+    "loadedMs": 1039
+  },
+  {
+    "provider": "smolvlm2",
+    "image": "tests/fixtures/gguf-test.png",
+    "skill": "ocr",
+    "run": 0,
+    "text": "The image contains the word \"TEST\" in black font.",
+    "durationMs": 114,
+    "loadedMs": 1039
+  },
+  {
+    "provider": "minicpm",
+    "image": "tests/fixtures/gguf-test.png",
+    "skill": "classify",
+    "run": 0,
+    "text": "poster",
+    "durationMs": 2295,
+    "loadedMs": 6571
+  },
+  {
+    "provider": "minicpm",
+    "image": "tests/fixtures/gguf-test.png",
+    "skill": "describe",
+    "run": 0,
+    "text": "In this image, we can see a red square and a blue circle. We can also see some text.",
+    "durationMs": 1426,
+    "loadedMs": 6571
+  },
+  {
+    "provider": "minicpm",
+    "image": "tests/fixtures/gguf-test.png",
+    "skill": "ocr",
+    "run": 0,
+    "text": "The text in the image is \"TEST\".",
+    "durationMs": 716,
+    "loadedMs": 6571
+  }
+]

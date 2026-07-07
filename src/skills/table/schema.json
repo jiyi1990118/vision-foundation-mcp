@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["description"],
+  "properties": {
+    "description": { "type": "string" },
+    "rowCount": { "type": "integer" },
+    "columnCount": { "type": "integer" }
+  }
+}

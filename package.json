@@ -1,0 +1,56 @@
+{
+  "name": "vision-foundation-mcp",
+  "version": "0.2.0",
+  "description": "Vision understanding MCP service powered by local SmolVLM / SmolVLM2 / MiniCPM-V via llama.cpp",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "vision-foundation-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc && for d in src/skills/*/; do cp -r $d dist/skills/$(basename $d); done",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "setup:llama": "tsx scripts/setup-llama.ts",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --fileParallelism=false tests/runtime-detector.test.ts tests/m4-e2e.test.ts tests/gguf-provider.test.ts tests/mcp-integration.test.ts",
+    "test:unit": "vitest run --fileParallelism=false tests/provider-router.test.ts tests/planner-active-provider.test.ts tests/model-manager.test.ts tests/minicpm-provider.test.ts tests/smolvlm2-provider.test.ts tests/provider-capabilities.test.ts tests/vision-analyze-routing.test.ts tests/vision-error-classification.test.ts tests/config.test.ts tests/options-propagation.test.ts tests/runtime-detector.test.ts tests/classify-skill.test.ts tests/compose-result-heuristic.test.ts tests/llama-server-resolver.test.ts tests/llama-server-process-registry.test.ts tests/llama-server-stop.test.ts",
+    "test:slow": "vitest run --fileParallelism=false tests/m1-skeleton.test.ts tests/m1.5-real-inference.test.ts tests/m2-core-engine.test.ts tests/minicpm-inference.test.ts tests/smolvlm2-inference.test.ts",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "mcp",
+    "vision",
+    "smolvlm",
+    "image-analysis",
+    "local-ai"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@huggingface/transformers": "^4.2.0",
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "node-llama-cpp": "^3.19.0",
+    "onnxruntime-node": "^1.22.0",
+    "sharp": "^0.34.2",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.21",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "eslint": "^9.27.0",
+    "prettier": "^3.5.3",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  }
+}

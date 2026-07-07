@@ -1,0 +1,10 @@
+{
+  "name": "document",
+  "description": "Analyze document type and structure from an image",
+  "version": "1.0.0",
+  "inputs": { "required": ["image"], "optional": [] },
+  "outputs": ["type", "fields"],
+  "supportedProviders": ["smolvlm", "gguf-smolvlm"],
+  "defaultTimeout": 30000,
+  "defaultRetry": { "max": 1, "strategy": "reprompt" }
+}

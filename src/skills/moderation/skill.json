@@ -1,0 +1,10 @@
+{
+  "name": "moderation",
+  "description": "Check image content safety",
+  "version": "1.0.0",
+  "inputs": { "required": ["image"], "optional": [] },
+  "outputs": ["safe", "flags"],
+  "supportedProviders": ["smolvlm", "gguf-smolvlm"],
+  "defaultTimeout": 10000,
+  "defaultRetry": { "max": 0, "strategy": "none" }
+}

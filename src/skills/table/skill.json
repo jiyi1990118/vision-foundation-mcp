@@ -1,0 +1,10 @@
+{
+  "name": "table",
+  "description": "Extract and reconstruct table structure from an image",
+  "version": "1.0.0",
+  "inputs": { "required": ["image"], "optional": [] },
+  "outputs": ["rows", "columns", "headers"],
+  "supportedProviders": ["smolvlm", "gguf-smolvlm"],
+  "defaultTimeout": 30000,
+  "defaultRetry": { "max": 1, "strategy": "reprompt" }
+}

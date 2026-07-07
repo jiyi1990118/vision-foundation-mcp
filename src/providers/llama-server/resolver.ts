@@ -40,8 +40,10 @@ function getDownloadDestination(): string {
     const testFile = join(packageBinDir, '.write-test');
     writeFileSync(testFile, '');
     unlinkSync(testFile);
+    logger.info(`Using project bin directory: ${packageBinDir}`);
     return packageBinDir;
   } catch {
+    logger.info(`Project bin directory is not writable, falling back to user directory: ${userBinDir}`);
     mkdirSync(userBinDir, { recursive: true });
     return userBinDir;
   }
@@ -50,10 +52,29 @@ function getDownloadDestination(): string {
 async function getLatestReleaseTag(): Promise<string> {
   const response = await fetch('https://api.github.com/repos/ggml-org/llama.cpp/releases/latest');
   if (!response.ok) {
-    throw new Error(`Failed to fetch latest release: ${response.status}`);
+    if (response.status === 429) {
+      const resetTime = response.headers.get('X-RateLimit-Reset');
+      const resetDate = resetTime ? new Date(Number(resetTime) * 1000).toLocaleString() : 'unknown';
+      throw new Error(
+        `GitHub API rate limit exceeded (60 requests/hour for unauthenticated requests). ` +
+        `Rate limit resets at: ${resetDate}. ` +
+        `You can set LLAMA_SERVER_PATH to use an existing llama-server binary.`
+      );
+    }
+    throw new Error(`Failed to fetch latest release: ${response.status} ${response.statusText}`);
   }
   const data = await response.json() as { tag_name: string };
-  return data.tag_name;
+  const tag = data.tag_name;
+  
+  // Validate tag format: non-empty, reasonable length, alphanumeric + dash/dot/underscore
+  if (!tag || tag.length === 0 || tag.length > 50) {
+    throw new Error(`Invalid tag format: "${tag}" (empty or too long)`);
+  }
+  if (!/^[a-zA-Z0-9._-]+$/.test(tag)) {
+    throw new Error(`Invalid tag format: "${tag}" (contains invalid characters)`);
+  }
+  
+  return tag;
 }
 
 function buildDownloadUrls(tag: string, platformFilename: string): string[] {

@@ -356,6 +356,8 @@ interface CategorySignal {
 
 const SUMMARY_CATEGORY_SIGNALS: CategorySignal[] = [
   // More specific visual artifacts first.
+  { category: 'screenshot', keywords: /\b(code|programming|terminal|console|editor|IDE|command line|bash|python|javascript|typescript|coding|laptop|computer|monitors? displaying|screen showing|working on)\b/i },
+  { category: 'diagram', keywords: /\b(flowchart|architecture|workflow|diagram|boxes?|arrows?|connections?|nodes?|schema|process flow|system design|blueprint)\b/i },
   { category: 'dashboard', keywords: /\b(dashboard|kpi|metric|scorecard|gauge)\b|\b(multiple|several) panels?\b/i },
   { category: 'chart', keywords: /\b(bar chart|line chart|pie|graph|axis|data point|trend|sales|quarter|revenue)\b/i },
   { category: 'ui', keywords: /\b(button|menu|sidebar|toolbar|toggle|checkbox|dialog|window|app|interface|panel|settings|form|input)\b/i },

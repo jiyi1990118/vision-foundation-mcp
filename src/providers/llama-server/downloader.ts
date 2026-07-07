@@ -1,0 +1,103 @@
+// src/providers/llama-server/downloader.ts
+import { createWriteStream } from 'node:fs';
+import { pipeline } from 'node:stream/promises';
+import { extract } from 'tar';
+import { join, dirname, basename } from 'node:path';
+import { mkdirSync, renameSync, existsSync, unlinkSync } from 'node:fs';
+import { logger } from '../../utils/logger.js';
+
+export interface DownloadOptions {
+  url: string;
+  destPath: string;
+  timeout?: number;
+  onProgress?: (percent: number) => void;
+}
+
+export async function downloadFile(options: DownloadOptions): Promise<void> {
+  const { url, destPath, timeout = 60000 } = options;
+  
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+  
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    
+    if (!response.ok || !response.body) {
+      throw new Error(`Download failed: ${response.status} ${response.statusText}`);
+    }
+    
+    await pipeline(response.body, createWriteStream(destPath));
+    logger.info(`Downloaded: ${destPath}`);
+  } catch (error) {
+    if ((error as Error).name === 'AbortError') {
+      throw new Error(`Download timeout after ${timeout}ms`);
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+export function buildMirrorUrl(githubUrl: string, mirrorBase?: string): string {
+  if (!mirrorBase) return githubUrl;
+  return `${mirrorBase}/${githubUrl}`;
+}
+
+export async function downloadWithRetry(
+  urls: string[],
+  destPath: string,
+  timeout: number = 60000
+): Promise<void> {
+  let lastError: Error | undefined;
+  
+  for (const url of urls) {
+    try {
+      logger.info(`Trying: ${url} (${timeout}ms timeout)`);
+      await downloadFile({ url, destPath, timeout });
+      return;
+    } catch (error) {
+      lastError = error as Error;
+      logger.warn(`Download failed from ${url}: ${lastError.message}`);
+    }
+  }
+  
+  throw new Error(`Failed to download from all sources. Last error: ${lastError?.message}`);
+}
+
+export async function downloadAndExtract(
+  urls: string[],
+  destDir: string,
+  binaryName: string,
+  timeout: number = 60000
+): Promise<string> {
+  const tempDir = join(destDir, '.downloading');
+  mkdirSync(tempDir, { recursive: true });
+  
+  const tarPath = join(tempDir, 'download.tar.gz');
+  
+  try {
+    // 下载
+    await downloadWithRetry(urls, tarPath, timeout);
+    
+    // 解压
+    logger.info('Extracting archive...');
+    await extract({ file: tarPath, cwd: tempDir });
+    
+    // 查找二进制文件
+    const extractedBinary = join(tempDir, 'bin', binaryName);
+    if (!existsSync(extractedBinary)) {
+      throw new Error(`Binary ${binaryName} not found in extracted archive`);
+    }
+    
+    // 移动到目标目录
+    mkdirSync(destDir, { recursive: true });
+    const finalPath = join(destDir, binaryName);
+    renameSync(extractedBinary, finalPath);
+    
+    logger.info(`Installed: ${finalPath}`);
+    return finalPath;
+  } finally {
+    // 清理临时文件
+    if (existsSync(tarPath)) unlinkSync(tarPath);
+  }
+}

@@ -14,12 +14,13 @@
 
 ## 安装
 
-### 1. 安装 llama.cpp
+### 1. llama.cpp（自动安装）
+
+llama-server 会在首次运行时自动下载安装。
+
+如需手动安装：
 
 ```bash
-# 推荐：显式 setup 检测/提示安装
-pnpm setup:llama
-
 # macOS (Homebrew)
 brew install llama.cpp
 
@@ -27,16 +28,14 @@ brew install llama.cpp
 git clone https://github.com/ggml-org/llama.cpp
 cd llama.cpp && cmake -B build && cmake --build build --config Release
 # 将 build/bin/llama-server 加入 PATH 或设置 LLAMA_SERVER_PATH
+
+# 或使用项目提供的检测工具
+pnpm setup:llama
 ```
 
-`pnpm setup:llama` 不会在 MCP 运行时静默安装可执行文件。它会：
-
-- 检测 `LLAMA_SERVER_PATH`
-- 检测 `~/.vision-mcp/bin/llama-server(.exe)`
-- 检测 Homebrew / system / PATH 里的 `llama-server`
-- 找不到时打印对应平台的安装说明
-
-高级用法：可以设置 `LLAMA_SERVER_DOWNLOAD_URL`，显式下载可信的 `llama-server` 二进制到 `~/.vision-mcp/bin/`。
+**环境变量：**
+- `LLAMA_SERVER_PATH` — 指定已安装的 llama-server 路径（跳过自动下载）
+- `LLAMA_DOWNLOAD_MIRROR` — 指定镜像站（如 `https://ghproxy.com`，用于加速 GitHub 下载）
 
 ### 2. 下载模型
 

@@ -3,7 +3,7 @@
 ## Commands
 
 - Install with `pnpm install`; this repo uses pnpm 11 build approvals in `pnpm-workspace.yaml` for native deps (`sharp`, `onnxruntime-node`, `node-llama-cpp`, `esbuild`, `protobufjs`).
-- Use `pnpm setup:llama` to detect/prepare llama.cpp explicitly. It checks `LLAMA_SERVER_PATH`, `~/.vision-mcp/bin/llama-server(.exe)`, system/Homebrew paths, and PATH. It does not silently install during MCP runtime; with `LLAMA_SERVER_DOWNLOAD_URL` it can download a trusted binary into `~/.vision-mcp/bin`.
+- Use `pnpm setup:llama` to detect/prepare llama.cpp explicitly. It checks `LLAMA_SERVER_PATH`, `~/.vision-mcp/bin/llama-server(.exe)`, system/Homebrew paths, and PATH. Runtime auto-installs llama-server from GitHub releases on first use if not found; supports mirror fallback via `LLAMA_DOWNLOAD_MIRROR`.
 - Build with `pnpm build`. Do not replace it with bare `tsc`: the script also copies `src/skills/*/{skill.json,prompt.md,schema.json}` into `dist/skills/`, which runtime loading requires.
 - Use `pnpm typecheck` for TypeScript verification.
 - Use `pnpm test` for the default stable suite. It runs Vitest with `--fileParallelism=false` to avoid `llama-server` port conflicts.
@@ -16,7 +16,14 @@
 
 - Default runtime is `VISION_PROVIDER=smolvlm2`, selected in `src/index.ts` — SmolVLM2-500M-Video-Instruct (better description quality). `VISION_PROVIDER=gguf` selects the SmolVLM-500M-Instruct fast candidate; `VISION_PROVIDER=onnx` selects the legacy Transformers.js provider.
 - GGUF-backed providers discover existing `llama-server` processes by matching the model path in `ps -axo pid=,command=` and extracting `--port`; if a matching healthy process exists, `LlamaServerProcess` reuses it. If none exists, providers allocate a random free high port at runtime. No port registry is written to disk.
-- GGUF runtime requires `llama-server` from llama.cpp. Resolver order: `LLAMA_SERVER_PATH`, `~/.vision-mcp/bin/llama-server(.exe)`, `/opt/homebrew/bin/llama-server`, `/usr/local/bin/llama-server`, `/usr/bin/llama-server`, then PATH (`llama-server` / `llama-server.exe`).
+- **Runtime依赖**：GGUF-backed providers需要`llama-server`（来自llama.cpp）
+- **自动安装**：首次运行时自动从GitHub releases下载，支持镜像站降级（`LLAMA_DOWNLOAD_MIRROR`）
+- **路径优先级**：
+  1. `LLAMA_SERVER_PATH`环境变量
+  2. 项目内`<package-root>/bin/llama-server`
+  3. 用户目录`~/.vision-mcp/bin/llama-server(.exe)`
+  4. 系统路径（`/opt/homebrew/bin`、`/usr/local/bin`、`/usr/bin`）
+  5. PATH查找`llama-server`或`llama-server.exe`
 - GGUF model files are expected under `~/.vision-mcp/models/ggml-org/SmolVLM-500M-Instruct-GGUF/` with both `SmolVLM-500M-Instruct-Q8_0.gguf` and `mmproj-SmolVLM-500M-Instruct-Q8_0.gguf` present.
 - SmolVLM2 fast candidate files are expected under `~/.vision-mcp/models/ggml-org/SmolVLM2-500M-Video-Instruct-GGUF/` with `SmolVLM2-500M-Video-Instruct-Q4_K_M.gguf` and `mmproj-SmolVLM2-500M-Video-Instruct-Q8_0.gguf` present. `ensureSmolVLM2Model()` can download them when `VISION_PROVIDER=smolvlm2` is used.
 - The ONNX provider downloads/cache models under `~/.vision-mcp/models` and uses `HF_ENDPOINT` if set; README defaults to `https://hf-mirror.com`.

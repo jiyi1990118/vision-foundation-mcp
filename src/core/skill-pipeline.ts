@@ -370,10 +370,16 @@ const CATEGORY_EXCLUSION_RULES: Record<string, string[]> = {
   'photo': ['screenshot', 'ui'],
   // If model says "illustration", summary signals for technical diagrams should override
   'illustration': ['diagram', 'screenshot'],
+  // If model says "screenshot", summary signals for artwork should override (Phase 4)
+  // This handles AI-generated/drawn images that contain technical content
+  'screenshot': ['illustration'],
 };
 
 const SUMMARY_CATEGORY_SIGNALS: CategorySignal[] = [
-  // More specific visual artifacts first.
+  // CRITICAL: Check artistic medium FIRST (media-first principle)
+  // illustration / artwork - AI-generated, drawn, painted, rendered
+  { category: 'illustration', keywords: /\b(sword|dragon|knight|warrior|magic|glowing|render|painted|drawn|artwork|anime|manga|fantasy|spell|rune|creature|monster|AI-generated|generated|character|cartoon|stylized|animated|illustrated|artistic|sketch|vector|cel|digital)\b/i },
+  // Then check for specific technical visual artifacts
   { category: 'screenshot', keywords: /\b(code|programming|terminal|console|editor|IDE|command line|bash|python|javascript|typescript|coding|laptop|computer|monitors? displaying|screen showing|working on)\b/i },
   { category: 'diagram', keywords: /\b(flowchart|architecture|workflow|diagram|boxes?|arrows?|connections?|nodes?|schema|process flow|system design|blueprint)\b/i },
   { category: 'dashboard', keywords: /\b(dashboard|kpi|metric|scorecard|gauge)\b|\b(multiple|several) panels?\b/i },
@@ -381,8 +387,6 @@ const SUMMARY_CATEGORY_SIGNALS: CategorySignal[] = [
   { category: 'ui', keywords: /\b(button|menu|sidebar|toolbar|toggle|checkbox|dialog|window|app|interface|panel|settings|form|input)\b/i },
   // genuine document
   { category: 'document', keywords: /\b(invoice|receipt|letter|contract|form|page of text|paragraph|printed|scanned|signature|stamp)\b/i },
-  // illustration / artwork
-  { category: 'illustration', keywords: /\b(sword|dragon|knight|warrior|magic|glowing|render|painted|drawn|artwork|anime|manga|fantasy|spell|rune|creature|monster)\b/i },
   // photo of people / real-world scene
   { category: 'photo', keywords: /\b(girl|boy|man|woman|person|people|standing|sitting|walking|room|kitchen|outdoor|indoor|selfie|portrait|chair|table|couple|family|child)\b/i },
 ];
@@ -390,6 +394,25 @@ const SUMMARY_CATEGORY_SIGNALS: CategorySignal[] = [
 function inferCategoryFromSummary(summary: string): CategoryInference | null {
   const lower = summary.toLowerCase();
   
+  // Phase 6: Check secondary artwork signals FIRST (before primary signals)
+  // This acts as a pre-filter to detect artistic rendering based on color/atmosphere combinations
+  const colorWords = /\b(hues?|vibrant|saturated|intense|dramatic|glowing|vivid|atmospheric|cinematic)\b/gi;
+  const characterWords = /\b(person|character|figure|boy|girl|man|woman)\b/gi;
+  
+  const colorMatches = lower.match(colorWords);
+  const characterMatches = lower.match(characterWords);
+  
+  if (colorMatches && characterMatches && colorMatches.length >= 1 && characterMatches.length >= 1) {
+    // Secondary signal detected: color descriptions + character = likely artwork
+    const matchCount = colorMatches.length + characterMatches.length;
+    const baseConfidence = 0.5;
+    const matchBonus = Math.min(matchCount * 0.03, 0.15); // Lower bonus than primary signals
+    const confidence = Math.min(baseConfidence + matchBonus, 0.65); // Cap at 0.65 for secondary signals
+    
+    return { category: 'illustration', matchCount, priorityIndex: 0, confidence };
+  }
+  
+  // Check primary signals from SUMMARY_CATEGORY_SIGNALS
   for (let i = 0; i < SUMMARY_CATEGORY_SIGNALS.length; i++) {
     const { category, keywords } = SUMMARY_CATEGORY_SIGNALS[i]!;
     
@@ -408,6 +431,7 @@ function inferCategoryFromSummary(summary: string): CategoryInference | null {
       return { category, matchCount, priorityIndex: i, confidence };
     }
   }
+  
   return null;
 }
 

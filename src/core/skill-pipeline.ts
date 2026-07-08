@@ -354,6 +354,24 @@ interface CategorySignal {
   keywords: RegExp;
 }
 
+interface CategoryInference {
+  category: string;
+  matchCount: number;
+  priorityIndex: number;
+  confidence: number;
+}
+
+// Category exclusion rules: if modelCategory is X and summaryCategory is Y, prefer summaryCategory
+// This handles cases where the model's classification conflicts with strong summary signals
+const CATEGORY_EXCLUSION_RULES: Record<string, string[]> = {
+  // If model says "document", summary signals for these categories should override
+  'document': ['screenshot', 'diagram', 'ui', 'photo', 'illustration'],
+  // If model says "photo", summary signals for these more specific categories should override
+  'photo': ['screenshot', 'ui'],
+  // If model says "illustration", summary signals for technical diagrams should override
+  'illustration': ['diagram', 'screenshot'],
+};
+
 const SUMMARY_CATEGORY_SIGNALS: CategorySignal[] = [
   // More specific visual artifacts first.
   { category: 'screenshot', keywords: /\b(code|programming|terminal|console|editor|IDE|command line|bash|python|javascript|typescript|coding|laptop|computer|monitors? displaying|screen showing|working on)\b/i },
@@ -369,10 +387,26 @@ const SUMMARY_CATEGORY_SIGNALS: CategorySignal[] = [
   { category: 'photo', keywords: /\b(girl|boy|man|woman|person|people|standing|sitting|walking|room|kitchen|outdoor|indoor|selfie|portrait|chair|table|couple|family|child)\b/i },
 ];
 
-function inferCategoryFromSummary(summary: string): string | null {
+function inferCategoryFromSummary(summary: string): CategoryInference | null {
   const lower = summary.toLowerCase();
-  for (const { category, keywords } of SUMMARY_CATEGORY_SIGNALS) {
-    if (keywords.test(lower)) return category;
+  
+  for (let i = 0; i < SUMMARY_CATEGORY_SIGNALS.length; i++) {
+    const { category, keywords } = SUMMARY_CATEGORY_SIGNALS[i]!;
+    
+    // Count how many keywords match
+    const matches = lower.match(keywords);
+    if (matches) {
+      const matchCount = matches.length;
+      
+      // Calculate dynamic confidence
+      // Base: 0.5, Match bonus: +0.05 per match (max +0.2), Priority bonus: high priority gets more
+      const baseConfidence = 0.5;
+      const matchBonus = Math.min(matchCount * 0.05, 0.2);
+      const priorityBonus = (SUMMARY_CATEGORY_SIGNALS.length - i) * 0.02;
+      const confidence = Math.min(baseConfidence + matchBonus + priorityBonus, 0.75);
+      
+      return { category, matchCount, priorityIndex: i, confidence };
+    }
   }
   return null;
 }
@@ -463,31 +497,34 @@ export function composeResult(
     summary = String(data.description ?? data.summary ?? '');
   }
 
-  // Post-classify heuristic: SmolVLM-500M has a strong bias toward "document"
-  // for any image with content. When the classifier says "document" but the
-  // summary describes a non-text scene, correct the category from the summary
-  // content and lower the confidence to flag it as inferred, not model-decided.
-  if (category === 'document') {
-    if (summary.length > 0) {
-      const corrected = inferCategoryFromSummary(summary);
-      if (corrected && corrected !== 'document') {
-        logger.info('Post-classify heuristic corrected category', {
-          from: 'document', to: corrected, summaryPreview: summary.slice(0, 80),
-        });
-        category = corrected;
-        confidence = Math.min(confidence, 0.6);
-      } else if (corrected === 'document') {
-        // Summary genuinely describes a text document — keep, but flag low conf
-        // only if confidence was the default 0.7 (model bias indicator).
-        if (confidence >= 0.7) confidence = 0.65;
-      } else {
-        // No signal from summary — model likely defaulted; lower confidence.
-        if (confidence >= 0.7) confidence = 0.5;
-      }
+  // Post-classify heuristic: Apply category exclusion rules
+  // When the classifier's category conflicts with strong summary signals,
+  // correct the category using the exclusion rules and dynamic confidence.
+  const exclusionList = CATEGORY_EXCLUSION_RULES[category];
+  if (exclusionList && summary.length > 0) {
+    const inference = inferCategoryFromSummary(summary);
+    if (inference && exclusionList.includes(inference.category)) {
+      logger.info('Post-classify heuristic corrected category', {
+        from: category,
+        to: inference.category,
+        matchCount: inference.matchCount,
+        priorityIndex: inference.priorityIndex,
+        dynamicConfidence: inference.confidence,
+        summaryPreview: summary.slice(0, 80),
+        exclusionRule: `${category} -> [${exclusionList.join(', ')}]`,
+      });
+      category = inference.category;
+      confidence = inference.confidence; // Use dynamic confidence
+    } else if (inference?.category === category) {
+      // Summary confirms the model's category — keep, but flag if confidence was default
+      if (confidence >= 0.7) confidence = 0.65;
     } else {
-      // No summary content — model likely defaulted to document; lower confidence.
+      // No strong signal from summary — model may have defaulted; lower confidence
       if (confidence >= 0.7) confidence = 0.5;
     }
+  } else if (category === 'document' && summary.length === 0) {
+    // Special case: no summary content for "document" — likely model default
+    if (confidence >= 0.7) confidence = 0.5;
   }
 
   // Build result map (only successful results)

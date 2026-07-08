@@ -37,6 +37,23 @@
 - `SkillPipeline` currently contains parsing, repair, minimal required-field validation, retry prompt enhancement, and result composition; there is no separate ResponseValidator module yet.
 - Logs must stay off stdout for MCP stdio. Use the existing logger; it writes to stderr.
 
+
+## Recent Optimizations
+
+### Image Classification (Phase 1-6)
+
+Phase 1-6优化实现了"媒介优先"分类逻辑，确保AI生成/绘制图片正确分类为illustration。
+
+详细文档: [Docs/classification-optimization.md](Docs/classification-optimization.md)
+
+**关键改进**:
+- 媒介优先原则（Prompt层引导）
+- Screenshot反向exclusion rule（规则层修正）
+- 次级artwork信号检测（逻辑层补充）
+
+**测试结果**: anime编程场景 screenshot(0.7) → illustration(0.65) ✅
+
+
 ## Testing Gotchas
 
 - GGUF tests start local `llama-server` instances on persisted provider ports; kill stale servers with `pkill -f "llama-server"` if tests fail with bind/port errors.

@@ -32,6 +32,7 @@ Vision Foundation MCP 解决的问题：
 | 视觉能力与数据获取耦合 | 只做视觉分析，不碰数据获取 |
 | 本地模型接入碎片化 | 统一 Provider + Runtime 抽象 |
 | 小模型输出不稳定 | Prompt Registry + Schema Registry + 三层质量保障 |
+| 密集中文 UI / 需求截图难以准确理解 | 专用 OCR Provider + OCR-driven UI Composer + 目标区域提取 |
 | 模型选择靠人工 | Execution Planner 自动决策 |
 | 策略硬编码 | Policy Engine 配置化驱动 |
 | 能力扩展需改引擎 | Skill 插件化，新增能力不动引擎 |
@@ -52,6 +53,7 @@ Vision Foundation MCP 解决的问题：
 - **单一职责**：只做图片 → 结构化信息，不做数据获取
 - **可插拔**：Skill / Provider / Runtime 三层皆可扩展
 - **配置驱动**：策略、模型选择走配置，不改代码
+- **OCR 增强**：可启用 `ppu-paddle-ocr` 作为 OCR-only Provider，用于密集中文 UI 截图、红框/标注区域提取
 - **AI 友好**：文档与上下文为 AI 协同开发而设计
 
 ---
@@ -136,7 +138,16 @@ SmolVLM2-500M-Video-Instruct 是**默认本地执行引擎**，不是万能模�
 - Q8_0 量化，精度与体积平衡
 - 小模型，输出不稳定 → 需 Prompt Registry + Schema Validator 兜底
 
-**它不负责**：复杂推理、高精度 OCR、细粒度表格还原等 → 留给 `quality=high` 模式接入的 MiniCPM-V 2.6。
+**它不负责**：复杂推理、高精度 OCR、细粒度表格还原等 → 高质量视觉理解交给 `quality=high` 模式接入的 MiniCPM-V；密集 OCR 和红框内表格还原优先交给可选 `ppu-paddle-ocr` + deterministic composer。
+
+### 5.1 v0.2 OCR-driven key-content extraction
+
+v0.2 新增了针对中文后台/需求截图的确定性增强路径：
+
+- `VISION_OCR_PROVIDER=ppu-paddle-ocr` 注册专用 OCR-only Provider。
+- OCR-only 请求路由到 `ppu-paddle-ocr`；`classify + ocr + summary` 混合请求仍由 VLM 负责视觉理解，并通过 per-skill override 让 OCR 由专用 Provider 执行。
+- 当 `options.target` 或 intent 命中红框/标注/关键区域语义时，系统检测红色虚线/实线框，结合全图 OCR 与局部裁剪 OCR 构造 `result.targetExtraction`。
+- 对红框内金额表格执行表头单位合并、行列重建和货币符号归一化，避免相邻框外文本泄漏。
 
 > 关键认知：**决定项目成败的不是某个模型，而是 Planner、Policy、Prompt Compiler、Skill Engine 这套工程体系。** 模型可替换，体系是根基。
 
@@ -203,7 +214,8 @@ Skill、Provider、Runtime 都是插件。新增能力 = 新增插件，不动�
 ## 9. 未来愿景（Future Vision）
 
 ```
-V1  SmolVLM2 本地视觉理解（本项目当前目标，已完成 M5 多模型扩展）
+V1  SmolVLM2 本地视觉理解（已完成 M5 多模型扩展）
+V1.1 OCR-driven key-content extraction（已完成 v0.2，支持红框/目标区域结构化提取）
 V2  接入 MiniCPM-V 2.6 高质量模式（已完成），支持 video 视频理解
 V3  Video 视频理解
 V4  Multi-Agent 多模型协作（复杂任务拆分给不同模型）

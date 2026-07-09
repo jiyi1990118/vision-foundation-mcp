@@ -50,6 +50,8 @@ core/execution-planner      决策逻辑
 core/policy-engine          策略匹配
 core/response-validator     校验/修复逻辑
 core/result-composer        组合逻辑
+core/annotation-detector    红框/标注检测
+core/key-content-extractor  目标区域 OCR / 表格重建 / 金额归一化
 core/request-normalizer     归一化逻辑
 utils/*                     工具函数
 ```
@@ -171,6 +173,8 @@ Provider.infer()       → Mock 返回预设 JSON
 Runtime.infer()        → Mock 返回预设输出
 ModelManager.ensure()  → Mock 返回假路径
 CacheManager.get()     → Mock 命中/未命中
+PpuPaddleOcrProvider   → Mock PaddleOcrService，避免下载 native 模型
+KeyContent OCR enhance → Fake OCR Provider 返回局部 OCR boxes
 ```
 
 ### 4.2 什么不该 Mock
@@ -293,6 +297,16 @@ describe("PolicyEngine", () => {
 - [ ] 并行 Skill 同时执行
 - [ ] 条件不满足 → 跳过
 - [ ] 单 Skill 失败不阻断其他
+- [ ] mixed OCR 分析 → summary 等待 ocr + classify
+- [ ] OCR-only + ppu-paddle-ocr → 路由到专用 OCR Provider
+- [ ] mixed classify+ocr+summary → VLM 主 Provider + OCR Provider override
+
+### OCR / Target Extraction
+- [ ] `options.target` auto → 自动补充 OCR 并可触发 targetExtraction
+- [ ] 显式 `skills=[classify]` + target → 不自动补充 OCR，不运行假提取
+- [ ] 红框检测 → 识别实线/虚线红框，过滤红色噪声
+- [ ] key-content extraction → 排除邻近框外文本，重建红框内表格
+- [ ] PaddleOCR provider → 支持嵌套 lines、矩形/多边形 box、并发 load 串行化
 
 ### CacheManager
 - [ ] 相同 key → 命中

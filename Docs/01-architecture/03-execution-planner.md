@@ -32,8 +32,17 @@ interface PlannerInput {
   options: {
     quality?: "fast" | "high";
     provider?: string;        // 用户强制指定
+    cache?: boolean;
+    maxTokens?: number;
+    target?: {
+      color?: string;
+      position?: string;
+      description?: string;
+    };
   };
-  resources: MachineResources; // CPU/内存/GPU/可用Runtime
+  resources: MachineResources; // CPU/总内存/可用内存/GPU/可用Runtime
+  activeProvider?: string;     // Router 实际选中的 Provider
+  activeRuntime?: string;      // Router 实际选中的 Runtime
 }
 ```
 
@@ -80,6 +89,8 @@ Planner 综合以下 **5 个维度** 做决策：
 - 可选：轻量意图分类器（本地小模型，非 SmolVLM）
 
 **优先级**：用户显式指定 `requestedSkills` 时，跳过意图推断。
+
+**目标区域补充规则**：当未显式指定 `requestedSkills`，且 `options.target` 或 intent 包含红框/标注/关键内容语义时，Planner 会在推断结果中自动补充 `ocr`，用于后续 annotation detection 和 key-content extraction。若用户显式指定了 `requestedSkills`，显式配置保持权威，不自动增补。
 
 ### 3.2 图片元信息分析（Metadata Analysis）
 
@@ -186,6 +197,15 @@ classify（先判断类型）
 summary（最后综合）
 ```
 
+当前混合 OCR 分析的实际依赖是：
+
+```
+ocr      ┐
+classify ├──► summary
+```
+
+这样 `summary` 可以拿到 OCR 上下文，同时不会早于分类结果执行。
+
 ### 5.4 自动分析模式（Auto Analyze）
 当 intent 为空或为 "auto" 时，Planner 先跑 `classify`，再按类型决定后续 Skill：
 ```
@@ -208,8 +228,11 @@ Planner 的 Provider 选择是「建议」，可被 Policy Engine 覆盖：
   quality=fast 或 未指定 → smolvlm2（默认本地优先）
   quality=high 且 大模型可用 → minicpm
   资源不足 → 路由器筛选掉不可行的 provider
+  skills=[ocr] 且 ppu-paddle-ocr 已注册 → ppu-paddle-ocr
 
 特殊规则：
+  mixed classify+ocr+summary → VLM 作为主 Provider，ocr skill 可通过 Provider override 交给 ppu-paddle-ocr
+  用户显式 options.provider 不可用 → 返回错误，不静默 fallback
   skill=moderation → 固定本地 provider（不外发隐私数据）
   image.width>8000 → 需大模型（小模型处理不了）
 ```
@@ -291,9 +314,14 @@ intentMappings:
 |----------|------|
 | 意图「提取文字」 | skills 含 ocr |
 | 意图为空 | 进入 auto 模式，含 classify |
+| `options.target` + auto | 自动补充 ocr |
+| 显式 `requestedSkills=[classify]` + target | 不自动补充 ocr |
 | 图片 width>3000 | preprocess 含 resize |
 | quality=high + 大模型可用 | provider=minicpm |
 | quality=high + 大模型不可用 | 回退 smolvlm2 |
+| skills=[ocr] + ppu-paddle-ocr 已注册 | provider=ppu-paddle-ocr |
+| mixed OCR 分析 | summary 依赖 ocr + classify |
+| 显式 provider 不可行 | 抛出 provider 不可用错误 |
 | 内存不足 | 路由器筛掉大模型，用 smolvlm2 |
 | skill=moderation | 固定本地 provider（不外发） |
 | 用户指定 requestedSkills | 跳过意图推断 |

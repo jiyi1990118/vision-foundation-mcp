@@ -17,7 +17,9 @@ M4  生产就绪（Cache + Lifecycle + 模型管理完善）
     ↓
 M5  多模型扩展（MiniCPM-V / Qwen2.5-VL）
     ↓
-M6  正式发布（v1.0）
+M6  发布准备（npm / GitHub）
+    ↓
+M7  OCR-driven 结构化理解（v0.2）
 ```
 
 ---
@@ -146,9 +148,10 @@ quality=fast 或 资源不足 → 路由器筛选掉大模型 → 回退 GGUF/Sm
 ### 实际 provider 列表
 | Provider | 模型 | 角色 | 启用方式 |
 |----------|------|------|----------|
-| `gguf` | SmolVLM-500M-Instruct-Q8_0 | 默认 | 默认 |
-| `smolvlm2` | SmolVLM2-500M-Video-Instruct-Q8_0 | 快速候选 | `VISION_PROVIDER=smolvlm2` |
+| `smolvlm2` | SmolVLM2-500M-Video-Instruct-Q4_K_M | 默认/快速候选 | 默认或 `VISION_PROVIDER=smolvlm2` |
+| `gguf` | SmolVLM-500M-Instruct-Q8_0 | fast legacy candidate | `VISION_PROVIDER=gguf` |
 | `minicpm` | MiniCPM-V-2_6-Q4_K_M | 高质量 | `VISION_HIGH_QUALITY=1` + `quality=high` |
+| `ppu-paddle-ocr` | PaddleOCR native model | OCR-only | `VISION_OCR_PROVIDER=ppu-paddle-ocr` |
 | `onnx` | SmolVLM Transformers.js | 遗留 | `VISION_PROVIDER=onnx` |
 
 ### 依赖
@@ -156,18 +159,19 @@ quality=fast 或 资源不足 → 路由器筛选掉大模型 → 回退 GGUF/Sm
 
 ---
 
-## M6 - 正式发布（v1.0）
+## M6 - 发布准备（npm / GitHub）✅ 已完成基础发布准备
 
-**目标**：开源发布。
+**目标**：完成开源发布准备。
 
 ### 交付内容
-- [x] 完整文档（Docs/ 全部就绪；M5 实现状态已回填）
-- [x] 使用示例（`examples/`：basic-analysis, high-quality, ocr-only, classify-only）
-- [x] README + 安装指南 + 配置指南（3 个 provider 模型下载、架构图、性能表）
+- [x] 完整文档（Docs/ 已同步 M5 + v0.2 OCR/key-content 实现状态）
+- [x] 使用示例（`examples/`：basic-analysis, high-quality, ocr-only, classify-only, ocr-provider）
+- [x] README + README.zh-CN + 安装指南 + 配置指南
 - [x] CI/CD（`.github/workflows/ci.yml`：lint + typecheck + build + `pnpm test:unit`）
 - [ ] 性能基准报告（脚本已就绪：`scripts/benchmark.ts`；待 MiniCPM-V 模型下载完成后跑全量对比）
 - [x] License（MIT）
-- [ ] 发布到 npm（`package.json` 已配置 `files` / `engines` / `publishConfig`；待正式发布）
+- [x] GitHub push（`main` 已推送到 `git@github.com:jiyi1990118/vision-foundation-mcp.git`）
+- [ ] 发布到 npm（`package.json` 已配置 `files` / `engines` / `publishConfig`；当前等待 `npm login`）
 
 ### 验收标准
 ```
@@ -176,6 +180,43 @@ quality=fast 或 资源不足 → 路由器筛选掉大模型 → 回退 GGUF/Sm
 
 ### 依赖
 - M5 完成
+
+---
+
+## M7 - OCR-driven 结构化理解（v0.2）✅ 已完成
+
+**目标**：提升中文后台/需求截图、红框标注、密集表格的结构化理解可靠性。
+
+### 交付内容
+- [x] `ppu-paddle-ocr` OCR-only Provider（`src/providers/ppu-paddle-ocr/provider.ts`）
+- [x] ProviderRouter OCR-only exact skill fit + mixed OCR Provider override
+- [x] `options.target` 输入契约，用于红框/指定区域提取
+- [x] 红色标注检测（实线/虚线红框、噪声过滤、框内文本收集）
+- [x] Key-content extractor（目标区域解析、局部裁剪 OCR、表格重建、单位合并、金额符号归一化）
+- [x] OCR-driven UI composer（`ocrText`、`result.ui`、`result.layout`、分类修正）
+- [x] 测试覆盖：annotation detector、key-content extractor、ppu-paddle-ocr provider、routing、planner、composer
+
+### 验收标准
+```
+给定带红色虚线框的中文后台截图：
+  → OCR 识别全图文本
+  → 检测红框坐标
+  → 提取红框内表格列名和每行金额
+  → 不泄漏邻近框外表头
+  → structuredContent.result.targetExtraction.table 可直接被 LLM 消费
+```
+
+### 实测样例
+TAPD/POS 后台截图红框区域输出：
+
+| 默认基础价-半份（元） | 默认附加价-半份（元） |
+|---|---|
+| 0.00 ¥ | 0.00 ¥ |
+| 0.00 ¥ | 0.00 ¥ |
+| 0.00 ¥ | 0.00 ¥ |
+| 0.00 ¥ | 0.00 ¥ |
+| 0.00 ¥ | 0.00 ¥ |
+| 0.00 ¥ | 0.00 ¥ |
 
 ---
 
@@ -188,7 +229,8 @@ quality=fast 或 资源不足 → 路由器筛选掉大模型 → 回退 GGUF/Sm
 | M3 | Skill Engine（质量保障部分）、API 契约 |
 | M4 | 模型管理、Provider/Runtime、编码规范、测试指南 |
 | M5 | Provider/Runtime（扩展部分） |
-| M6 | 全部文档 |
+| M6 | README、API 契约、测试指南、发布配置 |
+| M7 | OCR Provider、Request Lifecycle、Skill Engine、Provider/Runtime、key-content specs/plans |
 
 ---
 
@@ -196,6 +238,7 @@ quality=fast 或 资源不足 → 路由器筛选掉大模型 → 回退 GGUF/Sm
 
 ```
 v1.x  更多 Skill（icon识别、wireframe、design-system）
+v1.x  OCR/key-content 泛化更多标注颜色和复杂表格
 v2.0  Video 视频理解
 v3.0  Multi-Agent 多模型协作（复杂任务拆分给不同模型）
 v4.0  插件市场（第三方 Skill/Provider 分发）

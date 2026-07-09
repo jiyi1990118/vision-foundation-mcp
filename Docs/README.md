@@ -5,8 +5,8 @@
 
 > ⚠️ **实现状态说明**：本目录为早期设计文档，部分内容（如 `smolvlm`/`qwen2.5-vl` provider 名、ONNX 优先、`ports.json`）已过时。
 > 当前实现的权威文档是 **[`/AGENTS.md`](../AGENTS.md)** 和 **[`/README.md`](../README.md)**。
-> 实际 provider 列表：`smolvlm2`（默认）/ `gguf` / `minicpm` / `onnx`（遗留），均基于 llama.cpp。
-> M5 多模型扩展已完成，详见 [`05-roadmap/01-roadmap.md`](./05-roadmap/01-roadmap.md)。
+> 实际 provider 列表：`smolvlm2`（默认）/ `gguf` / `minicpm` / `onnx`（遗留）/ `ppu-paddle-ocr`（可选 OCR-only）。GGUF-backed provider 基于 llama.cpp，`ppu-paddle-ocr` 基于 native OCR。
+> M5 多模型扩展和 v0.2 OCR-driven key-content extraction 已完成，详见 [`05-roadmap/01-roadmap.md`](./05-roadmap/01-roadmap.md)。
 
 ---
 
@@ -95,6 +95,13 @@ Docs/
 |------|------|
 | [01-roadmap.md](./05-roadmap/01-roadmap.md) | M1-M6 里程碑、交付内容、验收标准 |
 
+### superpowers（实施计划与规格）
+| 文档 | 内容 |
+|------|------|
+| [specs/2026-07-09-key-content-extraction-design.md](./superpowers/specs/2026-07-09-key-content-extraction-design.md) | 红框/目标区域关键内容提取设计 |
+| [plans/2026-07-08-ppu-paddle-ocr-integration.md](./superpowers/plans/2026-07-08-ppu-paddle-ocr-integration.md) | `ppu-paddle-ocr` 专用 OCR Provider 集成计划 |
+| [plans/2026-07-09-key-content-extraction.md](./superpowers/plans/2026-07-09-key-content-extraction.md) | OCR-driven key-content extraction 实施计划 |
+
 ---
 
 ## 核心架构速览
@@ -109,10 +116,12 @@ Docs/
   L1  Request       ─── 归一化 + 元数据
   L2  Decision      ─── Planner（建议）+ Policy（强制）
   L3  Skill         ─── Pipeline + Prompt/Schema Registry + Validator + Composer
-  L4  Provider      ─── 模型抽象（smolvlm2 / gguf / minicpm）
-  L5  Runtime       ─── 引擎抽象（llama-cpp / onnx）
+  L4  Provider      ─── 模型/能力抽象（smolvlm2 / gguf / minicpm / ppu-paddle-ocr）
+  L5  Runtime       ─── 引擎抽象（llama-cpp / onnx / native-ocr）
   L6  Infrastructure─── 模型管理 + 生命周期 + 缓存
 ```
+
+当前 `vision.analyze` 结果还会在 OCR 成功且请求涉及目标区域/红框时执行 annotation detection 和 key-content extraction，将红框中的文本、表格结构和 `targetExtraction` 写入 `structuredContent.result`。
 
 **三轴扩展**：Skill（能力）/ Provider（模型）/ Runtime（引擎）皆可插件化，新增不改核心引擎。
 

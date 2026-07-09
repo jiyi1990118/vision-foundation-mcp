@@ -65,6 +65,15 @@
         "maxTokens": {
           "type": "number",
           "default": 1024
+        },
+        "target": {
+          "type": "object",
+          "description": "Optional target-region hint for annotated screenshots.",
+          "properties": {
+            "color": { "type": "string", "description": "e.g. red / 红色" },
+            "position": { "type": "string", "description": "e.g. right / left / top / bottom / 右侧" },
+            "description": { "type": "string", "description": "Natural language description of the target region." }
+          }
         }
       }
     }
@@ -107,6 +116,23 @@
   "options": { "cache": false }
 }
 ```
+
+**提取红框/目标区域内容**：
+```json
+{
+  "image": "/path/to/admin-ui.png",
+  "intent": "提取红色虚线框中的内容",
+  "options": {
+    "target": {
+      "color": "red",
+      "position": "right",
+      "description": "红色虚线框中的表格内容"
+    }
+  }
+}
+```
+
+说明：`options.target` 会在未显式指定 `skills` 时自动补充 `ocr`。若用户显式传入 `skills`，显式 skills 仍保持权威，不会被自动增补。
 
 ### 2.3 输入格式支持
 
@@ -161,13 +187,42 @@
 | `skills` | string[] | 是 | 执行的 Skill 列表 |
 | `result` | object | 是 | 各 Skill 的结构化结果 |
 | `result.<skill>` | object | 否 | 单个 Skill 的输出（按其 schema） |
+| `result.ui` | object | 否 | OCR-driven UI 结构化摘要，包含导航、动作、字段、表头和值等 |
+| `result.layout` | object | 否 | 基于 OCR 坐标的布局结构，如左侧菜单、主内容表头、底部操作 |
+| `result.annotations` | object | 否 | 检测到的视觉标注，如红色虚线/实线框 |
+| `result.targetExtraction` | object | 否 | 目标区域/红框关键内容提取结果，包含 `matchedRegion`、`textLines`、`table`、`warnings` |
+| `ocrText` | string | 否 | 顶层完整 OCR 文本，方便 LLM 直接消费 |
 | `metadata` | object | 是 | 元信息 |
 | `metadata.provider` | string | 是 | 使用的 Provider |
 | `metadata.runtime` | string | 是 | 使用的 Runtime |
 | `metadata.duration` | number | 是 | 总耗时(ms) |
 | `metadata.cached` | boolean | 是 | 是否命中缓存 |
 
-### 3.3 部分成功响应
+### 3.3 目标区域提取示例
+
+```json
+{
+  "result": {
+    "targetExtraction": {
+      "matchedRegion": {
+        "type": "redBox",
+        "box": "1450,500,1918,1090",
+        "confidence": 0.75
+      },
+      "table": {
+        "columns": ["默认基础价-半份（元）", "默认附加价-半份（元）"],
+        "rows": [
+          ["0.00 ¥", "0.00 ¥"],
+          ["0.00 ¥", "0.00 ¥"]
+        ]
+      },
+      "warnings": ["局部 OCR 将金额符号候选“夫”按金额上下文归一化为“¥”"]
+    }
+  }
+}
+```
+
+### 3.4 部分成功响应
 某些 Skill 失败时，仍返回成功的部分：
 ```json
 {

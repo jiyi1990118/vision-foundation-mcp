@@ -211,6 +211,27 @@ Step 3: ui 无条件 → 执行
 Step 4: summary 依赖所有完成 → 执行
 ```
 
+混合 OCR 截图分析示例：
+
+```
+Plan: [classify, ocr, summary]
+
+Step 1: classify 与 ocr 并行启动
+        - classify 使用当前 VLM Provider
+        - ocr 若有专用 Provider override，则使用 ppu-paddle-ocr
+Step 2: summary 等待 classify + ocr 全部完成
+Step 3: summary prompt 注入裁剪后的 OCR context（避免小上下文模型溢出）
+Step 4: Composer 合并 classify / ocr / summary，并生成 ocrText、ui、layout
+```
+
+目标区域/红框提取不是独立 Skill，而是 OCR 成功后的后处理增强：
+
+```
+result.ocr → annotation-detector → key-content-extractor → result.targetExtraction
+```
+
+该路径只在请求包含 `options.target` 或 intent 明确要求红框/标注/关键区域内容时运行。
+
 ---
 
 ## 6. 三层质量保障
@@ -309,6 +330,16 @@ finalResult
 **冲突处理**：
 - 多 Skill 的 `category` 不一致 → 取 confidence 最高者
 - 部分 Skill 失败 → 成功的照样返回，失败的标记 `error`
+
+当前 Composer 还包含 OCR-driven deterministic enrichment：
+
+- 从 OCR texts 生成顶层 `ocrText`。
+- 对中文后台/UI 截图生成 `result.ui` 和 `result.layout`。
+- 使用 OCR UI 信号修正弱分类结果，如 `document` → `ui`。
+- 接收 `annotations` 与 `keyContentExtraction`，输出 `result.annotations` 和 `result.targetExtraction`。
+- 对红框内价格表执行表头单位合并和金额符号归一化。
+
+对于密集中文后台截图，Composer 优先使用 OCR 结构化证据生成确定性摘要，避免小 VLM 仅回显 OCR 片段或遗漏字段。
 
 ---
 

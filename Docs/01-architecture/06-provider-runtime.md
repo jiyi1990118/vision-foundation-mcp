@@ -14,11 +14,12 @@
 │ gguf          │     │ gguf          │
 │ smolvlm2      │     │ onnx          │
 │ minicpm       │     │ mlx (规划中)  │
-│ onnx (遗留)   │     └───────────────┘
+│ onnx (遗留)   │     │ native-ocr    │
+│ ppu-paddle-ocr│     └───────────────┘
 └───────────────┘
 ```
 
-> **实现状态**：M5 之后，`gguf` runtime（基于 llama.cpp 的 `llama-server` 子进程）是默认且主要的推理引擎。所有三个生产 provider（`gguf` / `smolvlm2` / `minicpm`）都委托给共享的 `LlamaServerProcess`（见 `src/providers/llama-server/process.ts`）。`onnx` runtime 仅作为遗留 Transformers.js 路径保留，不再推荐。`mlx` runtime 仍在规划中。
+> **实现状态**：M5 之后，`gguf` runtime（基于 llama.cpp 的 `llama-server` 子进程）是默认且主要的推理引擎。所有三个 GGUF-backed provider（`gguf` / `smolvlm2` / `minicpm`）都委托给共享的 `LlamaServerProcess`（见 `src/providers/llama-server/process.ts`）。`onnx` runtime 仅作为遗留 Transformers.js 路径保留，不再推荐。v0.2 新增 `ppu-paddle-ocr` OCR-only provider，runtime 标记为 `native-ocr`，用于密集 OCR 和目标区域文本提取。`mlx` runtime 仍在规划中。
 
 **问题**：如果 Provider 直接调 ONNX，会发生：
 - 想换 MLX 跑 SmolVLM → 改 Provider 代码
@@ -100,6 +101,9 @@ providers/smolvlm2/
 ├── provider.ts         SmolVLM2Provider — 快速候选，委托给 LlamaServerProcess
 providers/minicpm/
 ├── provider.ts         MiniCPMProvider — 高质量 provider，委托给 LlamaServerProcess
+providers/ppu-paddle-ocr/
+├── provider.ts         PpuPaddleOcrProvider — OCR-only provider，基于 ppu-paddle-ocr
+├── types.ts            PaddleOCR 输出归一化类型
 providers/llama-server/
 ├── process.ts          LlamaServerProcess — 共享的 llama-server 子进程管理
 ├── process-registry.ts 进程发现、端口分配、ps 解析
@@ -196,6 +200,7 @@ interface RuntimeAdapter {
 | Runtime | 平台 | GPU | 适用 | 状态 |
 |---------|------|-----|------|------|
 | gguf (llama.cpp) | 全平台 | CUDA/Metal | GGUF 模型 | ✅ 默认推荐 |
+| native-ocr | macOS/Linux/Windows（随 ppu-paddle-ocr 支持） | 不要求 | OCR-only / 中文 UI 截图 / 目标区域 OCR | ✅ 可选 |
 | onnx (Transformers.js) | 全平台 | 无 | 遗留路径 | ⚠️ 不再推荐 |
 | mlx | macOS (Apple Silicon) | Metal | 规划中 | 🔲 未实现 |
 
@@ -210,12 +215,24 @@ gguf       支持 [gguf]             — SmolVLM-500M-Instruct-Q8_0
 smolvlm2   支持 [gguf]             — SmolVLM2-500M-Video-Instruct-Q8_0
 minicpm    支持 [gguf]             — MiniCPM-V-2_6-Q4_K_M
 onnx       支持 [onnx]（遗留）     — SmolVLM Q4_K_M (Transformers.js)
+ppu-paddle-ocr 支持 [native-ocr]  — OCR-only，需 VISION_OCR_PROVIDER=ppu-paddle-ocr
 
 匹配规则：
-  1. ProviderRouter 取 Provider.supportedRuntimes ∩ 当前可用 runtime
-  2. 若多个可用，按 config/runtime.yaml preferred 选择
-  3. 若都不可用 → 该 Provider 不可用 → Planner 降级
+  1. ProviderRouter 根据 requestedSkills / quality / resources 过滤候选
+  2. OCR-only 请求优先 exact skill fit，路由到 ppu-paddle-ocr
+  3. mixed OCR 请求保持 VLM 主 Provider，OCR 通过 per-skill override 交给专用 OCR Provider
+  4. 显式 options.provider 不可行时返回错误，不静默 fallback
 ```
+
+### 4.1 Dedicated OCR Provider
+
+`PpuPaddleOcrProvider` 的设计边界：
+
+- `supportedSkills = ['ocr']`，不负责分类/摘要/视觉推理。
+- `runtime = 'native-ocr'`，通过 `PaddleOcrService` 识别图片文字。
+- 初始化与识别期间将第三方库的 stdout 日志重定向到 stderr，保持 MCP stdio JSON-RPC 干净。
+- 并发 `load()` 使用 `loadPromise` 串行化，避免重复初始化 native OCR service。
+- OCR 输出会归一化为 `{ texts: [{ text, position, confidence }], language }`，供 `ocr` skill schema、UI composer 和 key-content extractor 复用。
 
 ---
 

@@ -59,6 +59,12 @@
     quality?: "fast" | "high",           // 质量模式
     provider?: string,                   // 指定 Provider（可选）
     cache?: boolean,                     // 是否使用缓存
+    maxTokens?: number,
+    target?: {                           // 目标区域提示（红框/高亮/指定区域）
+      color?: string,
+      position?: string,
+      description?: string,
+    },
   }
 }
 ```
@@ -168,6 +174,7 @@ interface SkillTask {
   prompt: string;                // 从 Prompt Registry 取
   schema: object;                // 从 Schema Registry 取
   priority: number;
+  dependsOn?: string[];          // 依赖的前置 Skill
 }
 ```
 
@@ -249,6 +256,8 @@ SkillTask
 **多 Skill 编排**：
 - 独立 Skill：可并行
 - 有依赖的 Skill：串行（如先 classify 再 ui）
+- 混合 OCR 分析：`ocr` 和 `classify` 可并行，`summary` 同时等待 `ocr` + `classify`
+- OCR Provider override：混合请求中若注册了 `ppu-paddle-ocr`，`ocr` skill 可由专用 OCR Provider 执行，其他 skill 仍由 VLM Provider 执行
 - 由 Pipeline 按依赖图调度
 
 ---
@@ -283,6 +292,21 @@ InferenceResponse（模型原始输出）
 
 **职责**：将多个 Skill 的结果合并为统一的 `structuredContent`
 
+OCR 成功时，Composer 会额外构造：
+
+- 顶层 `ocrText`：完整 OCR 文本，方便调用方或 LLM 直接消费。
+- `result.ui`：面向后台/UI 截图的结构化摘要，如导航、动作、字段、表头和值。
+- `result.layout`：基于 OCR 坐标的左侧栏、主内容、底部按钮等布局结构。
+
+当请求包含 `options.target` 或 intent 命中红框/标注/关键区域语义时，Stage 8/9 之间还会执行：
+
+```
+OCR 结果 → detectAnnotations(red boxes) → extractKeyContent(target region)
+        → result.annotations + result.targetExtraction
+```
+
+`targetExtraction` 会结合全图 OCR 与局部裁剪 OCR，输出目标区域内的 `textLines`、表格列/行、warnings 等，避免邻近框外文本混入。
+
 **输出结构**：
 ```typescript
 interface VisionResult {
@@ -292,9 +316,15 @@ interface VisionResult {
   skills: string[];          // 执行了哪些 Skill
   result: {                  // 各 Skill 的结构化结果
     [skillName: string]: any;
+    ui?: object;
+    layout?: object;
+    annotations?: object;
+    targetExtraction?: object;
   };
+  ocrText?: string;
   metadata: {
     provider: string;
+    runtime: string;
     duration: number;        // 耗时
     cached: boolean;
   };
@@ -323,8 +353,10 @@ interface VisionResult {
     "summary": "销售仪表盘，含柱状图与KPI卡片",
     "skills": ["classify", "ocr", "chart"],
     "result": { ... },
+    "ocrText": "菜单中心\nPOS分类管理\n保存",
     "metadata": {
       "provider": "smolvlm2",
+      "runtime": "llama-cpp",
       "duration": 1200,
       "cached": false
     }

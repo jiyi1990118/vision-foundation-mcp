@@ -56,7 +56,7 @@ export async function buildProvidersForRuntime(env: NodeJS.ProcessEnv = process.
 async function main(): Promise<void> {
   const server = new McpServer({
     name: 'vision-foundation-mcp',
-    version: '0.2.0',
+    version: '0.2.1',
   });
 
   const providers = await buildProvidersForRuntime();
@@ -78,7 +78,7 @@ async function main(): Promise<void> {
   await server.connect(transport);
 
   logger.info('Vision Foundation MCP server running', {
-    version: '0.2.0',
+    version: '0.2.1',
     providers: providers.map((p) => p.name),
   });
 }

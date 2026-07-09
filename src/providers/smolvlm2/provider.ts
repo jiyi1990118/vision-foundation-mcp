@@ -20,6 +20,8 @@ const MIN_FREE_RAM_MB = 512;
 const MEMORY_CHECK_INTERVAL = 30_000;
 const CACHE_TTL = 3_600_000;
 const CACHE_MAX = 100;
+const MAX_IMAGE_DIMENSION = 1024;
+const MAX_OUTPUT_TOKENS = 768;
 
 export class SmolVLM2Provider implements VisionProvider {
   readonly name = 'gguf-smolvlm2';
@@ -162,7 +164,7 @@ export class SmolVLM2Provider implements VisionProvider {
           { type: 'text', text: req.prompt },
         ],
       }],
-      max_tokens: Math.min(req.maxTokens, 512),
+      max_tokens: Math.min(req.maxTokens, MAX_OUTPUT_TOKENS),
       temperature: req.temperature,
       stream: false,
     };
@@ -220,7 +222,7 @@ export class SmolVLM2Provider implements VisionProvider {
     try {
       const sharp = (await import('sharp')).default;
       const meta = await sharp(image.buffer).metadata();
-      const maxDim = 512;
+      const maxDim = MAX_IMAGE_DIMENSION;
       if ((meta.width ?? 0) > maxDim || (meta.height ?? 0) > maxDim) {
         const resized = await sharp(image.buffer)
           .resize(maxDim, maxDim, { fit: 'inside', withoutEnlargement: true })

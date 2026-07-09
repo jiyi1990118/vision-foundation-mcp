@@ -2,202 +2,177 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub-vision--foundation--mcp-blue?logo=github)](https://github.com/jiyi1990118/vision-foundation-mcp)
 [![npm](https://img.shields.io/badge/npm-@npm__xiyuan%2Fvision--foundation--mcp-red?logo=npm)](https://www.npmjs.com/package/@npm_xiyuan/vision-foundation-mcp)
+[![MCP](https://img.shields.io/badge/MCP-stdio-green)](https://modelcontextprotocol.io/)
+[![License](https://img.shields.io/badge/license-MIT-black)](./LICENSE)
 
-本地视觉理解 MCP 服务，基于 SmolVLM / SmolVLM2 / MiniCPM-V + llama.cpp，为 Claude / Cursor / ChatGPT 等 MCP Client 提供图片分析能力。
+Local vision-understanding MCP server for Claude Desktop, Cursor, opencode, and other MCP clients. It exposes one stdio MCP tool, `vision.analyze`, powered by local SmolVLM / SmolVLM2 / MiniCPM-V models through `llama.cpp`.
 
-## 📑 目录
+English | [简体中文](./README.zh-CN.md)
 
-- [特性](#特性)
-- [快速开始](#快速开始)
-- [安装](#安装)
-  - [方式一：npm安装（推荐）](#方式一npm安装推荐)
-  - [方式二：从源码安装](#方式二从源码安装)
-- [配置 MCP Client](#配置-mcp-client)
-- [使用](#使用)
-- [环境变量](#环境变量)
-- [架构](#架构)
-- [开发](#开发)
-- [性能指标](#性能指标)
+## Contents
+
+- [What It Does](#what-it-does)
+- [Quick Start](#quick-start)
+- [MCP Tool Contract](#mcp-tool-contract)
+- [Client Configuration](#client-configuration)
+- [Usage Examples](#usage-examples)
+- [Models And Providers](#models-and-providers)
+- [Runtime Requirements](#runtime-requirements)
+- [Environment Variables](#environment-variables)
+- [Troubleshooting](#troubleshooting)
+- [Development](#development)
+- [Release Readiness](#release-readiness)
+- [Security And Privacy](#security-and-privacy)
 - [License](#license)
 
-## ✨ 特性
+## What It Does
 
-- **🚀 零配置启动**：llama-server 首次运行时自动下载安装，无需手动配置
-- **🔒 本地推理**：SmolVLM-500M / SmolVLM2-500M GGUF，无需云端 API，保护隐私
-- **⚡ GPU 加速**：自动检测 Metal (Apple Silicon) / CUDA (NVIDIA) / CPU
-- **🎯 多能力**：分类 / OCR / 描述 / 表格 / 文档 / 海报 / 审核 / 布局（8 个 Skill）
-- **🧠 智能路由**：意图自动映射到 Skill 组（describe → classify + summary）
-- **🎨 多模型可选**：默认 SmolVLM2（better quality），可切 SmolVLM（fast），`VISION_HIGH_QUALITY=1` 启用 MiniCPM-V 2.6（high）
-- **⚡ 高性能**：单次推理 ~300ms（Metal GPU），结果缓存秒返回
-- **📊 资源管理**：空闲超时卸载、引用计数、内存压力监控、崩溃自动恢复
+- Runs image understanding locally without sending images to a cloud vision API.
+- Supports local file paths, base64 strings, data URIs, and HTTP(S) image URLs.
+- Provides 8 data-driven skills: `classify`, `summary`, `ocr`, `table`, `document`, `poster`, `moderation`, and `layout`.
+- Uses SmolVLM2 by default for balanced local quality; optional SmolVLM fast mode and MiniCPM-V high-quality mode are available.
+- Auto-prepares `llama-server` and model files on first use when possible.
+- Keeps MCP stdio clean: JSON-RPC stays on stdout, logs go to stderr.
 
-## 🚀 快速开始
+## Quick Start
 
-### 最简安装（npm）
-
-```bash
-npm install @npm_xiyuan/vision-foundation-mcp
-```
-
-或使用 pnpm：
-
-```bash
-pnpm add @npm_xiyuan/vision-foundation-mcp
-```
-
-### 快速配置（Claude Desktop）
-
-编辑 `~/Library/Application Support/Claude/claude_desktop_config.json`：
+Use it directly with `npx` from an MCP client:
 
 ```json
 {
   "mcpServers": {
     "vision": {
       "command": "npx",
-      "args": ["@npm_xiyuan/vision-foundation-mcp"]
+      "args": ["-y", "@npm_xiyuan/vision-foundation-mcp"]
     }
   }
 }
 ```
 
-首次运行时会自动：
-- ✅ 下载并安装 llama-server
-- ✅ 下载 SmolVLM2 模型文件
-- ✅ 配置运行时环境
-
-**立即可用，无需任何手动配置！** 🎉
-
-## 📦 安装
-
-### 方式一：npm安装（推荐）
-
-适合快速体验和生产环境使用：
+Or install it in a project:
 
 ```bash
 npm install @npm_xiyuan/vision-foundation-mcp
-# 或
+```
+
+```bash
 pnpm add @npm_xiyuan/vision-foundation-mcp
 ```
 
-**优势**：
-- ✅ 一键安装，无需手动配置
-- ✅ 自动管理依赖和版本
-- ✅ 支持 npx 直接运行
+First run may download:
 
-### 方式二：从源码安装
+- `llama-server` from `ggml-org/llama.cpp` releases.
+- SmolVLM2 GGUF model files from Hugging Face or `HF_ENDPOINT`.
 
-适合开发者和需要自定义的场景：
+## MCP Tool Contract
 
-#### 1. 克隆仓库
+This server intentionally exposes a single MCP tool. The internal skill router decides which vision skills to run based on `intent`, `skills`, and `options`.
 
-```bash
-git clone git@github.com:jiyi1990118/vision-foundation-mcp.git
-cd vision-foundation-mcp
-pnpm install
-pnpm setup:llama  # 可选：检测/准备 llama.cpp
-pnpm build
+### Tool
+
+```text
+vision.analyze
 ```
 
-#### 2. llama.cpp（自动安装）
+### Input Schema
 
-llama-server 会在首次运行时自动下载安装到：
-- **优先**：项目内 `<package-root>/bin/`
-- **降级**：用户目录 `~/.vision-mcp/bin/`
-
-**路径优先级**：
-1. `LLAMA_SERVER_PATH` 环境变量
-2. 项目内 `bin/llama-server`
-3. 用户目录 `~/.vision-mcp/bin/llama-server`
-4. 系统路径（`/opt/homebrew/bin`、`/usr/local/bin`、`/usr/bin`）
-5. PATH 查找 `llama-server`
-
-如需手动安装：
-
-```bash
-# macOS (Homebrew)
-brew install llama.cpp
-
-# Linux — 从源码编译
-git clone https://github.com/ggml-org/llama.cpp
-cd llama.cpp && cmake -B build && cmake --build build --config Release
-# 将 build/bin/llama-server 加入 PATH 或设置 LLAMA_SERVER_PATH
-
-# 或使用项目提供的检测工具
-pnpm setup:llama
+```ts
+{
+  image: string;
+  intent?: string;
+  skills?: string[];
+  options?: {
+    quality?: "fast" | "high";
+    provider?: string;
+    cache?: boolean;
+    maxTokens?: number;
+    target?: {
+      color?: string;
+      position?: string;
+      description?: string;
+    };
+  };
+}
 ```
 
-**环境变量：**
-- `LLAMA_SERVER_PATH` — 指定已安装的 llama-server 路径（跳过自动下载）
-- `LLAMA_DOWNLOAD_MIRROR` — 指定镜像站（如 `https://ghproxy.com`，用于加速 GitHub 下载）
+### Input Fields
 
-#### 3. 下载模型
+| Field | Required | Description |
+|------|----------|-------------|
+| `image` | yes | Image source. Supports local file path, base64, data URI, or HTTP(S) URL. |
+| `intent` | no | Natural-language intent, such as `describe`, `ocr`, `table`, `document`, or `auto`. Defaults to `auto`. |
+| `skills` | no | Explicit skills to run. Overrides intent inference. Example: `["classify", "summary", "ocr"]`. |
+| `options.quality` | no | `fast` uses the default provider. `high` can route to MiniCPM-V when `VISION_HIGH_QUALITY=1` is set. |
+| `options.provider` | no | Optional provider override. Supported provider names depend on registered providers. |
+| `options.cache` | no | Reserved for cache-aware providers. |
+| `options.maxTokens` | no | Optional generation token limit passed through the request pipeline. |
+| `options.target` | no | Optional target-region hint for annotated screenshots, such as `{ "color": "red", "position": "right", "description": "dashed box content" }`. |
 
-默认 SmolVLM2-500M-Video（better quality）：
+### Structured Output
 
-```bash
-mkdir -p ~/.vision-mcp/models/ggml-org/SmolVLM2-500M-Video-Instruct-GGUF
+`vision.analyze` returns human-readable text plus MCP `structuredContent`:
 
-# 模型文件（Q4_K_M，~300MB）
-curl -L -o ~/.vision-mcp/models/ggml-org/SmolVLM2-500M-Video-Instruct-GGUF/SmolVLM2-500M-Video-Instruct-Q4_K_M.gguf \
-  "https://huggingface.co/ggml-org/SmolVLM2-500M-Video-Instruct-GGUF/resolve/main/SmolVLM2-500M-Video-Instruct-Q4_K_M.gguf"
-
-# 视觉投影器（Q8_0，~100MB）
-curl -L -o ~/.vision-mcp/models/ggml-org/SmolVLM2-500M-Video-Instruct-GGUF/mmproj-SmolVLM2-500M-Video-Instruct-Q8_0.gguf \
-  "https://huggingface.co/ggml-org/SmolVLM2-500M-Video-Instruct-GGUF/resolve/main/mmproj-SmolVLM2-500M-Video-Instruct-Q8_0.gguf"
+```ts
+{
+  category: string;
+  confidence: number;
+  summary: string;
+  skills: string[];
+  result: Record<string, unknown>;
+  metadata: {
+    provider: string;
+    runtime: string;
+    duration: number;
+    cached: boolean;
+  };
+}
 ```
 
-可选 — SmolVLM-500M-Instruct（更快的 fast 候选，Q8_0）：
+### Example Tool Call
 
-```bash
-mkdir -p ~/.vision-mcp/models/ggml-org/SmolVLM-500M-Instruct-GGUF
-
-# 模型文件 (417MB)
-curl -L -o ~/.vision-mcp/models/ggml-org/SmolVLM-500M-Instruct-GGUF/SmolVLM-500M-Instruct-Q8_0.gguf \
-  "https://huggingface.co/ggml-org/SmolVLM-500M-Instruct-GGUF/resolve/main/SmolVLM-500M-Instruct-Q8_0.gguf"
-
-# 视觉投影器 (104MB)
-curl -L -o ~/.vision-mcp/models/ggml-org/SmolVLM-500M-Instruct-GGUF/mmproj-SmolVLM-500M-Instruct-Q8_0.gguf \
-  "https://huggingface.co/ggml-org/SmolVLM-500M-Instruct-GGUF/resolve/main/mmproj-SmolVLM-500M-Instruct-Q8_0.gguf"
+```json
+{
+  "image": "/Users/me/Desktop/screenshot.png",
+  "intent": "describe",
+  "skills": ["classify", "summary", "ocr"],
+  "options": {
+    "quality": "fast"
+  }
+}
 ```
 
-可选 — MiniCPM-V 2.6（high，需 GPU，~2GB）：
+### Skill Routing
 
-```bash
-mkdir -p ~/.vision-mcp/models/bartowski/MiniCPM-V-2_6-GGUF
+| Intent | Skills |
+|------|--------|
+| `auto` | `classify`, `summary` |
+| `describe`, `analyze` | `classify`, `summary` |
+| `text`, `ocr`, `extract` | `ocr` |
+| `table` | `table` |
+| `document` | `document` |
+| `poster` | `poster` |
+| `safe`, `moderation` | `moderation` |
+| `layout` | `layout` |
+| `detail` | `classify`, `ocr`, `summary` |
 
-# 模型文件 (~2GB)
-curl -L -o ~/.vision-mcp/models/bartowski/MiniCPM-V-2_6-GGUF/MiniCPM-V-2_6-Q4_K_M.gguf \
-  "https://huggingface.co/bartowski/MiniCPM-V-2_6-GGUF/resolve/main/MiniCPM-V-2_6-Q4_K_M.gguf"
-
-# 视觉投影器
-curl -L -o ~/.vision-mcp/models/bartowski/MiniCPM-V-2_6-GGUF/mmproj-model-f16.gguf \
-  "https://huggingface.co/bartowski/MiniCPM-V-2_6-GGUF/resolve/main/mmproj-model-f16.gguf"
-```
-
-> **中国大陆用户**：可使用 `https://hf-mirror.com` 替代 `https://huggingface.co` 加速下载
-
-> **提示**：MiniCPM-V 仅在启用 `VISION_HIGH_QUALITY=1` 且请求带 `options.quality="high"` 时才会加载；默认仍用 SmolVLM2。
-
-## ⚙️ 配置 MCP Client
+## Client Configuration
 
 ### Claude Desktop
 
-编辑 `~/Library/Application Support/Claude/claude_desktop_config.json`：
-
-**使用 npm 包（推荐）**：
+Edit `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS:
 
 ```json
 {
   "mcpServers": {
     "vision": {
       "command": "npx",
-      "args": ["@npm_xiyuan/vision-foundation-mcp"]
+      "args": ["-y", "@npm_xiyuan/vision-foundation-mcp"]
     }
   }
 }
 ```
 
-**从源码运行**：
+Source checkout configuration:
 
 ```json
 {
@@ -207,7 +182,6 @@ curl -L -o ~/.vision-mcp/models/bartowski/MiniCPM-V-2_6-GGUF/mmproj-model-f16.gg
       "args": ["/path/to/vision-foundation-mcp/dist/index.js"],
       "env": {
         "VISION_PROVIDER": "smolvlm2",
-        "VISION_HIGH_QUALITY": "1",
         "LOG_LEVEL": "warn"
       }
     }
@@ -215,167 +189,222 @@ curl -L -o ~/.vision-mcp/models/bartowski/MiniCPM-V-2_6-GGUF/mmproj-model-f16.gg
 }
 ```
 
-> `VISION_HIGH_QUALITY=1` 是可选项；省略则只跑 SmolVLM2（fast），更省内存。
-
-如果要试更快的 SmolVLM-500M 候选，把 `VISION_PROVIDER` 改为：
-
-```json
-"VISION_PROVIDER": "gguf"
-```
-
 ### Cursor
 
-在 Cursor Settings → MCP 中添加：
+Add this in Cursor Settings -> MCP:
 
 ```json
 {
   "mcpServers": {
     "vision": {
       "command": "npx",
-      "args": ["@npm_xiyuan/vision-foundation-mcp"]
+      "args": ["-y", "@npm_xiyuan/vision-foundation-mcp"]
     }
   }
 }
 ```
 
-或从源码运行：
+### opencode
+
+Add this to `~/.config/opencode/opencode.json`:
 
 ```json
 {
-  "mcpServers": {
-    "vision": {
-      "command": "node",
-      "args": ["/path/to/vision-foundation-mcp/dist/index.js"]
+  "mcp": {
+    "vision-foundation": {
+      "type": "local",
+      "command": ["npx", "-y", "@npm_xiyuan/vision-foundation-mcp"],
+      "enabled": true,
+      "timeout": 120000
     }
   }
 }
 ```
 
-## 💡 使用
-
-配置完成后，在 Claude/Cursor 中直接对话：
-
-```
-用户: 请分析这张图片 /path/to/screenshot.png
-Claude: [调用 vision.analyze] 这张图片显示了一个红色方块和蓝色圆形...
-```
-
-### 支持的意图
-
-| 意图关键词 | 执行的 Skill |
-|-----------|-------------|
-| describe / describe / 描述 | classify + summary |
-| text / extract / OCR / 文字 | ocr |
-| table / 表格 | table |
-| document / 文档 | document |
-| poster / 海报 | poster |
-| safe / 审核 | moderation |
-| layout / 布局 | layout |
-| detail / 详细 | classify + ocr + summary |
-| auto (默认) | classify + summary |
-
-### 直接指定 Skill
-
-```
-用户: 用 OCR 技能分析这张图片 base64:iVBORw0K...
-```
-
-### 高质量模式（需启用 `VISION_HIGH_QUALITY=1` + GPU）
-
-启用后，请求带 `quality: "high"` 即可路由到 MiniCPM-V 2.6：
+If using a local checkout:
 
 ```json
 {
-  "image": "/path/to/chart.png",
-  "intent": "describe",
-  "options": { "quality": "high" }
+  "mcp": {
+    "vision-foundation": {
+      "type": "local",
+      "command": ["node", "/path/to/vision-foundation-mcp/dist/index.js"],
+      "enabled": true,
+      "timeout": 120000
+    }
+  }
 }
 ```
 
-- 资源不足（<4GB 可用内存）或无 GPU → 自动回退 SmolVLM
-- `quality: "fast"` 或缺省 → 始终用 SmolVLM
-- 首次 `quality=high` 触发 MiniCPM-V 模型准备（已下载则秒载，否则下载约 2GB）
+After editing MCP config, restart the client if it does not hot-reload MCP servers.
 
-## 🔧 环境变量
+## Usage Examples
 
-| 变量 | 默认值 | 说明 |
-|------|--------|------|
-| `VISION_PROVIDER` | `smolvlm2` | 默认/active Provider：`smolvlm2`、`gguf` 或 `onnx` |
-| `VISION_HIGH_QUALITY` | 未设置 | 设为 `1` 时额外注册 MiniCPM-V 2.6，使 `quality=high` 请求可路由到它 |
-| `LLAMA_SERVER_PATH` | 自动检测 | llama-server 路径（设置后跳过自动下载） |
-| `LLAMA_DOWNLOAD_MIRROR` | - | 下载镜像站（如 `https://ghproxy.com`） |
-| `LOG_LEVEL` | `info` | 日志级别：error/warn/info/debug |
-| `HF_ENDPOINT` | `https://hf-mirror.com` | 模型下载地址（ONNX Provider / 国内镜像） |
+Ask your MCP client:
 
-## 🏗️ 架构
-
-```
-MCP Client
-    │ vision.analyze(image, intent)
-    ▼
-┌───────────────────────────────────────┐
-│  Vision Foundation MCP                 │
-│                                        │
-│  Tool → Normalizer → Metadata          │
-│              → Router (selectProvider)  │
-│              → Planner → Policy         │
-│              → SkillPipeline → Provider │
-│              → Composer → Result        │
-│                                        │
-│  Providers (端口隔离，可共存)             │
-│    ├─ SmolVLM2 (default, better quality)│
-│    ├─ GGUF     (SmolVLM-500M fast)       │
-│    ├─ MiniCPM  (MiniCPM-V 2.6 high)      │
-│    └─ ONNX     (legacy, Transformers.js) │
-│        └─ llama-server → Metal/CUDA/CPU  │
-│        └─ 进程查找复用已有 llama-server，必要时随机空闲端口启动 │
-│        └─ 自动下载安装（首次运行）          │
-└───────────────────────────────────────┘
+```text
+Analyze this image: /Users/me/Desktop/chart.png
 ```
 
-## 🛠️ 开发
+```text
+Extract the text from this screenshot: /Users/me/Desktop/screenshot.png
+```
+
+```text
+Use OCR and summary for this image: /Users/me/Desktop/page.png
+```
+
+For local script examples, build the project and run:
 
 ```bash
-# 开发模式（热重载）
-pnpm dev
-
-# 类型检查
-pnpm typecheck
-
-# 运行测试（单元测试，不需要GPU）
-pnpm test:unit
-
-# 运行完整测试（包括推理测试，需要GPU和模型）
-pnpm test
-
-# 运行特定测试
-npx vitest run --fileParallelism=false tests/resolver.test.ts
+pnpm build
+node examples/basic-analysis.mjs /path/to/image.png
+node examples/ocr-only.mjs /path/to/screenshot.png
+VISION_OCR_PROVIDER=ppu-paddle-ocr node examples/ocr-provider.mjs /path/to/screenshot.png
+VISION_HIGH_QUALITY=1 node examples/high-quality.mjs /path/to/image.png
 ```
 
-## 📊 性能指标
+These examples are source-checkout examples; the npm package publishes the compiled server, not the `examples/` directory.
 
-| 指标 | SmolVLM (fast) | SmolVLM2 (default) | MiniCPM-V (high) |
-|------|----------------|---------------------|------------------|
-| 模型加载 | ~1s | ~1-2s | ~5s |
-| 单次推理 | ~300ms | ~400-600ms | ~1-2s |
-| 内存占用 | ~500MB | ~500-800MB | ~4GB |
-| 最小内存要求 | 512MB | 768MB | 4GB |
-| GPU 要求 | 否（CPU 可跑） | 否（CPU 可跑） | 是（Metal/CUDA） |
-| 并发上限 | 4 | 4 | 4 |
-| 空闲超时 | 10 min | 10 min | 10 min |
-| 描述质量 | 良好 | **优秀** ⭐ | 卓越 |
+## Models And Providers
 
-## 🔗 相关链接
+| Provider | Env | Runtime | Default Use |
+|---------|-----|---------|-------------|
+| SmolVLM2 | `VISION_PROVIDER=smolvlm2` | llama.cpp | Default, balanced local quality |
+| SmolVLM | `VISION_PROVIDER=gguf` | llama.cpp | Faster 500M candidate |
+| MiniCPM-V | `VISION_HIGH_QUALITY=1` + `options.quality="high"` | llama.cpp | Higher-quality mode, GPU recommended |
+| PPU PaddleOCR | `VISION_OCR_PROVIDER=ppu-paddle-ocr` + `skills: ["ocr"]` | native OCR | Optional dedicated OCR-only provider |
+| ONNX SmolVLM | `VISION_PROVIDER=onnx` | Transformers.js / ONNX Runtime | Legacy fallback |
 
-- **GitHub 仓库**：[jiyi1990118/vision-foundation-mcp](https://github.com/jiyi1990118/vision-foundation-mcp)
-- **npm 包**：[@npm_xiyuan/vision-foundation-mcp](https://www.npmjs.com/package/@npm_xiyuan/vision-foundation-mcp)
-- **MCP 协议**：[Model Context Protocol](https://modelcontextprotocol.io/)
-- **llama.cpp**：[ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp)
+Default model cache path:
 
-## 📄 License
+```text
+~/.vision-mcp/models
+```
+
+Default `llama-server` lookup order:
+
+1. `LLAMA_SERVER_PATH`
+2. `<package-root>/bin/llama-server`
+3. `~/.vision-mcp/bin/llama-server`
+4. `/opt/homebrew/bin`, `/usr/local/bin`, `/usr/bin`
+5. `PATH`
+
+### Optional Dedicated OCR Provider
+
+Set `VISION_OCR_PROVIDER=ppu-paddle-ocr` to register a dedicated PaddleOCR-backed provider for OCR-only requests:
+
+```bash
+VISION_OCR_PROVIDER=ppu-paddle-ocr vision-foundation-mcp
+```
+
+Behavior:
+
+- `skills: ["ocr"]` routes to `ppu-paddle-ocr` when available.
+- Mixed visual understanding requests such as `classify + ocr + summary` stay on the active VLM provider.
+- Models are cached by `ppu-paddle-ocr` under `~/.cache/ppu-paddle-ocr`.
+- Table structure is not reconstructed; text boxes and lines are returned in reading/layout order when available.
+
+## Runtime Requirements
+
+- Node.js 18 or newer.
+- macOS, Linux, or Windows, depending on available `llama.cpp` release binaries.
+- Network access on first run to download `llama-server` and model files.
+- Apple Silicon Metal or NVIDIA CUDA is recommended but not required for default local models.
+- CPU execution is supported for default/fast providers, but latency depends on the host.
+
+Manual setup from source:
+
+```bash
+git clone git@github.com:jiyi1990118/vision-foundation-mcp.git
+cd vision-foundation-mcp
+pnpm install
+pnpm setup:llama
+pnpm build
+pnpm test:unit
+```
+
+## Environment Variables
+
+| Variable | Default | Description |
+|---------|---------|-------------|
+| `VISION_PROVIDER` | `smolvlm2` | Default provider: `smolvlm2`, `gguf`, or `onnx`. |
+| `VISION_HIGH_QUALITY` | unset | Set to `1` to register MiniCPM-V for `quality=high` requests. |
+| `VISION_OCR_PROVIDER` | unset | Set to `ppu-paddle-ocr` to register the optional OCR-only provider. |
+| `LLAMA_SERVER_PATH` | auto-detect | Existing `llama-server` path. Skips auto-download when set. |
+| `LLAMA_DOWNLOAD_MIRROR` | unset | Optional GitHub release mirror for `llama-server` downloads. |
+| `HF_ENDPOINT` | environment-dependent | Hugging Face endpoint. Use `https://hf-mirror.com` when needed. |
+| `LOG_LEVEL` | `info` | `error`, `warn`, `info`, or `debug`. Logs are written to stderr. |
+
+## Troubleshooting
+
+| Problem | Fix |
+|--------|-----|
+| MCP client shows no tool | Restart the MCP client after changing config. Confirm the command works outside the client. |
+| First request is slow | First run may download `llama-server` and GGUF models. Increase MCP timeout to 120 seconds or more. |
+| `llama-server not found` | Run `pnpm setup:llama`, install `llama.cpp`, or set `LLAMA_SERVER_PATH`. |
+| GitHub download is slow | Set `LLAMA_DOWNLOAD_MIRROR` or install `llama-server` manually. |
+| Hugging Face download is slow | Set `HF_ENDPOINT=https://hf-mirror.com` or manually place model files under `~/.vision-mcp/models`. |
+| `quality=high` does not use MiniCPM-V | Set `VISION_HIGH_QUALITY=1`, restart the MCP client, and ensure the host has enough memory/GPU resources. |
+| stdio JSON-RPC errors | Do not write logs to stdout. This project writes logs to stderr through the logger. |
+
+## Development
+
+```bash
+pnpm install
+pnpm build
+pnpm lint
+pnpm typecheck
+pnpm test:unit
+```
+
+Useful commands:
+
+```bash
+pnpm dev
+pnpm setup:llama
+pnpm test
+pnpm test:slow
+npm pack --dry-run
+```
+
+`pnpm build` is required before running MCP integration checks because it also copies skill assets into `dist/skills`.
+
+## Release Readiness
+
+Before publishing to npm:
+
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test:unit
+pnpm build
+npm pack --dry-run
+```
+
+Package entry points:
+
+- npm package: `@npm_xiyuan/vision-foundation-mcp`
+- binary: `vision-foundation-mcp`
+- main/export: `dist/index.js`
+- transport: MCP stdio
+- tool: `vision.analyze`
+
+## Security And Privacy
+
+- Local files are read from the machine where the MCP server runs.
+- Local inference does not require a cloud vision API.
+- HTTP(S) URLs are fetched by the server process; only use trusted image URLs.
+- Do not pass private images to untrusted MCP clients or remote hosts.
+- Logs avoid stdout to preserve MCP JSON-RPC transport integrity.
+
+## Related Links
+
+- [Model Context Protocol](https://modelcontextprotocol.io/)
+- [llama.cpp](https://github.com/ggml-org/llama.cpp)
+- [SmolVLM2 GGUF](https://huggingface.co/ggml-org/SmolVLM2-500M-Video-Instruct-GGUF)
+- [npm package](https://www.npmjs.com/package/@npm_xiyuan/vision-foundation-mcp)
+
+## License
 
 MIT
-
----
-
-**使用愉快！如有问题，欢迎提交 [Issue](https://github.com/jiyi1990118/vision-foundation-mcp/issues)** 🎉

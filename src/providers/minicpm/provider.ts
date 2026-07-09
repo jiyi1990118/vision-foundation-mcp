@@ -39,7 +39,7 @@ export class MiniCPMProvider implements VisionProvider {
     'classify', 'ocr', 'summary', 'table', 'document', 'poster', 'moderation', 'layout',
   ];
   readonly requirements = {
-    minMemoryMB: 512,
+    minMemoryMB: 4096,
     gpuRequired: true,
     modelSizeMB: 2048,
   };
@@ -174,7 +174,7 @@ export class MiniCPMProvider implements VisionProvider {
             ],
           },
         ],
-        max_tokens: Math.min(req.maxTokens, 512),
+        max_tokens: Math.min(req.maxTokens, 1024),
         temperature: req.temperature,
         stream: false,
       };
@@ -279,7 +279,7 @@ export class MiniCPMProvider implements VisionProvider {
     try {
       const sharp = (await import('sharp')).default;
       const meta = await sharp(image.buffer).metadata();
-      const maxDim = 1024;
+      const maxDim = 2048;
 
       if ((meta.width ?? 0) > maxDim || (meta.height ?? 0) > maxDim) {
         const resized = await sharp(image.buffer)

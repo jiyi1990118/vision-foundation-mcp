@@ -20,10 +20,12 @@ export interface ProviderCandidate {
 export interface RouterOptions {
   quality?: 'fast' | 'high' | undefined;
   provider?: string | undefined;
+  target?: unknown;
 }
 
 export interface RouterResources {
   memoryAvailableMB: number;
+  totalMemoryMB?: number | undefined;
   hasGPU: boolean;
 }
 
@@ -87,7 +89,7 @@ export function chooseProvider(input: RouterInput): RouterResult {
     if (explicit) {
       return { name: explicit.name, runtime: explicit.runtime };
     }
-    // fall through to automatic selection
+    throw new Error(`Requested provider is unavailable or infeasible: ${options.provider}`);
   }
 
   // 2. Quality preference
@@ -97,6 +99,13 @@ export function chooseProvider(input: RouterInput): RouterResult {
     if (high) {
       return { name: high.name, runtime: high.runtime };
     }
+  }
+
+  // 2b. Exact skill fit. This lets future dedicated OCR providers handle
+  // OCR-only requests while mixed visual-understanding requests stay on VLMs.
+  const exact = feasible.find((c) => isExactSkillFit(c, requestedSkills));
+  if (exact) {
+    return { name: exact.name, runtime: exact.runtime };
   }
 
   // 3. Default: first feasible fast provider
@@ -112,7 +121,8 @@ function isFeasible(
   resources: RouterResources,
   requestedSkills: string[],
 ): boolean {
-  if (resources.memoryAvailableMB < candidate.minMemoryMB) return false;
+  const memoryMB = resources.totalMemoryMB ?? resources.memoryAvailableMB;
+  if (memoryMB < candidate.minMemoryMB) return false;
   if (candidate.gpuPreferred && !resources.hasGPU) return false;
   if (requestedSkills.length > 0) {
     const supported = new Set(candidate.supportedSkills);
@@ -121,4 +131,11 @@ function isFeasible(
     }
   }
   return true;
+}
+
+function isExactSkillFit(candidate: ProviderCandidate, requestedSkills: string[]): boolean {
+  if (requestedSkills.length === 0) return false;
+  if (candidate.supportedSkills.length !== requestedSkills.length) return false;
+  const supported = new Set(candidate.supportedSkills);
+  return requestedSkills.every((skill) => supported.has(skill));
 }

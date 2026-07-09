@@ -40,9 +40,9 @@
 
 ## Recent Optimizations
 
-### Image Classification (Phase 1-6)
+### Image Classification (Phase 1-7)
 
-Phase 1-6优化实现了"媒介优先"分类逻辑，确保AI生成/绘制图片正确分类为illustration。
+Phase 1-7优化实现了"媒介优先"分类逻辑，确保AI生成/绘制图片正确分类为illustration。
 
 详细文档: [Docs/classification-optimization.md](Docs/classification-optimization.md)
 
@@ -50,8 +50,11 @@ Phase 1-6优化实现了"媒介优先"分类逻辑，确保AI生成/绘制图片
 - 媒介优先原则（Prompt层引导）
 - Screenshot反向exclusion rule（规则层修正）
 - 次级artwork信号检测（逻辑层补充）
+- Dashboard排除规则 + 动物关键词扩展（Phase 7）
 
-**测试结果**: anime编程场景 screenshot(0.7) → illustration(0.65) ✅
+**测试结果**: 
+- anime编程场景 screenshot(0.7) → illustration(0.65) ✅
+- 墨水企鹅插画 dashboard(0.7) → illustration(0.75) ✅
 
 
 ## Testing Gotchas

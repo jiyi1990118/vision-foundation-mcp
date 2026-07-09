@@ -11,6 +11,7 @@
  */
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { pathToFileURL } from 'node:url';
 import { GGUFProvider } from './providers/gguf/provider.js';
 import { SmolVLMProvider } from './providers/smolvlm/provider.js';
 import { MiniCPMProvider } from './providers/minicpm/provider.js';
@@ -19,18 +20,12 @@ import { registerVisionAnalyzeTool } from './tools/vision-analyze.js';
 import { logger } from './utils/logger.js';
 import type { VisionProvider } from './providers/types.js';
 
-async function main(): Promise<void> {
-  const server = new McpServer({
-    name: 'vision-foundation-mcp',
-    version: '0.2.0',
-  });
-
-  // Select provider(s) based on env vars.
+export async function buildProvidersForRuntime(env: NodeJS.ProcessEnv = process.env): Promise<VisionProvider[]> {
   // VISION_PROVIDER picks the default/active provider; VISION_HIGH_QUALITY=1
   // also registers the MiniCPM-V high-quality provider so `quality=high`
   // requests can route to it (lazy-loaded on first high-quality request).
-  const providerType = process.env.VISION_PROVIDER ?? 'smolvlm2';
-  const enableHighQuality = process.env.VISION_HIGH_QUALITY === '1';
+  const providerType = env.VISION_PROVIDER ?? 'smolvlm2';
+  const enableHighQuality = env.VISION_HIGH_QUALITY === '1';
   const providers: VisionProvider[] = [];
 
   if (providerType === 'onnx') {
@@ -48,6 +43,23 @@ async function main(): Promise<void> {
     providers.push(new MiniCPMProvider());
     logger.info('High-quality provider registered (MiniCPM-V, lazy-loaded on quality=high)');
   }
+
+  if (env.VISION_OCR_PROVIDER === 'ppu-paddle-ocr') {
+    const { PpuPaddleOcrProvider } = await import('./providers/ppu-paddle-ocr/provider.js');
+    providers.push(new PpuPaddleOcrProvider());
+    logger.info('OCR provider registered (ppu-paddle-ocr, lazy-loaded on OCR-only requests)');
+  }
+
+  return providers;
+}
+
+async function main(): Promise<void> {
+  const server = new McpServer({
+    name: 'vision-foundation-mcp',
+    version: '0.2.0',
+  });
+
+  const providers = await buildProvidersForRuntime();
 
   // Register the single MCP Tool
   registerVisionAnalyzeTool(server, providers);
@@ -71,7 +83,9 @@ async function main(): Promise<void> {
   });
 }
 
-main().catch((error) => {
-  logger.error('Fatal error in main()', { error: error.message, stack: error.stack });
-  process.exit(1);
-});
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch((error) => {
+    logger.error('Fatal error in main()', { error: error.message, stack: error.stack });
+    process.exit(1);
+  });
+}

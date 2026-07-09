@@ -24,6 +24,14 @@ interface IntentMapping {
 }
 
 const INTENT_MAPPINGS: IntentMapping[] = [
+  // Requirement/product screenshots need both visual understanding and text extraction.
+  {
+    keywords: [
+      'requirement screenshot', 'prototype', 'wireframe', 'annotation', 'red box', 'highlight',
+      '需求截图', '截图内容', '页面内容', '图片内容', '界面内容', '原型图', '标注', '红框', '字段', '按钮', '开关',
+    ],
+    skills: ['classify', 'ocr', 'summary'],
+  },
   // Classification
   { keywords: ['what', 'type', 'category', 'classify', 'kind', '什么', '类型', '分类'], skills: ['classify'] },
   // OCR
@@ -60,6 +68,22 @@ export function mapIntentToSkills(intent: string): string[] {
   return ['classify', 'summary'];
 }
 
+export function resolveSkillNames(
+  requestedSkills: string[] | undefined,
+  intent: string,
+  options?: PlannerInput['options'],
+): string[] {
+  if (requestedSkills && requestedSkills.length > 0) {
+    const validSkills = requestedSkills.filter((s) => getSkill(s) !== undefined);
+    if (validSkills.length > 0) return validSkills;
+
+    logger.warn('No valid skills found in requestedSkills', { requestedSkills });
+    return augmentTargetSkills(['classify', 'summary'], intent, options);
+  }
+
+  return augmentTargetSkills(mapIntentToSkills(intent), intent, options);
+}
+
 // ── Planner ─────────────────────────────────────────────
 
 /**
@@ -73,18 +97,7 @@ export async function planExecution(input: PlannerInput): Promise<ExecutionPlan>
   void input.resources;
 
   // 1. Determine Skills
-  let skillNames: string[];
-  if (requestedSkills && requestedSkills.length > 0) {
-    // User explicitly specified skills
-    skillNames = requestedSkills.filter((s) => getSkill(s) !== undefined);
-    if (skillNames.length === 0) {
-      logger.warn('No valid skills found in requestedSkills', { requestedSkills });
-      skillNames = ['classify', 'summary']; // fallback
-    }
-  } else {
-    // Infer from intent
-    skillNames = mapIntentToSkills(intent);
-  }
+  const skillNames = resolveSkillNames(requestedSkills, intent, options);
 
   logger.info('Planner decision', {
     intent,
@@ -93,6 +106,7 @@ export async function planExecution(input: PlannerInput): Promise<ExecutionPlan>
   });
 
   // 2. Build SkillTasks
+  const mixedOcrAnalysis = skillNames.includes('ocr') && skillNames.some((name) => name !== 'ocr');
   const skills = skillNames.map((name, index) => {
     const manifest = getSkill(name)!;
     const prompt = compilePrompt(manifest, {
@@ -100,15 +114,18 @@ export async function planExecution(input: PlannerInput): Promise<ExecutionPlan>
       metadata,
     });
 
+    const dependsOn = mixedOcrAnalysis
+      ? dependenciesForMixedOcrAnalysis(name, skillNames)
+      : name === 'summary' && skillNames.includes('classify')
+        ? ['classify']
+        : undefined;
+
     return {
       skill: name,
       prompt,
       schema: manifest.schema,
-      priority: index,
-      // summary depends on classify (if both present)
-      dependsOn: name === 'summary' && skillNames.includes('classify')
-        ? ['classify']
-        : undefined,
+      priority: mixedOcrAnalysis ? priorityForMixedOcrAnalysis(name, index) : index,
+      dependsOn,
     } satisfies SkillTask;
   });
 
@@ -156,6 +173,41 @@ export async function planExecution(input: PlannerInput): Promise<ExecutionPlan>
   });
 
   return plan;
+}
+
+function priorityForMixedOcrAnalysis(name: string, fallback: number): number {
+  if (name === 'ocr') return 0;
+  if (name === 'classify') return 1;
+  if (name === 'summary') return 2;
+  return fallback + 3;
+}
+
+function dependenciesForMixedOcrAnalysis(name: string, skillNames: string[]): string[] | undefined {
+  if (name === 'summary') {
+    return ['ocr', ...(skillNames.includes('classify') ? ['classify'] : [])];
+  }
+  return undefined;
+}
+
+function augmentTargetSkills(
+  skillNames: string[],
+  intent: string,
+  options?: PlannerInput['options'],
+): string[] {
+  if (!shouldIncludeOcrForTarget(intent, options) || skillNames.includes('ocr')) {
+    return skillNames;
+  }
+
+  return [...skillNames, 'ocr'];
+}
+
+function shouldIncludeOcrForTarget(intent: string, options?: PlannerInput['options']): boolean {
+  if (options?.target) return true;
+
+  const lower = intent.toLowerCase();
+  return ['target', 'key content', 'red box', 'highlight', '目标', '关键内容', '红框', '标注'].some((keyword) => (
+    lower.includes(keyword)
+  ));
 }
 
 function buildCacheKey(

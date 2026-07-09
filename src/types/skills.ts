@@ -54,9 +54,15 @@ export interface PlannerInput {
     provider?: string | undefined;
     cache?: boolean | undefined;
     maxTokens?: number | undefined;
+    target?: {
+      color?: string | undefined;
+      position?: string | undefined;
+      description?: string | undefined;
+    } | undefined;
   };
   resources: {
     cpuCores: number;
+    totalMemoryMB?: number | undefined;
     memoryAvailableMB: number;
     hasGPU: boolean;
   };

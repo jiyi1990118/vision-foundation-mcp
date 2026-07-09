@@ -35,8 +35,15 @@ Boundary cases (choose carefully):
 - Flowchart with boxes and arrows → "diagram", NOT "illustration" (even if colorful)
 - Architecture diagram (system design) → "diagram", NOT "document"
 - App interface mockup/design → "ui" (if showing controls/buttons), NOT "screenshot"
+- Single app icon, favicon, emoji-style glyph, or launcher graphic → "icon", NOT "ui"
+- Brand logo, wordmark, logotype, or abstract brand mark → "logo", NOT "illustration"
+- Event flyer, advertisement, or designed layout with large title/date/venue text → "poster"
+- Comic strip/panels with speech bubbles → "comic", NOT generic "illustration"
+- Meme layout with top/bottom caption text over an image → "meme"
+- Geographic/street/floor map with roads, labels, or route markers → "map"
 - Screen capture of running app → "screenshot" (if showing actual usage), NOT "ui"
 - Anime/drawn/AI-generated character in ANY scene → ALWAYS "illustration" (regardless of content shown)
+- Cartoon scientist, educational mascot, or drawn teaching character → "illustration", NOT "other"
 - REAL photo of person working (screen visible in background) → "photo", NOT "screenshot"
 - Invoice or receipt scan → "document", NOT "screenshot"
 

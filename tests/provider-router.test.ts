@@ -22,6 +22,15 @@ const highQualityCandidate: ProviderCandidate = {
   supportedSkills: ['classify', 'ocr', 'summary', 'table', 'document', 'poster', 'moderation', 'layout'],
 };
 
+const ocrCandidate: ProviderCandidate = {
+  name: 'ppu-paddle-ocr',
+  runtime: 'native-ocr',
+  quality: 'fast',
+  minMemoryMB: 256,
+  gpuPreferred: false,
+  supportedSkills: ['ocr'],
+};
+
 describe('provider-router', () => {
   describe('chooseProvider', () => {
     it('returns the only candidate when one is available', () => {
@@ -39,6 +48,16 @@ describe('provider-router', () => {
         candidates: [ggufCandidate, highQualityCandidate],
         options: { quality: 'high' },
         resources: { memoryAvailableMB: 8192, hasGPU: true },
+        requestedSkills: ['classify'],
+      });
+      expect(choice.name).toBe('minicpm-v');
+    });
+
+    it('uses total memory for GPU-preferred providers when available memory is transiently low', () => {
+      const choice = chooseProvider({
+        candidates: [ggufCandidate, highQualityCandidate],
+        options: { quality: 'high' },
+        resources: { memoryAvailableMB: 64, totalMemoryMB: 16384, hasGPU: true },
         requestedSkills: ['classify'],
       });
       expect(choice.name).toBe('minicpm-v');
@@ -74,14 +93,22 @@ describe('provider-router', () => {
       expect(choice.name).toBe('minicpm-v');
     });
 
-    it('falls back when explicit provider lacks memory', () => {
-      const choice = chooseProvider({
+    it('throws when explicit provider lacks memory', () => {
+      expect(() => chooseProvider({
         candidates: [ggufCandidate, highQualityCandidate],
         options: { provider: 'minicpm-v' },
         resources: { memoryAvailableMB: 512, hasGPU: true },
         requestedSkills: ['classify'],
-      });
-      expect(choice.name).toBe('gguf-smolvlm');
+      })).toThrow(/requested provider/i);
+    });
+
+    it('throws when explicit provider is unknown', () => {
+      expect(() => chooseProvider({
+        candidates: [ggufCandidate, highQualityCandidate],
+        options: { provider: 'missing-provider' },
+        resources: { memoryAvailableMB: 8192, hasGPU: true },
+        requestedSkills: ['classify'],
+      })).toThrow(/requested provider/i);
     });
 
     it('filters candidates by required skills', () => {
@@ -133,6 +160,36 @@ describe('provider-router', () => {
       expect(candidate.name).toBe('gguf-smolvlm2');
       expect(candidate.quality).toBe('fast');
       expect(candidate.gpuPreferred).toBe(false);
+    });
+
+    it('prefers a dedicated OCR provider for OCR-only requests', () => {
+      const choice = chooseProvider({
+        candidates: [ggufCandidate, ocrCandidate],
+        options: {},
+        resources: { memoryAvailableMB: 8192, hasGPU: false },
+        requestedSkills: ['ocr'],
+      });
+      expect(choice.name).toBe('ppu-paddle-ocr');
+    });
+
+    it('keeps a VLM provider for mixed OCR and visual understanding requests', () => {
+      const choice = chooseProvider({
+        candidates: [ocrCandidate, ggufCandidate],
+        options: {},
+        resources: { memoryAvailableMB: 8192, hasGPU: false },
+        requestedSkills: ['classify', 'ocr', 'summary'],
+      });
+      expect(choice.name).toBe('gguf-smolvlm');
+    });
+
+    it('allows explicitly selecting a dedicated OCR provider for OCR-only requests', () => {
+      const choice = chooseProvider({
+        candidates: [ggufCandidate, ocrCandidate],
+        options: { provider: 'ppu-paddle-ocr' },
+        resources: { memoryAvailableMB: 8192, hasGPU: false },
+        requestedSkills: ['ocr'],
+      });
+      expect(choice.name).toBe('ppu-paddle-ocr');
     });
   });
 });

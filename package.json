@@ -1,29 +1,43 @@
 {
-  "name": "vision-foundation-mcp",
+  "name": "@npm_xiyuan/vision-foundation-mcp",
   "version": "0.2.0",
   "description": "Vision understanding MCP service powered by local SmolVLM / SmolVLM2 / MiniCPM-V via llama.cpp",
   "type": "module",
   "main": "dist/index.js",
+  "exports": "./dist/index.js",
   "bin": {
     "vision-foundation-mcp": "dist/index.js"
   },
   "files": [
     "dist/",
     "README.md",
+    "README.zh-CN.md",
     "LICENSE"
   ],
   "engines": {
     "node": ">=18"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jiyi1990118/vision-foundation-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jiyi1990118/vision-foundation-mcp/issues"
+  },
+  "homepage": "https://github.com/jiyi1990118/vision-foundation-mcp#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "build": "tsc && for d in src/skills/*/; do cp -r $d dist/skills/$(basename $d); done",
+    "build": "rm -rf dist && tsc && for d in src/skills/*/; do cp -r $d dist/skills/$(basename $d); done",
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
     "setup:llama": "tsx scripts/setup-llama.ts",
+    "prepublishOnly": "pnpm typecheck && pnpm test:unit && pnpm build",
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --fileParallelism=false tests/runtime-detector.test.ts tests/m4-e2e.test.ts tests/gguf-provider.test.ts tests/mcp-integration.test.ts",
-    "test:unit": "vitest run --fileParallelism=false tests/provider-router.test.ts tests/planner-active-provider.test.ts tests/model-manager.test.ts tests/minicpm-provider.test.ts tests/smolvlm2-provider.test.ts tests/provider-capabilities.test.ts tests/vision-analyze-routing.test.ts tests/vision-error-classification.test.ts tests/config.test.ts tests/options-propagation.test.ts tests/runtime-detector.test.ts tests/classify-skill.test.ts tests/compose-result-heuristic.test.ts tests/llama-server-resolver.test.ts tests/llama-server-process-registry.test.ts tests/llama-server-stop.test.ts",
+    "test:unit": "vitest run --fileParallelism=false tests/provider-router.test.ts tests/planner-active-provider.test.ts tests/model-manager.test.ts tests/minicpm-provider.test.ts tests/smolvlm2-provider.test.ts tests/ppu-paddle-ocr-provider.test.ts tests/annotation-detector.test.ts tests/key-content-extractor.test.ts tests/provider-capabilities.test.ts tests/vision-analyze-routing.test.ts tests/vision-error-classification.test.ts tests/config.test.ts tests/options-propagation.test.ts tests/runtime-detector.test.ts tests/classify-skill.test.ts tests/skill-prompt-detail.test.ts tests/compose-result-heuristic.test.ts tests/llama-server-resolver.test.ts tests/llama-server-process-registry.test.ts tests/llama-server-stop.test.ts",
     "test:slow": "vitest run --fileParallelism=false tests/m1-skeleton.test.ts tests/m1.5-real-inference.test.ts tests/m2-core-engine.test.ts tests/minicpm-inference.test.ts tests/smolvlm2-inference.test.ts",
     "test:watch": "vitest"
   },
@@ -40,6 +54,7 @@
     "@modelcontextprotocol/sdk": "^1.12.1",
     "node-llama-cpp": "^3.19.0",
     "onnxruntime-node": "^1.22.0",
+    "ppu-paddle-ocr": "^6.0.0",
     "sharp": "^0.34.2",
     "tar": "^7.5.19",
     "zod": "^3.25.76"

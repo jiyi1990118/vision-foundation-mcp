@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { selectProvider } from '../src/tools/vision-analyze.js';
+import { resolveSkillNames } from '../src/core/execution-planner.js';
+import { buildSkillProviderOverrides, selectProvider, shouldRunKeyContentExtraction } from '../src/tools/vision-analyze.js';
 import type { VisionProvider } from '../src/providers/types.js';
 import type { ImageInput, InferenceResponse, InferenceRequest } from '../src/types/domain.js';
 
@@ -27,6 +28,7 @@ function fakeProvider(opts: {
 
 const gguf = fakeProvider({ name: 'gguf-smolvlm', runtime: 'llama-cpp', minMemoryMB: 512, gpuRequired: false });
 const minicpm = fakeProvider({ name: 'minicpm-v', runtime: 'llama-cpp', minMemoryMB: 4096, gpuRequired: true });
+const ocr = fakeProvider({ name: 'ppu-paddle-ocr', runtime: 'native-ocr', minMemoryMB: 256, gpuRequired: false, skills: ['ocr'] });
 
 const goodResources = { memoryAvailableMB: 8192, hasGPU: true };
 
@@ -38,6 +40,15 @@ describe('selectProvider (vision-analyze routing)', () => {
 
   it('returns the high-quality provider when quality=high and resources allow', () => {
     const p = selectProvider([gguf, minicpm], { options: { quality: 'high' }, resources: goodResources, requestedSkills: ['classify'] });
+    expect(p.name).toBe('minicpm-v');
+  });
+
+  it('routes to high-quality provider on GPU hosts even when transient free memory is low', () => {
+    const p = selectProvider([gguf, minicpm], {
+      options: { quality: 'high' },
+      resources: { memoryAvailableMB: 64, totalMemoryMB: 16384, hasGPU: true },
+      requestedSkills: ['classify'],
+    });
     expect(p.name).toBe('minicpm-v');
   });
 
@@ -62,5 +73,91 @@ describe('selectProvider (vision-analyze routing)', () => {
   it('falls back when only one candidate is registered', () => {
     const p = selectProvider([gguf], { options: { quality: 'high' }, resources: goodResources, requestedSkills: ['classify'] });
     expect(p.name).toBe('gguf-smolvlm');
+  });
+
+  it('routes OCR-only requests to a dedicated OCR provider when registered', () => {
+    const p = selectProvider([gguf, ocr], { options: {}, resources: goodResources, requestedSkills: ['ocr'] });
+    expect(p.name).toBe('ppu-paddle-ocr');
+  });
+
+  it('keeps mixed screenshot analysis on the default VLM provider', () => {
+    const p = selectProvider([ocr, gguf], {
+      options: {},
+      resources: goodResources,
+      requestedSkills: ['classify', 'ocr', 'summary'],
+    });
+    expect(p.name).toBe('gguf-smolvlm');
+  });
+
+  it('includes OCR in auto target requests before provider routing', () => {
+    const requestedSkills = resolveSkillNames(undefined, 'auto', { target: { color: 'red', description: '红框内容' } });
+    const p = selectProvider([ocr, gguf], {
+      options: { target: { color: 'red', description: '红框内容' } },
+      resources: goodResources,
+      requestedSkills,
+    });
+
+    expect(requestedSkills).toEqual(['classify', 'summary', 'ocr']);
+    expect(p.name).toBe('gguf-smolvlm');
+  });
+
+  it('builds an OCR skill override for mixed requests when a dedicated OCR provider is registered', () => {
+    const overrides = buildSkillProviderOverrides([gguf, ocr], gguf, ['classify', 'ocr', 'summary']);
+    expect(overrides.ocr?.name).toBe('ppu-paddle-ocr');
+  });
+
+  it('does not override OCR-only requests when the selected provider is already OCR-only', () => {
+    const overrides = buildSkillProviderOverrides([gguf, ocr], ocr, ['ocr']);
+    expect(overrides.ocr).toBeUndefined();
+  });
+
+  it('does not run target extraction for explicit classify-only target requests without OCR', () => {
+    const requestedSkills = resolveSkillNames(['classify'], '提取红框', { target: { color: 'red' } });
+
+    expect(requestedSkills).toEqual(['classify']);
+    expect(shouldRunKeyContentExtraction({
+      classify: {
+        skill: 'classify',
+        success: true,
+        data: { category: 'screenshot', confidence: 0.9 },
+        duration: 1,
+      },
+    }, {
+      target: { color: 'red' },
+      intent: '提取红框',
+      annotations: undefined,
+      skillNames: requestedSkills,
+    })).toBe(false);
+  });
+
+  it('runs target extraction for auto target requests after OCR succeeds', () => {
+    const requestedSkills = resolveSkillNames(undefined, 'auto', { target: { color: 'red', description: '红框内容' } });
+
+    expect(requestedSkills).toEqual(['classify', 'summary', 'ocr']);
+    expect(shouldRunKeyContentExtraction({
+      classify: {
+        skill: 'classify',
+        success: true,
+        data: { category: 'screenshot', confidence: 0.9 },
+        duration: 1,
+      },
+      summary: {
+        skill: 'summary',
+        success: true,
+        data: { description: '界面截图' },
+        duration: 1,
+      },
+      ocr: {
+        skill: 'ocr',
+        success: true,
+        data: { texts: [{ text: '红框内容', position: '10,10,100,100', confidence: 0.9 }] },
+        duration: 1,
+      },
+    }, {
+      target: { color: 'red', description: '红框内容' },
+      intent: 'auto',
+      annotations: undefined,
+      skillNames: requestedSkills,
+    })).toBe(true);
   });
 });

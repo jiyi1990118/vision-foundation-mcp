@@ -2,8 +2,8 @@
 import { createWriteStream } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { extract } from 'tar';
-import { join, dirname, basename } from 'node:path';
-import { mkdirSync, renameSync, existsSync, unlinkSync, rmSync } from 'node:fs';
+import { join } from 'node:path';
+import { mkdirSync, renameSync, existsSync, rmSync } from 'node:fs';
 import { logger } from '../../utils/logger.js';
 
 export interface DownloadOptions {

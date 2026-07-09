@@ -9,6 +9,16 @@ const meta: ImageMetadata = {
 };
 
 describe('classify skill — optimised prompt + schema', () => {
+  it('ocr schema allows coordinate position strings from dedicated OCR providers', () => {
+    const skill = getSkill('ocr')!;
+    const schema = skill.schema as {
+      properties: { texts: { items: { properties: { position: { type: string; enum?: string[] } } } } };
+    };
+
+    expect(schema.properties.texts.items.properties.position.type).toBe('string');
+    expect(schema.properties.texts.items.properties.position.enum).toBeUndefined();
+  });
+
   it('prompt contains a definition for each category in the schema enum', () => {
     const skill = getSkill('classify')!;
     expect(skill).toBeDefined();
@@ -28,6 +38,14 @@ describe('classify skill — optimised prompt + schema', () => {
     const skill = getSkill('classify')!;
     const prompt = compilePrompt(skill, { intent: 'auto', metadata: meta });
     expect(prompt.toLowerCase()).toContain('do not default to');
+  });
+
+  it('prompt covers cartoon scientist and educational mascot images as illustration', () => {
+    const skill = getSkill('classify')!;
+    const prompt = compilePrompt(skill, { intent: 'auto', metadata: meta }).toLowerCase();
+    expect(prompt).toContain('cartoon scientist');
+    expect(prompt).toContain('educational mascot');
+    expect(prompt).toContain('illustration');
   });
 
   it('prompt demands pure JSON output with no markdown', () => {

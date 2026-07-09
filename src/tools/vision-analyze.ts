@@ -10,13 +10,17 @@ import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { NormalizeError, normalizeImageInput } from '../core/request-normalizer.js';
 import { extractMetadata } from '../core/metadata-extractor.js';
-import { planExecution } from '../core/execution-planner.js';
+import { planExecution, resolveSkillNames } from '../core/execution-planner.js';
 import { evaluatePolicy, PolicyDeniedError } from '../core/policy-engine.js';
 import { SkillPipeline, composeResult } from '../core/skill-pipeline.js';
+import type { TargetQuery } from '../core/skill-pipeline.js';
+import { detectAnnotations } from '../core/annotation-detector.js';
+import { extractKeyContent, shouldExtractKeyContent } from '../core/key-content-extractor.js';
+import type { KeyContentActivationInput } from '../core/key-content-extractor.js';
 import { Semaphore, withTimeout } from '../utils/concurrency.js';
 import { chooseProvider, providerToCandidate, type RouterOptions, type RouterResources } from '../core/provider-router.js';
 import type { VisionProvider } from '../providers/types.js';
-import type { PlannerInput, PolicyContext } from '../types/skills.js';
+import type { PlannerInput, PolicyContext, SkillResultSet } from '../types/skills.js';
 import { logger } from '../utils/logger.js';
 import { DEFAULT_CONFIG, getConfig } from '../core/config.js';
 
@@ -48,6 +52,11 @@ const inputSchema = z.object({
       provider: z.string().optional(),
       cache: z.boolean().optional(),
       maxTokens: z.number().optional(),
+      target: z.object({
+        color: z.string().optional(),
+        position: z.string().optional(),
+        description: z.string().optional(),
+      }).optional(),
     })
     .optional(),
 });
@@ -74,20 +83,21 @@ export function selectProvider(
     throw new Error('No vision provider registered');
   }
 
-  // Fast path: when quality is not "high" and no explicit provider is
-  // requested, there is nothing to route — just use the default. This
-  // avoids spurious router warnings on low-memory hosts where even the
-  // fast candidate may not strictly satisfy resource thresholds.
+  // Fast path: when quality is not "high", no explicit provider is requested,
+  // and the default provider covers the requested skills, just use it. OCR-only
+  // requests still go through routing so future dedicated OCR providers can win.
   const wantsHigh = input.options.quality === 'high';
   const hasExplicitProvider = typeof input.options.provider === 'string' && input.options.provider.length > 0;
-  if (!wantsHigh && !hasExplicitProvider) {
-    return providers[0]!;
-  }
-
-  const candidates = providers.map((p) => providerToCandidate(p));
   const skills = input.requestedSkills.length > 0
     ? input.requestedSkills
     : ['classify', 'summary'];
+  const defaultProvider = providers[0]!;
+  const shouldRoute = wantsHigh || hasExplicitProvider || isOcrOnly(skills) || !coversSkills(defaultProvider, skills);
+  if (!shouldRoute) {
+    return defaultProvider;
+  }
+
+  const candidates = providers.map((p) => providerToCandidate(p));
 
   try {
     const choice = chooseProvider({
@@ -99,12 +109,60 @@ export function selectProvider(
     const found = providers.find((p) => p.name === choice.name);
     if (found) return found;
   } catch (e) {
+    if (hasExplicitProvider) {
+      throw e;
+    }
     logger.warn('Provider routing failed, falling back to default provider', {
       error: (e as Error).message,
     });
   }
 
   return providers[0]!;
+}
+
+function isOcrOnly(skills: string[]): boolean {
+  return skills.length === 1 && skills[0] === 'ocr';
+}
+
+function coversSkills(provider: VisionProvider, skills: string[]): boolean {
+  const supported = new Set(provider.supportedSkills);
+  return skills.every((skill) => supported.has(skill));
+}
+
+function isDedicatedOcrProvider(provider: VisionProvider): boolean {
+  return provider.supportedSkills.length === 1 && provider.supportedSkills[0] === 'ocr';
+}
+
+export function buildSkillProviderOverrides(
+  providers: VisionProvider[],
+  selectedProvider: VisionProvider,
+  skillNames: string[],
+): Record<string, VisionProvider> {
+  const overrides: Record<string, VisionProvider> = {};
+  if (!skillNames.includes('ocr') || isOcrOnly(skillNames)) {
+    return overrides;
+  }
+
+  const dedicatedOcr = providers.find((provider) => (
+    provider !== selectedProvider
+    && provider.supportedSkills.length === 1
+    && provider.supportedSkills[0] === 'ocr'
+  ));
+  if (dedicatedOcr) {
+    overrides.ocr = dedicatedOcr;
+  }
+
+  return overrides;
+}
+
+export function shouldRunKeyContentExtraction(
+  skillResults: SkillResultSet,
+  input: KeyContentActivationInput,
+): boolean {
+  const ocrResult = skillResults.ocr;
+  return ocrResult?.success === true
+    && ocrResult.data !== undefined
+    && shouldExtractKeyContent(input);
 }
 
 export function registerVisionAnalyzeTool(
@@ -151,14 +209,13 @@ export function registerVisionAnalyzeTool(
             const hw = await detectHardware();
             const resources = {
               cpuCores: hw.cpuCores,
+              totalMemoryMB: hw.totalMemoryMB,
               memoryAvailableMB: hw.availableMemoryMB,
               hasGPU: hw.hasMetal || hw.hasCUDA,
             };
 
             // ── Stage 4b: Route to the best provider for this request ──
-            const skillNames = requestedSkills && requestedSkills.length > 0
-              ? requestedSkills
-              : ['classify', 'summary'];
+            const skillNames = resolveSkillNames(requestedSkills, intent, options ?? {});
             const provider = selectProvider(providers, {
               options: options ?? {},
               resources,
@@ -167,10 +224,21 @@ export function registerVisionAnalyzeTool(
             if (!provider.isLoaded()) {
               await provider.load();
             }
+            const providerOverrides = buildSkillProviderOverrides(providers, provider, skillNames);
+            await Promise.all(
+              Object.values(providerOverrides).map(async (overrideProvider) => {
+                if (!overrideProvider.isLoaded()) {
+                  await overrideProvider.load();
+                }
+              }),
+            );
             logger.info('Provider selected', {
               provider: provider.name,
               runtime: provider.runtime,
               requestedQuality: options?.quality ?? 'fast',
+              providerOverrides: Object.fromEntries(
+                Object.entries(providerOverrides).map(([skill, overrideProvider]) => [skill, overrideProvider.name]),
+              ),
             });
 
             const plannerInput: PlannerInput = {
@@ -204,12 +272,44 @@ export function registerVisionAnalyzeTool(
             });
 
             // ── Stage 6-7: Execute Skill Pipeline ──
-            const pipeline = new SkillPipeline(provider);
+            const pipeline = new SkillPipeline(provider, providerOverrides);
             const skillResults = await pipeline.execute(finalPlan, image);
 
             // ── Stage 8-9: Compose result ──
             const duration = Date.now() - startTime;
-            const visionResult = composeResult(skillResults, provider.name, provider.runtime, duration);
+            const shouldInspectAnnotations = shouldExtractKeyContent({
+              target: options?.target as TargetQuery | undefined,
+              intent,
+              skillNames,
+            });
+            const annotations = skillResults.ocr?.success && shouldInspectAnnotations
+              ? await detectAnnotations(image, skillResults.ocr.data)
+              : undefined;
+            const target = options?.target as TargetQuery | undefined;
+            const ocrProvider = providerOverrides.ocr ?? (isDedicatedOcrProvider(provider) ? provider : undefined);
+            const ocrResult = skillResults.ocr;
+            const shouldExtractKeyContentForRequest = shouldRunKeyContentExtraction(skillResults, {
+              target,
+              intent,
+              annotations,
+              skillNames,
+            });
+            const keyContentExtraction = shouldExtractKeyContentForRequest && ocrResult?.success === true
+              ? await extractKeyContent({
+                image,
+                target,
+                intent,
+                annotations,
+                ocrData: ocrResult.data,
+                ocrProvider,
+              })
+              : undefined;
+            const composeOptions = {
+              ...(annotations ? { annotations } : {}),
+              ...(target ? { target } : {}),
+              ...(keyContentExtraction ? { keyContentExtraction } : {}),
+            };
+            const visionResult = composeResult(skillResults, provider.name, provider.runtime, duration, composeOptions);
 
             logger.info('vision.analyze completed', {
               duration,

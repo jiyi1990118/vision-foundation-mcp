@@ -1,10 +1,15 @@
 // src/providers/llama-server/resolver.ts
 import { homedir, platform } from 'node:os';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
 import { existsSync, mkdirSync, writeFileSync, unlinkSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { logger } from '../../utils/logger.js';
 import { detectPlatform } from './platform-detector.js';
 import { downloadAndExtract, buildMirrorUrl } from './downloader.js';
+
+// ES module compatibility: __dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export interface ResolverOptions {
   env?: Record<string, string | undefined>;

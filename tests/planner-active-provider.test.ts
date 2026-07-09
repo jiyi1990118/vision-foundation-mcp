@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { planExecution } from '../src/core/execution-planner.js';
+import { planExecution, resolveSkillNames } from '../src/core/execution-planner.js';
 import type { PlannerInput } from '../src/types/skills.js';
 
 const baseInput = {
@@ -14,6 +14,55 @@ const baseInput = {
 };
 
 describe('execution-planner active-provider defaulting', () => {
+  it('maps requirement screenshot analysis to classify, OCR, and summary', async () => {
+    const input: PlannerInput = {
+      ...baseInput,
+      intent: '分析这个需求截图内容，提取页面字段、按钮、红框标注和图片内容',
+    } as PlannerInput;
+
+    const plan = await planExecution(input);
+    expect(plan.skills.map((task) => task.skill)).toEqual(['classify', 'ocr', 'summary']);
+  });
+
+  it('runs OCR and classify before summary for mixed screenshot analysis', async () => {
+    const input: PlannerInput = {
+      ...baseInput,
+      intent: '分析这个需求截图内容，提取页面字段、按钮、红框标注和图片内容',
+    } as PlannerInput;
+
+    const plan = await planExecution(input);
+    const classify = plan.skills.find((task) => task.skill === 'classify')!;
+    const summary = plan.skills.find((task) => task.skill === 'summary')!;
+
+    expect(classify.dependsOn).toBeUndefined();
+    expect(summary.dependsOn).toEqual(['ocr', 'classify']);
+  });
+
+  it('adds OCR for target extraction on auto intent', async () => {
+    const input: PlannerInput = {
+      ...baseInput,
+      options: { target: { color: 'red', description: '虚线红框中的内容' } },
+    } as PlannerInput;
+
+    const plan = await planExecution(input);
+    expect(plan.skills.map((task) => task.skill)).toEqual(['classify', 'summary', 'ocr']);
+  });
+
+  it('keeps explicit requested skills authoritative for target extraction', async () => {
+    const requestedSkills = resolveSkillNames(['classify'], '提取红框', { target: { color: 'red' } });
+    expect(requestedSkills).toEqual(['classify']);
+
+    const input: PlannerInput = {
+      ...baseInput,
+      intent: '提取红框',
+      requestedSkills: ['classify'],
+      options: { target: { color: 'red' } },
+    } as PlannerInput;
+
+    const plan = await planExecution(input);
+    expect(plan.skills.map((task) => task.skill)).toEqual(['classify']);
+  });
+
   it('uses activeProvider/activeRuntime when options.provider is unset', async () => {
     const input: PlannerInput = {
       ...baseInput,

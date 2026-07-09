@@ -1,10 +1,16 @@
 node_modules/
 dist/
+bin/
 *.js
 *.js.map
 *.d.ts
 !*.config.js
 .DS_Store
+**/.DS_Store
 *.log
 .env
-~/.vision-mcp/
+.env.*
+!.env.example
+.vision-mcp/
+*.tgz
+.worktrees/

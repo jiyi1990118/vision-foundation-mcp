@@ -13,7 +13,7 @@
           "text": { "type": "string" },
           "position": {
             "type": "string",
-            "enum": ["top-left", "top", "top-right", "left", "center", "right", "bottom-left", "bottom", "bottom-right"]
+            "description": "Either a coarse region such as center/top-left or a coordinate box string x1,y1,x2,y2 from a dedicated OCR provider."
           },
           "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
         }

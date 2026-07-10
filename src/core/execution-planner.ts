@@ -28,7 +28,8 @@ const INTENT_MAPPINGS: IntentMapping[] = [
   {
     keywords: [
       'requirement screenshot', 'prototype', 'wireframe', 'annotation', 'red box', 'highlight',
-      '需求截图', '截图内容', '页面内容', '图片内容', '界面内容', '原型图', '标注', '红框', '字段', '按钮', '开关',
+      'tapd', 'requirement image',
+      '需求', '需求图片', '需求截图', '截图内容', '页面内容', '图片内容', '界面内容', '原型图', '标注', '红框', '字段', '按钮', '开关',
     ],
     skills: ['classify', 'ocr', 'summary'],
   },
@@ -111,6 +112,7 @@ export async function planExecution(input: PlannerInput): Promise<ExecutionPlan>
     const manifest = getSkill(name)!;
     const prompt = compilePrompt(manifest, {
       intent,
+      focus: focusForSkill(name, options),
       metadata,
     });
 
@@ -199,6 +201,18 @@ function augmentTargetSkills(
   }
 
   return [...skillNames, 'ocr'];
+}
+
+function focusForSkill(name: string, options: PlannerInput['options']): string | undefined {
+  if (name !== 'ocr' || !options.target) return undefined;
+
+  const parts = [
+    options.target.color ? `color=${options.target.color}` : undefined,
+    options.target.position ? `position=${options.target.position}` : undefined,
+    options.target.description ? `description=${options.target.description}` : undefined,
+  ].filter((part): part is string => part !== undefined);
+
+  return parts.length > 0 ? parts.join('; ') : undefined;
 }
 
 function shouldIncludeOcrForTarget(intent: string, options?: PlannerInput['options']): boolean {

@@ -165,6 +165,32 @@ export function shouldRunKeyContentExtraction(
     && shouldExtractKeyContent(input);
 }
 
+export function shouldInspectAnnotationsForRequest(input: {
+  target?: TargetQuery | undefined;
+  intent?: string | undefined;
+  skillNames: string[];
+}): boolean {
+  if (!input.skillNames.includes('ocr')) return false;
+  return shouldExtractKeyContent({
+    target: input.target,
+    intent: input.intent,
+    skillNames: input.skillNames,
+  });
+}
+
+export function buildOcrProviderWarnings(input: {
+  intent?: string | undefined;
+  skillNames: string[];
+  selectedProvider: VisionProvider;
+  providerOverrides: Record<string, VisionProvider>;
+}): string[] {
+  if (!input.skillNames.includes('ocr')) return [];
+  if (!shouldExtractKeyContent({ intent: input.intent, skillNames: input.skillNames })) return [];
+  if (input.providerOverrides.ocr || isDedicatedOcrProvider(input.selectedProvider)) return [];
+
+  return ['未启用专用 OCR provider，需求图红框/小字提取可能不可靠；建议设置 VISION_OCR_PROVIDER=ppu-paddle-ocr。'];
+}
+
 export function registerVisionAnalyzeTool(
   server: McpServer,
   providers: VisionProvider[],
@@ -277,7 +303,7 @@ export function registerVisionAnalyzeTool(
 
             // ── Stage 8-9: Compose result ──
             const duration = Date.now() - startTime;
-            const shouldInspectAnnotations = shouldExtractKeyContent({
+            const shouldInspectAnnotations = shouldInspectAnnotationsForRequest({
               target: options?.target as TargetQuery | undefined,
               intent,
               skillNames,
@@ -304,6 +330,15 @@ export function registerVisionAnalyzeTool(
                 ocrProvider,
               })
               : undefined;
+            const ocrProviderWarnings = buildOcrProviderWarnings({
+              intent,
+              skillNames,
+              selectedProvider: provider,
+              providerOverrides,
+            });
+            if (keyContentExtraction && ocrProviderWarnings.length > 0) {
+              keyContentExtraction.warnings = [...new Set([...keyContentExtraction.warnings, ...ocrProviderWarnings])];
+            }
             const composeOptions = {
               ...(annotations ? { annotations } : {}),
               ...(target ? { target } : {}),

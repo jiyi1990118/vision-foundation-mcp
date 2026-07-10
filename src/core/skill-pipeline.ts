@@ -385,7 +385,7 @@ interface CategoryInference {
 }
 
 interface UiEvidence {
-  likelyPageType: 'admin-ui';
+  likelyPageType: 'admin-ui' | 'mobile-ui';
   navigation: string[];
   actions: string[];
   fields: string[];
@@ -393,6 +393,7 @@ interface UiEvidence {
   values: string[];
   modules: string[];
   rawTextCount: number;
+  title?: string | undefined;
 }
 
 interface OcrItem {
@@ -774,6 +775,9 @@ function parseBox(position: string): Box | undefined {
 function buildUiEvidence(lines: string[]): UiEvidence | undefined {
   if (lines.length < 8) return undefined;
 
+  const mobileEvidence = buildMobileUiEvidence(lines);
+  if (mobileEvidence) return mobileEvidence;
+
   const uiSignalCount = lines.filter((line) => /菜单|首页|管理|配置|操作|编辑|详情|停用|启用|保存|取消|新增|删除|查询|筛选|分类|价格|状态|CODE|POS/i.test(line)).length;
   if (uiSignalCount < 4) return undefined;
 
@@ -793,6 +797,35 @@ function buildUiEvidence(lines: string[]): UiEvidence | undefined {
     values,
     modules,
     rawTextCount: lines.length,
+  };
+}
+
+function buildMobileUiEvidence(lines: string[]): UiEvidence | undefined {
+  const statusBarSignals = lines.filter((line) => /^\d{1,2}:\d{2}$/.test(line)).length;
+  const productSignals = lines.filter((line) => /详情|双拼|比萨|披萨|经典手拍|配料|\(1\/2\)|\d+"/.test(line)).length;
+  const adminSignals = lines.filter((line) => /菜单中心|管理|配置|默认基础价|默认附加价|操作|编辑|停用|启用|CODE|POS/i.test(line)).length;
+
+  if (productSignals < 4 || adminSignals >= 3) return undefined;
+
+  const title = lines.find((line) => line === '详情') ?? lines.find((line) => /详情/.test(line));
+  const navigation = unique(lines.filter((line) => /详情|首页|返回|Tab|标签/.test(line)).slice(0, 8));
+  const actions = unique(lines.filter((line) => /保存|取消|确定|提交|加入|购买|下单/.test(line)).slice(0, 8));
+  const fields = unique(lines.filter((line) => /双拼|比萨|披萨|配料|经典手拍|\(1\/2\)|\d+"/.test(line)).slice(0, 12));
+  const values = unique(lines.filter((line) => /\+\d+|\(去[）)]|\(1\/2\)|\d+"/.test(line)).slice(0, 12));
+  const modules = unique(lines.filter((line) => /双拼|比萨|披萨/.test(line)).slice(0, 8));
+
+  if (statusBarSignals === 0 && !title && fields.length < 4) return undefined;
+
+  return {
+    likelyPageType: 'mobile-ui',
+    navigation,
+    actions,
+    fields,
+    tableHeaders: [],
+    values,
+    modules,
+    rawTextCount: lines.length,
+    title,
   };
 }
 
@@ -839,6 +872,21 @@ function buildUiLayout(items: OcrItem[]): UiLayout | undefined {
 }
 
 function buildOcrDrivenUiSummary(evidence: UiEvidence): string {
+  if (evidence.likelyPageType === 'mobile-ui') {
+    const parts = ['这是一个移动端应用页面。'];
+    if (evidence.title) {
+      parts.push(`页面标题为${evidence.title}。`);
+    }
+    if (evidence.fields.length > 0) {
+      parts.push(`页面可见商品或详情内容包括${evidence.fields.join('、')}。`);
+    }
+    if (evidence.values.length > 0) {
+      parts.push(`可见配置或变动信息包括${evidence.values.join('、')}。`);
+    }
+    parts.push(`OCR 共识别到 ${evidence.rawTextCount} 条文本，以上中文标签应作为页面内容理解的主要依据。`);
+    return parts.join('');
+  }
+
   const parts = ['这是一个中文后台管理系统页面。'];
   if (evidence.navigation.length > 0) {
     parts.push(`左侧导航或页面模块包含${evidence.navigation.join('、')}。`);

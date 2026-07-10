@@ -35,6 +35,7 @@ Boundary cases (choose carefully):
 - Flowchart with boxes and arrows → "diagram", NOT "illustration" (even if colorful)
 - Architecture diagram (system design) → "diagram", NOT "document"
 - App interface mockup/design → "ui" (if showing controls/buttons), NOT "screenshot"
+- Mobile app or mini-program product/detail/order pages → "ui", NOT "document" or "dashboard"
 - Single app icon, favicon, emoji-style glyph, or launcher graphic → "icon", NOT "ui"
 - Brand logo, wordmark, logotype, or abstract brand mark → "logo", NOT "illustration"
 - Event flyer, advertisement, or designed layout with large title/date/venue text → "poster"

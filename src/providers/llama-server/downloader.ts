@@ -3,7 +3,8 @@ import { createWriteStream } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { extract } from 'tar';
 import { join } from 'node:path';
-import { mkdirSync, renameSync, existsSync, rmSync } from 'node:fs';
+import { mkdirSync, renameSync, existsSync, rmSync, readdirSync, statSync } from 'node:fs';
+import { platform } from 'node:os';
 import { logger } from '../../utils/logger.js';
 
 export interface DownloadOptions {
@@ -72,32 +73,80 @@ export async function downloadAndExtract(
 ): Promise<string> {
   const tempDir = join(destDir, '.downloading');
   mkdirSync(tempDir, { recursive: true });
-  
-  const tarPath = join(tempDir, 'download.tar.gz');
-  
+
+  const isWindows = platform() === 'win32';
+  const archiveExt = isWindows ? '.zip' : '.tar.gz';
+  const archivePath = join(tempDir, `download${archiveExt}`);
+
   try {
-    // 下载
-    await downloadWithRetry(urls, tarPath, timeout);
-    
-    // 解压
+    await downloadWithRetry(urls, archivePath, timeout);
+
     logger.info('Extracting archive...');
-    await extract({ file: tarPath, cwd: tempDir });
-    
-    // 查找二进制文件
-    const extractedBinary = join(tempDir, 'bin', binaryName);
+
+    let extractedBinary: string;
+
+    if (isWindows) {
+      extractedBinary = await extractZipAndFindBinary(tempDir, archivePath, binaryName);
+    } else {
+      await extract({ file: archivePath, cwd: tempDir });
+      extractedBinary = join(tempDir, 'bin', binaryName);
+    }
+
     if (!existsSync(extractedBinary)) {
       throw new Error(`Binary ${binaryName} not found in extracted archive`);
     }
-    
-    // 移动到目标目录
+
     mkdirSync(destDir, { recursive: true });
     const finalPath = join(destDir, binaryName);
     renameSync(extractedBinary, finalPath);
-    
+
     logger.info(`Installed: ${finalPath}`);
     return finalPath;
   } finally {
-    // 清理临时目录
     if (existsSync(tempDir)) rmSync(tempDir, { recursive: true, force: true });
   }
+}
+
+/**
+ * Extract a .zip archive on Windows using PowerShell's Expand-Archive,
+ * then find the binary (may be in a nested bin/ subdirectory).
+ */
+async function extractZipAndFindBinary(
+  tempDir: string,
+  zipPath: string,
+  binaryName: string,
+): Promise<string> {
+  const { execFileSync } = await import('node:child_process');
+  const extractDir = join(tempDir, 'extracted');
+  mkdirSync(extractDir, { recursive: true });
+
+  execFileSync(
+    'powershell',
+    ['-NoProfile', '-NonInteractive', '-Command',
+     `Expand-Archive -Path '${zipPath}' -DestinationPath '${extractDir}' -Force`],
+    { encoding: 'utf8' },
+  );
+
+  // Search for the binary in the extracted directory tree
+  const directPath = join(extractDir, 'bin', binaryName);
+  if (existsSync(directPath)) return directPath;
+
+  // Fallback: recursively search for the binary
+  return findFileRecursive(extractDir, binaryName) ?? directPath;
+}
+
+/** Recursively search for a file by name. */
+function findFileRecursive(dir: string, fileName: string): string | null {
+  const entries = readdirSync(dir);
+  for (const entry of entries) {
+    const fullPath = join(dir, entry);
+    const stat = statSync(fullPath);
+    if (stat.isDirectory()) {
+      const found = findFileRecursive(fullPath, fileName);
+      if (found) return found;
+    } else if (entry === fileName) {
+      return fullPath;
+    }
+  }
+  return null;
 }

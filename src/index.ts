@@ -44,10 +44,13 @@ export async function buildProvidersForRuntime(env: NodeJS.ProcessEnv = process.
     logger.info('High-quality provider registered (MiniCPM-V, lazy-loaded on quality=high)');
   }
 
-  if (env.VISION_OCR_PROVIDER === 'ppu-paddle-ocr') {
+  const ocrProviderType = env.VISION_OCR_PROVIDER ?? 'ppu-paddle-ocr';
+  if (ocrProviderType === 'ppu-paddle-ocr') {
     const { PpuPaddleOcrProvider } = await import('./providers/ppu-paddle-ocr/provider.js');
     providers.push(new PpuPaddleOcrProvider());
     logger.info('OCR provider registered (ppu-paddle-ocr, lazy-loaded on OCR-only requests)');
+  } else if (ocrProviderType !== 'none') {
+    logger.warn('Unknown OCR provider requested; OCR provider disabled', { provider: ocrProviderType });
   }
 
   return providers;
@@ -56,7 +59,7 @@ export async function buildProvidersForRuntime(env: NodeJS.ProcessEnv = process.
 async function main(): Promise<void> {
   const server = new McpServer({
     name: 'vision-foundation-mcp',
-    version: '0.2.1',
+    version: '0.3.0',
   });
 
   const providers = await buildProvidersForRuntime();
@@ -78,7 +81,7 @@ async function main(): Promise<void> {
   await server.connect(transport);
 
   logger.info('Vision Foundation MCP server running', {
-    version: '0.2.1',
+    version: '0.3.0',
     providers: providers.map((p) => p.name),
   });
 }

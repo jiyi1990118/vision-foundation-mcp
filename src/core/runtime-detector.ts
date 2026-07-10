@@ -369,7 +369,7 @@ async function detectNVIDIA(platform: NodeJS.Platform): Promise<GPUInfo[]> {
   if (platform !== 'linux' && platform !== 'win32') return [];
   try {
     const output = await execWithTimeout(
-      'nvidia-smi --query-gpu=name,memory.total --format=csv,noheader 2>/dev/null',
+      'nvidia-smi --query-gpu=name,memory.total --format=csv,noheader',
       5000,
     );
     if (!output || output.includes('not found')) return [];

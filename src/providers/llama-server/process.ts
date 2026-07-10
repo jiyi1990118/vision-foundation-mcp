@@ -9,7 +9,7 @@
  *
  * @see Docs/01-architecture/06-provider-runtime.md
  */
-import { spawn, type ChildProcess } from 'node:child_process';
+import { spawn, spawnSync, type ChildProcess } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { homedir, platform } from 'node:os';
 import { join } from 'node:path';
@@ -274,7 +274,11 @@ export class LlamaServerProcess {
         provider: this.config.name, pid,
       });
       try {
-        process.kill(pid, 'SIGTERM');
+        if (platform() === 'win32') {
+          killProcessTreeWindows(pid);
+        } else {
+          process.kill(pid, 'SIGTERM');
+        }
       } catch (err) {
         // Process may have already exited.
         logger.debug('Attached llama-server already exited', {
@@ -294,11 +298,31 @@ export class LlamaServerProcess {
     }
 
     logger.info('Stopping llama-server', { provider: this.config.name });
-    proc.kill('SIGTERM');
+
+    if (platform() === 'win32') {
+      const winPid = proc.pid;
+      if (winPid) {
+        try {
+          killProcessTreeWindows(winPid);
+        } catch {
+          proc.kill();
+        }
+      } else {
+        proc.kill();
+      }
+    } else {
+      proc.kill('SIGTERM');
+    }
 
     await new Promise<void>((resolve) => {
       const timeout = setTimeout(() => {
-        if (!proc.killed) proc.kill('SIGKILL');
+        if (!proc.killed) {
+          if (platform() === 'win32') {
+            try { killProcessTreeWindows(proc.pid!, true); } catch { proc.kill(); }
+          } else {
+            proc.kill('SIGKILL');
+          }
+        }
         resolve();
       }, 5000);
 
@@ -315,6 +339,16 @@ export class LlamaServerProcess {
   }
 }
 
+/**
+ * Kill a process and its children on Windows using `taskkill`.
+ * @param force - If true, use /F for forceful termination (equivalent to SIGKILL).
+ */
+function killProcessTreeWindows(pid: number, force = false): void {
+  const args = ['/pid', String(pid), '/T'];
+  if (force) args.push('/F');
+  spawnSync('taskkill', args, { stdio: 'ignore', shell: false });
+}
+
 export interface LlamaServerResolverOptions {
   env?: Record<string, string | undefined>;
   platform?: NodeJS.Platform;
@@ -327,12 +361,25 @@ export function resolveLlamaServerCandidates(options: LlamaServerResolverOptions
   const currentPlatform = options.platform ?? platform();
   const home = options.homeDir ?? homedir();
   const exeName = currentPlatform === 'win32' ? 'llama-server.exe' : 'llama-server';
+  const userBin = join(home, '.vision-mcp', 'bin', exeName);
+
+  // Platform-specific system search paths
+  const systemPaths: string[] =
+    currentPlatform === 'win32'
+      ? [
+          join(home, 'AppData', 'Local', 'llama.cpp', exeName),
+          join(home, 'AppData', 'Local', 'Programs', 'llama.cpp', exeName),
+        ]
+      : [
+          '/opt/homebrew/bin/llama-server',
+          '/usr/local/bin/llama-server',
+          '/usr/bin/llama-server',
+        ];
+
   const candidates = [
     ...(env.LLAMA_SERVER_PATH ? [env.LLAMA_SERVER_PATH] : []),
-    join(home, '.vision-mcp', 'bin', exeName),
-    '/opt/homebrew/bin/llama-server',
-    '/usr/local/bin/llama-server',
-    '/usr/bin/llama-server',
+    userBin,
+    ...systemPaths,
     exeName,
   ];
 

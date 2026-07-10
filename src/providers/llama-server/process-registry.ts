@@ -82,8 +82,13 @@ function listLlamaServerCommandsUnix(): string[] {
 function listLlamaServerCommandsWindows(): string[] {
   try {
     const out = execFileSync(
-      'wmic',
-      ['process', 'where', "name like '%llama-server%'", 'get', 'ProcessId,CommandLine'],
+      'powershell',
+      [
+        '-NoProfile',
+        '-NonInteractive',
+        '-Command',
+        "Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*llama-server*' } | ForEach-Object { \"$($_.ProcessId) $($_.CommandLine)\" }",
+      ],
       { encoding: 'utf8' },
     );
     return out.split('\n').map((line) => line.trim()).filter(Boolean);

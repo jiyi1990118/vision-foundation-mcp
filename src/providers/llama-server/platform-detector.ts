@@ -15,7 +15,7 @@ export interface DetectOptions {
 export function detectPlatform(options: DetectOptions = {}): PlatformInfo {
   const currentPlatform = options.platform ?? platform();
   const currentArch = options.arch ?? arch();
-  
+
   // macOS
   if (currentPlatform === 'darwin') {
     if (currentArch === 'arm64') {
@@ -25,17 +25,22 @@ export function detectPlatform(options: DetectOptions = {}): PlatformInfo {
       return { platform: 'darwin', arch: 'x64', releaseFilename: 'macos-x64' };
     }
   }
-  
+
   // Linux
   if (currentPlatform === 'linux' && currentArch === 'x64') {
     return { platform: 'linux', arch: 'x64', releaseFilename: 'ubuntu-x64' };
   }
-  
-  // Windows
+
+  // Windows x64
   if (currentPlatform === 'win32' && currentArch === 'x64') {
     return { platform: 'win32', arch: 'x64', releaseFilename: 'win-cuda-cu12.4-x64' };
   }
-  
+
+  // Windows ARM64 (Snapdragon X Elite etc.)
+  if (currentPlatform === 'win32' && currentArch === 'arm64') {
+    return { platform: 'win32', arch: 'arm64', releaseFilename: 'win-arm64' };
+  }
+
   throw new Error(
     `Platform ${currentPlatform}-${currentArch} not supported for auto-install.\n` +
     `Please build llama.cpp from source or set LLAMA_SERVER_PATH.`

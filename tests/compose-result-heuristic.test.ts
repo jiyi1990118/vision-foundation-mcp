@@ -47,6 +47,35 @@ function ocrUiResults(summary = '菜单中心\n图片：\nedonner\nA 首页'): S
   };
 }
 
+function mobileProductDetailResults(summary = '详情\n经典手拍／9”\n双拼D'): SkillResultSet {
+  return {
+    classify: { skill: 'classify', success: true, data: { category: 'document', confidence: 0.7 }, duration: 100 },
+    summary: { skill: 'summary', success: true, data: { description: summary }, duration: 100 },
+    ocr: {
+      skill: 'ocr',
+      success: true,
+      data: {
+        texts: [
+          { text: '18:13', position: '99,46,206,76', confidence: 0.99 },
+          { text: '详情', position: '326,113,399,152', confidence: 0.99 },
+          { text: '经典手拍／9”', position: '269,260,468,307', confidence: 0.9 },
+          { text: '金沙咸蛋黄嫩鸡', position: '509,431,656,454', confidence: 0.99 },
+          { text: '比萨', position: '505,455,560,487', confidence: 0.99 },
+          { text: '夏威夷风情比萨', position: '34,540,186,563', confidence: 0.99 },
+          { text: '双拼D', position: '34,746,131,780', confidence: 0.99 },
+          { text: '双拼D', position: '34,804,113,836', confidence: 0.99 },
+          { text: '详情', position: '37,866,110,905', confidence: 0.99 },
+          { text: '9"+经典手拍+夏威夷风情比萨(1/2)+金沙咸蛋黄嫩鸡', position: '43,937,661,960', confidence: 0.97 },
+          { text: '比萨(1/2)', position: '41,973,151,998', confidence: 0.99 },
+          { text: '变动配料：左：菠萝+1方形火腿片(去）右：黄桃(去）椰果+1', position: '37,1058,680,1076', confidence: 0.93 },
+        ],
+        language: 'zh',
+      },
+      duration: 100,
+    },
+  };
+}
+
 describe('composeResult — post-classify heuristic', () => {
   it('adds top-level ocrText for OCR-only results', () => {
     const r = composeResult(
@@ -149,6 +178,25 @@ describe('composeResult — post-classify heuristic', () => {
     expect(r.result.ui).toMatchObject({
       likelyPageType: 'admin-ui',
       rawTextCount: 17,
+    });
+  });
+
+  it('uses mobile app summary for phone product detail screenshots, not admin UI wording', () => {
+    const r = composeResult(
+      mobileProductDetailResults(),
+      'gguf-smolvlm2', 'llama-cpp', 1000,
+    );
+
+    expect(r.category).toBe('ui');
+    expect(r.summary).toContain('移动端应用页面');
+    expect(r.summary).toContain('页面标题为详情');
+    expect(r.summary).toContain('双拼D');
+    expect(r.summary).toContain('变动配料');
+    expect(r.summary).not.toContain('中文后台管理系统');
+    expect(r.summary).not.toContain('左侧导航');
+    expect(r.result.ui).toMatchObject({
+      likelyPageType: 'mobile-ui',
+      rawTextCount: 12,
     });
   });
 

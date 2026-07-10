@@ -299,6 +299,26 @@ describe('key-content table reconstruction', () => {
     expect(extraction.table?.rows[0]?.[0]).not.toBe('0.00 0.00 ¥');
   });
 
+  it('deduplicates full-image and local OCR lines with punctuation variants', () => {
+    const extraction = buildStructuredContent([
+      {
+        text: '变动配料：左：菠萝+1方形火腿片(去）右：黄桃(去）椰果+1',
+        box: { x1: 37, y1: 1058, x2: 680, y2: 1076 },
+        source: 'full',
+      },
+      {
+        text: '变动配料：左：菠萝+1方形火腿片(去)右：黄桃(去)椰果+1',
+        box: { x1: 36, y1: 1057, x2: 681, y2: 1077 },
+        source: 'local',
+      },
+    ], { type: 'redBox', box: '24,1014,702,1118', confidence: 0.75 });
+
+    expect(extraction.textLines).toEqual([
+      '变动配料：左：菠萝+1方形火腿片(去）右：黄桃(去）椰果+1',
+    ]);
+    expect(extraction.summary).toBe('关键区域包含：变动配料：左：菠萝+1方形火腿片(去）右：黄桃(去）椰果+1。');
+  });
+
   it('normalizes table cells containing amount and OCR currency candidate tokens', () => {
     const extraction = buildStructuredContent([
       { text: '默认基础价-半份', box: { x1: 1466, y1: 529, x2: 1688, y2: 567 } },

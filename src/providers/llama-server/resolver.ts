@@ -22,15 +22,27 @@ export function resolveLlamaServerCandidates(options: ResolverOptions = {}): str
   const env = options.env ?? process.env;
   const packageRoot = options.packageRoot ?? join(__dirname, '..', '..', '..');
   const home = options.homeDir ?? homedir();
-  const exeName = platform() === 'win32' ? 'llama-server.exe' : 'llama-server';
-  
+  const currentPlatform = platform();
+  const exeName = currentPlatform === 'win32' ? 'llama-server.exe' : 'llama-server';
+
+  // Platform-specific system search paths
+  const systemPaths: string[] =
+    currentPlatform === 'win32'
+      ? [
+          join(home, 'AppData', 'Local', 'llama.cpp', exeName),
+          join(home, 'AppData', 'Local', 'Programs', 'llama.cpp', exeName),
+        ]
+      : [
+          '/opt/homebrew/bin/llama-server',
+          '/usr/local/bin/llama-server',
+          '/usr/bin/llama-server',
+        ];
+
   return [
     ...(env.LLAMA_SERVER_PATH ? [env.LLAMA_SERVER_PATH] : []),
     join(packageRoot, 'bin', exeName),
     join(home, '.vision-mcp', 'bin', exeName),
-    '/opt/homebrew/bin/llama-server',
-    '/usr/local/bin/llama-server',
-    '/usr/bin/llama-server',
+    ...systemPaths,
     exeName,
   ];
 }
@@ -83,7 +95,8 @@ async function getLatestReleaseTag(): Promise<string> {
 }
 
 function buildDownloadUrls(tag: string, platformFilename: string): string[] {
-  const filename = `llama-${tag}-bin-${platformFilename}.tar.gz`;
+  const archiveExt = platform() === 'win32' ? '.zip' : '.tar.gz';
+  const filename = `llama-${tag}-bin-${platformFilename}${archiveExt}`;
   const githubUrl = `https://github.com/ggml-org/llama.cpp/releases/download/${tag}/${filename}`;
   
   const urls = [

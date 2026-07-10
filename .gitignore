@@ -14,3 +14,4 @@ bin/
 .vision-mcp/
 *.tgz
 .worktrees/
+.codegraph/

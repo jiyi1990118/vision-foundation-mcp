@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { resolveSkillNames } from '../src/core/execution-planner.js';
-import { buildSkillProviderOverrides, selectProvider, shouldRunKeyContentExtraction } from '../src/tools/vision-analyze.js';
+import {
+  buildSkillProviderOverrides,
+  buildOcrProviderWarnings,
+  selectProvider,
+  shouldInspectAnnotationsForRequest,
+  shouldRunKeyContentExtraction,
+} from '../src/tools/vision-analyze.js';
 import type { VisionProvider } from '../src/providers/types.js';
 import type { ImageInput, InferenceResponse, InferenceRequest } from '../src/types/domain.js';
 
@@ -159,5 +165,57 @@ describe('selectProvider (vision-analyze routing)', () => {
       annotations: undefined,
       skillNames: requestedSkills,
     })).toBe(true);
+  });
+
+  it('runs target extraction for requirement image requests with detected red annotations', () => {
+    const requestedSkills = resolveSkillNames(undefined, '分析 TAPD 需求图片，返回关键内容和总结', {});
+
+    expect(requestedSkills).toEqual(['classify', 'ocr', 'summary']);
+    expect(shouldRunKeyContentExtraction({
+      classify: {
+        skill: 'classify',
+        success: true,
+        data: { category: 'screenshot', confidence: 0.9 },
+        duration: 1,
+      },
+      ocr: {
+        skill: 'ocr',
+        success: true,
+        data: { texts: [{ text: '变动配料：左：菠萝+1', position: '37,1058,300,1076', confidence: 0.9 }] },
+        duration: 1,
+      },
+    }, {
+      intent: '分析 TAPD 需求图片，返回关键内容和总结',
+      annotations: { redBoxes: [{ box: '24,1014,702,1118', confidence: 0.75, insideText: [], insideTextLines: [], nearbyText: [] }] },
+      skillNames: requestedSkills,
+    })).toBe(true);
+  });
+
+  it('inspects annotations for requirement image requests before red boxes are known', () => {
+    expect(shouldInspectAnnotationsForRequest({
+      intent: '分析 TAPD 需求图片，返回关键内容和总结',
+      skillNames: ['classify', 'ocr', 'summary'],
+      target: undefined,
+    })).toBe(true);
+  });
+
+  it('warns when requirement OCR falls back to a VLM provider without dedicated OCR', () => {
+    expect(buildOcrProviderWarnings({
+      intent: '分析 TAPD 需求图片，返回关键内容和总结',
+      skillNames: ['classify', 'ocr', 'summary'],
+      selectedProvider: gguf,
+      providerOverrides: {},
+    })).toEqual([
+      '未启用专用 OCR provider，需求图红框/小字提取可能不可靠；建议设置 VISION_OCR_PROVIDER=ppu-paddle-ocr。',
+    ]);
+  });
+
+  it('does not warn when a dedicated OCR override is available', () => {
+    expect(buildOcrProviderWarnings({
+      intent: '分析 TAPD 需求图片，返回关键内容和总结',
+      skillNames: ['classify', 'ocr', 'summary'],
+      selectedProvider: gguf,
+      providerOverrides: { ocr },
+    })).toEqual([]);
   });
 });

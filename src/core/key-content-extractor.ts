@@ -318,6 +318,8 @@ function normalizeLineText(items: Array<OcrItem & { box: Box }>, warnings: strin
   const merged: string[] = [];
   for (let i = 0; i < items.length; i++) {
     const item = items[i]!;
+    if (merged.some((text) => isNearDuplicateText(text, item.text))) continue;
+
     const next = items[i + 1];
     if (isNumericAmount(item.text) && next && isCurrencyCandidate(next.text) && isSameMoneyCell(item.box, next.box)) {
       if (next.text === '夫') warnings.push('局部 OCR 将金额符号候选“夫”按金额上下文归一化为“¥”');
@@ -328,6 +330,25 @@ function normalizeLineText(items: Array<OcrItem & { box: Box }>, warnings: strin
     merged.push(normalizeUnitText(item.text));
   }
   return merged.join(' ').trim();
+}
+
+function isNearDuplicateText(a: string, b: string): boolean {
+  const left = normalizeComparableText(a);
+  const right = normalizeComparableText(b);
+  if (!left || !right) return false;
+  if (left === right) return true;
+
+  const shorter = left.length <= right.length ? left : right;
+  const longer = left.length > right.length ? left : right;
+  return shorter.length >= 8 && longer.includes(shorter);
+}
+
+function normalizeComparableText(text: string): string {
+  return text
+    .replace(/[\s,，。.;；:："'“”‘’/\\|\-—_、]/g, '')
+    .replace(/[（]/g, '(')
+    .replace(/[）]/g, ')')
+    .trim();
 }
 
 function buildTable(lines: LineGroup[], warnings: string[]): { columns: string[]; rows: string[][] } | undefined {

@@ -24,6 +24,28 @@ describe('execution-planner active-provider defaulting', () => {
     expect(plan.skills.map((task) => task.skill)).toEqual(['classify', 'ocr', 'summary']);
   });
 
+  it('maps TAPD requirement image analysis to classify, OCR, and summary', async () => {
+    const input: PlannerInput = {
+      ...baseInput,
+      intent: '分析桌面上的 TAPD 需求图片，返回关键内容和总结',
+    } as PlannerInput;
+
+    const plan = await planExecution(input);
+    expect(plan.skills.map((task) => task.skill)).toEqual(['classify', 'ocr', 'summary']);
+  });
+
+  it('injects target focus into OCR prompts for region extraction', async () => {
+    const input: PlannerInput = {
+      ...baseInput,
+      options: { target: { color: 'red', position: '图片底部红色虚线框内', description: '红色虚线框包围的变动配料文字' } },
+    } as PlannerInput;
+
+    const plan = await planExecution(input);
+    const ocr = plan.skills.find((task) => task.skill === 'ocr')!;
+
+    expect(ocr.prompt).toContain('Focus on: color=red; position=图片底部红色虚线框内; description=红色虚线框包围的变动配料文字');
+  });
+
   it('runs OCR and classify before summary for mixed screenshot analysis', async () => {
     const input: PlannerInput = {
       ...baseInput,

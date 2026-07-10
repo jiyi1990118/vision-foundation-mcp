@@ -6,6 +6,15 @@ import { SmolVLM2Provider } from '../src/providers/smolvlm2/provider.js';
 import { listSkills } from '../src/skills/registry.js';
 
 describe('provider capability declarations', () => {
+  it('registers the OCR provider by default', async () => {
+    const { buildProvidersForRuntime } = await import('../src/index.js');
+    const providers = await buildProvidersForRuntime({
+      VISION_PROVIDER: 'smolvlm2',
+    } as NodeJS.ProcessEnv);
+
+    expect(providers.map((p) => p.name)).toContain('ppu-paddle-ocr');
+  });
+
   it('registers the OCR provider when explicitly enabled', async () => {
     const { buildProvidersForRuntime } = await import('../src/index.js');
     const providers = await buildProvidersForRuntime({
@@ -14,6 +23,16 @@ describe('provider capability declarations', () => {
     } as NodeJS.ProcessEnv);
 
     expect(providers.map((p) => p.name)).toContain('ppu-paddle-ocr');
+  });
+
+  it('does not register the OCR provider when explicitly disabled', async () => {
+    const { buildProvidersForRuntime } = await import('../src/index.js');
+    const providers = await buildProvidersForRuntime({
+      VISION_PROVIDER: 'smolvlm2',
+      VISION_OCR_PROVIDER: 'none',
+    } as NodeJS.ProcessEnv);
+
+    expect(providers.map((p) => p.name)).not.toContain('ppu-paddle-ocr');
   });
 
   it('GGUF provider declares support for every registered runtime skill', () => {

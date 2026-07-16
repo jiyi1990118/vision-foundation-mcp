@@ -175,12 +175,14 @@ export class LlamaServerProcess {
     );
   }
 
-  async inferOnce(body: object): Promise<ChatCompletionResponse> {
+  async inferOnce(body: object, signal?: AbortSignal): Promise<ChatCompletionResponse> {
+    const timeoutSignal = AbortSignal.timeout(120000);
+    const abortSignal = signal ? AbortSignal.any([timeoutSignal, signal]) : timeoutSignal;
     const resp = await fetch(`${this.baseUrl}/v1/chat/completions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(120000),
+      signal: abortSignal,
     });
 
     if (!resp.ok) {
@@ -191,12 +193,14 @@ export class LlamaServerProcess {
     return (await resp.json()) as ChatCompletionResponse;
   }
 
-  async *streamOnce(body: object): AsyncGenerator<string> {
+  async *streamOnce(body: object, signal?: AbortSignal): AsyncGenerator<string> {
+    const timeoutSignal = AbortSignal.timeout(120000);
+    const abortSignal = signal ? AbortSignal.any([timeoutSignal, signal]) : timeoutSignal;
     const resp = await fetch(`${this.baseUrl}/v1/chat/completions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...body, stream: true }),
-      signal: AbortSignal.timeout(120000),
+      signal: abortSignal,
     });
 
     if (!resp.ok || !resp.body) {
@@ -206,24 +210,30 @@ export class LlamaServerProcess {
     const reader = resp.body.getReader();
     const decoder = new TextDecoder();
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
 
-      const chunk = decoder.decode(value, { stream: true });
-      for (const line of chunk.split('\n')) {
-        if (line.startsWith('data: ')) {
-          const jsonStr = line.slice(6);
-          if (jsonStr === '[DONE]') return;
-          try {
-            const parsed = JSON.parse(jsonStr);
-            const content = parsed.choices?.[0]?.delta?.content;
-            if (content) yield content;
-          } catch {
-            // Skip malformed chunks
+        const chunk = decoder.decode(value, { stream: true });
+        for (const line of chunk.split('\n')) {
+          if (line.startsWith('data: ')) {
+            const jsonStr = line.slice(6);
+            if (jsonStr === '[DONE]') return;
+            try {
+              const parsed = JSON.parse(jsonStr);
+              const content = parsed.choices?.[0]?.delta?.content;
+              if (content) yield content;
+            } catch {
+              // Skip malformed chunks
+            }
           }
         }
       }
+    } finally {
+      // Cancel the reader so the underlying HTTP connection is not left
+      // dangling on abort, early return, or consumer break-out.
+      await reader.cancel().catch(() => {});
     }
   }
 
@@ -235,8 +245,14 @@ export class LlamaServerProcess {
     body: object,
     restart: () => Promise<void>,
     maxRetries = 2,
+    signal?: AbortSignal,
   ): Promise<ChatCompletionResponse> {
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      // If the caller aborted (e.g. request timeout), fail fast without
+      // retrying or restarting - the server is healthy, the request was cancelled.
+      if (signal?.aborted) {
+        throw new Error('Inference aborted by caller');
+      }
       if (!this.isRunning) {
         logger.warn('llama-server not running, restarting', {
           provider: this.config.name, attempt,
@@ -245,8 +261,12 @@ export class LlamaServerProcess {
       }
 
       try {
-        return await this.inferOnce(body);
+        return await this.inferOnce(body, signal);
       } catch (e) {
+        // Cancellation (abort) must not trigger server restart/retry.
+        if (signal?.aborted || isAbortError(e)) {
+          throw e;
+        }
         if (attempt < maxRetries) {
           logger.warn('Inference failed, restarting server', {
             provider: this.config.name,
@@ -409,4 +429,13 @@ export function resolveLlamaServerPath(options: LlamaServerResolverOptions = {})
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/** True for fetch/AbortController cancellation errors (must not retry/restart). */
+function isAbortError(e: unknown): boolean {
+  if (e instanceof Error) {
+    if (e.name === 'AbortError') return true;
+    return /aborted/i.test(e.message);
+  }
+  return false;
 }

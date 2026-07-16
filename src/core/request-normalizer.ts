@@ -69,22 +69,38 @@ function parseDataUri(uri: string): Buffer {
   return Buffer.from(match[1], 'base64');
 }
 
+/**
+ * Best-effort private/loopback host detection for SSRF mitigation.
+ * Covers IPv4 private ranges, loopback, link-local, and IPv6 loopback /
+ * link-local / unique-local. NOTE: string filtering alone cannot defeat DNS
+ * rebinding (a public hostname resolving to a private IP); `redirect: 'error'`
+ * is also set on the fetch to block redirect-based exfiltration.
+ */
+export function isPrivateHost(hostname: string): boolean {
+  const h = hostname.toLowerCase().replace(/^\[|\]$/g, '');
+  if (h === 'localhost' || h === '0.0.0.0' || h === '::1' || h === '::') return true;
+  if (h.startsWith('fc') || h.startsWith('fd')) return true;        // IPv6 ULA
+  if (h.startsWith('fe80')) return true;                            // IPv6 link-local
+  const parts = h.split('.');
+  if (parts.length === 4 && parts.every((p) => /^\d+$/.test(p))) {
+    const [a, b] = parts.map(Number) as [number, number, number, number];
+    if (a === 0 || a === 10 || a === 127) return true;
+    if (a === 169 && b === 254) return true;                        // link-local
+    if (a === 172 && b >= 16 && b <= 31) return true;               // private
+    if (a === 192 && b === 168) return true;                        // private
+  }
+  return false;
+}
+
 async function fetchUrl(url: string): Promise<Buffer> {
   const parsed = new URL(url);
   if (!['http:', 'https:'].includes(parsed.protocol)) {
     throw new NormalizeError('NORMALIZE_INVALID_INPUT', `Unsupported protocol: ${parsed.protocol}`);
   }
-  // SSRF protection: block private IPs
-  // (full implementation in security module, basic check here)
-  const hostname = parsed.hostname;
-  if (
-    hostname === 'localhost' ||
-    hostname.startsWith('127.') ||
-    hostname.startsWith('10.') ||
-    hostname.startsWith('192.168.') ||
-    hostname.startsWith('169.254.')
-  ) {
-    throw new NormalizeError('NORMALIZE_INVALID_INPUT', 'URL resolves to private IP (SSRF blocked)');
+  // SSRF protection: block private/loopback addresses.
+  // See isPrivateHost for coverage notes (DNS rebinding still needs resolution-based checks).
+  if (isPrivateHost(parsed.hostname)) {
+    throw new NormalizeError('NORMALIZE_INVALID_INPUT', 'URL resolves to a private/loopback address (SSRF blocked)');
   }
 
   const response = await fetch(url, {

@@ -1,0 +1,14 @@
+{
+  "server": {
+    "maxConcurrent": 4,
+    "requestTimeoutMs": 30000
+  },
+  "security": {
+    "maxImageSizeBytes": 10485760
+  },
+  "gguf": {
+    "modelDir": "~/.vision-mcp/models/ggml-org/SmolVLM-500M-Instruct-GGUF",
+    "endpoint": "https://hf-mirror.com",
+    "port": 18082
+  }
+}

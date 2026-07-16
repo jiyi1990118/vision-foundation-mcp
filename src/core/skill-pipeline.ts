@@ -46,20 +46,10 @@ export class SkillPipeline {
   async execute(
     plan: ExecutionPlan,
     image: ImageInput,
+    signal?: AbortSignal,
   ): Promise<SkillResultSet> {
     const results: SkillResultSet = {};
     const sorted = [...plan.skills].sort((a, b) => a.priority - b.priority);
-
-    // Build dependency graph: map skill → list of skills that depend on it
-    const dependents = new Map<string, string[]>();
-    for (const task of sorted) {
-      if (task.dependsOn) {
-        for (const dep of task.dependsOn) {
-          if (!dependents.has(dep)) dependents.set(dep, []);
-          dependents.get(dep)!.push(task.skill);
-        }
-      }
-    }
 
     // Track in-flight promises so we can batch independent skills
     const inFlight = new Map<string, Promise<SkillResult>>();
@@ -110,7 +100,7 @@ export class SkillPipeline {
       }
 
       // Execute the skill — store promise for parallel tracking
-      const promise = this.executeSkill(task, image, plan, results).then((result) => {
+      const promise = this.executeSkill(task, image, plan, results, signal).then((result) => {
         results[task.skill] = result;
         return result;
       });
@@ -135,6 +125,7 @@ export class SkillPipeline {
     image: ImageInput,
     plan: ExecutionPlan,
     results: SkillResultSet,
+    signal?: AbortSignal,
   ): Promise<SkillResult> {
     const start = Date.now();
     logger.info('Skill executing', { skill: task.skill });
@@ -144,6 +135,7 @@ export class SkillPipeline {
     let currentPrompt = task.prompt;
 
     for (let attempt = 0; attempt <= maxRetry; attempt++) {
+      if (signal?.aborted) break;
       try {
         const prompt = appendOcrContext(currentPrompt, results['ocr']?.data, task.skill);
 
@@ -154,6 +146,7 @@ export class SkillPipeline {
           maxTokens: plan.maxTokens ?? 256,
           temperature: 0,
           cache: plan.cache,
+          signal,
         };
 
         // Call provider
@@ -256,9 +249,7 @@ export class SkillPipeline {
           }
         }
       }
-    } catch (e) {
-      void (e as Error);
-
+    } catch {
       // Try fixing common JSON syntax issues first
       if (text.startsWith('{')) {
         const fixed = text

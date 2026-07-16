@@ -42,6 +42,7 @@ export interface KeyContentInput {
   annotations?: ImageAnnotations | undefined;
   ocrData?: unknown;
   ocrProvider?: VisionProvider | undefined;
+  signal?: AbortSignal | undefined;
 }
 
 export interface KeyContentActivationInput {
@@ -69,6 +70,7 @@ export interface EnhanceRegionOcrInput {
   region: Box;
   provider: VisionProvider;
   scale?: number;
+  signal?: AbortSignal | undefined;
 }
 
 interface LineGroup {
@@ -106,7 +108,7 @@ export async function extractKeyContent(input: KeyContentInput): Promise<KeyCont
   let localItems: OcrItem[] = [];
   if (input.ocrProvider) {
     try {
-      localItems = await enhanceRegionOcr({ image: input.image, region: parsedRegion, provider: input.ocrProvider });
+      localItems = await enhanceRegionOcr({ image: input.image, region: parsedRegion, provider: input.ocrProvider, signal: input.signal });
     } catch {
       warnings.push('region OCR failed; using full-image OCR only');
     }
@@ -276,6 +278,7 @@ export async function enhanceRegionOcr(input: EnhanceRegionOcrInput): Promise<Oc
     maxTokens: 512,
     temperature: 0,
     cache: false,
+    signal: input.signal,
   });
 
   let parsed: unknown;

@@ -106,7 +106,7 @@ vision.analyze({ image, intent: "auto" })
 ### 交付内容
 - [ ] CacheManager（结果缓存，SHA256 key，TTL/LRU）
 - [ ] LifecycleManager（按需加载、空闲回收、引用计数）
-- [ ] ModelManager 完善（断点续传、SHA256 校验、版本管理）
+- [x] ModelManager 完善（断点续传、SHA256 校验、版本管理）
 - [ ] 错误处理体系（统一错误码、可重试标记）
 - [ ] 日志体系（结构化日志、级别控制）
 - [ ] 配置体系完善（所有 config/*.yaml）

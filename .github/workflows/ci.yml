@@ -6,10 +6,16 @@ on:
   pull_request:
     branches: [main, master]
 
+# Cancel superseded runs on the same ref to save CI minutes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  lint-typecheck-test:
+  # Fast feedback: lint + typecheck don't need a build or tests.
+  lint-typecheck:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
 
     steps:
       - uses: actions/checkout@v4
@@ -34,8 +40,37 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
+  # Build + unit tests on multiple Node versions.
+  build-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['20', '22']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Build
         run: pnpm build
 
       - name: Unit tests
         run: pnpm test:unit
+
+      - name: Verify build output
+        run: node -e "require('./dist/index.js')"

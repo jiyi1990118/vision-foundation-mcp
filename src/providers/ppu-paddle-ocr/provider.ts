@@ -69,6 +69,9 @@ export class PpuPaddleOcrProvider implements VisionProvider {
   }
 
   async unload(): Promise<void> {
+    if (this.loadPromise) {
+      await this.loadPromise.catch(() => {});
+    }
     if (this.service) {
       await this.service.destroy();
       this.service = null;

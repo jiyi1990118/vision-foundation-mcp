@@ -17,7 +17,7 @@ import type { TargetQuery } from '../core/skill-pipeline.js';
 import { detectAnnotations } from '../core/annotation-detector.js';
 import { extractKeyContent, shouldExtractKeyContent } from '../core/key-content-extractor.js';
 import type { KeyContentActivationInput } from '../core/key-content-extractor.js';
-import { Semaphore, withTimeout } from '../utils/concurrency.js';
+import { Semaphore, withAbortableTimeout } from '../utils/concurrency.js';
 import { chooseProvider, providerToCandidate, type RouterOptions, type RouterResources } from '../core/provider-router.js';
 import type { VisionProvider } from '../providers/types.js';
 import type { PlannerInput, PolicyContext, SkillResultSet } from '../types/skills.js';
@@ -222,8 +222,8 @@ export function registerVisionAnalyzeTool(
 
       try {
         // Wrap entire pipeline in a timeout
-        return await withTimeout(
-          (async () => {
+        return await withAbortableTimeout(
+          async (signal) => {
             // ── Stage 2: Normalize input ──
             const image = await normalizeImageInput(rawImage);
 
@@ -299,7 +299,7 @@ export function registerVisionAnalyzeTool(
 
             // ── Stage 6-7: Execute Skill Pipeline ──
             const pipeline = new SkillPipeline(provider, providerOverrides);
-            const skillResults = await pipeline.execute(finalPlan, image);
+            const skillResults = await pipeline.execute(finalPlan, image, signal);
 
             // ── Stage 8-9: Compose result ──
             const duration = Date.now() - startTime;
@@ -328,6 +328,7 @@ export function registerVisionAnalyzeTool(
                 annotations,
                 ocrData: ocrResult.data,
                 ocrProvider,
+                signal,
               })
               : undefined;
             const ocrProviderWarnings = buildOcrProviderWarnings({
@@ -361,7 +362,7 @@ export function registerVisionAnalyzeTool(
               ],
               structuredContent: visionResult,
             };
-          })(),
+          },
           config.server.requestTimeoutMs,
           'Vision analysis timed out',
         );

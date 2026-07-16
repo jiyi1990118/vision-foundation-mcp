@@ -25,7 +25,7 @@ export class Semaphore {
   }
 
   release(): void {
-    this.current--;
+    if (this.current > 0) this.current--;
     const next = this.queue.shift();
     if (next) next();
   }
@@ -53,6 +53,34 @@ export function withTimeout<T>(
     }, timeoutMs);
 
     promise
+      .then((result) => {
+        clearTimeout(timer);
+        resolve(result);
+      })
+      .catch((err) => {
+        clearTimeout(timer);
+        reject(err);
+      });
+  });
+}
+
+/**
+ * Run an abortable function with a timeout. On timeout the function's
+ * AbortController is aborted (so it can cancel in-flight work such as a fetch)
+ * and the returned promise rejects with a timeout error.
+ */
+export function withAbortableTimeout<T>(
+  fn: (signal: AbortSignal) => Promise<T>,
+  timeoutMs: number,
+  errorMessage = 'Request timed out',
+): Promise<T> {
+  const controller = new AbortController();
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      controller.abort();
+      reject(new Error(`${errorMessage} after ${timeoutMs}ms`));
+    }, timeoutMs);
+    fn(controller.signal)
       .then((result) => {
         clearTimeout(timer);
         resolve(result);

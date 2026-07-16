@@ -65,10 +65,22 @@ export class SmolVLMProvider implements VisionProvider {
   private processor: any = null;
   private eosTokenId = DEFAULT_EOS_TOKEN_ID;
   private runtimeConfig: RuntimeConfig | null = null;
+  private loadPromise: Promise<void> | null = null;
 
   async load(): Promise<void> {
     if (this.loaded) return;
+    // Deduplicate concurrent cold loads - ONNX model download + session init
+    // is expensive and must not run twice in parallel.
+    if (this.loadPromise) return this.loadPromise;
+    this.loadPromise = this.doLoad();
+    try {
+      await this.loadPromise;
+    } finally {
+      this.loadPromise = null;
+    }
+  }
 
+  private async doLoad(): Promise<void> {
     // Detect hardware and get runtime config
     this.runtimeConfig = await getRuntimeConfig();
     logger.info('SmolVLM loading...', {
@@ -179,7 +191,6 @@ export class SmolVLMProvider implements VisionProvider {
       const generatedTokens: number[] = [token1];
 
       if (token1 === this.eosTokenId) {
-        void prefillTime;
         return this.buildResult(generatedTokens, start);
       }
 
@@ -191,6 +202,9 @@ export class SmolVLMProvider implements VisionProvider {
       let totalDecodeTime = 0;
 
       for (let step = 1; step < maxTokens; step++) {
+        if (req.signal?.aborted) {
+          throw new Error('Inference aborted by caller');
+        }
         const tDecode = Date.now();
 
         const decodeInput = {
@@ -233,16 +247,15 @@ export class SmolVLMProvider implements VisionProvider {
       }
 
       const duration = Date.now() - start;
+      const decodeSteps = generatedTokens.length - 1;
       logger.info('Inference completed', {
         duration,
         prefillTime,
-        decodeSteps: generatedTokens.length - 1,
-        avgDecodeTime: totalDecodeTime / (generatedTokens.length - 1),
+        decodeSteps,
+        avgDecodeTime: decodeSteps > 0 ? totalDecodeTime / decodeSteps : 0,
         textLength: this.processor.decode(generatedTokens, { skip_special_tokens: true }).length,
       });
 
-      void prefillTime;
-      void totalDecodeTime;
       return this.buildResult(generatedTokens, start);
     } catch (e) {
       logger.error('Inference failed', { error: (e as Error).message });
@@ -251,6 +264,9 @@ export class SmolVLMProvider implements VisionProvider {
   }
 
   async unload(): Promise<void> {
+    if (this.loadPromise) {
+      await this.loadPromise.catch(() => {});
+    }
     if (!this.loaded) return;
     logger.info('SmolVLM unloading...', { provider: this.name });
     this.model = null;

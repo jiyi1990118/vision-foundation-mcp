@@ -37,6 +37,8 @@ export interface InferenceRequest {
   maxTokens: number;
   temperature: number;
   cache?: boolean | undefined;
+  /** Optional abort signal; when aborted, in-flight inference is cancelled. */
+  signal?: AbortSignal | undefined;
 }
 
 /** Raw inference response from a Provider. */

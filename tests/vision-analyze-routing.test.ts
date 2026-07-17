@@ -95,7 +95,7 @@ describe('selectProvider (vision-analyze routing)', () => {
     expect(p.name).toBe('gguf-smolvlm');
   });
 
-  it('includes OCR in auto target requests before provider routing', () => {
+  it('includes OCR in auto target requests before provider routing (summary skipped for target)', () => {
     const requestedSkills = resolveSkillNames(undefined, 'auto', { target: { color: 'red', description: '红框内容' } });
     const p = selectProvider([ocr, gguf], {
       options: { target: { color: 'red', description: '红框内容' } },
@@ -103,7 +103,7 @@ describe('selectProvider (vision-analyze routing)', () => {
       requestedSkills,
     });
 
-    expect(requestedSkills).toEqual(['classify', 'summary', 'ocr']);
+    expect(requestedSkills).toEqual(['classify', 'ocr']);
     expect(p.name).toBe('gguf-smolvlm');
   });
 
@@ -139,18 +139,12 @@ describe('selectProvider (vision-analyze routing)', () => {
   it('runs target extraction for auto target requests after OCR succeeds', () => {
     const requestedSkills = resolveSkillNames(undefined, 'auto', { target: { color: 'red', description: '红框内容' } });
 
-    expect(requestedSkills).toEqual(['classify', 'summary', 'ocr']);
+    expect(requestedSkills).toEqual(['classify', 'ocr']);
     expect(shouldRunKeyContentExtraction({
       classify: {
         skill: 'classify',
         success: true,
         data: { category: 'screenshot', confidence: 0.9 },
-        duration: 1,
-      },
-      summary: {
-        skill: 'summary',
-        success: true,
-        data: { description: '界面截图' },
         duration: 1,
       },
       ocr: {
@@ -170,7 +164,7 @@ describe('selectProvider (vision-analyze routing)', () => {
   it('runs target extraction for requirement image requests with detected red annotations', () => {
     const requestedSkills = resolveSkillNames(undefined, '分析 TAPD 需求图片，返回关键内容和总结', {});
 
-    expect(requestedSkills).toEqual(['classify', 'ocr', 'summary']);
+    expect(requestedSkills).toEqual(['classify', 'ocr']);
     expect(shouldRunKeyContentExtraction({
       classify: {
         skill: 'classify',

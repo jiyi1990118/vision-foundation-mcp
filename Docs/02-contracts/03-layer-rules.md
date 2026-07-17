@@ -50,6 +50,8 @@ L0 Tool
 
 > ✅ 允许 ❌ 禁止
 
+> **例外**：L0 Tool 在 Pipeline 执行后、组合结果前，直接调用 L3 后处理抽取模块（`detectAnnotations` / `extractKeyContent` / `extractForScenario` / `runReasoning`），用于标注检测、关键内容提取、场景抽取与通用解析。这是有意为之的 L0→L3 耦合（post-pipeline enrichment 阶段），见 §7。
+
 ---
 
 ## 3. 禁止的依赖（黑名单）
@@ -59,10 +61,12 @@ L0 Tool
 ### 3.1 跨层调用
 ```
 ❌ L3 Skill ──► L5 Runtime      （必须经 L4 Provider）
-❌ L0 Tool ──► L4 Provider      （必须经 L2→L3→L4）
+❌ L0 Tool ──► L4 Provider      （必须经 L2->L3->L4）
 ❌ L0 Tool ──► L3 Skill         （必须经 L2 Decision）
 ❌ L1 Request ──► L3 Skill      （必须经 L2）
 ```
+
+> 例外：Pipeline 执行后、组合结果前的后处理抽取阶段，L0 直接调用 L3 抽取模块（`detectAnnotations` / `extractKeyContent` / `extractForScenario` / `runReasoning`）。这不替代 Skill Pipeline 本身（Pipeline 仍经 L2 Plan 编排），仅做 post-pipeline enrichment，见 §7。
 
 ### 3.2 反向依赖
 ```
@@ -79,6 +83,8 @@ L0 Tool
 ❌ L3 Validator ──► L3 Composer （各自独立，由 Pipeline 编排）
 ```
 
+> 注：`Validator`/`Composer` 在当前代码库并非独立模块。校验内联于 `SkillPipeline.parseAndValidate`（`src/core/skill-pipeline.ts`）；组合是 `composeResult` 函数（同文件），非独立类。此处的「同层越权」规则仍作为概念约束保留。
+
 ---
 
 ## 4. 各层职责边界
@@ -86,8 +92,12 @@ L0 Tool
 ### L0 - Tool Layer
 ```
 ✅ 做：接收 MCP 请求、转交下层、包装返回、调用 Cache 检查
+✅ 做（M5）：在 Planner 之前执行 Provider 路由（selectProvider），决定实际执行 Provider；Planner 信任 PlannerInput.activeProvider/activeRuntime
+✅ 做（enrichment）：Pipeline 执行后直接调用 L3 抽取模块（detectAnnotations / extractKeyContent / extractForScenario / runReasoning）
 ❌ 不做：业务逻辑、模型调用、策略决策、意图分析
 ```
+
+> **M5 路由说明**：Provider 选择发生在 L0（`vision-analyze.ts` 的 `selectProvider`），而非 L2。Router 是 Provider 选择的唯一权威；PolicyEngine 的 `memory-guard` 仅 warn，不再 override Provider。
 
 ### L1 - Request Layer
 ```
@@ -97,17 +107,21 @@ L0 Tool
 
 ### L2 - Decision Layer
 ```
-✅ 做：意图分析、Skill 选择、Provider 建议、生成 Plan
-❌ 不做：执行推理、调用 Provider/Runtime、缓存读写
+✅ 做：意图分析、Skill 选择、生成 Plan
+❌ 不做：执行推理、调用 Provider/Runtime、缓存读写、Provider 选择（已上移至 L0）
 ```
 
 **注意**：Planner 和 Policy 都在 L2，但 Planner 产出草稿，Policy 评估。二者是「顺序协作」而非「互相调用」——由上层（Pipeline 或 Tool）串联。
+
+**M5 路由**：Provider 选择已在 L0 完成（`selectProvider`），Planner 不再「建议 Provider」。`ExecutionPlan.provider/runtime` 取自 `PlannerInput.activeProvider/activeRuntime`（由 L0 注入），保持 Plan 与实际执行 Runtime 一致。Policy 的 `memory-guard` 仅 warn，不 override Provider。
 
 ### L3 - Skill Layer
 ```
 ✅ 做：Prompt 编译、Schema 取出、调 Provider、校验、组合
 ❌ 不做：直接调 Runtime、做策略决策
 ```
+
+> 注：「校验」内联于 `SkillPipeline.parseAndValidate`，无独立 `ResponseValidator` 模块；「组合」是 `composeResult` 函数，均位于 `src/core/skill-pipeline.ts`。`result.ui` / `result.layout` / `result.parse` 等算法式结果也在组合阶段产出。
 
 ### L4 - Provider Layer
 ```
@@ -180,9 +194,10 @@ import { ExecutionPlanner } from "../../core/planner";
 
 | 例外 | 理由 | 限制 |
 |------|------|------|
-| L0 → L6 Cache | Tool 层直接查缓存，避免无谓推理 | 仅读，不写 |
-| L3 → L6 Cache | Skill 层写缓存（推理后） | 仅写 |
-| L4 → L6 ModelManager | Provider 取模型路径 | 仅读路径 |
+| L0 -> L6 Cache | Tool 层直接查缓存，避免无谓推理 | 仅读，不写 |
+| L0 -> L3 抽取模块 | post-pipeline enrichment：`detectAnnotations` / `extractKeyContent` / `extractForScenario` / `runReasoning` | 仅在 Pipeline 执行后、组合前调用；不替代 Pipeline 本身 |
+| L3 -> L6 Cache | Skill 层写缓存（推理后） | 仅写 |
+| L4 -> L6 ModelManager | Provider 取模型路径 | 仅读路径 |
 
 **任何其他跨层调用都需要 ADR 记录理由。**
 

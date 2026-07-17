@@ -1,10 +1,10 @@
 {
   "name": "document",
-  "description": "Analyze document type and structure from an image",
+  "description": "Identify document type (invoice/receipt/form/letter/report/article) and extract key information",
   "version": "1.0.0",
   "inputs": { "required": ["image"], "optional": [] },
-  "outputs": ["type", "fields"],
-  "supportedProviders": ["smolvlm", "gguf-smolvlm"],
+  "outputs": ["description", "documentType"],
+  "supportedProviders": ["gguf-smolvlm", "gguf-smolvlm2", "minicpm-v"],
   "defaultTimeout": 30000,
   "defaultRetry": { "max": 1, "strategy": "reprompt" }
 }

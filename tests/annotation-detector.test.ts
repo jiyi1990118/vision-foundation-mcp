@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import sharp from 'sharp';
-import { detectAnnotations } from '../src/core/annotation-detector.js';
+import { detectAnnotations, resolveColorName } from '../src/core/annotation-detector.js';
 import type { ImageInput } from '../src/types/domain.js';
 
 async function makeRedBoxImage(): Promise<ImageInput> {
@@ -140,5 +140,119 @@ describe('annotation detector', () => {
     expect(annotations.redBoxes).toHaveLength(1);
     expect(annotations.redBoxes[0]?.insideTextLines).toEqual(['框内列标题', '框内数值']);
     expect(annotations.redBoxes[0]?.insideText).not.toEqual(expect.arrayContaining(['边缘框外表头']));
+  });
+});
+
+describe('multi-color annotation detection', () => {
+  it('detects blue annotation boxes', async () => {
+    const svg = `
+      <svg width="240" height="160" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="white"/>
+        <rect x="50" y="40" width="120" height="70" fill="none" stroke="rgb(0,0,230)" stroke-width="4"/>
+      </svg>
+    `;
+    const buffer = await sharp(Buffer.from(svg)).png().toBuffer();
+    const image: ImageInput = { buffer, mimeType: 'image/png', source: 'blue-box', size: buffer.length };
+
+    const annotations = await detectAnnotations(image, {
+      texts: [
+        { text: '蓝框内容', position: '60,50,110,70' },
+      ],
+    });
+
+    expect(annotations.coloredBoxes).toBeDefined();
+    const blueBoxes = annotations.coloredBoxes!.filter((b) => b.color === 'blue');
+    expect(blueBoxes.length).toBeGreaterThanOrEqual(1);
+    expect(blueBoxes[0]?.insideText).toEqual(expect.arrayContaining(['蓝框内容']));
+    // Red boxes should not be detected for a blue-only image.
+    expect(annotations.redBoxes).toHaveLength(0);
+  });
+
+  it('detects both red and green boxes in the same image', async () => {
+    const svg = `
+      <svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="white"/>
+        <rect x="30" y="30" width="120" height="80" fill="none" stroke="rgb(230,0,0)" stroke-width="4"/>
+        <rect x="220" y="30" width="120" height="80" fill="none" stroke="rgb(0,200,0)" stroke-width="4"/>
+      </svg>
+    `;
+    const buffer = await sharp(Buffer.from(svg)).png().toBuffer();
+    const image: ImageInput = { buffer, mimeType: 'image/png', source: 'multi-color', size: buffer.length };
+
+    const annotations = await detectAnnotations(image, {
+      texts: [
+        { text: '红色区域', position: '40,40,100,70' },
+        { text: '绿色区域', position: '230,40,300,70' },
+      ],
+    });
+
+    expect(annotations.coloredBoxes).toBeDefined();
+    const colors = annotations.coloredBoxes!.map((b) => b.color);
+    expect(colors).toContain('red');
+    expect(colors).toContain('green');
+  });
+
+  it('resolveColorName maps user aliases to canonical names', () => {
+    expect(resolveColorName('red')).toBe('red');
+    expect(resolveColorName('红色')).toBe('red');
+    expect(resolveColorName('蓝')).toBe('blue');
+    expect(resolveColorName('BLUE')).toBe('blue');
+    expect(resolveColorName('黄框')).toBe('yellow');
+    expect(resolveColorName('purple')).toBe('magenta');
+    expect(resolveColorName(undefined)).toBeUndefined();
+    expect(resolveColorName('unknown')).toBeUndefined();
+  });
+
+  it('splits two stacked dashed red boxes sharing the same vertical sides', async () => {
+    // Two dashed red boxes stacked vertically, same x-range, connected by
+    // shared dashed vertical sides. Dilation merges them into one connected
+    // component; the splitter must separate them at the horizontal gap.
+    const svg = `
+      <svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="white"/>
+        <rect x="50" y="30" width="200" height="80" fill="none" stroke="rgb(230,0,0)" stroke-width="3" stroke-dasharray="10 6"/>
+        <rect x="50" y="160" width="200" height="80" fill="none" stroke="rgb(230,0,0)" stroke-width="3" stroke-dasharray="10 6"/>
+      </svg>
+    `;
+    const buffer = await sharp(Buffer.from(svg)).png().toBuffer();
+    const image: ImageInput = { buffer, mimeType: 'image/png', source: 'two-stacked', size: buffer.length };
+
+    const annotations = await detectAnnotations(image, {
+      texts: [
+        { text: '上框内容', position: '60,40,120,70' },
+        { text: '下框内容', position: '60,170,120,200' },
+      ],
+    });
+
+    // Should detect 2 separate boxes, not 1 merged box.
+    expect(annotations.redBoxes).toHaveLength(2);
+    const boxes = annotations.redBoxes.map((b) => b.box);
+    // Top box should be in the upper half, bottom box in the lower half.
+    const topBox = boxes.find((b) => Number(b.split(',')[1]) < 100);
+    const bottomBox = boxes.find((b) => Number(b.split(',')[1]) >= 100);
+    expect(topBox).toBeDefined();
+    expect(bottomBox).toBeDefined();
+  });
+
+  it('filters out filled blue UI elements (buttons, backgrounds)', async () => {
+    // A filled blue rectangle (like a button or selected menu item) should
+    // NOT be detected as an annotation box - it has high fill ratio.
+    const svg = `
+      <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="white"/>
+        <rect x="50" y="40" width="100" height="30" fill="rgb(0,80,200)" stroke="none"/>
+        <rect x="50" y="100" width="200" height="120" fill="none" stroke="rgb(230,0,0)" stroke-width="3"/>
+      </svg>
+    `;
+    const buffer = await sharp(Buffer.from(svg)).png().toBuffer();
+    const image: ImageInput = { buffer, mimeType: 'image/png', source: 'mixed-ui-annotation', size: buffer.length };
+
+    const annotations = await detectAnnotations(image, undefined);
+
+    // Should detect the red outline box, but NOT the blue filled button.
+    const redBoxes = annotations.coloredBoxes?.filter((b) => b.color === 'red') ?? [];
+    const blueBoxes = annotations.coloredBoxes?.filter((b) => b.color === 'blue') ?? [];
+    expect(redBoxes).toHaveLength(1);
+    expect(blueBoxes).toHaveLength(0);
   });
 });

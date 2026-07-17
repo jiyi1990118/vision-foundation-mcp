@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://vision-foundation-mcp/layout_ir.schema.json",
+  "title": "LayoutIR",
+  "description": "Geometric layout: regions, layout type, spacing, and optional theme. Layer 2 of the UI analysis IR.",
+  "type": "object",
+  "required": ["regions", "layoutType", "spacing"],
+  "additionalProperties": false,
+  "properties": {
+    "regions": {
+      "type": "array",
+      "description": "Visual regions detected by the layout extractor (header/sidebar/main/footer/card/nav/table/content).",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "bbox", "relativeArea", "children"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["header", "sidebar", "main", "footer", "card", "nav", "table", "content"]
+          },
+          "bbox": { "$ref": "#/$defs/bbox" },
+          "relativeArea": { "type": "number", "minimum": 0 },
+          "bgColor": { "type": "string" },
+          "children": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "layoutType": {
+      "type": "string",
+      "enum": ["grid", "columns", "sidebar", "centered", "split-pane", "stack"]
+    },
+    "spacing": {
+      "type": "object",
+      "required": ["averageGap", "scale", "verticalGaps", "horizontalGaps"],
+      "additionalProperties": false,
+      "properties": {
+        "averageGap": { "type": "number", "minimum": 0 },
+        "scale": { "type": "string", "enum": ["compact", "comfortable", "spacious"] },
+        "verticalGaps": { "type": "array", "items": { "type": "number" } },
+        "horizontalGaps": { "type": "array", "items": { "type": "number" } }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "description": "Optional design theme derived from DesignExtraction.",
+      "required": ["palette", "background", "primary", "textColor", "isDarkMode", "contrastRatio"],
+      "additionalProperties": false,
+      "properties": {
+        "palette": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["hex", "rgb", "role", "frequency"],
+            "additionalProperties": false,
+            "properties": {
+              "hex": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+              "rgb": { "type": "array", "items": { "type": "integer", "minimum": 0, "maximum": 255 }, "minItems": 3, "maxItems": 3 },
+              "role": { "type": "string" },
+              "frequency": { "type": "number", "minimum": 0, "maximum": 1 }
+            }
+          }
+        },
+        "background": { "type": "string" },
+        "primary": { "type": "string" },
+        "textColor": { "type": "string" },
+        "isDarkMode": { "type": "boolean" },
+        "contrastRatio": { "type": "number", "minimum": 1, "maximum": 21 }
+      }
+    }
+  },
+  "$defs": {
+    "bbox": {
+      "type": "object",
+      "required": ["x", "y", "w", "h"],
+      "additionalProperties": false,
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "w": { "type": "number", "minimum": 0 },
+        "h": { "type": "number", "minimum": 0 }
+      }
+    }
+  }
+}

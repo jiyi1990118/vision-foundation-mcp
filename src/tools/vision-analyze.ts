@@ -15,12 +15,19 @@ import { evaluatePolicy, PolicyDeniedError } from '../core/policy-engine.js';
 import { SkillPipeline, composeResult } from '../core/skill-pipeline.js';
 import type { TargetQuery } from '../core/skill-pipeline.js';
 import { detectAnnotations } from '../core/annotation-detector.js';
-import { extractKeyContent, shouldExtractKeyContent } from '../core/key-content-extractor.js';
+import { extractKeyContent, shouldExtractKeyContent, extractOcrItems } from '../core/key-content-extractor.js';
 import type { KeyContentActivationInput } from '../core/key-content-extractor.js';
+import { extractForScenario } from '../core/extractors/scenario-dispatcher.js';
+import { extractDesignTokens } from '../core/extractors/design-extractor.js';
+import { extractUiLayout } from '../core/extractors/ui-layout-extractor.js';
+import { runUiAnalysis } from '../ui-analysis/orchestrator.js';
+import { runReasoning } from '../core/universal-parser.js';
+import { sceneFromClassify, sceneFromHint, sceneFromScenario, refineScene } from '../core/scene-taxonomy.js';
+import type { ParseScene } from '../types/domain.js';
 import { Semaphore, withAbortableTimeout } from '../utils/concurrency.js';
 import { chooseProvider, providerToCandidate, type RouterOptions, type RouterResources } from '../core/provider-router.js';
 import type { VisionProvider } from '../providers/types.js';
-import type { PlannerInput, PolicyContext, SkillResultSet } from '../types/skills.js';
+import type { PlannerInput, PolicyContext, SkillResult, SkillResultSet } from '../types/skills.js';
 import { logger } from '../utils/logger.js';
 import { DEFAULT_CONFIG, getConfig } from '../core/config.js';
 
@@ -42,6 +49,10 @@ const inputSchema = z.object({
     .string()
     .optional()
     .describe('Natural language intent. Empty or "auto" for automatic analysis.'),
+  scene: z
+    .string()
+    .optional()
+    .describe('Scene hint to guide parsing (e.g. requirement, ui, code, chart). Guides but does not override image evidence.'),
   skills: z
     .array(z.string())
     .optional()
@@ -57,6 +68,18 @@ const inputSchema = z.object({
         position: z.string().optional(),
         description: z.string().optional(),
       }).optional(),
+      build_tree: z.boolean().optional().describe('Build hierarchical SemanticAST for UI scenes (default true when scene=ui).'),
+      export_codegen: z.boolean().optional().describe('Export CodegenIR from the UI AST.'),
+      export_figma: z.boolean().optional().describe('Export Figma REST-API shaped JSON from the UI AST.'),
+      export_markdown: z.boolean().optional().describe('Export human-readable Markdown from the UI AST.'),
+      use_llm: z.boolean().optional().describe('Enable LLM enhancement of UI semantics (default false; v1 algorithmic only).'),
+      detect_layout: z.boolean().optional().describe('Include layout regions/constraints (default true).'),
+      detect_component: z.boolean().optional().describe('Include detected components (default true).'),
+      detect_text: z.boolean().optional().describe('Include OCR text binding (default true).'),
+      detect_icon: z.boolean().optional().describe('Include icon/image/logo areas (default true).'),
+      detect_theme: z.boolean().optional().describe('Include theme/design tokens (default true).'),
+      strict_mode: z.boolean().optional().describe('Validate output structure; fail on missing required fields instead of degrading silently.'),
+      embed_images: z.boolean().optional().describe('Embed small icon/image crops as base64 data URLs (default false; bounded by size/count).'),
     })
     .optional(),
 });
@@ -205,7 +228,7 @@ export function registerVisionAnalyzeTool(
       inputSchema,
     },
     async (args) => {
-      const { image: rawImage, intent: rawIntent, skills: requestedSkills, options } = args;
+      const { image: rawImage, intent: rawIntent, scene: sceneHint, skills: requestedSkills, options } = args;
       const intent = rawIntent || 'auto';
       const startTime = Date.now();
       const config = await getConfig();
@@ -331,6 +354,101 @@ export function registerVisionAnalyzeTool(
                 signal,
               })
               : undefined;
+            // Scenario-driven structured extraction (chart/diagram/invoice/code/form).
+            // Runs when the scenario has a dedicated extractor and key-content did
+            // not already handle it (requirement scenario).
+            let scenarioExtraction: { summary: string } | undefined;
+            let scenarioExtractionData: unknown;
+            let scenarioType = 'general';
+            if (keyContentExtraction) {
+              // Key-content extraction only runs for requirement/annotation/target
+              // intents (see shouldExtractKeyContent), so the scenario is
+              // requirement. extractForScenario is skipped to avoid duplicate work.
+              scenarioType = 'requirement';
+            } else if (ocrResult?.success === true) {
+              const category = skillResults.classify?.success
+                ? String((skillResults.classify.data as Record<string, unknown> | undefined)?.category ?? '')
+                : undefined;
+              const { detection, extraction } = await extractForScenario({
+                image,
+                intent,
+                ...(category ? { category } : {}),
+                hasAnnotations: (annotations?.coloredBoxes?.length ?? annotations?.redBoxes.length ?? 0) > 0,
+                ...(target ? { hasTarget: true } : {}),
+                ocrData: ocrResult.data,
+              });
+              scenarioType = detection.scenario;
+              if (detection.scenario !== 'requirement' && extraction) {
+                scenarioExtraction = { summary: extraction.summary };
+                scenarioExtractionData = extraction;
+                logger.info('Scenario extraction completed', {
+                  scenario: detection.scenario,
+                  label: detection.label,
+                });
+              }
+            }
+            // Design token extraction: algorithmic color palette extraction
+            // (median-cut quantization + role classification + WCAG contrast).
+            // Runs for UI / screenshot / poster scenes. ~50ms, no VLM.
+            const classifyCategory = skillResults.classify?.success
+              ? String((skillResults.classify.data as Record<string, unknown> | undefined)?.category ?? '')
+              : '';
+            const designExtraction = shouldExtractDesign(classifyCategory, sceneHint)
+              ? await extractDesignTokens(image).catch((err) => {
+                logger.warn('design extraction failed', { error: String(err) });
+                return undefined;
+              })
+              : undefined;
+            // UI layout extraction: visual region detection + component
+            // boundaries + text hierarchy + spacing + icon areas.
+            // Same trigger as design extraction. ~100ms, no VLM.
+            const uiLayoutExtraction = shouldExtractDesign(classifyCategory, sceneHint)
+              ? await extractUiLayout(
+                  image,
+                  skillResults.ocr?.success ? extractOcrItems(skillResults.ocr.data, 'full') : undefined,
+                  designExtraction?.palette.map((p) => ({ hex: p.hex, role: p.role })),
+                ).catch((err) => {
+                  logger.warn('ui layout extraction failed', { error: String(err) });
+                  return undefined;
+                })
+              : undefined;
+            // Universal parser reasoning: one focused VLM call for
+            // insights/risks/next_actions. Falls back to scene templates on
+            // failure or hallucination (handled inside runReasoning).
+            const ocrTextForReasoning = skillResults.ocr?.success
+              ? extractOcrTextForReasoning(skillResults.ocr.data)
+              : undefined;
+            const summaryForReasoning = String(
+              (skillResults.summary?.data as Record<string, unknown> | undefined)?.description
+              ?? (skillResults.summary?.data as Record<string, unknown> | undefined)?.summary
+              ?? '',
+            );
+            // Skip the reasoning VLM call when there is no context to ground it
+            // (e.g. classify-only / single-skill requests): templates are more
+            // reliable than a bare 500M-model guess and we save ~3-5s latency.
+            const hasReasoningContext = Boolean(
+              ocrTextForReasoning || summaryForReasoning || scenarioExtractionData || keyContentExtraction,
+            );
+            const reasoningResult = hasReasoningContext
+              ? await runReasoning(provider, {
+                image: { buffer: image.buffer, mimeType: image.mimeType },
+                scene: resolveReasoningScene({
+                  category: skillResults.classify,
+                  scenario: scenarioType,
+                  sceneHint,
+                  ocrText: ocrTextForReasoning,
+                  summary: summaryForReasoning,
+                  intent,
+                }),
+                ocrText: ocrTextForReasoning,
+                summary: summaryForReasoning,
+                scenarioExtractionData,
+                keyContentExtraction,
+              }, signal).catch((err) => {
+                logger.warn('runReasoning threw; using templates', { error: String(err) });
+                return undefined;
+              })
+              : undefined;
             const ocrProviderWarnings = buildOcrProviderWarnings({
               intent,
               skillNames,
@@ -344,6 +462,15 @@ export function registerVisionAnalyzeTool(
               ...(annotations ? { annotations } : {}),
               ...(target ? { target } : {}),
               ...(keyContentExtraction ? { keyContentExtraction } : {}),
+              ...(scenarioExtraction ? { scenarioExtraction } : {}),
+              ...(scenarioExtractionData ? { scenarioExtractionData } : {}),
+              ...(designExtraction ? { designExtraction } : {}),
+              ...(uiLayoutExtraction ? { uiLayoutExtraction } : {}),
+              scenario: scenarioType,
+              reasoningResult,
+              sceneHint,
+              metadata,
+              intent,
             };
             const visionResult = composeResult(skillResults, provider.name, provider.runtime, duration, composeOptions);
 
@@ -352,6 +479,46 @@ export function registerVisionAnalyzeTool(
               skillsSucceeded: visionResult.skills,
               category: visionResult.category,
             });
+
+            // UI semantic AST pipeline: layer flat uiLayoutExtraction into a hierarchical
+            // SemanticAST (+ per-node styles + optional VLM image descriptions + a
+            // consolidated uiReconstruction). Orchestrated in src/ui-analysis/orchestrator.ts;
+            // each stage degrades gracefully. Gated by scene + build_tree option.
+            if (uiLayoutExtraction && shouldExtractDesign(classifyCategory, sceneHint) && options?.build_tree !== false) {
+              try {
+                const uiResult = await runUiAnalysis({
+                  uiLayoutExtraction,
+                  ...(designExtraction ? { designExtraction } : {}),
+                  ...(image ? { image } : {}),
+                  ...(provider ? { provider } : {}),
+                  ...(skillResults.ocr?.success ? { ocrItems: extractOcrItems(skillResults.ocr.data, 'full') } : {}),
+                  options: {
+                    buildTree: true,
+                    exportCodegen: options?.export_codegen === true,
+                    exportFigma: options?.export_figma === true,
+                    exportMarkdown: options?.export_markdown === true,
+                    useLlm: options?.use_llm === true,
+                    detectLayout: options?.detect_layout !== false,
+                    detectComponent: options?.detect_component !== false,
+                    detectText: options?.detect_text !== false,
+                    detectIcon: options?.detect_icon !== false,
+                    detectTheme: options?.detect_theme !== false,
+                    strictMode: options?.strict_mode === true,
+                    embedImages: options?.embed_images === true,
+                  },
+                });
+                if (uiResult.ui) visionResult.result.ui = uiResult.ui;
+                if (uiResult.uiSemantics) visionResult.result.uiSemantics = uiResult.uiSemantics;
+                if (uiResult.codegenIr) visionResult.result.codegenIr = uiResult.codegenIr;
+                if (uiResult.figmaJson) visionResult.result.figmaJson = uiResult.figmaJson;
+                if (uiResult.uiMarkdown) visionResult.result.uiMarkdown = uiResult.uiMarkdown;
+                if (uiResult.imageContents) visionResult.result.imageContents = uiResult.imageContents;
+                if (uiResult.uiReconstruction) visionResult.result.uiReconstruction = uiResult.uiReconstruction;
+              } catch (err) {
+                if (options?.strict_mode === true) throw err;
+                logger.warn('ui analysis failed', { error: String(err) });
+              }
+            }
 
             return {
               content: [
@@ -421,4 +588,71 @@ export function classifyVisionError(errorLike: unknown): ClassifiedVisionError {
   }
 
   return { code: 'INTERNAL_ERROR', message, retryable: true };
+}
+
+/**
+ * Whether design token extraction should run. Triggers for UI / screenshot /
+ * poster categories, or when the user provides a ui/prototype scene hint.
+ */
+function shouldExtractDesign(category: string, sceneHint: string | undefined): boolean {
+  const uiCategories = new Set(['ui', 'screenshot', 'poster']);
+  if (uiCategories.has(category)) return true;
+  if (sceneHint) {
+    const lower = sceneHint.toLowerCase();
+    if (lower.includes('ui') || lower.includes('prototype')) return true;
+  }
+  return false;
+}
+
+/**
+ * Extract joined OCR text from the ocr skill result for the reasoning call.
+ */
+function extractOcrTextForReasoning(ocrData: unknown): string | undefined {
+  if (typeof ocrData !== 'object' || ocrData === null) return undefined;
+  const texts = (ocrData as { texts?: unknown }).texts;
+  if (!Array.isArray(texts)) return undefined;
+  const lines = texts
+    .map((item) => {
+      if (typeof item === 'string') return item.trim();
+      if (typeof item === 'object' && item !== null) {
+        const text = (item as { text?: unknown }).text;
+        return typeof text === 'string' ? text.trim() : '';
+      }
+      return '';
+    })
+    .filter((line) => line.length > 0);
+  return lines.length > 0 ? lines.join('\n') : undefined;
+}
+
+/**
+ * Pick the single highest-confidence scene for the reasoning VLM prompt.
+ * Mirrors buildSceneDetection's fusion (classify + scenario + hint + refine)
+ * but returns one ParseScene so the reasoning prompt stays consistent with
+ * the final parse result.
+ */
+function resolveReasoningScene(input: {
+  category: SkillResult | undefined;
+  scenario: string;
+  sceneHint: string | undefined;
+  ocrText: string | undefined;
+  summary: string;
+  intent: string;
+}): ParseScene {
+  const categoryStr = input.category?.success && input.category.data
+    ? String((input.category.data as Record<string, unknown>).category ?? '')
+    : undefined;
+  const signals = [
+    sceneFromClassify(categoryStr),
+    sceneFromScenario(input.scenario),
+    sceneFromHint(input.sceneHint),
+  ].filter((s): s is NonNullable<typeof s> => s !== undefined);
+  const base = signals.length > 0
+    ? signals.sort((a, b) => b.confidence - a.confidence)[0]!.scene
+    : 'other';
+  // Apply keyword refinement using the same text as buildSceneDetection
+  // (OCR + summary + intent) so the reasoning prompt scene matches the final
+  // parse result.
+  const text = `${input.ocrText ?? ''}\n${input.summary}\n${input.intent}`;
+  const refined = refineScene(base, text);
+  return refined?.scene ?? base;
 }

@@ -86,6 +86,127 @@ export interface VisionResult {
   };
 }
 
+// ── Universal Vision Parser output (result.parse) ──
+
+export type ParseScene =
+  | 'document'
+  | 'requirement'
+  | 'ui'
+  | 'prototype'
+  | 'photo'
+  | 'code'
+  | 'table'
+  | 'chart'
+  | 'flowchart'
+  | 'mindmap'
+  | 'ppt'
+  | 'chat'
+  | 'error'
+  | 'other';
+
+export interface SceneEntry {
+  scene: ParseScene;
+  confidence: number;
+  reason: string;
+}
+
+export interface SceneBlock {
+  detected: SceneEntry[];
+  final: ParseScene;
+  reason: string;
+}
+
+export interface QualityBlock {
+  clarity: number;
+  ocr_confidence: number;
+  issues: string[];
+}
+
+export interface Entity {
+  type: string;
+  value: string;
+  label?: string | undefined;
+}
+
+export interface Relationship {
+  from: string;
+  to: string;
+  type?: string | undefined;
+}
+
+export interface DesignTokenEntry {
+  hex: string;
+  role: string;
+  frequency: number;
+}
+
+export interface DesignBlock {
+  palette: DesignTokenEntry[];
+  background: string;
+  primary: string;
+  textColor: string;
+  isDarkMode: boolean;
+  contrastRatio: number;
+}
+
+export interface BBox {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+export interface VisualRegion {
+  id: string;
+  type: string;
+  bbox: BBox;
+  relativeArea: number;
+  children: string[];
+}
+
+export interface UiComponentEntry {
+  type: string;
+  bbox: BBox;
+  text: string;
+  state: string;
+  variant: string;
+}
+
+export interface TextEntry {
+  text: string;
+  bbox: BBox;
+  estimatedLevel: string;
+}
+
+export interface UiLayoutBlock {
+  pageType: string;
+  layoutType: string;
+  regions: VisualRegion[];
+  components: UiComponentEntry[];
+  texts: TextEntry[];
+  averageGap: number;
+  spacingScale: string;
+  mediaAreaCount: number;
+  summary: string;
+}
+
+export interface UniversalParse {
+  scene: SceneBlock;
+  quality: QualityBlock;
+  layout: Record<string, unknown>;
+  ocr: { corrected: string };
+  entities: Entity[];
+  relationships: Relationship[];
+  logic: string[];
+  design?: DesignBlock | undefined;
+  uiLayout?: UiLayoutBlock | undefined;
+  summary: string;
+  insights: string[];
+  risks: string[];
+  next_actions: string[];
+  confidence: number;
+}
+
 // ── M2 types are defined in skills.ts (authoritative source) ──
 // Re-export for convenience so callers can import from either file.
 export type {

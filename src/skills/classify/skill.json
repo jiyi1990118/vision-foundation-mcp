@@ -1,13 +1,13 @@
 {
   "name": "classify",
-  "description": "Identify the overall category of an image",
+  "description": "Classify an image into exactly one category (medium-first: photo/screenshot vs illustration, then subject within that medium)",
   "version": "1.1.0",
   "inputs": {
     "required": ["image"],
     "optional": ["focus"]
   },
-  "outputs": ["category", "confidence", "reasoning"],
-  "supportedProviders": ["smolvlm", "gguf", "minicpm"],
+  "outputs": ["category", "confidence", "subcategory", "reasoning"],
+  "supportedProviders": ["smolvlm", "gguf-smolvlm", "gguf-smolvlm2", "minicpm-v"],
   "defaultTimeout": 30000,
   "defaultRetry": { "max": 1, "strategy": "reprompt" }
 }

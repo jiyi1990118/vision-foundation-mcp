@@ -1,10 +1,10 @@
 {
   "name": "poster",
-  "description": "Analyze poster design and content",
+  "description": "Analyze a designed poster: main theme, visual elements, colors, and text content",
   "version": "1.0.0",
   "inputs": { "required": ["image"], "optional": [] },
-  "outputs": ["theme", "elements"],
-  "supportedProviders": ["smolvlm", "gguf-smolvlm"],
+  "outputs": ["description", "theme"],
+  "supportedProviders": ["gguf-smolvlm", "gguf-smolvlm2", "minicpm-v"],
   "defaultTimeout": 30000,
   "defaultRetry": { "max": 1, "strategy": "reprompt" }
 }

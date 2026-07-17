@@ -2,7 +2,8 @@ import sharp from 'sharp';
 import type { ImageInput } from '../types/domain.js';
 import type { VisionProvider } from '../providers/types.js';
 import type { TargetQuery } from './skill-pipeline.js';
-import type { ImageAnnotations } from './annotation-detector.js';
+import type { ImageAnnotations, ColoredBoxAnnotation } from './annotation-detector.js';
+import { resolveColorName } from './annotation-detector.js';
 
 export interface Box {
   x1: number;
@@ -21,9 +22,10 @@ export interface OcrItem {
 export interface KeyContentExtraction {
   query?: TargetQuery | undefined;
   matchedRegion: {
-    type: 'redBox' | 'highlightBox' | 'layoutRegion';
+    type: 'redBox' | 'coloredBox' | 'highlightBox' | 'layoutRegion';
     box: string;
     confidence: number;
+    color?: string;
   };
   textLines: string[];
   table?: {
@@ -33,6 +35,14 @@ export interface KeyContentExtraction {
   fields?: Array<{ label: string; value: string }>;
   summary: string;
   warnings: string[];
+  /** When multiple annotation boxes are detected, each gets its own extraction. */
+  allExtractions?: Array<{
+    matchedRegion: KeyContentExtraction['matchedRegion'];
+    textLines: string[];
+    table?: { columns: string[]; rows: string[][] };
+    fields?: Array<{ label: string; value: string }>;
+    summary: string;
+  }>;
 }
 
 export interface KeyContentInput {
@@ -53,9 +63,10 @@ export interface KeyContentActivationInput {
 }
 
 export interface ResolvedTargetRegion {
-  type: 'redBox' | 'highlightBox' | 'layoutRegion';
+  type: 'redBox' | 'coloredBox' | 'highlightBox' | 'layoutRegion';
   box: string;
   confidence: number;
+  color?: string;
 }
 
 export interface ResolveTargetRegionInput {
@@ -82,45 +93,109 @@ export function shouldExtractKeyContent(input: KeyContentActivationInput): boole
   if (input.target) return true;
 
   const intent = input.intent ?? '';
-  if (/红框|虚线框|框中|圈出|标注|高亮|关键内容|提取区域|目标区域|red box|marked|highlighted|annotat|circled|boxed|specified region|target[- ]?region|extract\w*[^\n]{0,20}region|region[^\n]{0,20}extract\w*/i.test(intent)) {
+  // Expanded keywords: Chinese + English, color-specific + generic annotation terms.
+  if (/红框|蓝框|绿框|黄框|橙框|紫框|粉框|虚线框|框中|圈出|标注|高亮|关键内容|提取区域|目标区域|重点|标出|选中|标记|red box|blue box|green box|yellow box|marked|highlighted|annotat|circled|boxed|specified region|target[- ]?region|key content|extract\w*[^\n]{0,20}region|region[^\n]{0,20}extract\w*|pointed (?:out|to)|arrow/i.test(intent)) {
     return true;
   }
 
-  const hasAnnotations = (input.annotations?.redBoxes.length ?? 0) > 0;
+  const hasAnnotations = (input.annotations?.coloredBoxes?.length ?? input.annotations?.redBoxes.length ?? 0) > 0;
   const wantsContent = input.skillNames.includes('ocr') || input.skillNames.includes('summary');
   return hasAnnotations && wantsContent;
 }
 
 export async function extractKeyContent(input: KeyContentInput): Promise<KeyContentExtraction | undefined> {
   const fullItems = extractOcrItems(input.ocrData, 'full');
-  const region = resolveTargetRegion({
+  const regions = resolveAllTargetRegions({
     target: input.target,
     intent: input.intent,
     annotations: input.annotations,
     ocrItems: fullItems,
   });
-  if (!region) return undefined;
 
-  const parsedRegion = parseBox(region.box);
-  if (!parsedRegion) return undefined;
+  // If no annotation boxes, fall back to layout-region resolution (single).
+  if (regions.length === 0) {
+    const region = resolveLayoutRegion(fullItems, input.target, input.intent);
+    if (!region) return undefined;
+    const parsedRegion = parseBox(region.box);
+    if (!parsedRegion) return undefined;
 
-  const warnings: string[] = [];
-  let localItems: OcrItem[] = [];
-  if (input.ocrProvider) {
-    try {
-      localItems = await enhanceRegionOcr({ image: input.image, region: parsedRegion, provider: input.ocrProvider, signal: input.signal });
-    } catch {
-      warnings.push('region OCR failed; using full-image OCR only');
+    const warnings: string[] = [];
+    let localItems: OcrItem[] = [];
+    if (input.ocrProvider) {
+      try {
+        localItems = await enhanceRegionOcr({ image: input.image, region: parsedRegion, provider: input.ocrProvider, signal: input.signal });
+      } catch {
+        warnings.push('region OCR failed; using full-image OCR only');
+      }
     }
+
+    const merged = mergeOcrItems(itemsInsideRegion(fullItems, parsedRegion), itemsInsideRegion(localItems, parsedRegion));
+    const extraction = buildStructuredContent(merged, region);
+    return {
+      ...extraction,
+      query: input.target,
+      warnings: uniqueStrings([...warnings, ...extraction.warnings]),
+    };
   }
 
-  const merged = mergeOcrItems(itemsInsideRegion(fullItems, parsedRegion), itemsInsideRegion(localItems, parsedRegion));
-  const extraction = buildStructuredContent(merged, region);
+  // Multi-box path: extract from every annotation box independently.
+  const warnings: string[] = [];
+  const allExtractions: KeyContentExtraction['allExtractions'] = [];
+
+  for (const region of regions) {
+    const parsedRegion = parseBox(region.box);
+    if (!parsedRegion) continue;
+
+    let localItems: OcrItem[] = [];
+    if (input.ocrProvider) {
+      try {
+        localItems = await enhanceRegionOcr({ image: input.image, region: parsedRegion, provider: input.ocrProvider, signal: input.signal });
+      } catch {
+        warnings.push(`region OCR failed for ${region.color ?? ''} box; using full-image OCR only`);
+      }
+    }
+
+    const merged = mergeOcrItems(itemsInsideRegion(fullItems, parsedRegion), itemsInsideRegion(localItems, parsedRegion));
+    const perBox = buildStructuredContent(merged, region);
+    allExtractions.push({
+      matchedRegion: perBox.matchedRegion,
+      textLines: perBox.textLines,
+      ...(perBox.table ? { table: perBox.table } : {}),
+      ...(perBox.fields && perBox.fields.length > 0 ? { fields: perBox.fields } : {}),
+      summary: perBox.summary,
+    });
+  }
+
+  if (allExtractions.length === 0) return undefined;
+
+  // Primary extraction is the highest-ranked box; top-level fields mirror it
+  // for backward compatibility.  allExtractions carries every box's data.
+  const primary = allExtractions[0]!;
   return {
-    ...extraction,
+    matchedRegion: primary.matchedRegion,
+    textLines: primary.textLines,
+    ...(primary.table ? { table: primary.table } : {}),
+    ...(primary.fields && primary.fields.length > 0 ? { fields: primary.fields } : {}),
+    summary: composeMultiBoxSummary(allExtractions),
+    warnings: uniqueStrings(warnings),
     query: input.target,
-    warnings: uniqueStrings([...warnings, ...extraction.warnings]),
+    allExtractions,
   };
+}
+
+/** Combine per-box summaries into a single multi-box summary string. */
+function composeMultiBoxSummary(
+  extractions: NonNullable<KeyContentExtraction['allExtractions']>,
+): string {
+  if (extractions.length === 1) return extractions[0]!.summary;
+
+  const parts: string[] = [];
+  for (const ext of extractions) {
+    const colorLabel = ext.matchedRegion.color ? `${ext.matchedRegion.color}框` : '区域';
+    const idx = parts.length + 1;
+    parts.push(`【${colorLabel}${idx}】${ext.summary}`);
+  }
+  return parts.join('\n');
 }
 
 function mergeOcrItems(fullItems: OcrItem[], localItems: OcrItem[]): OcrItem[] {
@@ -147,46 +222,151 @@ export function buildStructuredContent(items: OcrItem[], region: ResolvedTargetR
   const warnings: string[] = [];
   const lines = groupLines(boxed);
   const textLines = lines.map((line) => normalizeLineText(line.items, warnings)).filter(Boolean);
-  const table = buildTable(lines, warnings);
+
+  // Only build a table if the content is genuinely tabular (column headers
+  // with aligned data rows).  Form-like layouts (scattered labels, selectors,
+  // checkboxes) produce garbage tables, so we detect and skip them.
+  const table = isTabularContent(lines) ? buildTable(lines, warnings) : undefined;
+  const fields = !table ? buildFields(lines) : undefined;
 
   return {
     matchedRegion: region,
     textLines,
     ...(table ? { table } : {}),
-    summary: summarizeStructuredContent(textLines, table),
+    ...(fields && fields.length > 0 ? { fields } : {}),
+    summary: summarizeStructuredContent(textLines, table, fields),
     warnings: uniqueStrings(warnings),
   };
 }
 
+/**
+ * Determine whether the OCR lines represent a genuine table (column headers
+ * with aligned data rows) rather than a form-like layout (scattered labels,
+ * selectors, checkboxes).
+ *
+ * Heuristics:
+ * - First line must have ≥2 items (potential column headers).
+ * - Header texts should be mostly unique (not "尺寸：" + "尺寸:").
+ * - Data rows should fill ≥40% of columns (not mostly empty cells).
+ * - At least 1 data row with content in ≥2 columns.
+ */
+function isTabularContent(lines: LineGroup[]): boolean {
+  if (lines.length < 2) return false; // Need header + ≥1 data row
+
+  const headerLine = lines[0];
+  if (!headerLine || headerLine.items.length < 2) return false;
+
+  // Header uniqueness: deduplicate by normalized text; if >50% are duplicates,
+  // it's not a real table header.
+  const headerTexts = headerLine.items.map((item) => normalizeComparableText(item.text));
+  const uniqueHeaders = new Set(headerTexts.filter(Boolean));
+  if (uniqueHeaders.size < headerTexts.length * 0.5) return false;
+
+  // Check column fill ratio across data rows.
+  const columnCenters = headerLine.items.map((item) => centerX(item.box));
+  const dataLines = lines.slice(1);
+  let rowsWithTwoColumns = 0;
+  let totalFilledCells = 0;
+  const totalCells = dataLines.length * columnCenters.length;
+
+  for (const line of dataLines) {
+    const filledColumns = new Set<number>();
+    for (const item of line.items) {
+      const colIdx = nearestIndex(columnCenters, centerX(item.box));
+      filledColumns.add(colIdx);
+    }
+    if (filledColumns.size >= 2) rowsWithTwoColumns++;
+    totalFilledCells += filledColumns.size;
+  }
+
+  // Need ≥1 row with content in ≥2 columns.
+  if (rowsWithTwoColumns < 1) return false;
+
+  // Overall fill ratio should be ≥40% (not mostly empty cells).
+  if (totalCells > 0 && totalFilledCells / totalCells < 0.4) return false;
+
+  return true;
+}
+
+/**
+ * Build a list of label-value field pairs from OCR lines.  Used for form-like
+ * layouts where table extraction doesn't apply.
+ */
+function buildFields(lines: LineGroup[]): Array<{ label: string; value: string }> {
+  const fields: Array<{ label: string; value: string }> = [];
+  for (const line of lines) {
+    const text = line.items.map((item) => item.text).join(' ').trim();
+    if (!text) continue;
+    // Detect "label：value" or "label: value" patterns.
+    const match = text.match(/^([^：:]{1,20})[：:]\s*(.+)$/);
+    if (match) {
+      const value = match[2]!.trim();
+      // Skip complex text lines where the value itself contains colons
+      // (e.g. "变动配料：左：菠萝 右：黄桃") - these are not simple label-value
+      // pairs but multi-clause sentences that read better as plain text.
+      if (/[：:]/.test(value)) continue;
+      fields.push({ label: match[1]!.trim(), value });
+    }
+  }
+  return fields;
+}
+
+/**
+ * Resolve ALL annotation boxes (ranked by score), not just the best one.
+ * Used for multi-box key content extraction where every annotated region
+ * should be extracted independently.
+ */
+export function resolveAllTargetRegions(input: ResolveTargetRegionInput): ResolvedTargetRegion[] {
+  const requestedColor = resolveColorName(input.target?.color) ?? inferColorFromIntent(input.intent ?? '');
+  const allBoxes = (input.annotations?.coloredBoxes ?? input.annotations?.redBoxes ?? [])
+    .map((b) => ({ ...b, color: b.color ?? 'red' }));
+
+  const candidates = requestedColor
+    ? allBoxes.filter((b) => b.color === requestedColor)
+    : allBoxes;
+
+  return rankAnnotationBoxes(candidates, input.target?.position);
+}
+
 export function resolveTargetRegion(input: ResolveTargetRegionInput): ResolvedTargetRegion | undefined {
-  const explicitColor = input.target?.color?.toLowerCase();
-  if (explicitColor && explicitColor !== 'red' && explicitColor !== '红色') {
-    return undefined;
-  }
-
-  const redBoxes = input.annotations?.redBoxes ?? [];
-  if (redBoxes.length > 0) {
-    return rankRedAnnotationBoxes(redBoxes, input.target?.position)[0];
-  }
-
+  const regions = resolveAllTargetRegions(input);
+  if (regions.length > 0) return regions[0];
   return resolveLayoutRegion(input.ocrItems, input.target, input.intent);
 }
 
-export function rankRedAnnotationBoxes(
-  redBoxes: NonNullable<ImageAnnotations['redBoxes']>,
+/** Extract a color name from intent keywords like "红框", "蓝框", "blue box". */
+function inferColorFromIntent(intent: string): string | undefined {
+  const lower = intent.toLowerCase();
+  // Check each color's aliases against the intent.
+  const colorPatterns: Array<{ name: string; pattern: RegExp }> = [
+    { name: 'red', pattern: /红框|红色框|红\s*色|red\s*box|red\s*annot/i },
+    { name: 'blue', pattern: /蓝框|蓝色框|蓝\s*色|blue\s*box|blue\s*annot/i },
+    { name: 'green', pattern: /绿框|绿色框|绿\s*色|green\s*box|green\s*annot/i },
+    { name: 'yellow', pattern: /黄框|黄色框|黄\s*色|橙框|橙色框|yellow\s*box|orange\s*box/i },
+    { name: 'magenta', pattern: /紫框|紫色框|粉框|粉色框|紫\s*色|粉\s*色|purple\s*box|pink\s*box|magenta\s*box/i },
+  ];
+  for (const { name, pattern } of colorPatterns) {
+    if (pattern.test(lower)) return name;
+  }
+  return undefined;
+}
+
+export function rankAnnotationBoxes(
+  boxes: ColoredBoxAnnotation[],
   position: string | undefined,
 ): ResolvedTargetRegion[] {
-  return redBoxes
+  return boxes
     .map((box) => ({ raw: box, parsed: parseBox(box.box) }))
-    .filter((item): item is { raw: typeof redBoxes[number]; parsed: Box } => item.parsed !== undefined)
+    .filter((item): item is { raw: ColoredBoxAnnotation; parsed: Box } => item.parsed !== undefined)
     .map((item) => ({
-      type: 'redBox' as const,
+      type: (item.raw.color === 'red' ? 'redBox' : 'coloredBox') as 'redBox' | 'coloredBox',
       box: item.raw.box,
       confidence: item.raw.confidence,
+      color: item.raw.color,
       score: item.raw.confidence + scorePosition(item.parsed, position),
     }))
     .sort((a, b) => b.score - a.score)
-    .map(({ type, box, confidence }) => ({ type, box, confidence }));
+    .map(({ type, box, confidence, color }) => ({ type, box, confidence, color }));
 }
 
 export function resolveLayoutRegion(
@@ -471,9 +651,16 @@ function nearestIndex(values: number[], value: number): number {
   return bestIndex;
 }
 
-function summarizeStructuredContent(textLines: string[], table: { columns: string[]; rows: string[][] } | undefined): string {
+function summarizeStructuredContent(
+  textLines: string[],
+  table: { columns: string[]; rows: string[][] } | undefined,
+  fields?: Array<{ label: string; value: string }> | undefined,
+): string {
   if (table) {
     return `关键区域包含表格：${table.columns.join('、')}，共 ${table.rows.length} 行。`;
+  }
+  if (fields && fields.length > 0) {
+    return `关键区域包含字段：${fields.map((f) => `${f.label}=${f.value}`).join('，')}。`;
   }
   return textLines.length > 0 ? `关键区域包含：${textLines.join('；')}。` : '关键区域未识别到明确文本。';
 }

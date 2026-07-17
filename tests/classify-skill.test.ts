@@ -67,9 +67,9 @@ describe('classify skill — optimised prompt + schema', () => {
     expect(schema.properties.reasoning).toBeDefined();
   });
 
-  it('declares support for the gguf provider (not only smolvlm)', () => {
+  it('declares support for a gguf provider (not only smolvlm)', () => {
     const skill = getSkill('classify')!;
-    expect(skill.supportedProviders).toContain('gguf');
+    expect(skill.supportedProviders).toContain('gguf-smolvlm');
   });
 
   it('prompt is substantially richer than a one-line question', () => {

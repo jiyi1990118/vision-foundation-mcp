@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://vision-foundation-mcp/codegen_ir.schema.json",
+  "title": "CodegenIR",
+  "description": "Framework-agnostic renderable description: node tree plus layout constraints, slots, and repeats. Layer 4 of the UI analysis IR.",
+  "type": "object",
+  "required": ["root", "constraints", "slots", "repeats"],
+  "additionalProperties": false,
+  "properties": {
+    "root": { "$ref": "#/$defs/codegenNode" },
+    "constraints": {
+      "type": "array",
+      "description": "Layout constraints (flex direction, gap, alignment) keyed to target nodes.",
+      "items": {
+        "type": "object",
+        "required": ["targetId"],
+        "additionalProperties": false,
+        "properties": {
+          "targetId": { "type": "string" },
+          "direction": { "type": "string", "enum": ["row", "column", "grid"] },
+          "gap": { "type": "number", "minimum": 0 },
+          "align": { "type": "string" }
+        }
+      }
+    },
+    "responsive": {
+      "type": "array",
+      "description": "Optional responsive overrides keyed by breakpoint.",
+      "items": {
+        "type": "object",
+        "required": ["breakpoint", "layout"],
+        "additionalProperties": false,
+        "properties": {
+          "breakpoint": { "type": "string" },
+          "layout": { "type": "string" }
+        }
+      }
+    },
+    "slots": {
+      "type": "array",
+      "description": "Named insertion slots for composition.",
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      }
+    },
+    "repeats": {
+      "type": "array",
+      "description": "Repeated (list-like) nodes with an expected item count.",
+      "items": {
+        "type": "object",
+        "required": ["targetId", "count"],
+        "additionalProperties": false,
+        "properties": {
+          "targetId": { "type": "string" },
+          "count": { "type": "integer", "minimum": 0 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "componentType": {
+      "type": "string",
+      "enum": [
+        "page", "container", "header", "footer", "navbar", "sidebar", "toolbar",
+        "card", "section", "list", "listItem", "table", "row", "column", "grid",
+        "button", "iconButton", "text", "title", "subtitle", "input", "textarea",
+        "checkbox", "radio", "switch", "select", "dropdown", "image", "avatar",
+        "icon", "divider", "progress", "badge", "tag", "tab", "dialog", "drawer",
+        "bottomSheet", "unknown"
+      ]
+    },
+    "codegenNode": {
+      "type": "object",
+      "required": ["id", "type", "props", "children"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "$ref": "#/$defs/componentType" },
+        "props": { "type": "object", "description": "Free-form renderable properties." },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/codegenNode" }
+        }
+      }
+    }
+  }
+}

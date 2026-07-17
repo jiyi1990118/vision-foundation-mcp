@@ -1,10 +1,10 @@
 {
   "name": "moderation",
-  "description": "Check image content safety",
+  "description": "Check image content safety: flag violence, nudity, illegal, or harmful material",
   "version": "1.0.0",
   "inputs": { "required": ["image"], "optional": [] },
-  "outputs": ["safe", "flags"],
-  "supportedProviders": ["smolvlm", "gguf-smolvlm"],
+  "outputs": ["description", "safe"],
+  "supportedProviders": ["smolvlm", "gguf-smolvlm", "gguf-smolvlm2", "minicpm-v"],
   "defaultTimeout": 10000,
   "defaultRetry": { "max": 0, "strategy": "none" }
 }

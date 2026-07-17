@@ -1,13 +1,13 @@
 {
   "name": "summary",
-  "description": "Generate a natural language description of an image",
+  "description": "Generate a detailed natural-language description of an image, preserving page structure for UI/requirement screenshots",
   "version": "1.0.0",
   "inputs": {
     "required": ["image"],
     "optional": ["focus"]
   },
-  "outputs": ["description"],
-  "supportedProviders": ["smolvlm"],
+  "outputs": ["description", "tags"],
+  "supportedProviders": ["smolvlm", "gguf-smolvlm", "gguf-smolvlm2", "minicpm-v"],
   "defaultTimeout": 30000,
   "defaultRetry": { "max": 1, "strategy": "reprompt" }
 }

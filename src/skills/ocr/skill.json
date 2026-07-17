@@ -1,13 +1,13 @@
 {
   "name": "ocr",
-  "description": "Extract text content from an image",
+  "description": "Extract all visible text from an image, grouped by region with positions and per-box confidence",
   "version": "1.0.0",
   "inputs": {
     "required": ["image"],
     "optional": ["focus"]
   },
-  "outputs": ["texts"],
-  "supportedProviders": ["smolvlm"],
+  "outputs": ["texts", "language"],
+  "supportedProviders": ["smolvlm", "gguf-smolvlm", "gguf-smolvlm2", "minicpm-v", "ppu-paddle-ocr"],
   "defaultTimeout": 30000,
   "defaultRetry": { "max": 2, "strategy": "reprompt" }
 }

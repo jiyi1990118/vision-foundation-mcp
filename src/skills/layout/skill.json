@@ -1,10 +1,10 @@
 {
   "name": "layout",
-  "description": "Analyze visual layout structure of an image",
+  "description": "Analyze the visual layout structure of an image (grid/columns/rows/sidebar/sections)",
   "version": "1.0.0",
   "inputs": { "required": ["image"], "optional": [] },
-  "outputs": ["layout"],
-  "supportedProviders": ["smolvlm", "gguf-smolvlm"],
+  "outputs": ["description", "layoutType"],
+  "supportedProviders": ["gguf-smolvlm", "gguf-smolvlm2", "minicpm-v"],
   "defaultTimeout": 30000,
   "defaultRetry": { "max": 1, "strategy": "reprompt" }
 }

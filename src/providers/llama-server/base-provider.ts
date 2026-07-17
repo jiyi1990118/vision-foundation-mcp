@@ -37,6 +37,10 @@ export interface LlamaCppProviderConfig {
   minFreeRamMB: number;
   /** Minimum VRAM (MB) to offload layers on CUDA; below this -> CPU. */
   minVramMB: number;
+  /** Total context window tokens. Default 8192. */
+  contextSize?: number | undefined;
+  /** Parallel slots (each gets contextSize/slots). Default 2. */
+  parallelSlots?: number | undefined;
   /** Acquire model files; throws on download/corruption failure. */
   ensureModel: () => Promise<ModelPaths>;
   /** Idle timeout before auto-unload (ms). Defaults to 10 min. */
@@ -172,6 +176,8 @@ export abstract class BaseLlamaCppProvider implements VisionProvider {
       existingPid: existing?.pid,
       gpuLayers,
       threads,
+      contextSize: this.config.contextSize,
+      parallelSlots: this.config.parallelSlots,
     });
     await this.server.start();
 

@@ -58,6 +58,17 @@
 | **LifecycleManager** | 生命周期管理器 | ❌ ModelLoader / ResourceManager |
 | **CacheManager** | 缓存管理器 | ❌ CacheStore |
 
+### 2.4 组件实现状态（Implementation Status）
+
+> 以下组件在当前代码库中**并非独立模块**，相关功能内联在别处。术语仍作为概念保留便于讨论；新建代码不应假设其以独立类/文件存在。
+
+| 组件 | 实际位置 | 说明 |
+|------|----------|------|
+| **ResponseValidator** | `SkillPipeline.parseAndValidate`（`src/core/skill-pipeline.ts`） | 响应校验内联在 Pipeline 中，无独立 `ResponseValidator` 类/模块 |
+| **ResultComposer** | `composeResult` 函数（`src/core/skill-pipeline.ts`） | 结果组合是函数式实现，非独立类 |
+| **LifecycleManager** | `BaseLlamaCppProvider`（`src/providers/llama-server/base-provider.ts`） | Provider 生命周期内嵌于基类，无独立管理器 |
+| **CacheManager** | 无结果级缓存 | `VisionResult.metadata.cached` 当前硬编码为 `false`；仅 Provider 级推理缓存存在于 `base-provider.ts` 的 `resultCache` |
+
 ---
 
 ## 3. 领域模型（核心实体关系）
@@ -129,12 +140,13 @@ interface ImageMetadata {
   aspectRatio: number;
   format: string;
   hasAlpha: boolean;
-  colorCount: number;
   fileSize: number;
   complexity: "low" | "medium" | "high";
   estimatedType?: string;
 }
 ```
+
+> 注：无 `colorCount` 字段。`complexity` 由 `metadata-extractor.ts` 基于像素数 + `fileSize` 的启发式估算。
 
 ### 4.3 ExecutionPlan
 ```typescript
@@ -147,6 +159,8 @@ interface ExecutionPlan {
   cacheKey: string;
   timeout: number;
   retry: { max: number; strategy: "none" | "reprompt" | "fallback" };
+  maxTokens?: number;
+  cache?: boolean;
 }
 ```
 
@@ -169,11 +183,12 @@ interface InferenceRequest {
   prompt: string;
   maxTokens: number;
   temperature: number;
+  cache?: boolean;            // 是否命中 Provider 级推理缓存
+  signal?: AbortSignal;       // 可选中止信号，中断在途推理
 }
 
 interface InferenceResponse {
   text: string;
-  raw?: any;
   duration: number;
 }
 ```
@@ -181,15 +196,18 @@ interface InferenceResponse {
 ### 4.6 VisionResult
 ```typescript
 interface VisionResult {
+  [key: string]: unknown;     // index signature（兼容 MCP structuredContent）
   category: string;
   confidence: number;
   summary: string;
   skills: string[];
-  result: { [skillName: string]: any };
+  result: Record<string, unknown>;
+  ocrText?: string;           // 顶层完整 OCR 文本，方便 LLM 直接消费
   metadata: {
     provider: string;
+    runtime: string;          // 使用的 Runtime
     duration: number;
-    cached: boolean;
+    cached: boolean;          // 当前硬编码 false（无结果级缓存）
   };
 }
 ```
@@ -198,10 +216,82 @@ interface VisionResult {
 ```typescript
 interface MachineResources {
   cpuCores: number;
-  memoryAvailable: number;   // MB
+  totalMemoryMB?: number;    // MB（可选）
+  memoryAvailableMB: number; // MB
   hasGPU: boolean;
-  gpuMemory?: number;        // MB
   availableRuntimes: string[];
+}
+```
+
+### 4.8 SkillManifest
+```typescript
+interface SkillManifest {
+  name: string;
+  description: string;
+  version: string;
+  inputs: { required: string[]; optional: string[] };
+  outputs: string[];
+  supportedProviders: string[];
+  defaultTimeout: number;
+  defaultRetry: { max: number; strategy: "none" | "reprompt" | "fallback" };  // 联合类型，非 string
+  promptTemplate: string;
+  schema: object;
+}
+```
+
+### 4.9 UniversalParse（result.parse）
+
+通用视觉解析输出，挂在 `VisionResult.result.parse`。由 `src/core/universal-parser.ts` 的 `runReasoning` 产出（单次聚焦的 VLM 调用），失败时回退到场景模板。
+
+```typescript
+type ParseScene =
+  | "document" | "requirement" | "ui" | "prototype" | "photo"
+  | "code" | "table" | "chart" | "flowchart" | "mindmap"
+  | "ppt" | "chat" | "error" | "other";
+
+interface SceneEntry {
+  scene: ParseScene;
+  confidence: number;
+  reason: string;
+}
+
+interface SceneBlock {
+  detected: SceneEntry[];   // 多场景候选
+  final: ParseScene;        // 融合后的最终场景
+  reason: string;
+}
+
+interface QualityBlock {
+  clarity: number;
+  ocr_confidence: number;
+  issues: string[];
+}
+
+interface Entity {
+  type: string;
+  value: string;
+  label?: string;
+}
+
+interface Relationship {
+  from: string;
+  to: string;
+  type?: string;
+}
+
+interface UniversalParse {
+  scene: SceneBlock;
+  quality: QualityBlock;
+  layout: Record<string, unknown>;
+  ocr: { corrected: string };
+  entities: Entity[];
+  relationships: Relationship[];
+  logic: string[];
+  summary: string;
+  insights: string[];
+  risks: string[];
+  next_actions: string[];
+  confidence: number;
 }
 ```
 
@@ -250,10 +340,10 @@ type ProviderState =
   | "unloading"  // 卸载中
   | "error";     // 加载失败
 
-// Skill 执行状态
+// Skill 执行状态（aspirational：当前代码库未作为类型导出，仅作为概念规划保留）
 type SkillState = "pending" | "running" | "success" | "failed" | "skipped";
 
-// 推理结果状态
+// 推理结果状态（aspirational：当前代码库未作为类型导出，仅作为概念规划保留）
 type ResultState = "fresh" | "cached" | "partial" | "error";
 ```
 
@@ -264,16 +354,20 @@ type ResultState = "fresh" | "cached" | "partial" | "error";
 错误码使用 `模块_原因` 格式，全大写下划线：
 
 ```
+// 当前已实现（src/tools/vision-analyze.ts classifyVisionError 实际抛出）
 NORMALIZE_INVALID_INPUT       归一化：输入无效
+POLICY_DENIED                 策略拒绝（如超大图）
+TIMEOUT                       推理超时
+RUNTIME_NOT_FOUND             无可用 Runtime / llama-server 未找到
 MODEL_DOWNLOAD_FAILED         模型下载失败
-MODEL_CORRUPTED               模型校验失败
-PROVIDER_UNAVAILABLE          Provider 不可用
-RUNTIME_NOT_FOUND             Runtime 不可用
-POLICY_DENIED                 策略拒绝
-SKILL_VALIDATION_FAILED       Skill 校验失败
-SKILL_RETRY_EXHAUSTED         Skill 重试耗尽
-RESOURCE_INSUFFICIENT         资源不足
-TIMEOUT                       超时
+MODEL_CORRUPTED               模型校验失败（checksum）
+INTERNAL_ERROR                未知内部错误
+
+// 以下为规划/aspirational，当前 classifyVisionError 尚未抛出
+PROVIDER_UNAVAILABLE          Provider 不可用（规划中，未实现）
+SKILL_VALIDATION_FAILED       Skill 校验失败（规划中，未实现；校验内联于 SkillPipeline）
+SKILL_RETRY_EXHAUSTED         Skill 重试耗尽（规划中，未实现）
+RESOURCE_INSUFFICIENT         资源不足（规划中，未实现；memory-guard 仅 warn）
 ```
 
 ---

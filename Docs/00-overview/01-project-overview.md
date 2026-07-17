@@ -75,16 +75,22 @@ Structured JSON + Text Summary
 （符合 MCP 规范的 content + structuredContent）
 ```
 
-**能力**（通过 Skill 提供）：
+除各 Skill 结果外，输出还包含：
+
+- **Universal Vision Parser（`result.parse`）**：统一视觉解析结构，由 `universal-parser` 生成，提供 insights / risks / next_actions 等推理摘要。
+- **`result.ui` / `result.layout`**：OCR 成功后由 Composer 算法化构造（非独立 Skill），面向后台/UI 截图的结构化摘要与布局结构。
+- **场景提取器**：针对 chart / diagram / invoice / code / form 等场景，`src/core/extractors/` 下有专用确定性提取器做结构化抽取。
+
+**能力**（通过 Skill 提供，共 8 个）：
 
 ```
-classify      分类       object       目标检测
-summary       摘要       ocr          文字识别
-ui            UI分析     layout       布局分析
-chart         图表       table        表格
+classify      分类       summary      摘要
+ocr           文字识别   table        表格
 document      文档       poster       海报
-color         配色       moderation   内容审核
+moderation    内容审核   layout       布局分析
 ```
+
+> 说明：`ui`、`layout` 不是独立 Skill，而是 OCR 成功后算法化构造的输出。
 
 ### 4.2 不负责什么（Out of Scope）
 
@@ -114,9 +120,9 @@ color         配色       moderation   内容审核
 ┌──────────────────────────────────────────────────┐
 │            Vision Foundation MCP                  │
 │                                                   │
-│   输入归一化 → Planner → Policy → Skill Pipeline  │
-│              → Provider → Runtime → Model         │
-│              → Validator → Composer → 输出         │
+│   输入归一化 → 路由 → Planner → Policy → Pipeline │
+│              → Provider(llama.cpp) → 推理           │
+│              → 提取器 → Universal Parser → 输出    │
 └───────────────────────┬──────────────────────────┘
                         │ Structured JSON
                         ▼
@@ -150,6 +156,15 @@ v0.2 新增了针对中文后台/需求截图的确定性增强路径：
 - 对红框内金额表格执行表头单位合并、行列重建和货币符号归一化，避免相邻框外文本泄漏。
 
 > 关键认知：**决定项目成败的不是某个模型，而是 Planner、Policy、Prompt Compiler、Skill Engine 这套工程体系。** 模型可替换，体系是根基。
+
+### 5.2 M5 多模型路由（Provider Router）
+
+M5 引入了基于路由的 Provider 选择机制（`src/core/provider-router.ts`）：
+
+- `selectProvider()` 根据请求的 `quality` / `provider` 选项、检测到的硬件资源、所需 Skill，从已注册 Provider 中选出最合适的实例。
+- 默认 / 活动 Provider 为 `gguf-smolvlm2`；`VISION_HIGH_QUALITY=1` 时注册 `minicpm-v`，`quality=high` 请求可路由到它（首次使用懒加载，约 2GB 下载）。
+- 路由是 Provider 选择的唯一权威；Planner 不再硬编码改写 Provider，`memory-guard` 规则仅告警不覆盖。
+- `VISION_OCR_PROVIDER=ppu-paddle-ocr` 可注册专用 OCR-only Provider，混合请求中 `ocr` skill 由其执行，其余 skill 仍由 VLM Provider 执行。
 
 ---
 

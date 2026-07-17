@@ -14,24 +14,24 @@ const baseInput = {
 };
 
 describe('execution-planner active-provider defaulting', () => {
-  it('maps requirement screenshot analysis to classify, OCR, and summary', async () => {
+  it('maps requirement screenshot analysis to classify and OCR (summary skipped for key-content)', async () => {
     const input: PlannerInput = {
       ...baseInput,
       intent: '分析这个需求截图内容，提取页面字段、按钮、红框标注和图片内容',
     } as PlannerInput;
 
     const plan = await planExecution(input);
-    expect(plan.skills.map((task) => task.skill)).toEqual(['classify', 'ocr', 'summary']);
+    expect(plan.skills.map((task) => task.skill)).toEqual(['classify', 'ocr']);
   });
 
-  it('maps TAPD requirement image analysis to classify, OCR, and summary', async () => {
+  it('maps TAPD requirement image analysis to classify and OCR (summary skipped for key content)', async () => {
     const input: PlannerInput = {
       ...baseInput,
       intent: '分析桌面上的 TAPD 需求图片，返回关键内容和总结',
     } as PlannerInput;
 
     const plan = await planExecution(input);
-    expect(plan.skills.map((task) => task.skill)).toEqual(['classify', 'ocr', 'summary']);
+    expect(plan.skills.map((task) => task.skill)).toEqual(['classify', 'ocr']);
   });
 
   it('injects target focus into OCR prompts for region extraction', async () => {
@@ -49,7 +49,7 @@ describe('execution-planner active-provider defaulting', () => {
   it('runs OCR and classify before summary for mixed screenshot analysis', async () => {
     const input: PlannerInput = {
       ...baseInput,
-      intent: '分析这个需求截图内容，提取页面字段、按钮、红框标注和图片内容',
+      intent: '全面详细地看这张图',
     } as PlannerInput;
 
     const plan = await planExecution(input);
@@ -60,14 +60,14 @@ describe('execution-planner active-provider defaulting', () => {
     expect(summary.dependsOn).toEqual(['ocr', 'classify']);
   });
 
-  it('adds OCR for target extraction on auto intent', async () => {
+  it('adds OCR for target extraction on auto intent (summary skipped for target)', async () => {
     const input: PlannerInput = {
       ...baseInput,
       options: { target: { color: 'red', description: '虚线红框中的内容' } },
     } as PlannerInput;
 
     const plan = await planExecution(input);
-    expect(plan.skills.map((task) => task.skill)).toEqual(['classify', 'summary', 'ocr']);
+    expect(plan.skills.map((task) => task.skill)).toEqual(['classify', 'ocr']);
   });
 
   it('keeps explicit requested skills authoritative for target extraction', async () => {

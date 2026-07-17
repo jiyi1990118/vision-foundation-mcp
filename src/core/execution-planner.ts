@@ -24,12 +24,18 @@ interface IntentMapping {
 }
 
 const INTENT_MAPPINGS: IntentMapping[] = [
-  // Requirement/product screenshots need both visual understanding and text extraction.
+  // Requirement / product management screenshots need both visual understanding
+  // and text extraction.  Covers TAPD, Jira, Confluence, Feishu/Lark, DingTalk
+  // docs, PRD, stories, iterations, defects, tasks, and any requirement image.
   {
     keywords: [
       'requirement screenshot', 'prototype', 'wireframe', 'annotation', 'red box', 'highlight',
-      'tapd', 'requirement image',
-      '需求', '需求图片', '需求截图', '截图内容', '页面内容', '图片内容', '界面内容', '原型图', '标注', '红框', '字段', '按钮', '开关',
+      'tapd', 'requirement image', 'product requirement', 'prd', 'user story', 'acceptance criteria',
+      'jira', 'confluence', 'feishu', 'lark', 'dingtalk',
+      '需求', '需求图片', '需求截图', '需求文档', '需求规格', '需求说明', '截图内容', '页面内容', '图片内容', '界面内容',
+      '原型图', '标注', '红框', '字段', '按钮', '开关',
+      '产品', '产品需求', '产品文档', '产品截图', 'story', '迭代', '缺陷', '任务', '用例', '验收标准',
+      '飞书', '钉钉', '知识库', '需求池', '需求评审', '需求拆解',
     ],
     skills: ['classify', 'ocr', 'summary'],
   },
@@ -41,16 +47,16 @@ const INTENT_MAPPINGS: IntentMapping[] = [
   { keywords: ['describe', 'summary', 'explain', 'analyze', 'auto', '描述', '总结', '分析', '解析'], skills: ['classify', 'summary'] },
   // Detailed analysis
   { keywords: ['detail', 'full', 'comprehensive', '详细', '全面'], skills: ['classify', 'ocr', 'summary'] },
-  // Table
-  { keywords: ['table', 'spreadsheet', 'grid', '表格'], skills: ['table'] },
-  // Document
-  { keywords: ['document', 'page', 'letter', 'invoice', '文档', '页面'], skills: ['document'] },
-  // Poster / design
-  { keywords: ['poster', 'design', 'banner', 'ad', '海报', '设计'], skills: ['poster'] },
-  // Moderation / safety
+  // Table - classify in parallel so the universal parser gets a scene signal.
+  { keywords: ['table', 'spreadsheet', 'grid', '表格'], skills: ['classify', 'table'] },
+  // Document - classify in parallel for scene detection.
+  { keywords: ['document', 'page', 'letter', 'invoice', '文档', '页面'], skills: ['classify', 'document'] },
+  // Poster / design - classify in parallel for scene detection.
+  { keywords: ['poster', 'design', 'banner', 'ad', '海报', '设计'], skills: ['classify', 'poster'] },
+  // Moderation / safety - standalone (no scene/entities needed).
   { keywords: ['safe', 'moderation', 'nsfw', 'inappropriate', '审核', '安全'], skills: ['moderation'] },
-  // Layout
-  { keywords: ['layout', 'structure', 'arrangement', '布局', '结构'], skills: ['layout'] },
+  // Layout - classify in parallel for scene detection.
+  { keywords: ['layout', 'structure', 'arrangement', '布局', '结构'], skills: ['classify', 'layout'] },
 ];
 
 /**
@@ -196,11 +202,51 @@ function augmentTargetSkills(
   intent: string,
   options?: PlannerInput['options'],
 ): string[] {
-  if (!shouldIncludeOcrForTarget(intent, options) || skillNames.includes('ocr')) {
-    return skillNames;
+  let skills = skillNames;
+
+  // P0-3: For key-content / annotation extraction intents, skip the VLM
+  // `summary` skill.  UI screenshots with annotation boxes cause the VLM to
+  // hallucinate; the OCR-driven summary (composeResult ->
+  // shouldPreferOcrDrivenSummary + appendKeyContentSummary) produces better
+  // results from the structured OCR + key-content extraction.
+  if (shouldSkipSummaryForKeyContent(intent, options)) {
+    skills = skills.filter((name) => name !== 'summary');
   }
 
-  return [...skillNames, 'ocr'];
+  if (!shouldIncludeOcrForTarget(intent, options) || skills.includes('ocr')) {
+    return skills;
+  }
+
+  return [...skills, 'ocr'];
+}
+
+/**
+ * Whether to skip the VLM `summary` skill for this request.
+ * Returns true when the intent asks for structured content extraction
+ * where an OCR/algorithm-driven summary is more reliable than VLM
+ * hallucination.  Covers: requirement/product, chart/dashboard, diagram,
+ * invoice/document, code screenshot, and form field extraction intents.
+ */
+function shouldSkipSummaryForKeyContent(intent: string, options?: PlannerInput['options']): boolean {
+  if (options?.target) return true;
+
+  const lower = intent.toLowerCase();
+  return [
+    // requirement / product / annotation
+    'target', 'key content', 'red box', 'highlight', 'annotat', 'boxed', 'circled',
+    '目标', '关键内容', '红框', '蓝框', '绿框', '标注', '框中', '圈出', '标出', '选中', '标记',
+    '需求', '产品', '原型', '字段',
+    // chart / dashboard data extraction
+    'chart', 'graph', 'dashboard', 'kpi', 'metric', '数据图', '图表', '柱状', '折线', '饼图', '趋势', '指标',
+    // diagram / flowchart
+    'diagram', 'flowchart', 'flow chart', 'architecture', '流程图', '架构图', '拓扑', '流向',
+    // invoice / document structure
+    'invoice', 'receipt', '票据', '发票', '收据', '账单', '明细',
+    // code screenshot
+    'code', '代码', '源码', '代码片段',
+    // form fields
+    'form', '表单', '填写',
+  ].some((keyword) => lower.includes(keyword));
 }
 
 function focusForSkill(name: string, options: PlannerInput['options']): string | undefined {
@@ -219,9 +265,14 @@ function shouldIncludeOcrForTarget(intent: string, options?: PlannerInput['optio
   if (options?.target) return true;
 
   const lower = intent.toLowerCase();
-  return ['target', 'key content', 'red box', 'highlight', '目标', '关键内容', '红框', '标注'].some((keyword) => (
-    lower.includes(keyword)
-  ));
+  return [
+    'target', 'key content', 'red box', 'highlight',
+    '目标', '关键内容', '红框', '标注',
+    'chart', 'dashboard', 'kpi', '图表', '指标',
+    'diagram', 'flowchart', '流程图', '架构图',
+    'invoice', 'receipt', '票据', '发票',
+    'code', '代码', 'form', '表单',
+  ].some((keyword) => lower.includes(keyword));
 }
 
 function buildCacheKey(

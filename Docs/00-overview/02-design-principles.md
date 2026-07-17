@@ -44,10 +44,10 @@
 **默认本地，离线可用；云端是可选升级，不是默认路径。**
 
 ### 落实点
-- 默认 Provider = SmolVLM（本地、CPU）
+- 默认 Provider = SmolVLM2（GGUF via llama.cpp，Metal/CUDA/CPU 加速，约 500MB）
 - 模型自动下载到本地缓存目录 `~/.vision-mcp/models/`
 - 不依赖任何云端 API Key 即可运行
-- 配置 `quality: high` 时才考虑切换云端/大模型
+- 配置 `quality: high` 时才切换大模型（MiniCPM-V，需 GPU）
 
 ### 决策示例
 - 选型：SmolVLM2 Q8_0 via llama.cpp —— Metal/CUDA 加速，CPU 也可跑
@@ -60,13 +60,15 @@
 
 **能用配置解决的，不用代码。策略变更 = 配置变更。**
 
-### 落实点
-- 模型选择策略 → `config/policy.yaml`
-- Provider 注册 → `config/providers.yaml`
-- 生命周期参数（idle timeout 等）→ config
-- 预处理流程（resize 等）→ ExecutionPlan 配置
+> 现状说明：YAML 配置文件（`policy.yaml` / `providers.yaml` 等）为**规划目标，尚未实现**。当前配置机制为 JSON（`config/default.json`，可选）+ 环境变量（`VISION_*`）覆盖；策略规则硬编码在 `policy-engine.ts` 的 `DEFAULT_RULES` 中。本原则描述的是目标方向，正逐步收敛中。
 
-### 示例
+### 落实点（现状）
+- 运行参数 -> `config/default.json` + 环境变量（`VISION_*`）
+- 策略规则 -> `policy-engine.ts` 硬编码 `DEFAULT_RULES`（large-image-resize / memory-guard 仅告警 / reject-huge）
+- 生命周期参数（idle timeout 等）-> 硬编码在 `BaseLlamaCppProvider`
+- 预处理流程（resize 等）-> ExecutionPlan 配置
+
+### 示例（目标形态，YAML 配置化）
 ```yaml
 # 新增一个「大图缩放」策略，不改任何代码
 policies:
@@ -89,15 +91,15 @@ policies:
 
 ### 三条扩展轴
 ```
-Skill（能力）     新增视觉能力 → 加 skills/xxx/ 目录
-Provider（模型）  新增模型     → 加 providers/xxx/ 目录
-Runtime（引擎）   新增推理引擎 → 加 runtime/xxx/ 目录
+Skill（能力）     新增视觉能力 -> 加 skills/xxx/ 目录
+Provider（模型）  新增模型     -> 加 providers/xxx/ 目录
+Runtime（引擎）   新增推理引擎 -> 加 providers/llama-server/ 共享基类
 ```
 
 ### 落实点
-- 每个 Skill 是独立目录：`prompt.md + schema.json + validator.ts`
+- 每个 Skill 是独立目录：`skill.json + prompt.md + schema.json`（无 validator.ts / postprocess.ts / examples/，校验内联在 SkillPipeline）
 - 每个 Provider 实现 `VisionProvider` 接口即可注册
-- 每个 Runtime 实现 `RuntimeAdapter` 接口即可接入
+- GGUF Provider 共享 `BaseLlamaCppProvider` 基类，统一生命周期 / 缓存 / 图像优化
 - 新增任一插件，**不需要修改** Engine 核心代码
 
 ### 反模式（禁止）
@@ -171,7 +173,7 @@ Model（模型文件）
 | `vision.analyze` Tool 入参 | MCP 暴露的唯一接口 |
 | `structuredContent` 返回结构 | Client 依赖它解析 |
 | Skill 的 `schema.json` | Provider 按此约束输出 |
-| `VisionProvider` / `RuntimeAdapter` 接口 | 插件按此实现 |
+| `VisionProvider` 接口（含 `runtime` 字段） | Provider 插件按此实现 |
 
 ### 变更规则
 - 新增字段：允许（向后兼容）

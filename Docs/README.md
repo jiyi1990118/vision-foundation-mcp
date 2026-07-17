@@ -3,10 +3,11 @@
 > 本目录是 Vision Foundation MCP 的完整设计文档体系。
 > 文档按「总览 → 架构 → 契约 → 开发规范 → 决策记录 → 路线图」分层组织。
 
-> ⚠️ **实现状态说明**：本目录为早期设计文档，部分内容（如 `smolvlm`/`qwen2.5-vl` provider 名、ONNX 优先、`ports.json`）已过时。
+> ⚠️ **实现状态说明**：本目录为早期设计文档，部分内容（如 `smolvlm`/`qwen2.5-vl` provider 名、ONNX 优先、`ports.json`、YAML 配置）已过时。
 > 当前实现的权威文档是 **[`/AGENTS.md`](../AGENTS.md)** 和 **[`/README.md`](../README.md)**。
-> 实际 provider 列表：`smolvlm2`（默认）/ `gguf` / `minicpm` / `onnx`（遗留）/ `ppu-paddle-ocr`（可选 OCR-only）。GGUF-backed provider 基于 llama.cpp，`ppu-paddle-ocr` 基于 native OCR。
-> M5 多模型扩展和 v0.2 OCR-driven key-content extraction 已完成，详见 [`05-roadmap/01-roadmap.md`](./05-roadmap/01-roadmap.md)。
+> 实际 provider 列表：`smolvlm2`（默认）/ `gguf-smolvlm` / `minicpm-v` / `smolvlm`（ONNX 遗留）/ `ppu-paddle-ocr`（默认注册的 OCR-only provider，设 `VISION_OCR_PROVIDER=none` 可禁用）。GGUF-backed provider 基于 llama.cpp，`ppu-paddle-ocr` 基于 native OCR。
+> 配置采用 JSON（`config/default.json`），无 `policy.yaml` / `providers.yaml` / `lifecycle.yaml` / `prompts.yaml` / `cache.yaml`。
+> 已完成：M5 多模型扩展、OCR-driven key-content extraction、通用视觉解析器（Universal Vision Parser，`result.parse`）、场景分类（scene taxonomy，14 个 ParseScene）、场景提取器（chart/diagram/invoice/code/form）、多色标注检测（red/blue/green/yellow/magenta）。详见 [`05-roadmap/01-roadmap.md`](./05-roadmap/01-roadmap.md)。
 
 ---
 
@@ -15,7 +16,7 @@
 ```
 Docs/
 ├── 00-overview/          总览（项目定位、设计原则）
-├── 01-architecture/      架构设计（7 份核心架构文档）
+├── 01-architecture/      架构设计（13 份架构文档）
 ├── 02-contracts/         契约（领域模型、API、分层规则）
 ├── 03-development/       开发规范（编码、目录、测试）
 ├── 04-decisions/         架构决策记录（ADR）
@@ -66,6 +67,7 @@ Docs/
 | [10-error-handling.md](./01-architecture/10-error-handling.md) | 统一错误码、分层捕获、重试策略、部分成功 |
 | [11-security.md](./01-architecture/11-security.md) | 图片安全、SSRF 防护、防 DoS/OOM、隐私保护、Prompt 注入防护 |
 | [12-cache.md](./01-architecture/12-cache.md) | 推理结果缓存：LRU+TTL、缓存键设计、一致性 |
+| [13-universal-parser.md](./01-architecture/13-universal-parser.md) | 通用视觉解析器（Universal Vision Parser）：scene 分类、场景提取器、多色标注检测、VLM 推理、`result.parse` 结构 |
 
 ### 02-contracts（契约）
 | 文档 | 内容 |
@@ -110,18 +112,23 @@ Docs/
 ┌──────────────────────────────────────────────────┐
 │  MCP Client (Claude / Cursor / ChatGPT / Codex)  │
 └───────────────────────┬──────────────────────────┘
-                        │ vision.analyze(image, intent)
+                        │ vision.analyze(image, intent, scene)
                         ▼
   L0  Tool          ─── 唯一入口
   L1  Request       ─── 归一化 + 元数据
   L2  Decision      ─── Planner（建议）+ Policy（强制）
-  L3  Skill         ─── Pipeline + Prompt/Schema Registry + Validator + Composer
-  L4  Provider      ─── 模型/能力抽象（smolvlm2 / gguf / minicpm / ppu-paddle-ocr）
+  L3  Skill         ─── Pipeline + Prompt/Schema Registry + Composer + Universal Parser + Scenario Extractors + Annotation Detector
+  L4  Provider      ─── 模型/能力抽象（smolvlm2 / gguf-smolvlm / minicpm-v / ppu-paddle-ocr）
   L5  Runtime       ─── 引擎抽象（llama-cpp / onnx / native-ocr）
   L6  Infrastructure─── 模型管理 + 生命周期 + 缓存
 ```
 
-当前 `vision.analyze` 结果还会在 OCR 成功且请求涉及目标区域/红框时执行 annotation detection 和 key-content extraction，将红框中的文本、表格结构和 `targetExtraction` 写入 `structuredContent.result`。
+`vision.analyze` 的结果除了各 Skill 数据，还通过 `composeResult` 算法化构建若干字段写入 `structuredContent.result`：
+
+- `parse` - 通用视觉解析器（Universal Vision Parser）：由场景分类（scene taxonomy，14 个 ParseScene 取值）、OCR、场景提取器（`chart`/`diagram`/`invoice`/`code`/`form`）和一次聚焦 VLM 推理调用共同构建，输出 `entities` / `relationships` / `logic` / `insights` / `risks` / `next_actions`。
+- `annotations` - 多色标注检测，支持 `red`/`blue`/`green`/`yellow`/`magenta` 五种颜色，每个框携带 `insideText` / `insideTextLines` / `nearbyText`。
+- `targetExtraction` - OCR 驱动的关键内容提取（`requirement` 场景，含标注框或目标查询时触发，将红框中的文本、表格结构和 `targetExtraction` 写入结果）。
+- `ui` / `layout` - 由 OCR 算法化构建的 UI 与布局信息。
 
 **三轴扩展**：Skill（能力）/ Provider（模型）/ Runtime（引擎）皆可插件化，新增不改核心引擎。
 

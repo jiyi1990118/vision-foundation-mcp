@@ -80,6 +80,7 @@ vision.analyze
 {
   image: string;
   intent?: string;
+  scene?: string;
   skills?: string[];
   options?: {
     quality?: "fast" | "high";
@@ -101,6 +102,7 @@ vision.analyze
 |------|----------|-------------|
 | `image` | yes | Image source. Supports local file path, base64, data URI, or HTTP(S) URL. |
 | `intent` | no | Natural-language intent, such as `describe`, `ocr`, `table`, `document`, or `auto`. Defaults to `auto`. |
+| `scene` | no | Scene hint to guide parsing, e.g. `requirement`, `ui`, `code`, `chart`. Guides but does not override image evidence. |
 | `skills` | no | Explicit skills to run. Overrides intent inference. Example: `["classify", "summary", "ocr"]`. |
 | `options.quality` | no | `fast` uses the default provider. `high` can route to MiniCPM-V when `VISION_HIGH_QUALITY=1` is set. |
 | `options.provider` | no | Optional provider override. Supported provider names depend on registered providers. |
@@ -118,15 +120,47 @@ vision.analyze
   confidence: number;
   summary: string;
   skills: string[];
-  result: Record<string, unknown>;
+  result: Record<string, unknown>; // per-skill data + ui, layout, annotations, targetExtraction, parse
   metadata: {
     provider: string;
     runtime: string;
     duration: number;
     cached: boolean;
   };
+  ocrText?: string; // top-level joined OCR text
 }
 ```
+
+`result` carries per-skill data plus several algorithmically built fields: `ui` and `layout` (built from OCR in `composeResult`), `annotations` (multi-color annotation detection), `targetExtraction` (key-content extraction), and `parse` (the Universal Vision Parser, described below).
+
+### Universal Vision Parser
+
+`result.parse` is the Universal Vision Parser output, built from the scene taxonomy, OCR, scenario extractors, and an optional focused VLM reasoning call. It gives callers a uniform structured view across many image types.
+
+```ts
+{
+  scene: { detected: SceneEntry[]; final: ParseScene; reason: string };
+  quality: { clarity: number; ocr_confidence: number; issues: string[] };
+  layout: Record<string, unknown>;
+  ocr: { corrected: string };
+  entities: { type: string; value: string; label?: string }[];
+  relationships: { from: string; to: string; type?: string }[];
+  logic: string[];
+  summary: string;
+  insights: string[];
+  risks: string[];
+  next_actions: string[];
+  confidence: number;
+}
+```
+
+- `scene` - detected scene candidates and the final scene, chosen from 14 values: `document`, `requirement`, `ui`, `prototype`, `photo`, `code`, `table`, `chart`, `flowchart`, `mindmap`, `ppt`, `chat`, `error`, `other`.
+- `quality` - clarity, OCR confidence, and detected quality issues.
+- `ocr.corrected` - OCR text after correction.
+- `entities` / `relationships` / `logic` - structured elements produced by OCR-driven scenario extractors (`chart`, `diagram`, `invoice`/`document`, `code`, `form`).
+- `insights` / `risks` / `next_actions` - from one focused VLM reasoning call (`temp=0`, `maxTokens=256`). Skipped when there is no OCR/summary/extraction context (saves ~3-5s); falls back to scene-specific templates on failure or hallucination.
+
+Annotation detection (`result.annotations`) recognizes five color presets - `red`, `blue`, `green`, `yellow`, and `magenta` - each box carrying `insideText`, `insideTextLines`, and `nearbyText`. When the scenario is `requirement` and annotation boxes or a target query are present, key-content extraction runs and writes `result.targetExtraction`.
 
 ### Example Tool Call
 
@@ -273,7 +307,7 @@ These examples are source-checkout examples; the npm package publishes the compi
 | SmolVLM2 | `VISION_PROVIDER=smolvlm2` | llama.cpp | Default, balanced local quality |
 | SmolVLM | `VISION_PROVIDER=gguf` | llama.cpp | Faster 500M candidate |
 | MiniCPM-V | `VISION_HIGH_QUALITY=1` + `options.quality="high"` | llama.cpp | Higher-quality mode, GPU recommended |
-| PPU PaddleOCR | `VISION_OCR_PROVIDER=ppu-paddle-ocr` + `skills: ["ocr"]` | native OCR | Optional dedicated OCR-only provider |
+| PPU PaddleOCR | `VISION_OCR_PROVIDER=ppu-paddle-ocr` (default) + `skills: ["ocr"]` | native OCR | Dedicated OCR-only provider (registered by default; set `none` to disable) |
 | ONNX SmolVLM | `VISION_PROVIDER=onnx` | Transformers.js / ONNX Runtime | Legacy fallback |
 
 Default model cache path:
@@ -290,19 +324,23 @@ Default `llama-server` lookup order:
 4. `/opt/homebrew/bin`, `/usr/local/bin`, `/usr/bin`
 5. `PATH`
 
-### Optional Dedicated OCR Provider
+### Dedicated OCR Provider
 
-Set `VISION_OCR_PROVIDER=ppu-paddle-ocr` to register a dedicated PaddleOCR-backed provider for OCR-only requests:
+The PPU PaddleOCR provider is registered **by default**. `VISION_OCR_PROVIDER` defaults to `ppu-paddle-ocr`; set it to `none` to disable the OCR-only provider:
 
 ```bash
+# default: ppu-paddle-ocr registered
 VISION_OCR_PROVIDER=ppu-paddle-ocr vision-foundation-mcp
+
+# disable the OCR-only provider
+VISION_OCR_PROVIDER=none vision-foundation-mcp
 ```
 
 Behavior:
 
 - `skills: ["ocr"]` routes to `ppu-paddle-ocr` when available.
 - Mixed visual understanding requests such as `classify + ocr + summary` stay on the active VLM provider.
-- Models are cached by `ppu-paddle-ocr` under `~/.cache/ppu-paddle-ocr`.
+- Models are cached under `~/.cache/ppu-paddle-ocr`.
 - Table structure is not reconstructed; text boxes and lines are returned in reading/layout order when available.
 
 ## Runtime Requirements
@@ -330,7 +368,7 @@ pnpm test:unit
 |---------|---------|-------------|
 | `VISION_PROVIDER` | `smolvlm2` | Default provider: `smolvlm2`, `gguf`, or `onnx`. |
 | `VISION_HIGH_QUALITY` | unset | Set to `1` to register MiniCPM-V for `quality=high` requests. |
-| `VISION_OCR_PROVIDER` | unset | Set to `ppu-paddle-ocr` to register the optional OCR-only provider. |
+| `VISION_OCR_PROVIDER` | `ppu-paddle-ocr` | Defaults to `ppu-paddle-ocr` (registered by default). Set to `none` to disable the OCR-only provider. |
 | `LLAMA_SERVER_PATH` | auto-detect | Existing `llama-server` path. Skips auto-download when set. |
 | `LLAMA_DOWNLOAD_MIRROR` | unset | Optional GitHub release mirror for `llama-server` downloads. |
 | `HF_ENDPOINT` | environment-dependent | Hugging Face endpoint. Use `https://hf-mirror.com` when needed. |

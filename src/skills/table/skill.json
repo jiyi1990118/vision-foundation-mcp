@@ -1,10 +1,10 @@
 {
   "name": "table",
-  "description": "Extract and reconstruct table structure from an image",
+  "description": "Reconstruct table structure from an image: row/column counts, headers, and cell data row by row",
   "version": "1.0.0",
   "inputs": { "required": ["image"], "optional": [] },
-  "outputs": ["rows", "columns", "headers"],
-  "supportedProviders": ["smolvlm", "gguf-smolvlm"],
+  "outputs": ["description", "rowCount", "columnCount"],
+  "supportedProviders": ["gguf-smolvlm", "gguf-smolvlm2", "minicpm-v"],
   "defaultTimeout": 30000,
   "defaultRetry": { "max": 1, "strategy": "reprompt" }
 }

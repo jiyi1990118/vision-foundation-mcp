@@ -41,6 +41,11 @@
       "description": "Natural language intent. e.g. 'extract text', 'analyze UI'. Empty or 'auto' for automatic analysis.",
       "default": "auto"
     },
+    "scene": {
+      "type": "string",
+      "description": "Scene hint to guide parsing (e.g. requirement, ui, code, chart). Guides but does not override image evidence.",
+      "default": ""
+    },
     "skills": {
       "type": "array",
       "items": { "type": "string" },
@@ -102,11 +107,13 @@
 **指定 Skill + 高质量**：
 ```json
 {
-  "image": "https://example.com/chart.png",
-  "skills": ["classify", "chart", "summary"],
+  "image": "https://example.com/dashboard.png",
+  "skills": ["classify", "table", "summary"],
   "options": { "quality": "high" }
 }
 ```
+
+> 注：`chart` 不是 Skill 而是场景抽取器（scenario extractor）。可用 Skill 见 §5。`scene` 参数（见 §2.1）可引导 `result.parse` 的场景判定，如 `"scene": "requirement"`。
 
 **不使用缓存**：
 ```json
@@ -132,7 +139,7 @@
 }
 ```
 
-说明：`options.target` 会在未显式指定 `skills` 时自动补充 `ocr`。若用户显式传入 `skills`，显式 skills 仍保持权威，不会被自动增补。
+说明：`options.target` 会在未显式指定 `skills` 时自动补充 `ocr`。若用户显式传入 `skills`，显式 skills 仍保持权威，不会被自动增补。`options.target.color` 支持 5 色：`red` / `blue` / `green` / `yellow` / `magenta`（含中文别名如 红色 / 蓝框 / 紫框）。
 
 ### 2.3 输入格式支持
 
@@ -160,11 +167,10 @@
     "category": "dashboard",
     "confidence": 0.95,
     "summary": "销售仪表盘，包含柱状图和KPI卡片",
-    "skills": ["classify", "ocr", "chart", "summary"],
+    "skills": ["classify", "ocr", "summary"],
     "result": {
       "classify": { ... },
       "ocr": { ... },
-      "chart": { ... },
       "summary": { ... }
     },
     "metadata": {
@@ -186,11 +192,12 @@
 | `summary` | string | 是 | 文本摘要 |
 | `skills` | string[] | 是 | 执行的 Skill 列表 |
 | `result` | object | 是 | 各 Skill 的结构化结果 |
-| `result.<skill>` | object | 否 | 单个 Skill 的输出（按其 schema） |
-| `result.ui` | object | 否 | OCR-driven UI 结构化摘要，包含导航、动作、字段、表头和值等 |
-| `result.layout` | object | 否 | 基于 OCR 坐标的布局结构，如左侧菜单、主内容表头、底部操作 |
-| `result.annotations` | object | 否 | 检测到的视觉标注，如红色虚线/实线框 |
-| `result.targetExtraction` | object | 否 | 目标区域/红框关键内容提取结果，包含 `matchedRegion`、`textLines`、`table`、`warnings` |
+| `result.<skill>` | object | 否 | 单个 Skill 的输出（按其 schema）。8 个 Skill：classify / summary / ocr / table / document / poster / moderation / layout |
+| `result.ui` | object | 否 | **非 Skill**，算法式产出 `UiEvidence`：`{ likelyPageType, navigation, actions, fields, tableHeaders, values, modules, rawTextCount, title? }` |
+| `result.layout` | object | 否 | 算法式产出的布局结构（基于 OCR 坐标，如左侧菜单、主内容表头、底部操作） |
+| `result.parse` | object | 否 | 通用解析（UniversalParse）：`scene` / `quality` / `layout` / `ocr.corrected` / `entities` / `relationships` / `logic` / `summary` / `insights` / `risks` / `next_actions` / `confidence`，类型见 [01-domain-model §4.9](./01-domain-model.md) |
+| `result.annotations` | object | 否 | 检测到的彩色标注框。支持 5 色：`red` / `blue` / `green` / `yellow` / `magenta`，含 `coloredBoxes` 与 `redBoxes`（向后兼容） |
+| `result.targetExtraction` | object | 否 | 目标区域/红框关键内容提取（KeyContentExtraction）：`query` / `matchedRegion{type,box,confidence,color?}` / `textLines` / `table?` / `fields?` / `summary` / `warnings` / `allExtractions?`（多框时每框一项） |
 | `ocrText` | string | 否 | 顶层完整 OCR 文本，方便 LLM 直接消费 |
 | `metadata` | object | 是 | 元信息 |
 | `metadata.provider` | string | 是 | 使用的 Provider |
@@ -204,11 +211,14 @@
 {
   "result": {
     "targetExtraction": {
+      "query": { "color": "red", "position": "right", "description": "红色虚线框中的表格内容" },
       "matchedRegion": {
         "type": "redBox",
         "box": "1450,500,1918,1090",
-        "confidence": 0.75
+        "confidence": 0.75,
+        "color": "red"
       },
+      "textLines": ["默认基础价-半份（元）", "默认附加价-半份（元）"],
       "table": {
         "columns": ["默认基础价-半份（元）", "默认附加价-半份（元）"],
         "rows": [
@@ -216,11 +226,15 @@
           ["0.00 ¥", "0.00 ¥"]
         ]
       },
+      "fields": [{ "label": "默认基础价-半份", "value": "0.00 ¥" }],
+      "summary": "关键区域包含：默认基础价-半份（元）；默认附加价-半份（元）。",
       "warnings": ["局部 OCR 将金额符号候选“夫”按金额上下文归一化为“¥”"]
     }
   }
 }
 ```
+
+> 多个标注框同时存在时，每个框各产生一次提取，汇总在 `allExtractions`（数组）；顶层字段为首个框的结果（向后兼容）。
 
 ### 3.4 部分成功响应
 某些 Skill 失败时，仍返回成功的部分：
@@ -233,10 +247,10 @@
     "skills": ["classify", "ocr", "document"],
     "result": {
       "classify": { "category": "document", "confidence": 0.88 },
-      "ocr": { "error": "SKILL_RETRY_EXHAUSTED", "partial": true },
+      "ocr": { "error": "skill_inference_failed", "partial": true },
       "document": { "type": "invoice", "fields": { ... } }
     },
-    "metadata": { "provider": "smolvlm2", "duration": 8500, "cached": false }
+    "metadata": { "provider": "smolvlm2", "runtime": "gguf", "duration": 8500, "cached": false }
   }
 }
 ```
@@ -267,17 +281,19 @@
 
 ### 4.2 错误码
 
+**当前已实现**（`classifyVisionError` 实际抛出）：
+
 | 错误码 | 含义 | 可重试 |
 |--------|------|--------|
 | `NORMALIZE_INVALID_INPUT` | 输入格式不支持/文件损坏 | 否 |
-| `MODEL_DOWNLOAD_FAILED` | 模型下载失败 | 是 |
-| `MODEL_CORRUPTED` | 模型校验失败 | 是 |
-| `PROVIDER_UNAVAILABLE` | 所需 Provider 不可用 | 否 |
-| `RUNTIME_NOT_FOUND` | 无可用 Runtime | 否 |
 | `POLICY_DENIED` | 策略拒绝（如超大图） | 否 |
-| `RESOURCE_INSUFFICIENT` | 内存/资源不足 | 是 |
 | `TIMEOUT` | 推理超时 | 是 |
+| `RUNTIME_NOT_FOUND` | 无可用 Runtime / llama-server 未找到 | 否 |
+| `MODEL_DOWNLOAD_FAILED` | 模型下载失败 | 是 |
+| `MODEL_CORRUPTED` | 模型校验失败（checksum） | 是 |
 | `INTERNAL_ERROR` | 未知内部错误 | 是 |
+
+**Aspirational（规划中，当前未抛出）**：`PROVIDER_UNAVAILABLE`、`RESOURCE_INSUFFICIENT`、`SKILL_VALIDATION_FAILED`、`SKILL_RETRY_EXHAUSTED`。这些错误码在术语表保留，但 `classifyVisionError` 尚未产生。
 
 ---
 
@@ -293,12 +309,16 @@
   "properties": {
     "category": {
       "type": "string",
-      "enum": ["dashboard","chart","diagram","document","poster","ui","photo","logo","icon","map","comic","meme"]
+      "enum": ["dashboard","chart","diagram","document","poster","ui","screenshot","photo","illustration","logo","icon","map","comic","meme","other"]
     },
-    "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "subcategory": { "type": "string" },
+    "reasoning": { "type": "string", "description": "Brief chain-of-thought: what you see, then why you chose this category." }
   }
 }
 ```
+
+> 枚举共 15 个值（含 `screenshot` / `illustration` / `other`）。
 
 ### 5.2 ocr.schema.json
 ```json
@@ -313,37 +333,35 @@
         "required": ["text"],
         "properties": {
           "text": { "type": "string" },
-          "position": { "type": "string" },
-          "confidence": { "type": "number" }
+          "position": { "type": "string", "description": "粗粒度区域（如 center/top-left）或坐标框字符串 x1,y1,x2,y2（专用 OCR provider）" },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
         }
       }
-    }
+    },
+    "language": { "type": "string" }
   }
 }
 ```
 
-### 5.3 ui.schema.json
-```json
-{
-  "type": "object",
-  "required": ["layout", "components"],
-  "properties": {
-    "layout": { "type": "string" },
-    "components": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "type": { "type": "string" },
-          "position": { "type": "string" }
-        }
-      }
-    },
-    "theme": { "type": "string" },
-    "typography": { "type": "string" }
-  }
+### 5.3 ui —— 非 Skill（算法式 UiEvidence）
+
+`ui` **不是** Skill，`src/skills/` 下没有 `ui` 目录。`result.ui` 由 `composeResult` 基于 OCR 文本算法式产出（`buildUiEvidence`），无需 VLM 调用。其结构 `UiEvidence`（定义于 `src/core/skill-pipeline.ts`）：
+
+```typescript
+interface UiEvidence {
+  likelyPageType: "admin-ui" | "mobile-ui";
+  navigation: string[];
+  actions: string[];
+  fields: string[];
+  tableHeaders: string[];
+  values: string[];
+  modules: string[];
+  rawTextCount: number;
+  title?: string;
 }
 ```
+
+> 同理 `result.layout` 也是算法式产出，非 Skill。
 
 ---
 

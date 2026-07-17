@@ -80,6 +80,7 @@ vision.analyze
 {
   image: string;
   intent?: string;
+  scene?: string;
   skills?: string[];
   options?: {
     quality?: "fast" | "high";
@@ -101,6 +102,7 @@ vision.analyze
 |------|------|------|
 | `image` | 是 | 图片来源。支持本地文件路径、base64、data URI、HTTP(S) URL。 |
 | `intent` | 否 | 自然语言意图，如 `describe`、`ocr`、`table`、`document`、`auto`。默认 `auto`。 |
+| `scene` | 否 | 场景提示，用于引导解析，如 `requirement`、`ui`、`code`、`chart`。仅作引导，不会覆盖图片证据。 |
 | `skills` | 否 | 显式指定要执行的 Skill，会覆盖 intent 推断。例如 `["classify", "summary", "ocr"]`。 |
 | `options.quality` | 否 | `fast` 使用默认 provider；`high` 在设置 `VISION_HIGH_QUALITY=1` 后可路由到 MiniCPM-V。 |
 | `options.provider` | 否 | 可选 provider 覆盖，具体名称取决于当前注册的 provider。 |
@@ -118,15 +120,47 @@ vision.analyze
   confidence: number;
   summary: string;
   skills: string[];
-  result: Record<string, unknown>;
+  result: Record<string, unknown>; // 各 Skill 数据 + ui、layout、annotations、targetExtraction、parse
   metadata: {
     provider: string;
     runtime: string;
     duration: number;
     cached: boolean;
   };
+  ocrText?: string; // 顶层拼接后的 OCR 文本
 }
 ```
+
+`result` 除了各 Skill 数据，还携带若干算法构建的字段：`ui` 与 `layout`（在 `composeResult` 中由 OCR 构建）、`annotations`（多色标注检测）、`targetExtraction`（关键内容提取）以及 `parse`（通用视觉解析器，见下文）。
+
+### 通用视觉解析器（Universal Vision Parser）
+
+`result.parse` 是通用视觉解析器的输出，由场景分类、OCR、场景提取器以及一次可选的聚焦 VLM 推理调用共同构建，为调用方提供跨多种图片类型的统一结构化视图。
+
+```ts
+{
+  scene: { detected: SceneEntry[]; final: ParseScene; reason: string };
+  quality: { clarity: number; ocr_confidence: number; issues: string[] };
+  layout: Record<string, unknown>;
+  ocr: { corrected: string };
+  entities: { type: string; value: string; label?: string }[];
+  relationships: { from: string; to: string; type?: string }[];
+  logic: string[];
+  summary: string;
+  insights: string[];
+  risks: string[];
+  next_actions: string[];
+  confidence: number;
+}
+```
+
+- `scene` - 检测到的场景候选及最终场景，从 14 个取值中选择：`document`、`requirement`、`ui`、`prototype`、`photo`、`code`、`table`、`chart`、`flowchart`、`mindmap`、`ppt`、`chat`、`error`、`other`。
+- `quality` - 清晰度、OCR 置信度及检测到的质量问题。
+- `ocr.corrected` - 纠错后的 OCR 文本。
+- `entities` / `relationships` / `logic` - 由 OCR 驱动的场景提取器（`chart`、`diagram`、`invoice`/`document`、`code`、`form`）产出的结构化元素。
+- `insights` / `risks` / `next_actions` - 来自一次聚焦的 VLM 推理调用（`temp=0`、`maxTokens=256`）。当没有 OCR/摘要/提取上下文时跳过（节省约 3-5 秒）；失败或幻觉时回退到场景专属模板。
+
+标注检测（`result.annotations`）支持 5 种颜色预设 - `red`、`blue`、`green`、`yellow`、`magenta` - 每个框携带 `insideText`、`insideTextLines` 和 `nearbyText`。当场景为 `requirement` 且存在标注框或目标查询时，会执行关键内容提取并写入 `result.targetExtraction`。
 
 ### 调用示例
 
@@ -273,7 +307,7 @@ VISION_HIGH_QUALITY=1 node examples/high-quality.mjs /path/to/image.png
 | SmolVLM2 | `VISION_PROVIDER=smolvlm2` | llama.cpp | 默认，本地质量更均衡 |
 | SmolVLM | `VISION_PROVIDER=gguf` | llama.cpp | 更快的 500M 候选 |
 | MiniCPM-V | `VISION_HIGH_QUALITY=1` + `options.quality="high"` | llama.cpp | 高质量模式，建议 GPU |
-| PPU PaddleOCR | `VISION_OCR_PROVIDER=ppu-paddle-ocr` + `skills: ["ocr"]` | native OCR | 可选专用 OCR-only provider |
+| PPU PaddleOCR | `VISION_OCR_PROVIDER=ppu-paddle-ocr`（默认）+ `skills: ["ocr"]` | native OCR | 专用 OCR-only provider（默认注册；设为 `none` 可禁用） |
 | ONNX SmolVLM | `VISION_PROVIDER=onnx` | Transformers.js / ONNX Runtime | 遗留 fallback |
 
 默认模型缓存目录：
@@ -290,12 +324,16 @@ VISION_HIGH_QUALITY=1 node examples/high-quality.mjs /path/to/image.png
 4. `/opt/homebrew/bin`、`/usr/local/bin`、`/usr/bin`
 5. `PATH`
 
-### 可选专用 OCR Provider
+### 专用 OCR Provider
 
-设置 `VISION_OCR_PROVIDER=ppu-paddle-ocr` 后，服务会注册一个基于 PaddleOCR 的专用 OCR Provider：
+PPU PaddleOCR provider **默认注册**。`VISION_OCR_PROVIDER` 默认为 `ppu-paddle-ocr`；设为 `none` 可禁用 OCR-only provider：
 
 ```bash
+# 默认：注册 ppu-paddle-ocr
 VISION_OCR_PROVIDER=ppu-paddle-ocr vision-foundation-mcp
+
+# 禁用 OCR-only provider
+VISION_OCR_PROVIDER=none vision-foundation-mcp
 ```
 
 行为：
@@ -330,7 +368,7 @@ pnpm test:unit
 |------|--------|------|
 | `VISION_PROVIDER` | `smolvlm2` | 默认 provider：`smolvlm2`、`gguf` 或 `onnx`。 |
 | `VISION_HIGH_QUALITY` | 未设置 | 设为 `1` 后注册 MiniCPM-V，用于 `quality=high` 请求。 |
-| `VISION_OCR_PROVIDER` | 未设置 | 设为 `ppu-paddle-ocr` 后注册可选 OCR-only provider。 |
+| `VISION_OCR_PROVIDER` | `ppu-paddle-ocr` | 默认为 `ppu-paddle-ocr`（默认注册）。设为 `none` 可禁用 OCR-only provider。 |
 | `LLAMA_SERVER_PATH` | 自动检测 | 已安装的 `llama-server` 路径；设置后跳过自动下载。 |
 | `LLAMA_DOWNLOAD_MIRROR` | 未设置 | 可选 GitHub release 镜像，用于下载 `llama-server`。 |
 | `HF_ENDPOINT` | 取决于环境 | Hugging Face endpoint；需要时可设为 `https://hf-mirror.com`。 |

@@ -18,12 +18,19 @@ import type {
 } from '../types/skills.js';
 import type {
   ImageInput,
+  ImageMetadata,
   InferenceRequest,
   InferenceResponse,
   VisionResult,
 } from '../types/domain.js';
 import type { VisionProvider } from '../providers/types.js';
 import { logger } from '../utils/logger.js';
+import {
+  buildUniversalParse,
+  type ReasoningResult,
+} from './universal-parser.js';
+import type { DesignExtraction } from './extractors/design-extractor.js';
+import type { UiLayoutExtraction } from './extractors/ui-layout-extractor.js';
 
 // ── Pipeline ────────────────────────────────────────────
 
@@ -390,6 +397,7 @@ interface UiEvidence {
 interface OcrItem {
   text: string;
   box?: Box;
+  confidence?: number;
 }
 
 interface Box {
@@ -414,6 +422,24 @@ export interface ComposeResultOptions {
   annotations?: unknown;
   target?: TargetQuery | undefined;
   keyContentExtraction?: unknown;
+  /** Structured extraction from a scenario-specific extractor (chart/diagram/...). */
+  scenarioExtraction?: { summary: string } | undefined;
+  /** Full scenario extraction object (chart/diagram/document/code/form) for universal-parse. */
+  scenarioExtractionData?: unknown | undefined;
+  /** scenario-resolver scenario (e.g. 'requirement', 'chart', 'general'). */
+  scenario?: string | undefined;
+  /** VLM reasoning output (insights/risks/next_actions); undefined falls back to templates. */
+  reasoningResult?: ReasoningResult | undefined;
+  /** User-provided scene hint; guides scene detection without overriding evidence. */
+  sceneHint?: string | undefined;
+  /** Image metadata for quality assessment. */
+  metadata?: ImageMetadata | undefined;
+  /** Request intent text (for scene refinement). */
+  intent?: string | undefined;
+  /** Design token extraction (color palette, roles, dark mode). */
+  designExtraction?: DesignExtraction | undefined;
+  /** UI layout extraction (visual regions, components, text hierarchy, spacing). */
+  uiLayoutExtraction?: UiLayoutExtraction | undefined;
 }
 
 export interface TargetQuery {
@@ -645,8 +671,11 @@ export function composeResult(
   }
   if (options.keyContentExtraction) {
     summary = appendKeyContentSummary(summary, options.keyContentExtraction);
-  } else if (hasRedBoxes(options.annotations)) {
+  } else if (hasAnnotationBoxes(options.annotations)) {
     summary = appendAnnotationSummary(summary, options.annotations);
+  }
+  if (options.scenarioExtraction?.summary) {
+    summary = summary ? `${summary}${options.scenarioExtraction.summary}` : options.scenarioExtraction.summary;
   }
 
   // Build result map (only successful results)
@@ -688,6 +717,31 @@ export function composeResult(
   if (options.keyContentExtraction) {
     resultMap.targetExtraction = options.keyContentExtraction;
   }
+  if (options.designExtraction) {
+    resultMap.design = options.designExtraction;
+  }
+  if (options.uiLayoutExtraction) {
+    resultMap.uiLayout = options.uiLayoutExtraction;
+  }
+
+  // Universal Vision Parser: assemble structured `result.parse` block.
+  resultMap.parse = buildUniversalParse({
+    category,
+    confidence,
+    scenario: options.scenario ?? 'general',
+    summary,
+    ocrText,
+    ocrItems,
+    layout: layout ?? undefined,
+    scenarioExtractionData: options.scenarioExtractionData,
+    keyContentExtraction: options.keyContentExtraction,
+    reasoningResult: options.reasoningResult,
+    sceneHint: options.sceneHint,
+    metadata: options.metadata,
+    intent: options.intent,
+    designExtraction: options.designExtraction,
+    uiLayoutExtraction: options.uiLayoutExtraction,
+  });
 
   const visionResult: VisionResult = {
     category,
@@ -748,9 +802,14 @@ function extractOcrItems(data: unknown): OcrItem[] {
       if (typeof text !== 'string' || text.trim().length === 0) return undefined;
       const position = (item as { position?: unknown }).position;
       const box = typeof position === 'string' ? parseBox(position) : undefined;
+      const confidenceRaw = (item as { confidence?: unknown }).confidence;
+      const confidence = typeof confidenceRaw === 'number' && Number.isFinite(confidenceRaw)
+        ? confidenceRaw
+        : undefined;
       return {
         text: text.trim(),
         ...(box ? { box } : {}),
+        ...(confidence !== undefined ? { confidence } : {}),
       };
     })
     .filter((item): item is OcrItem => item !== undefined);
@@ -894,30 +953,55 @@ function buildOcrDrivenUiSummary(evidence: UiEvidence): string {
 
 function shouldPreferOcrDrivenSummary(summary: string, ocrText: string | undefined): boolean {
   if (!summary.trim()) return true;
+  if (hasExcessiveRepetition(summary)) return true;
   if (!ocrText) return false;
   if (summary.length < 80 && /[\u4e00-\u9fff]/.test(summary)) return true;
   return ocrText.includes(summary.trim());
 }
 
-function hasRedBoxes(annotations: unknown): boolean {
+/** Detect hallucinated repetition in VLM output (e.g. same lines repeated 3+ times). */
+function hasExcessiveRepetition(text: string): boolean {
+  const lines = text.split('\n').map((l) => l.trim()).filter(Boolean);
+  if (lines.length < 6) return false;
+  // Check if any single line repeats more than 3 times.
+  const counts = new Map<string, number>();
+  for (const line of lines) {
+    counts.set(line, (counts.get(line) ?? 0) + 1);
+  }
+  for (const count of counts.values()) {
+    if (count > 3) return true;
+  }
+  // Check if a block of lines repeats (pattern duplication).
+  const block = lines.slice(0, 4).join('\n');
+  if (block.length > 20 && lines.slice(4).join('\n').includes(block)) return true;
+  return false;
+}
+
+function hasAnnotationBoxes(annotations: unknown): boolean {
   if (typeof annotations !== 'object' || annotations === null) return false;
-  const redBoxes = (annotations as { redBoxes?: unknown }).redBoxes;
-  return Array.isArray(redBoxes) && redBoxes.length > 0;
+  const obj = annotations as { coloredBoxes?: unknown; redBoxes?: unknown };
+  if (Array.isArray(obj.coloredBoxes) && obj.coloredBoxes.length > 0) return true;
+  return Array.isArray(obj.redBoxes) && obj.redBoxes.length > 0;
 }
 
 function appendAnnotationSummary(summary: string, annotations: unknown): string {
-  if (!hasRedBoxes(annotations)) return summary;
-  const redBoxes = (annotations as { redBoxes: Array<Record<string, unknown>> }).redBoxes;
-  const textGroups = redBoxes
+  if (!hasAnnotationBoxes(annotations)) return summary;
+  const obj = annotations as { coloredBoxes?: Array<Record<string, unknown>>; redBoxes?: Array<Record<string, unknown>> };
+  // Prefer coloredBoxes (all colors) for a richer summary; fall back to redBoxes.
+  const boxes = obj.coloredBoxes ?? obj.redBoxes ?? [];
+  const colorLabels: Record<string, string> = { red: '红框', blue: '蓝框', green: '绿框', yellow: '黄框', magenta: '紫框' };
+  const textGroups = boxes
     .map((box) => {
       const inside = Array.isArray(box.insideText) ? box.insideText.filter((text): text is string => typeof text === 'string') : [];
       const nearby = Array.isArray(box.nearbyText) ? box.nearbyText.filter((text): text is string => typeof text === 'string') : [];
       return unique([...inside, ...nearby]).slice(0, 8).join('、');
     })
     .filter((text) => text.length > 0);
+  const colors = [...new Set(boxes.map((b) => b.color ?? 'red'))];
+  const colorText = colors.map((c) => colorLabels[c as string] ?? `${c}框`).join('');
   const annotationText = textGroups.length > 0
-    ? `红框标注区域包含或靠近：${textGroups.join('；')}。`
-    : `检测到 ${redBoxes.length} 个红框标注区域。`;
+    ? `${colorText}标注区域包含或靠近：${textGroups.join('；')}。`
+    : `检测到 ${boxes.length} 个${colorText}标注区域。`;
   return summary ? `${summary}${annotationText}` : annotationText;
 }
 

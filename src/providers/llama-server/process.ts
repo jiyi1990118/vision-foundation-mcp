@@ -27,6 +27,10 @@ export interface LlamaServerConfig {
   existingPid?: number | undefined;
   gpuLayers: number;
   threads: number;
+  /** Total context window size in tokens. Default 8192. */
+  contextSize?: number | undefined;
+  /** Number of parallel slots. Each slot gets contextSize/slots tokens. Default 2. */
+  parallelSlots?: number | undefined;
 }
 
 export interface ChatCompletionResponse {
@@ -57,6 +61,8 @@ export class LlamaServerProcess {
 
   async start(): Promise<void> {
     const { name, modelPath, mmprojPath, port, gpuLayers, threads, existingPid } = this.config;
+    const contextSize = this.config.contextSize ?? 8192;
+    const parallelSlots = this.config.parallelSlots ?? 2;
     const bin = await ensureLlamaServer();
     this.attachedPid = existingPid ?? null;
 
@@ -64,18 +70,18 @@ export class LlamaServerProcess {
       '-m', modelPath,
       '--mmproj', mmprojPath,
       '-ngl', String(gpuLayers),
-      '-c', '4096',
+      '-c', String(contextSize),
       '--port', String(port),
       '--host', '127.0.0.1',
       '--temp', '0',
       '-t', String(threads),
-      '-np', '4',
+      '-np', String(parallelSlots),
       '-b', '512',
       '-ub', '512',
     ];
 
     logger.info('Starting llama-server', {
-      provider: name, bin, port, gpuLayers, threads,
+      provider: name, bin, port, gpuLayers, threads, contextSize, parallelSlots,
     });
 
     this.baseUrl = `http://127.0.0.1:${port}`;

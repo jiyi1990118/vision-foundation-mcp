@@ -15,7 +15,7 @@
                            ▼
 ┌──────────────────────────────────────────────────────────────┐
 │  L0  Tool Layer                                               │
-│      tools/vision.analyze.ts  (MCP 唯一入口)                   │
+│      tools/vision-analyze.ts  (MCP 唯一入口)                   │
 └──────────────────────────┬───────────────────────────────────┘
                            │ ImageInput + Intent
                            ▼
@@ -38,29 +38,28 @@
 │      Skill Pipeline        按 Plan 串联执行 Skill              │
 │      Prompt Registry       取优化后的 Prompt                    │
 │      Schema Registry       取输出 Schema                        │
-│      Validator + Composer  校验 + 组合结果                      │
+│      校验/组合内联于 SkillPipeline（无独立模块）              │
 └──────────────────────────┬───────────────────────────────────┘
                            │ InferenceRequest
                            ▼
 ┌──────────────────────────────────────────────────────────────┐
 │  L4  Provider Layer                                           │
 │      VisionProvider        统一模型接口                         │
-│      (smolvlm2 / gguf / minicpm / onnx)                        │
+│      (gguf-smolvlm2 / minicpm-v / smolvlm / ppu-paddle-ocr 等)│
 └──────────────────────────┬───────────────────────────────────┘
                            │ RuntimeCall
                            ▼
 ┌──────────────────────────────────────────────────────────────┐
 │  L5  Runtime Layer                                            │
-│      Runtime Adapter       统一推理引擎接口                     │
-│      (llama-cpp / onnx)                                         │
+│      LlamaServerProcess    GGUF 子进程（无 RuntimeAdapter）   │
+│      (llama.cpp via BaseLlamaCppProvider)                     │
 └──────────────────────────┬───────────────────────────────────┘
                            │ 推理执行
                            ▼
 ┌──────────────────────────────────────────────────────────────┐
 │  L6  Infrastructure                                           │
 │      Model Manager         下载/缓存/校验/版本                  │
-│      Lifecycle Manager     加载/卸载/空闲回收                   │
-│      Cache Manager         结果缓存(SHA256)                     │
+│      生命周期/缓存/图像优化  内嵌于 BaseLlamaCppProvider      │
 └──────────────────────────────────────────────────────────────┘
 ```
 
@@ -86,7 +85,7 @@
 | 模块 | Request Normalizer、Metadata Extractor |
 | 输入 | 多种格式（file/base64/buffer/http/data-uri） |
 | 输出 | `NormalizedRequest`（统一 ImageInput + Metadata） |
-| 关键 | 复杂度估算用轻量算法（Sharp/OpenCV），不调用大模型 |
+| 关键 | 复杂度估算用 pixels + fileSize 启发式（sharp），不调用大模型 |
 
 ### L2 - Decision Layer（决策层）
 | 项 | 说明 |
@@ -101,16 +100,16 @@
 | 项 | 说明 |
 |----|------|
 | 职责 | 按 Plan 执行 Skill，保障输出质量 |
-| 模块 | Skill Pipeline、Prompt Registry、Schema Registry、Validator、Composer |
+| 模块 | Skill Pipeline（内联校验/修复/重试 + composeResult）、Prompt Registry、Schema Registry |
 | 输入 | ExecutionPlan + NormalizedRequest |
 | 输出 | `VisionResult`（结构化结果） |
-| 关键 | 三层质量保障：Prompt Compiler → Validator → Composer |
+| 关键 | 三层质量保障：Prompt Compiler → 内联校验/修复/重试 → composeResult |
 
 ### L4 - Provider Layer（模型层）
 | 项 | 说明 |
 |----|------|
 | 职责 | 模型抽象，统一接口 |
-| 模块 | smolvlm2 / gguf / minicpm 等 Provider |
+| 模块 | gguf-smolvlm2 / gguf-smolvlm / minicpm-v / smolvlm / ppu-paddle-ocr |
 | 输入 | `InferenceRequest`（图片 + prompt + schema） |
 | 输出 | `InferenceResponse`（原始输出） |
 | 关键 | Provider 不知道业务语义，只负责调用模型 |
@@ -118,18 +117,18 @@
 ### L5 - Runtime Layer（运行时层）
 | 项 | 说明 |
 |----|------|
-| 职责 | 推理引擎抽象，隔离具体引擎差异 |
-| 模块 | llama-cpp / onnx |
-| 输入 | RuntimeCall（模型路径 + 输入张量/文本） |
-| 输出 | 推理结果 |
-| 关键 | Provider 永远不直接调 ONNX，必须经过 Runtime Adapter |
+| 职责 | 推理引擎执行（GGUF via llama.cpp 子进程；ONNX 内嵌于 SmolVLMProvider） |
+| 模块 | `LlamaServerProcess`（共享）、`BaseLlamaCppProvider`（GGUF 基类） |
+| 输入 | 模型路径 + 图片/Prompt + 推理参数 |
+| 输出 | 推理结果（文本） |
+| 关键 | **无独立 `RuntimeAdapter` 抽象**；GGUF Provider 经 `BaseLlamaCppProvider` 直接委托 `LlamaServerProcess`，ONNX Provider 内部直接调用 onnxruntime |
 
 ### L6 - Infrastructure（基础设施层）
 | 项 | 说明 |
 |----|------|
-| 职责 | 模型管理、生命周期、缓存 |
-| 模块 | Model Manager、Lifecycle Manager、Cache Manager |
-| 特点 | 被上层调用，不反向依赖上层 |
+| 职责 | 模型下载/校验 + 进程生命周期（加载/卸载/空闲回收）+ 推理缓存 |
+| 模块 | Model Manager（`core/model-manager.ts`）；生命周期/缓存/图像优化内嵌于 `BaseLlamaCppProvider`（引用计数 + 10min idle 卸载 + 低内存告警 + 推理缓存 LRU/TTL） |
+| 特点 | 被上层调用，不反向依赖上层；无独立 Cache Manager 模块 |
 
 ---
 
@@ -169,7 +168,7 @@ L0 Tool ──► L1 Request ──► L2 Decision ──► L3 Skill ──► 
         │
 [5] Execution Planner 综合意图+元信息+资源 → 草稿 Plan
         │
-[6] Policy Engine 按配置校验/调整 → 最终 ExecutionPlan
+[6] Policy Engine 按硬编码规则校验/调整 → 最终 ExecutionPlan（仅告警/拒绝，不覆盖 Provider）
         │
 [7] Skill Pipeline 按 Plan 串联执行各 Skill：
         ├── 取 Prompt（Prompt Registry）
@@ -177,14 +176,14 @@ L0 Tool ──► L1 Request ──► L2 Decision ──► L3 Skill ──► 
         ├── 调 Provider.infer()
         │       └── Provider 调 Runtime.infer()
         │              └── Runtime 执行模型推理
-        ├── Validator 校验输出（必要时修复/重试）
+        ├── 内联校验输出（修复/重试，无独立 Validator 模块）
         └── 暂存 Skill 结果
         │
-[8] Result Composer 合并多 Skill 结果 → unified structuredContent
+[8] composeResult（skill-pipeline.ts）合并多 Skill 结果 + 场景提取器/Universal Parser 增强
         │
 [9] Tool Layer 包装为 MCP 响应返回
         │
-[10] Cache Manager 异步缓存结果（key = SHA256(image) + intent）
+[10] （未实现）请求级结果缓存；仅 Provider 层有推理缓存（BaseLlamaCppProvider）
 ```
 
 > 详细版见 [02-request-lifecycle.md](./02-request-lifecycle.md)
@@ -209,9 +208,9 @@ L0 Tool ──► L1 Request ──► L2 Decision ──► L3 Skill ──► 
 
 | 扩展轴 | 接口 | 目录 | 示例 |
 |--------|------|------|------|
-| Skill | 实现 Skill 定义 | `skills/xxx/` | chart、table、moderation |
-| Provider | 实现 `VisionProvider` | `providers/xxx/` | gguf、minicpm、smolvlm2 |
-| Runtime | 实现 `RuntimeAdapter` | `providers/llama-server/` | llama-cpp、onnx |
+| Skill | skill.json + prompt.md + schema.json | `skills/xxx/` | table、moderation、layout |
+| Provider | 实现 `VisionProvider` | `providers/xxx/` | gguf-smolvlm2、minicpm-v、smolvlm |
+| Runtime | 共享 `BaseLlamaCppProvider` / 内嵌 onnxruntime | `providers/llama-server/` | llama.cpp、onnx |
 
 **核心不变量**：新增任一插件，不需要修改 Engine 核心代码。
 
@@ -219,38 +218,28 @@ L0 Tool ──► L1 Request ──► L2 Decision ──► L3 Skill ──► 
 
 ## 6. 配置体系
 
+> 现状：YAML 配置文件（`policy.yaml` / `providers.yaml` / `runtime.yaml` / `lifecycle.yaml` / `prompts.yaml`）为**规划目标，尚未实现**。当前为 JSON 配置 + 环境变量覆盖 + 硬编码策略规则。
+
 ```
 config/
-├── policy.yaml        策略配置（模型选择规则）
-├── providers.yaml     Provider 注册表
-├── runtime.yaml       Runtime 检测与选择
-├── lifecycle.yaml     生命周期参数（idle timeout 等）
-└── prompts.yaml       Prompt 版本与默认值
+└── default.json.example   运行参数示例（maxConcurrent / requestTimeoutMs / maxImageSizeBytes / gguf.port / endpoint）
 ```
 
-所有配置热加载（或重启生效），不硬编码在代码中。
+- `src/core/config.ts`：JSON-based 配置，读取 `config/default.json`（可选）+ 环境变量（`VISION_*`）覆盖。默认值：maxConcurrent=4、requestTimeoutMs=30000、maxImageSizeBytes=10MB、gguf.port=18082、endpoint=`https://hf-mirror.com`。
+- `src/core/policy-engine.ts`：策略规则硬编码为 `DEFAULT_RULES`（**非 policy.yaml**）：
+  - `large-image-resize`：width>3000 -> 追加 resize 预处理
+  - `memory-guard`：可用内存<1024MB -> **仅告警，不覆盖 Provider**
+  - `reject-huge`：size>50MB -> 拒绝
+- Provider 选择由路由（`provider-router.ts` 的 `selectProvider`）决定，非配置文件。
 
-### policy.yaml 示例
+### 目标形态（policy.yaml，尚未实现）
 ```yaml
 policies:
-  - name: fast-local
-    when:
-      image.size < 2MB
-      complexity: low
-    provider: smolvlm2
-
-  - name: ui-large
-    when:
-      image.width > 3000
-    preprocess:
-      - resize
-    provider: smolvlm2
-
   - name: high-quality
     when:
       complexity: high
       quality: high
-    provider: minicpm
+    provider: minicpm-v
 ```
 
 ---
@@ -260,40 +249,52 @@ policies:
 ```
 vision-foundation-mcp/
 ├── src/
+│   ├── index.ts               MCP 入口，Provider 注册
 │   ├── core/                  L1-L2 核心引擎
+│   │   ├── config.ts                 JSON 配置（非 YAML）
 │   │   ├── request-normalizer.ts
-│   │   ├── metadata-extractor.ts
-│   │   ├── execution-planner.ts
-│   │   ├── policy-engine.ts
-│   │   ├── skill-pipeline.ts
-│   │   ├── response-validator.ts
-│   │   ├── result-composer.ts
-│   │   ├── lifecycle-manager.ts
-│   │   └── cache-manager.ts
-│   ├── skills/                L3 Skill 插件
-│   │   ├── classify/
-│   │   ├── ocr/
-│   │   ├── ui/
-│   │   └── ...
+│   │   ├── metadata-extractor.ts      宽高/格式/hasAlpha/fileSize + 复杂度启发式
+│   │   ├── execution-planner.ts       INTENT_MAPPINGS、Skill 选择
+│   │   ├── policy-engine.ts           硬编码 DEFAULT_RULES（非 policy.yaml）
+│   │   ├── skill-pipeline.ts         SkillPipeline + composeResult（内联校验/修复/重试）
+│   │   ├── prompt-compiler.ts
+│   │   ├── provider-router.ts         M5 路由：selectProvider / chooseProvider
+│   │   ├── runtime-detector.ts
+│   │   ├── scenario-resolver.ts      detectScenario：requirement/chart/diagram/invoice/code/form/general
+│   │   ├── scene-taxonomy.ts         14 个 ParseScene、refineScene、nextActionTemplates
+│   │   ├── universal-parser.ts       buildUniversalParse / runReasoning（result.parse）
+│   │   ├── key-content-extractor.ts  需求场景关键内容提取
+│   │   ├── annotation-detector.ts    多色（5 色）标注检测
+│   │   ├── model-manager.ts          GGUF 下载 / SHA-256 / Range 断点续传
+│   │   └── extractors/               场景提取器
+│   │       ├── scenario-dispatcher.ts
+│   │       ├── chart-extractor.ts
+│   │       ├── diagram-extractor.ts
+│   │       ├── document-extractor.ts
+│   │       ├── code-extractor.ts
+│   │       └── form-extractor.ts
+│   ├── skills/                L3 Skill 插件（8 个：classify/summary/ocr/table/document/poster/moderation/layout）
+│   │   └── <name>/{skill.json, prompt.md, schema.json}
 │   ├── providers/             L4 Provider 插件
-│   │   ├── smolvlm2/         （默认，SmolVLM2-500M-Video）
-│   │   ├── gguf/             （SmolVLM-500M-Instruct fast 候选）
-│   │   ├── minicpm/          （高质量，MiniCPM-V 2.6）
-│   │   ├── smolvlm/          （遗留，ONNX/Transformers.js）
-│   │   └── llama-server/     （共享的 LlamaServerProcess）
-│   ├── runtime/               L5 Runtime（当前无独立抽象，由 llama-server 统一）
-│   │   └── (规划中: mlx)
-│   ├── models/                L6 模型管理
-│   │   ├── manager.ts
-│   │   ├── registry.ts
-│   │   └── downloader.ts
+│   │   ├── types.ts                   VisionProvider 接口（含 runtime 字段）
+│   │   ├── smolvlm2/         （默认，SmolVLM2-500M-Video，name=gguf-smolvlm2）
+│   │   ├── gguf/             （SmolVLM-500M-Instruct fast 候选，name=gguf-smolvlm）
+│   │   ├── minicpm/          （高质量，MiniCPM-V，name=minicpm-v）
+│   │   ├── smolvlm/          （遗留，ONNX，name=smolvlm）
+│   │   ├── ppu-paddle-ocr/   （OCR-only，name=ppu-paddle-ocr）
+│   │   └── llama-server/     （共享 GGUF 基础设施）
+│   │       ├── base-provider.ts       BaseLlamaCppProvider（生命周期/缓存/图像优化）
+│   │       ├── process.ts             LlamaServerProcess
+│   │       ├── process-registry.ts
+│   │       ├── downloader.ts          自动安装 llama-server（GitHub releases + 镜像降级）
+│   │       ├── platform-detector.ts
+│   │       └── resolver.ts            检测顺序：LLAMA_SERVER_PATH → <pkg>/bin → ~/.vision-mcp/bin → 系统 → PATH
 │   ├── tools/                 L0 MCP Tool
-│   │   └── vision.analyze.ts
-│   ├── types/                 类型定义（契约）
-│   └── utils/                 工具函数
-├── prompts/                   Prompt Registry
-├── schemas/                   Schema Registry
-├── config/                    配置文件
+│   │   └── vision-analyze.ts         （单一 MCP Tool，非 vision.analyze.ts）
+│   └── utils/
+│       ├── logger.ts                  写 stderr（MCP stdio，不写 stdout）
+│       └── concurrency.ts            Semaphore / withAbortableTimeout
+├── config/                    config/default.json(.example)（JSON，非 YAML）
 ├── tests/
 └── Docs/
 ```

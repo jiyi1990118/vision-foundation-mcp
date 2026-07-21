@@ -14,13 +14,6 @@ function hasControlState(node: ASTNode): boolean {
   return node.props.control !== undefined && typeof node.props.control === 'object';
 }
 
-let assetCounter = 0;
-
-function nextAssetId(): string {
-  assetCounter++;
-  return `asset-${assetCounter}`;
-}
-
 /**
  * Walk the AST and assign a RenderInfo to each node's props.render.
  *
@@ -35,6 +28,7 @@ function nextAssetId(): string {
  * - semantic-only: info only, must not be re-rendered (child of asset)
  */
 export function assignRenderModes(root: ASTNode, options?: PolicyOptions): void {
+  let assetCounter = 0;
   const walk = (node: ASTNode, parentMode?: string): void => {
     let render: RenderInfo;
 
@@ -48,7 +42,7 @@ export function assignRenderModes(root: ASTNode, options?: PolicyOptions): void 
 
     // Banner without separable background -> asset fallback.
     if (options?.bannerFallback === true && node.props.semanticRole === 'banner') {
-      const assetId = nextAssetId();
+      const assetId = `asset-${++assetCounter}`;
       render = { mode: 'asset', assetId, reason: 'banner-background-not-separable' };
       node.props.render = render;
       for (const child of node.children) walk(child, render.mode);

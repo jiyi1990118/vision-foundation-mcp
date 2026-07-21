@@ -1,3 +1,6 @@
+export { assignRenderModes } from './reconstruction-policy.js';
+export type { PolicyOptions } from './reconstruction-policy.js';
+
 export type {
   RenderMode,
   RenderInfo,

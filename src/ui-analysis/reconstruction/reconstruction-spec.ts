@@ -17,10 +17,12 @@ import type {
   CodegenConstraint,
   CodegenRepeat,
   CodegenResponsiveRule,
+  CodegenSlot,
   SemanticAST,
 } from '../ir/types.js';
 import { inferConstraints } from '../constraint/constraint-engine.js';
 import type { ImageContentInfo } from '../image-content/image-content-extractor.js';
+import type { AssetManifest, QualityReport } from '../policy/types.js';
 
 export interface UiReconstructionSpec {
   version: string;
@@ -38,8 +40,12 @@ export interface UiReconstructionSpec {
   constraints: CodegenConstraint[];
   responsive?: CodegenResponsiveRule[];
   repeats?: CodegenRepeat[];
+  slots?: CodegenSlot[];
   images: ImageContentInfo[];
   stats: { nodeCount: number; componentCounts: Record<string, number> };
+  diagnostics?: { skipped: string[] };
+  assets?: AssetManifest;
+  quality?: QualityReport;
 }
 
 export interface BuildReconstructionInput {
@@ -48,6 +54,7 @@ export interface BuildReconstructionInput {
   constraints?: CodegenConstraint[] | undefined;
   responsive?: CodegenResponsiveRule[] | undefined;
   repeats?: CodegenRepeat[] | undefined;
+  slots?: CodegenSlot[] | undefined;
   images?: ImageContentInfo[] | undefined;
   theme?: {
     palette: Array<{ hex: string; role: string }>;
@@ -57,6 +64,9 @@ export interface BuildReconstructionInput {
     isDarkMode: boolean;
     contrastRatio: number;
   } | undefined;
+  diagnostics?: { skipped: string[] } | undefined;
+  assets?: AssetManifest | undefined;
+  quality?: QualityReport | undefined;
 }
 
 function computeStats(
@@ -74,7 +84,7 @@ function computeStats(
 }
 
 export function buildUiReconstruction(input: BuildReconstructionInput): UiReconstructionSpec {
-  const { ast, semantics, constraints, images, theme, responsive, repeats } = input;
+  const { ast, semantics, constraints, images, theme, responsive, repeats, slots, diagnostics, assets, quality } = input;
   const spec: UiReconstructionSpec = {
     version: ast.version,
     page: {
@@ -90,6 +100,10 @@ export function buildUiReconstruction(input: BuildReconstructionInput): UiRecons
     ...(theme ? { theme } : {}),
     ...(responsive ? { responsive } : {}),
     ...(repeats && repeats.length > 0 ? { repeats } : {}),
+    ...(slots && slots.length > 0 ? { slots } : {}),
+    ...(diagnostics && diagnostics.skipped.length > 0 ? { diagnostics } : {}),
+    ...(assets ? { assets } : {}),
+    ...(quality ? { quality } : {}),
   };
   return spec;
 }

@@ -22,23 +22,32 @@ import type { UiLayoutExtraction } from '../core/extractors/ui-layout-extractor.
 import type { DesignExtraction } from '../core/extractors/design-extractor.js';
 import type { OcrItem } from '../core/key-content-extractor.js';
 import type { VisionProvider } from '../providers/types.js';
-import type { SemanticAST, CodegenIR, VisionOcrItem } from './ir/types.js';
+import type { SemanticAST, CodegenIR, VisionOcrItem, DecodedImage, ASTNode } from './ir/types.js';
 import type { UiReconstructionSpec } from './reconstruction/index.js';
 import type { PageType, VariantInfo } from './semantic/index.js';
 import type { ImageContentInfo } from './image-content/index.js';
 import { analyzeUiPipeline } from './pipeline.js';
 import { ocrItemsToVisionOcr } from './ir/ocr-adapter.js';
 import { extractNodeStyles, injectNodeStyles } from './style/index.js';
-import { describeImageContents, embedImageDataUrls } from './image-content/index.js';
+import { classifyMediaAreas, describeImageContents, embedImageDataUrls } from './image-content/index.js';
 import { filterSolidMediaAreas } from './image-content/media-area-filter.js';
+import { decodeRawImage } from './image-content/decode.js';
 import { buildUiReconstruction } from './reconstruction/index.js';
 import { enrichNodeTypes } from './typing/index.js';
 import { enrichInteractivity } from './interactivity/index.js';
 import { toVisionIRFromLayout, toLayoutIR } from './ir/mappers.js';
 import { detectOverlays, applyOverlays } from './overlay/index.js';
+import type { OverlayInfo } from './overlay/index.js';
 import { inferPageType, inferVariants, buildSemanticSummary } from './semantic/index.js';
+import { FigmaExporter, MarkdownExporter, toCodegenIr } from './exporter/index.js';
 import { validateReconstruction } from './validate.js';
+import { applyCompositeGrammar } from './composition/composite-grammar.js';
+import { assignRenderModes } from './policy/reconstruction-policy.js';
+import { computeQualityReport } from './policy/index.js';
+import type { RenderMode } from './policy/index.js';
 import { logger } from '../utils/logger.js';
+
+const MAX_MEDIA_AREAS = 20;
 
 export interface UiAnalysisOptions {
   buildTree?: boolean;
@@ -53,6 +62,8 @@ export interface UiAnalysisOptions {
   detectTheme?: boolean;
   strictMode?: boolean;
   embedImages?: boolean;
+  summaryOnly?: boolean;
+  reconstructionMode?: 'fast' | 'balanced' | 'high_fidelity';
 }
 
 export interface UiAnalysisResult {
@@ -78,6 +89,14 @@ export interface RunUiAnalysisInput {
   provider?: VisionProvider;
   ocrItems?: OcrItem[];
   options?: UiAnalysisOptions;
+  /**
+   * Optional abort signal. Propagated into the IO-bound enrichment stages
+   * (VLM image descriptions, data-URL embedding) so a request timeout or
+   * client abort cancels in-flight work instead of running to completion.
+   * CPU-only stages (pipeline / type / interactivity / overlay) are too
+   * fast to benefit from cooperative cancellation.
+   */
+  signal?: AbortSignal;
 }
 
 /**
@@ -98,10 +117,51 @@ function applyDetectFilters(ext: UiLayoutExtraction, opts: UiAnalysisOptions): U
   if (detectComponent && detectText && detectIcon) return ext;
   return {
     ...ext,
-    components: detectComponent ? ext.components : [],
+    components: detectComponent
+      ? detectText ? ext.components : ext.components.map((component) => ({ ...component, text: '' }))
+      : [],
     texts: detectText ? ext.texts : [],
-    mediaAreas: detectIcon ? ext.mediaAreas : [],
+    mediaAreas: detectIcon
+      ? detectText ? ext.mediaAreas : ext.mediaAreas.map((area) => ({ ...area, nearbyText: undefined }))
+      : [],
   };
+}
+
+function filteredLayoutSummary(extraction: UiLayoutExtraction): string {
+  const parts: string[] = [];
+  if (extraction.structure.regions.length > 0) {
+    const regionTypes = [...new Set(extraction.structure.regions.map((region) => region.type))];
+    parts.push(`${extraction.structure.regions.length} 个视觉区域（${regionTypes.join('/')}）`);
+  }
+  parts.push(`${extraction.components.length} 个组件`);
+  if (extraction.mediaAreas.length > 0) parts.push(`${extraction.mediaAreas.length} 个图标/图片区域`);
+  parts.push(`间距风格：${extraction.spacing.scale}`);
+  const titleCount = extraction.texts.filter((text) => text.estimatedLevel === 'title').length;
+  if (titleCount > 0) parts.push(`标题 ${titleCount} 个`);
+  return parts.join('，');
+}
+
+/** Filter the legacy UI-layout branch before it is exposed in MCP output. */
+export function filterUiLayoutExtractionForOutput(
+  ext: UiLayoutExtraction,
+  opts: UiAnalysisOptions,
+): UiLayoutExtraction {
+  const filtered = applyDetectFilters(ext, opts);
+  const output = opts.detectLayout === false
+    ? {
+        ...filtered,
+        structure: { ...filtered.structure, regions: [] },
+      }
+    : filtered;
+  return { ...output, summary: filteredLayoutSummary(output) };
+}
+
+function throwIfAborted(signal: AbortSignal | undefined): void {
+  if (signal?.aborted !== true) return;
+  if (signal.reason instanceof Error) throw signal.reason;
+  const error = new Error('The operation was aborted');
+  error.name = 'AbortError';
+  throw error;
 }
 
 /**
@@ -111,22 +171,51 @@ function applyDetectFilters(ext: UiLayoutExtraction, opts: UiAnalysisOptions): U
  * otherwise failures degrade to omitted fields + a logger.warn.
  */
 export async function runUiAnalysis(input: RunUiAnalysisInput): Promise<UiAnalysisResult> {
+  throwIfAborted(input.signal);
   const result: UiAnalysisResult = {};
   const opts = input.options ?? {};
   const detectTheme = opts.detectTheme !== false;
+  const skipped: string[] = [];
+
+  // Decode the source image once and share the raw buffer across every
+  // pixel-sampling stage (media-area filter / style extractor / overlay
+  // detector) so the same image is not decoded three times. A decode failure
+  // leaves this undefined; each consumer then re-attempts and skips on failure.
+  let decodedImage: DecodedImage | undefined;
+  if (input.image) {
+    try {
+      decodedImage = await decodeRawImage(input.image);
+      throwIfAborted(input.signal);
+    } catch {
+      throwIfAborted(input.signal);
+      // leave undefined; each consumer re-attempts and skips on failure
+    }
+  }
 
   const filteredLayout = applyDetectFilters(input.uiLayoutExtraction, opts);
   const effectiveDesign = detectTheme ? input.designExtraction : undefined;
-  const visionOcr = input.ocrItems ? ocrItemsToVisionOcr(input.ocrItems) : undefined;
+  const visionOcr = opts.detectText === false
+    ? undefined
+    : input.ocrItems ? ocrItemsToVisionOcr(input.ocrItems) : undefined;
 
   let effectiveLayout = filteredLayout;
   if (input.image && opts.detectIcon !== false && filteredLayout.mediaAreas.length > 0) {
     try {
-      const solidAreas = await filterSolidMediaAreas(input.image, filteredLayout.mediaAreas);
-      if (solidAreas.length !== filteredLayout.mediaAreas.length) {
-        effectiveLayout = { ...filteredLayout, mediaAreas: solidAreas };
-      }
+      const solidAreas = await filterSolidMediaAreas(
+        input.image,
+        filteredLayout.mediaAreas,
+        decodedImage,
+        MAX_MEDIA_AREAS,
+      );
+      throwIfAborted(input.signal);
+      const classifiedAreas = (decodedImage
+        ? classifyMediaAreas(solidAreas, { x: 0, y: 0, w: decodedImage.width, h: decodedImage.height })
+        : solidAreas)
+        .sort((a, b) => a.bbox.y - b.bbox.y || a.bbox.x - b.bbox.x);
+      effectiveLayout = { ...filteredLayout, mediaAreas: classifiedAreas };
     } catch (err) {
+      throwIfAborted(input.signal);
+      skipped.push('mediaAreaFilter');
       logger.warn('ui media-area filter failed', { error: String(err) });
     }
   }
@@ -135,21 +224,46 @@ export async function runUiAnalysis(input: RunUiAnalysisInput): Promise<UiAnalys
     uiLayoutExtraction: effectiveLayout,
     ...(effectiveDesign ? { designExtraction: effectiveDesign } : {}),
     ...(visionOcr ? { ocrItems: visionOcr } : {}),
+    ...(decodedImage
+      ? { pageBbox: { x: 0, y: 0, w: decodedImage.width, h: decodedImage.height } }
+      : {}),
     options: {
-      buildTree: opts.buildTree !== false,
-      exportCodegen: opts.exportCodegen === true,
-      exportFigma: opts.exportFigma === true,
-      exportMarkdown: opts.exportMarkdown === true,
+      // The AST remains private analysis state when buildTree=false so final
+      // exports still receive every enrichment pass.
+      buildTree: true,
+      exportCodegen: false,
+      exportFigma: false,
+      exportMarkdown: false,
       useLlm: opts.useLlm === true,
     },
   });
 
   if (input.image && pipeline.ui) {
     try {
-      const nodeStyles = await extractNodeStyles(input.image, pipeline.ui);
+      const nodeStyles = await extractNodeStyles(input.image, pipeline.ui, decodedImage);
+      throwIfAborted(input.signal);
       injectNodeStyles(pipeline.ui, nodeStyles);
     } catch (err) {
+      throwIfAborted(input.signal);
+      skipped.push('styleExtraction');
       logger.warn('ui style extraction failed', { error: String(err) });
+    }
+  }
+
+  let overlays: OverlayInfo[] = [];
+  if (pipeline.ui && opts.detectComponent !== false) {
+    try {
+      overlays = await detectOverlays(
+        input.image,
+        pipeline.ui,
+        decodedImage,
+        toLayoutIR(effectiveLayout, effectiveDesign).regions,
+      );
+      throwIfAborted(input.signal);
+    } catch (err) {
+      throwIfAborted(input.signal);
+      skipped.push('overlayDetection');
+      logger.warn('ui overlay detection failed', { error: String(err) });
     }
   }
 
@@ -161,8 +275,10 @@ export async function runUiAnalysis(input: RunUiAnalysisInput): Promise<UiAnalys
       } catch {
         pipelineOcr = undefined;
       }
-      enrichNodeTypes(pipeline.ui, pipelineOcr);
+      enrichNodeTypes(pipeline.ui, pipelineOcr, { detectComponent: opts.detectComponent !== false });
     } catch (err) {
+      throwIfAborted(input.signal);
+      skipped.push('typeEnrichment');
       logger.warn('ui type enrichment failed', { error: String(err) });
     }
   }
@@ -171,16 +287,31 @@ export async function runUiAnalysis(input: RunUiAnalysisInput): Promise<UiAnalys
     try {
       enrichInteractivity(pipeline.ui);
     } catch (err) {
+      throwIfAborted(input.signal);
+      skipped.push('interactivity');
       logger.warn('ui interactivity enrichment failed', { error: String(err) });
     }
   }
 
-  if (input.image && pipeline.ui) {
+  if (pipeline.ui) {
     try {
-      const overlays = await detectOverlays(input.image, pipeline.ui);
+      applyCompositeGrammar(pipeline.ui.root);
+      assignRenderModes(pipeline.ui.root);
+      throwIfAborted(input.signal);
+    } catch (err) {
+      throwIfAborted(input.signal);
+      skipped.push('compositeGrammar');
+      logger.warn('ui composite grammar failed', { error: String(err) });
+    }
+  }
+
+  if (pipeline.ui && overlays.length > 0) {
+    try {
       applyOverlays(pipeline.ui, overlays);
     } catch (err) {
-      logger.warn('ui overlay detection failed', { error: String(err) });
+      throwIfAborted(input.signal);
+      skipped.push('overlayApplication');
+      logger.warn('ui overlay application failed', { error: String(err) });
     }
   }
 
@@ -212,11 +343,14 @@ export async function runUiAnalysis(input: RunUiAnalysisInput): Promise<UiAnalys
         summary,
       };
     } catch (err) {
+      throwIfAborted(input.signal);
+      skipped.push('semanticReinference');
       logger.warn('ui semantic re-inference failed', { error: String(err) });
     }
   }
 
   if (
+    opts.summaryOnly !== true &&
     opts.useLlm === true &&
     input.image &&
     input.provider &&
@@ -224,35 +358,74 @@ export async function runUiAnalysis(input: RunUiAnalysisInput): Promise<UiAnalys
     pipeline.imageContents.length > 0
   ) {
     try {
-      await describeImageContents(input.provider, input.image, pipeline.imageContents);
+      await describeImageContents(
+        input.provider,
+        input.image,
+        pipeline.imageContents,
+        input.signal ? { signal: input.signal } : undefined,
+      );
+      throwIfAborted(input.signal);
     } catch (err) {
+      throwIfAborted(input.signal);
+      skipped.push('imageDescription');
       logger.warn('ui image description failed', { error: String(err) });
     }
   }
 
   if (
+    opts.summaryOnly !== true &&
     opts.embedImages === true &&
     input.image &&
     pipeline.imageContents &&
     pipeline.imageContents.length > 0
   ) {
     try {
-      await embedImageDataUrls(input.image, pipeline.imageContents);
+      await embedImageDataUrls(
+        input.image,
+        pipeline.imageContents,
+        input.signal ? { signal: input.signal } : undefined,
+      );
+      throwIfAborted(input.signal);
     } catch (err) {
+      throwIfAborted(input.signal);
+      skipped.push('imageEmbedding');
       logger.warn('ui image embed failed', { error: String(err) });
     }
   }
 
-  if (pipeline.ui) result.ui = pipeline.ui;
-  if (pipeline.uiSemantics) result.uiSemantics = pipeline.uiSemantics;
-  if (pipeline.codegenIr) result.codegenIr = pipeline.codegenIr;
-  if (pipeline.figma) result.figmaJson = pipeline.figma;
-  if (pipeline.markdown) result.uiMarkdown = pipeline.markdown;
-  if (pipeline.imageContents) result.imageContents = pipeline.imageContents;
-
+  // The async enrichment stages mutate the AST in place. Rebuild every
+  // structural export now so types, props, references and repeated templates
+  // all describe the final tree rather than the pipeline's pre-enrichment
+  // snapshot. The AST can remain private when buildTree=false while explicit
+  // exports still use this final enriched representation.
+  let finalCodegenIr = pipeline.codegenIr;
+  let finalFigma: unknown;
+  let finalMarkdown: string | undefined;
   if (pipeline.ui) {
+    const finalLayout = toLayoutIR(effectiveLayout, effectiveDesign);
+    finalCodegenIr = toCodegenIr(pipeline.ui, finalLayout);
+    if (opts.summaryOnly !== true && opts.exportFigma === true) {
+      finalFigma = new FigmaExporter().export(pipeline.ui);
+    }
+    if (opts.summaryOnly !== true && opts.exportMarkdown === true) {
+      finalMarkdown = new MarkdownExporter().export(pipeline.ui);
+    }
+  }
+  if (finalCodegenIr && opts.detectLayout === false) {
+    finalCodegenIr = { ...finalCodegenIr, constraints: [], responsive: [] };
+  }
+
+  const exposeTree = opts.buildTree !== false && opts.summaryOnly !== true;
+  if (pipeline.ui && exposeTree) result.ui = pipeline.ui;
+  if (pipeline.uiSemantics && exposeTree) result.uiSemantics = pipeline.uiSemantics;
+  if (finalCodegenIr && opts.summaryOnly !== true && opts.exportCodegen === true) result.codegenIr = finalCodegenIr;
+  if (finalFigma && opts.summaryOnly !== true) result.figmaJson = finalFigma;
+  if (finalMarkdown && opts.summaryOnly !== true) result.uiMarkdown = finalMarkdown;
+  if (pipeline.imageContents && opts.summaryOnly !== true) result.imageContents = pipeline.imageContents;
+
+  if (pipeline.ui && opts.buildTree !== false) {
     try {
-      const responsiveRules = pipeline.codegenIr?.responsive;
+      const responsiveRules = finalCodegenIr?.responsive;
       const recon = buildUiReconstruction({
         ast: pipeline.ui,
         ...(pipeline.uiSemantics
@@ -264,9 +437,12 @@ export async function runUiAnalysis(input: RunUiAnalysisInput): Promise<UiAnalys
               },
             }
           : {}),
-        ...(pipeline.codegenIr?.constraints ? { constraints: pipeline.codegenIr.constraints } : {}),
+        ...(finalCodegenIr?.constraints ? { constraints: finalCodegenIr.constraints } : {}),
         ...(responsiveRules && responsiveRules.length > 0 ? { responsive: responsiveRules } : {}),
-        ...(pipeline.codegenIr?.repeats ? { repeats: pipeline.codegenIr.repeats } : {}),
+        ...(finalCodegenIr?.repeats ? { repeats: finalCodegenIr.repeats } : {}),
+        ...(finalCodegenIr?.slots && finalCodegenIr.slots.length > 0
+          ? { slots: finalCodegenIr.slots }
+          : {}),
         ...(pipeline.imageContents ? { images: pipeline.imageContents } : {}),
         ...(effectiveDesign
           ? {
@@ -280,19 +456,76 @@ export async function runUiAnalysis(input: RunUiAnalysisInput): Promise<UiAnalys
               },
             }
           : {}),
+        ...(skipped.length > 0 ? { diagnostics: { skipped } } : {}),
+        ...(pipeline.ui ? {
+          quality: computeQualityReport(
+            collectRenderNodes(pipeline.ui.root),
+            countNodes(pipeline.ui.root),
+          ),
+        } : {}),
       });
       if (opts.detectLayout === false) {
         recon.constraints = [];
       }
+      if (opts.summaryOnly === true) {
+        recon.tree = { ...recon.tree, children: [] };
+        recon.constraints = [];
+        recon.images = [];
+        delete recon.repeats;
+        delete recon.slots;
+        delete recon.responsive;
+      }
       result.uiReconstruction = recon;
     } catch (err) {
+      if (opts.strictMode === true) throw err;
       logger.warn('ui reconstruction build failed', { error: String(err) });
     }
   }
 
-  if (opts.strictMode === true && result.uiReconstruction) {
-    validateReconstruction(result.uiReconstruction);
+  if (opts.strictMode === true && opts.buildTree !== false) {
+    if (!result.uiReconstruction) {
+      throw new Error('uiReconstruction validation failed: reconstruction was not produced');
+    }
+    validateReconstruction(result.uiReconstruction, { summaryOnly: opts.summaryOnly === true });
+  }
+  if (opts.strictMode === true && opts.buildTree === false) {
+    const requestedExports = [
+      opts.exportCodegen === true,
+      opts.exportFigma === true,
+      opts.exportMarkdown === true,
+    ];
+    if (!requestedExports.some(Boolean)) {
+      throw new Error('strict mode requires buildTree=true or at least one explicit export');
+    }
+    if (opts.exportCodegen === true && !result.codegenIr) {
+      throw new Error('codegen export validation failed: export was not produced');
+    }
+    if (opts.exportFigma === true && !result.figmaJson) {
+      throw new Error('figma export validation failed: export was not produced');
+    }
+    if (opts.exportMarkdown === true && !result.uiMarkdown) {
+      throw new Error('markdown export validation failed: export was not produced');
+    }
   }
 
   return result;
+}
+
+function collectRenderNodes(node: ASTNode): Array<{ id: string; render: { mode: RenderMode } }> {
+  const result: Array<{ id: string; render: { mode: RenderMode } }> = [];
+  const walk = (n: ASTNode): void => {
+    const render = n.props.render;
+    if (render !== null && typeof render === 'object' && 'mode' in render) {
+      result.push({ id: n.id, render: render as { mode: RenderMode } });
+    }
+    for (const c of n.children) walk(c);
+  };
+  walk(node);
+  return result;
+}
+
+function countNodes(node: ASTNode): number {
+  let count = 1;
+  for (const c of node.children) count += countNodes(c);
+  return count;
 }

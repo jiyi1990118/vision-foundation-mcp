@@ -12,15 +12,19 @@ import { NormalizeError, normalizeImageInput } from '../core/request-normalizer.
 import { extractMetadata } from '../core/metadata-extractor.js';
 import { planExecution, resolveSkillNames } from '../core/execution-planner.js';
 import { evaluatePolicy, PolicyDeniedError } from '../core/policy-engine.js';
-import { SkillPipeline, composeResult } from '../core/skill-pipeline.js';
+import { SkillPipeline, composeResult, resolveResultCategory } from '../core/skill-pipeline.js';
 import type { TargetQuery } from '../core/skill-pipeline.js';
 import { detectAnnotations } from '../core/annotation-detector.js';
 import { extractKeyContent, shouldExtractKeyContent, extractOcrItems } from '../core/key-content-extractor.js';
 import type { KeyContentActivationInput } from '../core/key-content-extractor.js';
 import { extractForScenario } from '../core/extractors/scenario-dispatcher.js';
 import { extractDesignTokens } from '../core/extractors/design-extractor.js';
-import { extractUiLayout } from '../core/extractors/ui-layout-extractor.js';
-import { runUiAnalysis } from '../ui-analysis/orchestrator.js';
+import { extractUiLayoutForAnalysis } from '../ui-analysis/adapters/index.js';
+import {
+  filterUiLayoutExtractionForOutput,
+  runUiAnalysis,
+  type UiAnalysisOptions,
+} from '../ui-analysis/orchestrator.js';
 import { runReasoning } from '../core/universal-parser.js';
 import { sceneFromClassify, sceneFromHint, sceneFromScenario, refineScene } from '../core/scene-taxonomy.js';
 import type { ParseScene } from '../types/domain.js';
@@ -80,6 +84,8 @@ const inputSchema = z.object({
       detect_theme: z.boolean().optional().describe('Include theme/design tokens (default true).'),
       strict_mode: z.boolean().optional().describe('Validate output structure; fail on missing required fields instead of degrading silently.'),
       embed_images: z.boolean().optional().describe('Embed small icon/image crops as base64 data URLs (default false; bounded by size/count).'),
+      summary_only: z.boolean().optional().describe('Trim uiReconstruction to a root-only tree + stats (omit deep children/constraints/images) to cap output size for large UIs.'),
+      reconstruction_mode: z.enum(['fast', 'balanced', 'high_fidelity']).optional().describe('UI analysis depth: fast (CV+OCR only), balanced (+UI detector), high_fidelity (+OmniParser/icon caption). Default fast.'),
     })
     .optional(),
 });
@@ -390,10 +396,40 @@ export function registerVisionAnalyzeTool(
             // Design token extraction: algorithmic color palette extraction
             // (median-cut quantization + role classification + WCAG contrast).
             // Runs for UI / screenshot / poster scenes. ~50ms, no VLM.
-            const classifyCategory = skillResults.classify?.success
-              ? String((skillResults.classify.data as Record<string, unknown> | undefined)?.category ?? '')
-              : '';
-            const designExtraction = shouldExtractDesign(classifyCategory, sceneHint)
+            const summarySkillText = String(
+              (skillResults.summary?.data as Record<string, unknown> | undefined)?.description
+              ?? (skillResults.summary?.data as Record<string, unknown> | undefined)?.summary
+              ?? '',
+            );
+            const resolvedCategory = resolveResultCategory(skillResults, summarySkillText).category;
+            const isUiScene = shouldExtractDesign(resolvedCategory, sceneHint);
+            const uiOptions: UiAnalysisOptions = {
+              buildTree: options?.build_tree !== false,
+              exportCodegen: options?.export_codegen === true,
+              exportFigma: options?.export_figma === true,
+              exportMarkdown: options?.export_markdown === true,
+              useLlm: options?.use_llm === true,
+              detectLayout: options?.detect_layout !== false,
+              detectComponent: options?.detect_component !== false,
+              detectText: options?.detect_text !== false,
+              detectIcon: options?.detect_icon !== false,
+              detectTheme: options?.detect_theme !== false,
+              strictMode: options?.strict_mode === true,
+              embedImages: options?.embed_images === true,
+              summaryOnly: options?.summary_only === true,
+            };
+            const hasExplicitUiExport = uiOptions.exportCodegen === true
+              || uiOptions.exportFigma === true
+              || uiOptions.exportMarkdown === true;
+            if (
+              isUiScene
+              && uiOptions.strictMode === true
+              && uiOptions.buildTree === false
+              && !hasExplicitUiExport
+            ) {
+              throw new Error('strict mode requires build_tree=true or at least one explicit UI export');
+            }
+            const designExtraction = isUiScene && uiOptions.detectTheme !== false
               ? await extractDesignTokens(image).catch((err) => {
                 logger.warn('design extraction failed', { error: String(err) });
                 return undefined;
@@ -402,27 +438,32 @@ export function registerVisionAnalyzeTool(
             // UI layout extraction: visual region detection + component
             // boundaries + text hierarchy + spacing + icon areas.
             // Same trigger as design extraction. ~100ms, no VLM.
-            const uiLayoutExtraction = shouldExtractDesign(classifyCategory, sceneHint)
-              ? await extractUiLayout(
+            const uiLayoutExtraction = isUiScene
+              ? await extractUiLayoutForAnalysis(
                   image,
-                  skillResults.ocr?.success ? extractOcrItems(skillResults.ocr.data, 'full') : undefined,
+                  uiOptions.detectText !== false && skillResults.ocr?.success
+                    ? extractOcrItems(skillResults.ocr.data, 'full')
+                    : undefined,
                   designExtraction?.palette.map((p) => ({ hex: p.hex, role: p.role })),
+                  { detectMedia: uiOptions.detectIcon !== false },
                 ).catch((err) => {
                   logger.warn('ui layout extraction failed', { error: String(err) });
+                  if (uiOptions.strictMode === true) {
+                    throw new Error(`ui layout extraction failed: ${String(err)}`);
+                  }
                   return undefined;
                 })
               : undefined;
+            if (isUiScene && uiOptions.strictMode === true && !uiLayoutExtraction) {
+              throw new Error('ui layout extraction failed: no layout was produced');
+            }
             // Universal parser reasoning: one focused VLM call for
             // insights/risks/next_actions. Falls back to scene templates on
             // failure or hallucination (handled inside runReasoning).
             const ocrTextForReasoning = skillResults.ocr?.success
               ? extractOcrTextForReasoning(skillResults.ocr.data)
               : undefined;
-            const summaryForReasoning = String(
-              (skillResults.summary?.data as Record<string, unknown> | undefined)?.description
-              ?? (skillResults.summary?.data as Record<string, unknown> | undefined)?.summary
-              ?? '',
-            );
+            const summaryForReasoning = summarySkillText;
             // Skip the reasoning VLM call when there is no context to ground it
             // (e.g. classify-only / single-skill requests): templates are more
             // reliable than a bare 500M-model guess and we save ~3-5s latency.
@@ -458,14 +499,21 @@ export function registerVisionAnalyzeTool(
             if (keyContentExtraction && ocrProviderWarnings.length > 0) {
               keyContentExtraction.warnings = [...new Set([...keyContentExtraction.warnings, ...ocrProviderWarnings])];
             }
+            const summaryOnly = uiOptions.summaryOnly === true;
+            const publicUiLayout = uiLayoutExtraction && !summaryOnly
+              ? filterUiLayoutExtractionForOutput(uiLayoutExtraction, uiOptions)
+              : undefined;
+            const publicDesign = !summaryOnly && uiOptions.detectTheme !== false
+              ? designExtraction
+              : undefined;
             const composeOptions = {
               ...(annotations ? { annotations } : {}),
               ...(target ? { target } : {}),
               ...(keyContentExtraction ? { keyContentExtraction } : {}),
               ...(scenarioExtraction ? { scenarioExtraction } : {}),
               ...(scenarioExtractionData ? { scenarioExtractionData } : {}),
-              ...(designExtraction ? { designExtraction } : {}),
-              ...(uiLayoutExtraction ? { uiLayoutExtraction } : {}),
+              ...(publicDesign ? { designExtraction: publicDesign } : {}),
+              ...(publicUiLayout ? { uiLayoutExtraction: publicUiLayout } : {}),
               scenario: scenarioType,
               reasoningResult,
               sceneHint,
@@ -473,6 +521,11 @@ export function registerVisionAnalyzeTool(
               intent,
             };
             const visionResult = composeResult(skillResults, provider.name, provider.runtime, duration, composeOptions);
+            scrubLegacyUiBranches(
+              visionResult.result,
+              uiOptions,
+              skillResults.layout !== undefined,
+            );
 
             logger.info('vision.analyze completed', {
               duration,
@@ -484,28 +537,16 @@ export function registerVisionAnalyzeTool(
             // SemanticAST (+ per-node styles + optional VLM image descriptions + a
             // consolidated uiReconstruction). Orchestrated in src/ui-analysis/orchestrator.ts;
             // each stage degrades gracefully. Gated by scene + build_tree option.
-            if (uiLayoutExtraction && shouldExtractDesign(classifyCategory, sceneHint) && options?.build_tree !== false) {
+            if (uiLayoutExtraction && isUiScene && (uiOptions.buildTree !== false || hasExplicitUiExport)) {
               try {
                 const uiResult = await runUiAnalysis({
                   uiLayoutExtraction,
+                  signal,
                   ...(designExtraction ? { designExtraction } : {}),
                   ...(image ? { image } : {}),
                   ...(provider ? { provider } : {}),
                   ...(skillResults.ocr?.success ? { ocrItems: extractOcrItems(skillResults.ocr.data, 'full') } : {}),
-                  options: {
-                    buildTree: true,
-                    exportCodegen: options?.export_codegen === true,
-                    exportFigma: options?.export_figma === true,
-                    exportMarkdown: options?.export_markdown === true,
-                    useLlm: options?.use_llm === true,
-                    detectLayout: options?.detect_layout !== false,
-                    detectComponent: options?.detect_component !== false,
-                    detectText: options?.detect_text !== false,
-                    detectIcon: options?.detect_icon !== false,
-                    detectTheme: options?.detect_theme !== false,
-                    strictMode: options?.strict_mode === true,
-                    embedImages: options?.embed_images === true,
-                  },
+                  options: uiOptions,
                 });
                 if (uiResult.ui) visionResult.result.ui = uiResult.ui;
                 if (uiResult.uiSemantics) visionResult.result.uiSemantics = uiResult.uiSemantics;
@@ -517,6 +558,20 @@ export function registerVisionAnalyzeTool(
               } catch (err) {
                 if (options?.strict_mode === true) throw err;
                 logger.warn('ui analysis failed', { error: String(err) });
+              }
+            }
+            if (uiOptions.strictMode === true) {
+              if (isUiScene && uiOptions.buildTree !== false && !visionResult.result.uiReconstruction) {
+                throw new Error('uiReconstruction validation failed: reconstruction was not produced');
+              }
+              if (uiOptions.exportCodegen === true && !visionResult.result.codegenIr) {
+                throw new Error('codegen export validation failed: export was not produced');
+              }
+              if (uiOptions.exportFigma === true && !visionResult.result.figmaJson) {
+                throw new Error('figma export validation failed: export was not produced');
+              }
+              if (uiOptions.exportMarkdown === true && !visionResult.result.uiMarkdown) {
+                throw new Error('markdown export validation failed: export was not produced');
               }
             }
 
@@ -602,6 +657,27 @@ function shouldExtractDesign(category: string, sceneHint: string | undefined): b
     if (lower.includes('ui') || lower.includes('prototype')) return true;
   }
   return false;
+}
+
+function scrubLegacyUiBranches(
+  result: Record<string, unknown>,
+  options: UiAnalysisOptions,
+  hasLayoutSkillResult: boolean,
+): void {
+  const hideUiEvidence = options.summaryOnly === true
+    || options.buildTree === false
+    || options.detectText === false
+    || options.detectComponent === false;
+  const hideLayout = options.summaryOnly === true
+    || options.detectLayout === false
+    || options.detectText === false
+    || options.detectComponent === false;
+  if (hideUiEvidence) delete result.ui;
+  if (hideLayout && !hasLayoutSkillResult) delete result.layout;
+  const parse = result.parse;
+  if (typeof parse === 'object' && parse !== null) {
+    if (hideLayout) delete (parse as Record<string, unknown>).layout;
+  }
 }
 
 /**

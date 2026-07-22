@@ -23,7 +23,7 @@
  * @see src/core/annotation-detector.ts                   (resolveWithObject scan)
  */
 import type { ImageInput } from '../../types/domain.js';
-import type { SemanticAST, ASTNode, NodeStyle, BBox, DecodedImage, GradientInfo } from '../ir/types.js';
+import type { SemanticAST, ASTNode, NodeStyle, BBox, DecodedImage, GradientInfo, PaddingInfo } from '../ir/types.js';
 import { decodeRawImage } from '../image-content/decode.js';
 
 interface RGB {
@@ -450,6 +450,120 @@ export function detectGradient(img: DecodedImage, bbox: BBox): GradientInfo | nu
   };
 }
 
+const BORDER_WIDTH_SCAN_LIMIT = 10;
+const BORDER_WIDTH_COLOR_THRESHOLD = 30;
+
+export function estimateBorderWidth(img: DecodedImage, bbox: BBox): number {
+  const x0 = Math.max(0, Math.floor(bbox.x));
+  const y0 = Math.max(0, Math.floor(bbox.y));
+  const x1 = Math.min(img.width, Math.ceil(bbox.x + bbox.w));
+  const y1 = Math.min(img.height, Math.ceil(bbox.y + bbox.h));
+  const w = x1 - x0;
+  const h = y1 - y0;
+  if (w < 4 || h < 4) return 0;
+  const { data, width, stride } = img;
+
+  // Sample along top edge from left to right, find where color stabilizes
+  const midX = x0 + Math.floor(w / 2);
+  const scan = (startX: number, startY: number, stepX: number, stepY: number, limit: number): number => {
+    const idx0 = (startY * width + startX) * stride;
+    const edgeR = data[idx0] ?? 0;
+    const edgeG = data[idx0 + 1] ?? 0;
+    const edgeB = data[idx0 + 2] ?? 0;
+    for (let k = 1; k < limit; k++) {
+      const px = startX + stepX * k;
+      const py = startY + stepY * k;
+      const idx = (py * width + px) * stride;
+      const r = data[idx] ?? 0;
+      const g = data[idx + 1] ?? 0;
+      const b = data[idx + 2] ?? 0;
+      const diff = Math.sqrt((r - edgeR) ** 2 + (g - edgeG) ** 2 + (b - edgeB) ** 2);
+      if (diff > BORDER_WIDTH_COLOR_THRESHOLD) return k;
+    }
+    return 0;
+  };
+
+  const top = scan(midX, y0, 0, 1, Math.min(BORDER_WIDTH_SCAN_LIMIT, Math.floor(h / 2)));
+  const bottom = scan(midX, y1 - 1, 0, -1, Math.min(BORDER_WIDTH_SCAN_LIMIT, Math.floor(h / 2)));
+  const left = scan(x0, y0 + Math.floor(h / 2), 1, 0, Math.min(BORDER_WIDTH_SCAN_LIMIT, Math.floor(w / 2)));
+  const right = scan(x1 - 1, y0 + Math.floor(h / 2), -1, 0, Math.min(BORDER_WIDTH_SCAN_LIMIT, Math.floor(w / 2)));
+
+  // Return max border width if at least 2 edges agree
+  const widths = [top, bottom, left, right].filter((v) => v > 0);
+  if (widths.length < 2) return 0;
+  return Math.max(...widths);
+}
+
+const PADDING_MIN_SIZE = 20;
+const PADDING_CONTENT_THRESHOLD = 30;
+
+export function estimatePadding(img: DecodedImage, bbox: BBox): PaddingInfo | null {
+  const x0 = Math.max(0, Math.floor(bbox.x));
+  const y0 = Math.max(0, Math.floor(bbox.y));
+  const x1 = Math.min(img.width, Math.ceil(bbox.x + bbox.w));
+  const y1 = Math.min(img.height, Math.ceil(bbox.y + bbox.h));
+  const w = x1 - x0;
+  const h = y1 - y0;
+  if (w < PADDING_MIN_SIZE || h < PADDING_MIN_SIZE) return null;
+  const { data, width, stride } = img;
+
+  // Get background color from corners
+  const cornerIdx = (y0 * width + x0) * stride;
+  const bgR = data[cornerIdx] ?? 0;
+  const bgG = data[cornerIdx + 1] ?? 0;
+  const bgB = data[cornerIdx + 2] ?? 0;
+
+  const isContent = (x: number, y: number): boolean => {
+    const idx = (y * width + x) * stride;
+    const r = data[idx] ?? 0;
+    const g = data[idx + 1] ?? 0;
+    const b = data[idx + 2] ?? 0;
+    return Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2) > PADDING_CONTENT_THRESHOLD;
+  };
+
+  // Find first content row from top
+  let topPad = 0;
+  for (let y = y0; y < y1; y++) {
+    let found = false;
+    for (let x = x0; x < x1; x += 2) {
+      if (isContent(x, y)) { found = true; break; }
+    }
+    if (found) { topPad = y - y0; break; }
+  }
+
+  let bottomPad = 0;
+  for (let y = y1 - 1; y >= y0; y--) {
+    let found = false;
+    for (let x = x0; x < x1; x += 2) {
+      if (isContent(x, y)) { found = true; break; }
+    }
+    if (found) { bottomPad = y1 - 1 - y; break; }
+  }
+
+  let leftPad = 0;
+  for (let x = x0; x < x1; x++) {
+    let found = false;
+    for (let y = y0; y < y1; y += 2) {
+      if (isContent(x, y)) { found = true; break; }
+    }
+    if (found) { leftPad = x - x0; break; }
+  }
+
+  let rightPad = 0;
+  for (let x = x1 - 1; x >= x0; x--) {
+    let found = false;
+    for (let y = y0; y < y1; y += 2) {
+      if (isContent(x, y)) { found = true; break; }
+    }
+    if (found) { rightPad = x1 - 1 - x; break; }
+  }
+
+  // If no content found at all, return null
+  if (topPad === 0 && bottomPad === 0 && leftPad === 0 && rightPad === 0) return null;
+
+  return { top: topPad, right: rightPad, bottom: bottomPad, left: leftPad };
+}
+
 function sampleNodeStyle(node: ASTNode, data: Buffer, width: number, height: number, stride: number): NodeStyle | null {
   const rect = clipRect(node.bbox, width, height);
   if (rect === null) return null;
@@ -483,6 +597,17 @@ function sampleNodeStyle(node: ASTNode, data: Buffer, width: number, height: num
   const edge = dominantEdgeColor(data, rect, width, stride);
   if (edge !== null && rgbDistance(edge, bg) > BORDER_COLOR_THRESHOLD) {
     style.borderColor = rgbToHex(edge.r, edge.g, edge.b);
+  }
+
+  const borderWidth = estimateBorderWidth({ data, width, height, stride }, node.bbox);
+  if (borderWidth > 0) {
+    style.borderWidth = borderWidth;
+    style.borderStyle = 'solid';
+  }
+
+  const padding = estimatePadding({ data, width, height, stride }, node.bbox);
+  if (padding !== null) {
+    style.padding = padding;
   }
 
   const outerRing = collectOuterRing(data, rect, width, height, stride);

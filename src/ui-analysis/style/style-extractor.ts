@@ -564,6 +564,95 @@ export function estimatePadding(img: DecodedImage, bbox: BBox): PaddingInfo | nu
   return { top: topPad, right: rightPad, bottom: bottomPad, left: leftPad };
 }
 
+const TEXT_DARK_LUMINANCE = 128;
+const TEXT_ALIGN_CENTER_TOLERANCE = 0.15;
+
+export interface TypographyInfo {
+  textAlign?: 'left' | 'center' | 'right' | 'justify';
+  textDecoration?: 'none' | 'underline' | 'line-through';
+  lineHeight?: number;
+  letterSpacing?: number;
+}
+
+export function analyzeTypography(img: DecodedImage, bbox: BBox): TypographyInfo | null {
+  const x0 = Math.max(0, Math.floor(bbox.x));
+  const y0 = Math.max(0, Math.floor(bbox.y));
+  const x1 = Math.min(img.width, Math.ceil(bbox.x + bbox.w));
+  const y1 = Math.min(img.height, Math.ceil(bbox.y + bbox.h));
+  const w = x1 - x0;
+  const h = y1 - y0;
+  if (w < 4 || h < 4) return null;
+  const { data, width, stride } = img;
+
+  let minDarkX = x1, maxDarkX = x0;
+  let darkRowCount = 0;
+  const rowDarkCounts: number[] = new Array(h).fill(0);
+
+  for (let y = y0; y < y1; y++) {
+    let rowDark = 0;
+    for (let x = x0; x < x1; x++) {
+      const idx = (y * width + x) * stride;
+      const r = data[idx] ?? 0;
+      const g = data[idx + 1] ?? 0;
+      const b = data[idx + 2] ?? 0;
+      if (0.299 * r + 0.587 * g + 0.114 * b < TEXT_DARK_LUMINANCE) {
+        rowDark++;
+        if (x < minDarkX) minDarkX = x;
+        if (x > maxDarkX) maxDarkX = x;
+      }
+    }
+    rowDarkCounts[y - y0] = rowDark;
+    if (rowDark > 0) {
+      darkRowCount++;
+    }
+  }
+
+  if (darkRowCount === 0) return null;
+
+  const info: TypographyInfo = {};
+
+  if (maxDarkX >= minDarkX && w > 0) {
+    const contentStart = (minDarkX - x0) / w;
+    const contentEnd = (maxDarkX - x0) / w;
+    const contentCenter = (contentStart + contentEnd) / 2;
+
+    if (Math.abs(contentCenter - 0.5) < TEXT_ALIGN_CENTER_TOLERANCE) {
+      info.textAlign = 'center';
+    } else if (contentStart < 0.2 && contentEnd < 0.8) {
+      info.textAlign = 'left';
+    } else if (contentEnd > 0.8 && contentStart > 0.2) {
+      info.textAlign = 'right';
+    } else {
+      info.textAlign = 'left';
+    }
+  }
+
+  let maxDarkRow = y0;
+  let maxDarkCount = 0;
+  for (let y = y0; y < y1; y++) {
+    if ((rowDarkCounts[y - y0] ?? 0) > maxDarkCount) {
+      maxDarkCount = rowDarkCounts[y - y0] ?? 0;
+      maxDarkRow = y;
+    }
+  }
+
+  const underlineStart = maxDarkRow + 3;
+  const underlineEnd = Math.min(y1, maxDarkRow + 8);
+  for (let y = underlineStart; y < underlineEnd; y++) {
+    if ((rowDarkCounts[y - y0] ?? 0) > maxDarkCount * 0.6) {
+      const nextRow = y + 1 < y1 ? (rowDarkCounts[y + 1 - y0] ?? 0) : 0;
+      if (nextRow < maxDarkCount * 0.3) {
+        info.textDecoration = 'underline';
+        break;
+      }
+    }
+  }
+
+  if (info.textDecoration === undefined) info.textDecoration = 'none';
+
+  return info;
+}
+
 function sampleNodeStyle(node: ASTNode, data: Buffer, width: number, height: number, stride: number): NodeStyle | null {
   const rect = clipRect(node.bbox, width, height);
   if (rect === null) return null;
@@ -625,6 +714,12 @@ function sampleNodeStyle(node: ASTNode, data: Buffer, width: number, height: num
     }
     style.fontSize = Math.round(node.bbox.h);
     style.fontWeight = textAppearance.darkDensity > BOLD_DENSITY ? 700 : 400;
+
+    const typography = analyzeTypography({ data, width, height, stride }, node.bbox);
+    if (typography !== null) {
+      if (typography.textAlign) style.textAlign = typography.textAlign;
+      if (typography.textDecoration) style.textDecoration = typography.textDecoration;
+    }
   }
 
   return style;

@@ -15,3 +15,11 @@ export {
   computeCoverage,
   computeMetrics,
 } from './metrics.js';
+export type {
+  BenchmarkImageInput,
+  BenchmarkImageResult,
+  BenchmarkSummary,
+  BenchmarkResult,
+  RunBenchmarkInput,
+} from './runner.js';
+export { extractPredictionsFromAst, runBenchmark } from './runner.js';

@@ -23,3 +23,12 @@ export type {
   RunBenchmarkInput,
 } from './runner.js';
 export { extractPredictionsFromAst, runBenchmark } from './runner.js';
+export type {
+  SyntheticImage,
+  SyntheticElement,
+  SyntheticAnnotation,
+  SyntheticSample,
+  SyntheticLayoutType,
+  SyntheticDataset,
+} from './synthetic-generator.js';
+export { generateSyntheticSample, generateSyntheticDataset } from './synthetic-generator.js';

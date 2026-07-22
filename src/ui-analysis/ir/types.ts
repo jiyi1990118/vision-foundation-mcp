@@ -39,6 +39,9 @@ export interface VisionDetection {
   type: string;
   bbox: BBox;
   score: number;
+  text?: string;
+  state?: 'default' | 'active' | 'selected' | 'disabled';
+  variant?: 'primary' | 'secondary' | 'success' | 'danger' | 'ghost' | 'default';
 }
 
 export interface VisionOcrItem {
@@ -172,7 +175,9 @@ export interface SemanticAST {
 export interface CodegenNode {
   id: string;
   type: ComponentType;
+  bbox: BBox;
   props: Record<string, unknown>;
+  text?: string;
   children: CodegenNode[];
 }
 
@@ -196,6 +201,10 @@ export interface CodegenSlot {
 export interface CodegenRepeat {
   targetId: string;
   count: number;
+  /** id of the first child in the isomorphic group - the reusable template. */
+  templateId?: string;
+  /** type of the template child; drives the slot name. */
+  templateType?: ComponentType;
 }
 
 export interface CodegenIR {
@@ -222,12 +231,52 @@ export interface CodegenIR {
  * omitted (not set to a placeholder) when the signal is absent so that
  * downstream agents do not receive fake values.
  */
+export interface GradientStop {
+  offset: number;
+  color: string;
+}
+
+export interface GradientInfo {
+  type: 'linear' | 'radial';
+  direction?: string;
+  stops: GradientStop[];
+}
+
+export interface PaddingInfo {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}
+
 export interface NodeStyle {
   backgroundColor?: string;
   borderColor?: string;
+  borderWidth?: number;
+  borderStyle?: 'solid' | 'dashed' | 'dotted' | 'none';
   textColor?: string;
   fontSize?: number;
   fontWeight?: number | string;
+  lineHeight?: number;
+  letterSpacing?: number;
+  textAlign?: 'left' | 'center' | 'right' | 'justify';
+  textDecoration?: 'none' | 'underline' | 'line-through';
   borderRadius?: number;
   boxShadow?: string;
+  gradient?: GradientInfo;
+  padding?: PaddingInfo;
+  opacity?: number;
+}
+
+/**
+ * A decoded raw image buffer shared across pixel-sampling engines to avoid
+ * re-decoding the same source image. Produced by `decodeRawImage`; consumed
+ * by the style extractor / media-area filter / overlay detector so the
+ * orchestrator decodes once and threads the buffer through.
+ */
+export interface DecodedImage {
+  data: Buffer;
+  width: number;
+  height: number;
+  stride: number;
 }

@@ -1,9 +1,14 @@
-import type { ASTNode } from '../ir/types.js';
+import type { ASTNode, DecodedImage } from '../ir/types.js';
 import type { RenderInfo } from './types.js';
+import type { BannerLayerInfo } from '../composition/banner-layerizer.js';
 
 export interface PolicyOptions {
   /** When true, banners without separable backgrounds fall back to asset. */
   bannerFallback?: boolean;
+  /** Decoded source image; required to analyze banner separability. */
+  image?: DecodedImage;
+  /** Banner layerizer used to decide hybrid vs asset per banner. */
+  layerizeFn?: (img: DecodedImage, bbox: { x: number; y: number; w: number; h: number }) => BannerLayerInfo;
 }
 
 function hasStyle(node: ASTNode): boolean {
@@ -40,10 +45,28 @@ export function assignRenderModes(root: ASTNode, options?: PolicyOptions): void 
       return;
     }
 
-    // Banner without separable background -> asset fallback.
+    // Banner: analyze separability when image + layerizer are provided.
     if (options?.bannerFallback === true && node.props.semanticRole === 'banner') {
-      const assetId = `asset-${++assetCounter}`;
-      render = { mode: 'asset', assetId, reason: 'banner-background-not-separable' };
+      let mode: 'hybrid' | 'asset' = 'asset';
+      let reason = 'banner-background-not-separable';
+      if (options.image !== undefined && options.layerizeFn !== undefined) {
+        try {
+          const layerInfo = options.layerizeFn(options.image, node.bbox);
+          if (layerInfo.separable) {
+            mode = 'hybrid';
+            reason = 'banner-background-separable';
+          } else {
+            reason = 'banner-background-not-separable';
+          }
+        } catch {
+          // Analysis failed, fall back to asset
+        }
+      }
+      let assetId: string | undefined;
+      if (mode === 'asset') {
+        assetId = `asset-${++assetCounter}`;
+      }
+      render = { mode, ...(assetId !== undefined ? { assetId } : {}), reason };
       node.props.render = render;
       for (const child of node.children) walk(child, render.mode);
       return;

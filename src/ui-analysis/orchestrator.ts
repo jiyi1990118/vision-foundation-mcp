@@ -43,6 +43,7 @@ import { FigmaExporter, MarkdownExporter, toCodegenIr } from './exporter/index.j
 import { validateReconstruction } from './validate.js';
 import { applyCompositeGrammar } from './composition/composite-grammar.js';
 import { assignRenderModes } from './policy/reconstruction-policy.js';
+import { analyzeControlAppearance } from './control/index.js';
 import { computeQualityReport } from './policy/index.js';
 import type { RenderMode } from './policy/index.js';
 import { logger } from '../utils/logger.js';
@@ -290,6 +291,40 @@ export async function runUiAnalysis(input: RunUiAnalysisInput): Promise<UiAnalys
       throwIfAborted(input.signal);
       skipped.push('interactivity');
       logger.warn('ui interactivity enrichment failed', { error: String(err) });
+    }
+  }
+
+  // Control appearance analysis (P2): pixel-based detection of checkbox /
+  // radio / switch family + state. Runs before composite grammar + render
+  // policy so that (a) small `input` leaves are promoted to the detected
+  // control family, (b) `props.control` is set, and (c) the render policy can
+  // then assign native mode to controls with detected state.
+  if (pipeline.ui && decodedImage && opts.detectComponent !== false) {
+    const controlImg = decodedImage;
+    try {
+      const walkControl = (node: ASTNode): void => {
+        const isControlLike =
+          node.type === 'checkbox' || node.type === 'radio' || node.type === 'switch';
+        const isSmallInput =
+          node.type === 'input' && node.bbox.w <= 48 && node.bbox.h <= 48;
+        if (isControlLike || isSmallInput) {
+          const appearance = analyzeControlAppearance(controlImg, node.bbox);
+          if (appearance !== null) {
+            node.props.control = appearance;
+            // Promote a small input leaf to the detected control family.
+            if (isSmallInput) {
+              node.type = appearance.family;
+            }
+          }
+        }
+        for (const c of node.children) walkControl(c);
+      };
+      walkControl(pipeline.ui.root);
+      throwIfAborted(input.signal);
+    } catch (err) {
+      throwIfAborted(input.signal);
+      skipped.push('controlAnalysis');
+      logger.warn('ui control analysis failed', { error: String(err) });
     }
   }
 

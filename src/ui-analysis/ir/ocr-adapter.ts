@@ -20,13 +20,16 @@ export function ocrItemsToVisionOcr(items: OcrItem[]): VisionOcrItem[] {
   for (const item of items) {
     const box = item.box;
     if (!box) continue;
+    if (![box.x1, box.y1, box.x2, box.y2].every(Number.isFinite)) continue;
     const w = box.x2 - box.x1;
     const h = box.y2 - box.y1;
     if (w <= 0 || h <= 0) continue;
+    const confidence = item.confidence ?? 1;
+    if (!Number.isFinite(confidence) || confidence < 0 || confidence > 1) continue;
     out.push({
       text: item.text,
       bbox: { x: box.x1, y: box.y1, w, h },
-      confidence: item.confidence ?? 1,
+      confidence,
     });
   }
   return out;

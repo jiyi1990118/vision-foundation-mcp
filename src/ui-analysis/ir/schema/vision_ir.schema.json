@@ -17,7 +17,10 @@
         "properties": {
           "type": { "type": "string", "description": "Detector-specific type label, e.g. button, card, icon." },
           "bbox": { "$ref": "#/$defs/bbox" },
-          "score": { "type": "number", "minimum": 0, "maximum": 1 }
+          "score": { "type": "number", "minimum": 0, "maximum": 1 },
+          "text": { "type": "string" },
+          "state": { "type": "string", "enum": ["default", "active", "selected", "disabled"] },
+          "variant": { "type": "string", "enum": ["primary", "secondary", "success", "danger", "ghost", "default"] }
         }
       }
     },

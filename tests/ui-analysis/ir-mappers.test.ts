@@ -51,6 +51,9 @@ describe('ir mappers', () => {
     expect(ir.detections[0]!.type).toBe('button');
     expect(ir.detections[0]!.bbox).toEqual({ x: 300, y: 280, w: 40, h: 18 });
     expect(ir.detections[0]!.score).toBe(1);
+    expect(ir.detections[0]!.text).toBe('保存');
+    expect(ir.detections[0]!.state).toBe('default');
+    expect(ir.detections[0]!.variant).toBe('primary');
 
     expect(ir.ocr).toHaveLength(1);
     expect(ir.ocr[0]!.text).toBe('商品管理');

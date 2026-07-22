@@ -34,11 +34,11 @@ const DEFAULT_ALT_TEXT: Record<MediaArea['type'], string> = {
   logo: 'Logo',
 };
 
-function clampCrop(bbox: BBox): { x: number; y: number; w: number; h: number } {
+export function clampCrop(bbox: BBox): { x: number; y: number; w: number; h: number } {
   const x = Math.max(0, bbox.x);
   const y = Math.max(0, bbox.y);
-  const w = Math.max(1, bbox.w);
-  const h = Math.max(1, bbox.h);
+  const w = Math.max(1, bbox.x + bbox.w - x);
+  const h = Math.max(1, bbox.y + bbox.h - y);
   return { x, y, w, h };
 }
 

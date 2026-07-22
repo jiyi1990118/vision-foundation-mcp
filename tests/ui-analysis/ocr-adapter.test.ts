@@ -52,4 +52,16 @@ describe('ocrItemsToVisionOcr (S30 G-D2)', () => {
   it('returns empty for empty input', () => {
     expect(ocrItemsToVisionOcr([])).toEqual([]);
   });
+
+  it('skips non-finite coordinates and confidence values outside 0..1', () => {
+    const items: OcrItem[] = [
+      { text: 'infinite', box: { x1: 0, y1: 0, x2: Infinity, y2: 10 }, confidence: 0.9 },
+      { text: 'high', box: { x1: 0, y1: 0, x2: 10, y2: 10 }, confidence: 2 },
+      { text: 'low', box: { x1: 0, y1: 0, x2: 10, y2: 10 }, confidence: -1 },
+      { text: 'ok', box: { x1: 0, y1: 0, x2: 10, y2: 10 }, confidence: 0.5 },
+    ];
+    expect(ocrItemsToVisionOcr(items)).toEqual([
+      { text: 'ok', bbox: { x: 0, y: 0, w: 10, h: 10 }, confidence: 0.5 },
+    ]);
+  });
 });

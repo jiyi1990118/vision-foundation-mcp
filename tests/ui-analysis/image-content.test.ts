@@ -41,7 +41,7 @@ describe('image-content-extractor', () => {
     expect(r).toHaveLength(1);
     expect(r[0]!.type).toBe('logo');
     expect(r[0]!.altText).toBe('Logo');
-    expect(r[0]!.crop).toEqual({ x: 0, y: 0, w: 40, h: 40 });
+    expect(r[0]!.crop).toEqual({ x: 0, y: 0, w: 35, h: 37 });
     expect(r[0]!.nearbyText).toBeUndefined();
   });
 });

@@ -41,6 +41,15 @@ describe('ui-analysis pipeline', () => {
     expect(Array.isArray(result.codegenIr!.constraints)).toBe(true);
   });
 
+  it('computes codegenIr even without exportCodegen so reconstruction can use repeats/slots', () => {
+    const result = analyzeUiPipeline({
+      uiLayoutExtraction: makeUiLayout(),
+      options: { exportCodegen: false },
+    });
+    expect(result.codegenIr).toBeDefined();
+    expect(result.codegenIr!.root.type).toBe('page');
+  });
+
   it('omits ui when buildTree is false but still exports codegen', () => {
     const result = analyzeUiPipeline({
       uiLayoutExtraction: makeUiLayout(),

@@ -13,9 +13,17 @@
  * @see ../ir/types.js            (SemanticAST / ASTNode / CodegenRepeat)
  * @see ../constraint/constraint-engine.js  (sibling-arrangement traversal pattern)
  */
-import type { SemanticAST, ASTNode, CodegenRepeat } from '../ir/types.js';
+import type { SemanticAST, ASTNode, CodegenRepeat, ComponentType } from '../ir/types.js';
 
 const SIZE_TOLERANCE = 0.15;
+const MIN_REPEAT_COUNT = 2;
+
+const REPEATABLE_TYPES: ReadonlySet<ComponentType> = new Set([
+  'listItem',
+  'card',
+  'row',
+  'section',
+]);
 
 function relativeDiff(a: number, b: number): number {
   const max = Math.max(a, b);
@@ -31,22 +39,27 @@ function sizesSimilar(a: ASTNode, b: ASTNode): boolean {
 }
 
 function groupSimilarChildren(children: ASTNode[]): ASTNode[][] {
+  const ordered = children
+    .filter((child) => REPEATABLE_TYPES.has(child.type))
+    .sort((a, b) => (
+      a.type.localeCompare(b.type)
+      || a.bbox.w - b.bbox.w
+      || a.bbox.h - b.bbox.h
+      || a.bbox.y - b.bbox.y
+      || a.bbox.x - b.bbox.x
+      || a.id.localeCompare(b.id)
+    ));
   const groups: ASTNode[][] = [];
-  const assigned = new Set<number>();
-  for (let i = 0; i < children.length; i++) {
-    if (assigned.has(i)) continue;
-    const seed = children[i]!;
-    const group: ASTNode[] = [seed];
-    assigned.add(i);
-    for (let j = i + 1; j < children.length; j++) {
-      if (assigned.has(j)) continue;
-      const candidate = children[j]!;
-      if (candidate.type === seed.type && sizesSimilar(seed, candidate)) {
-        group.push(candidate);
-        assigned.add(j);
-      }
+  for (const candidate of ordered) {
+    const group = groups.find((existing) => (
+      existing[0]?.type === candidate.type
+      && existing.every((member) => sizesSimilar(member, candidate))
+    ));
+    if (group !== undefined) {
+      group.push(candidate);
+    } else {
+      groups.push([candidate]);
     }
-    groups.push(group);
   }
   return groups;
 }
@@ -58,15 +71,20 @@ function groupSimilarChildren(children: ASTNode[]): ASTNode[][] {
 export function detectRepeats(ast: SemanticAST): CodegenRepeat[] {
   const repeats: CodegenRepeat[] = [];
   const walk = (node: ASTNode): void => {
-    if (node.children.length >= 2) {
+    if (node.children.length >= MIN_REPEAT_COUNT) {
       const candidateGroups = groupSimilarChildren(node.children).filter(
-        (g) => g.length >= 2,
+        (g) => g.length >= MIN_REPEAT_COUNT,
       );
       if (candidateGroups.length > 0) {
         const largest = candidateGroups.reduce((best, g) =>
           g.length > best.length ? g : best,
         );
-        repeats.push({ targetId: node.id, count: largest.length });
+        repeats.push({
+          targetId: node.id,
+          count: largest.length,
+          templateId: largest[0]!.id,
+          templateType: largest[0]!.type,
+        });
       }
     }
     for (const child of node.children) {

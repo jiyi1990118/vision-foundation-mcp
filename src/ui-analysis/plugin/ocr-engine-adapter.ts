@@ -43,10 +43,12 @@ export function parseOcrTextToItems(text: string): VisionOcrItem[] {
     if (!t || typeof t.text !== 'string') continue;
     const bbox = parsePosition(t.position);
     if (!bbox) continue;
+    const confidence = typeof t.confidence === 'number' ? t.confidence : 1;
+    if (!Number.isFinite(confidence) || confidence < 0 || confidence > 1) continue;
     items.push({
       text: t.text,
       bbox,
-      confidence: typeof t.confidence === 'number' ? t.confidence : 1,
+      confidence,
     });
   }
   return items;
@@ -55,8 +57,9 @@ export function parseOcrTextToItems(text: string): VisionOcrItem[] {
 function parsePosition(position?: string): BBox | undefined {
   if (!position) return undefined;
   const parts = position.split(',').map((p) => Number(p));
-  if (parts.length !== 4 || parts.some((n) => Number.isNaN(n))) return undefined;
+  if (parts.length !== 4 || parts.some((n) => !Number.isFinite(n))) return undefined;
   const [x1, y1, x2, y2] = parts as [number, number, number, number];
+  if (x2 <= x1 || y2 <= y1) return undefined;
   return { x: x1, y: y1, w: x2 - x1, h: y2 - y1 };
 }
 

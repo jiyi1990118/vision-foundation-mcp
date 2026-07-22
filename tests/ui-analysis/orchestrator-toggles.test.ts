@@ -70,6 +70,25 @@ describe('runUiAnalysis detect_* toggles (S24 G-B1)', () => {
     expect(types).toContain('page');
   });
 
+  it('detect_component=false does not re-infer a button from a styled region', async () => {
+    const layout = makeLayout();
+    layout.structure.regions = [{
+      id: 'cta',
+      type: 'content',
+      bbox: { x: 20, y: 70, w: 120, h: 40 },
+      relativeArea: 0.2,
+      bgColor: '#1677ff',
+      children: [],
+    }];
+    layout.components = [];
+    layout.texts = [{ text: '保存', bbox: { x: 40, y: 80, w: 80, h: 24 }, estimatedLevel: 'body' }];
+    const result = await runUiAnalysis({
+      uiLayoutExtraction: layout,
+      options: { detectComponent: false },
+    });
+    expect(collectTypes(result.uiReconstruction!.tree)).not.toContain('button');
+  });
+
   it('detect_text=false omits text child nodes', async () => {
     const result = await runUiAnalysis({
       uiLayoutExtraction: makeLayout(),
@@ -79,6 +98,27 @@ describe('runUiAnalysis detect_* toggles (S24 G-B1)', () => {
     expect(result.uiReconstruction).toBeDefined();
     const types = collectTypes(result.uiReconstruction!.tree);
     expect(types).not.toContain('text');
+  });
+
+  it('detect_text=false also ignores externally supplied OCR items', async () => {
+    const result = await runUiAnalysis({
+      uiLayoutExtraction: makeLayout(),
+      ocrItems: [{
+        text: '外部OCR',
+        box: { x1: 30, y1: 20, x2: 120, y2: 40 },
+        confidence: 0.99,
+      }],
+      options: { detectText: false },
+    });
+
+    const texts: string[] = [];
+    const walk = (node: ASTNode): void => {
+      if (node.text) texts.push(node.text);
+      for (const child of node.children) walk(child);
+    };
+    walk(result.uiReconstruction!.tree);
+    expect(texts).not.toContain('外部OCR');
+    expect(texts).toEqual([]);
   });
 
   it('detect_icon=false empties imageContents', async () => {
@@ -115,6 +155,15 @@ describe('runUiAnalysis detect_* toggles (S24 G-B1)', () => {
 
     expect(result.uiReconstruction).toBeDefined();
     expect(result.uiReconstruction!.constraints).toEqual([]);
+  });
+
+  it('detect_layout=false also clears constraints in an exported CodegenIR', async () => {
+    const result = await runUiAnalysis({
+      uiLayoutExtraction: makeLayout(),
+      options: { detectLayout: false, exportCodegen: true },
+    });
+    expect(result.codegenIr!.constraints).toEqual([]);
+    expect(result.codegenIr!.responsive).toEqual([]);
   });
 
   it('strict_mode=true with valid input does not throw and produces uiReconstruction', async () => {

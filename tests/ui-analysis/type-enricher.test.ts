@@ -60,6 +60,21 @@ describe('type-enricher / enrichNodeTypes', () => {
     expect(grp.children.map((c) => c.type)).toEqual(['button', 'button', 'button']);
   });
 
+  it('does not promote a horizontal row of cards to a list', () => {
+    const page = ast(
+      container('page', 'page', box(0, 0, 400, 200), [
+        container('cards', 'container', box(0, 0, 400, 120), [
+          leaf('c1', 'card', box(0, 0, 100, 100)),
+          leaf('c2', 'card', box(120, 0, 100, 100)),
+          leaf('c3', 'card', box(240, 0, 100, 100)),
+        ]),
+      ]),
+    );
+    enrichNodeTypes(page);
+    expect(page.root.children[0]!.type).toBe('row');
+    expect(page.root.children[0]!.children.every((child) => child.type === 'card')).toBe(true);
+  });
+
   it('promotes a thin textless node to divider', () => {
     const page = ast(
       container('page', 'page', box(0, 0, 400, 600), [

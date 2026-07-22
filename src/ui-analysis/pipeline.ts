@@ -6,6 +6,7 @@ import type {
   LayoutIR,
   SemanticAST,
   CodegenIR,
+  BBox,
 } from './ir/types.js';
 import { toVisionIRFromLayout, toLayoutIR } from './ir/mappers.js';
 import { buildSemanticAst } from './ast/ast-builder.js';
@@ -29,6 +30,7 @@ export interface UiPipelineInput {
   uiLayoutExtraction: UiLayoutExtraction;
   designExtraction?: DesignExtraction;
   ocrItems?: VisionOcrItem[] | undefined;
+  pageBbox?: BBox | undefined;
   options?: UiPipelineOptions;
 }
 
@@ -71,7 +73,7 @@ export function analyzeUiPipeline(input: UiPipelineInput): UiPipelineResult {
   if (layoutIR) {
     try {
       const detections = visionIR?.detections;
-      ast = buildSemanticAst(layoutIR, ocr, detections, input.uiLayoutExtraction.mediaAreas);
+      ast = buildSemanticAst(layoutIR, ocr, detections, input.uiLayoutExtraction.mediaAreas, input.pageBbox);
     } catch {
       ast = undefined;
     }
@@ -97,7 +99,7 @@ export function analyzeUiPipeline(input: UiPipelineInput): UiPipelineResult {
     result.imageContents = extractImageContents(input.uiLayoutExtraction.mediaAreas);
   } catch {}
 
-  if (ast && opts.exportCodegen) {
+  if (ast) {
     try {
       result.codegenIr = toCodegenIr(ast, layoutIR);
     } catch {}

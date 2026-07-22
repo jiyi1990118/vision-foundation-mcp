@@ -67,6 +67,20 @@ describe('responsive-engine / inferResponsive', () => {
     expect(rules).toContainEqual({ breakpoint: 'mobile', layout: 'sidebar-collapse' });
   });
 
+  it('is invariant when the page and sidebar are translated away from the origin', () => {
+    const page = ast({
+      id: 'page',
+      type: 'page',
+      bbox: { x: 100, y: 50, w: 400, h: 600 },
+      props: {},
+      children: [leaf('s', 'sidebar', { x: 110, y: 50, w: 80, h: 600 })],
+    });
+    expect(inferResponsive(page, makeLayout([], 'stack'))).toContainEqual({
+      breakpoint: 'mobile',
+      layout: 'sidebar-collapse',
+    });
+  });
+
   it('emits horizontal-scroll when AST contains a table node', () => {
     const page = ast({
       id: 'page',

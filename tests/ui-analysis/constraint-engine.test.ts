@@ -69,4 +69,32 @@ describe('constraint-engine', () => {
     expect(ct.direction).toBe('grid');
     expect(ct.gap).toBe(252);
   });
+
+  it('grid row gap is independent of same-row sibling order and height', () => {
+    const makeAst = (reverse: boolean): SemanticAST => {
+      const firstRow = [
+        { id: 'tall', type: 'card' as const, bbox: { x: 0, y: 0, w: 80, h: 100 }, props: {}, children: [] },
+        { id: 'short', type: 'card' as const, bbox: { x: 100, y: 0, w: 80, h: 20 }, props: {}, children: [] },
+      ];
+      return {
+        root: {
+          id: 'grid',
+          type: 'container',
+          bbox: { x: 0, y: 0, w: 200, h: 160 },
+          props: {},
+          children: [
+            ...(reverse ? firstRow.reverse() : firstRow),
+            { id: 'next', type: 'card', bbox: { x: 50, y: 110, w: 80, h: 40 }, props: {}, children: [] },
+          ],
+        },
+        version: '1.0.0',
+      };
+    };
+
+    const forward = inferConstraints(makeAst(false))[0]!;
+    const reversed = inferConstraints(makeAst(true))[0]!;
+    expect(forward.direction).toBe('grid');
+    expect(forward.gap).toBe(10);
+    expect(reversed.gap).toBe(10);
+  });
 });

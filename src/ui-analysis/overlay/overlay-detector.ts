@@ -25,9 +25,9 @@
  * @see ../ir/types.js               (ComponentType: dialog/drawer/bottomSheet)
  * @see ../orchestrator.js           (invocation site, after type enrichment)
  */
-import sharp from 'sharp';
 import type { ImageInput } from '../../types/domain.js';
-import type { SemanticAST, ASTNode, BBox } from '../ir/types.js';
+import type { SemanticAST, ASTNode, BBox, DecodedImage, VisualRegion } from '../ir/types.js';
+import { decodeRawImage } from '../image-content/decode.js';
 
 export interface OverlayInfo {
   nodeId: string;
@@ -73,6 +73,12 @@ const OVERLAY_CONTAINER_TYPES: ReadonlySet<string> = new Set([
   'container',
   'section',
   'unknown',
+]);
+
+const GEOMETRY_OVERLAY_TYPES: ReadonlySet<string> = new Set([
+  ...OVERLAY_CONTAINER_TYPES,
+  'sidebar',
+  'footer',
 ]);
 
 function luminance(rgb: RGB): number {
@@ -224,6 +230,25 @@ function bboxInside(inner: BBox, outer: BBox): boolean {
   );
 }
 
+function bboxIntersectionArea(a: BBox, b: BBox): number {
+  const x0 = Math.max(a.x, b.x);
+  const y0 = Math.max(a.y, b.y);
+  const x1 = Math.min(a.x + a.w, b.x + b.w);
+  const y1 = Math.min(a.y + a.h, b.y + b.h);
+  return Math.max(0, x1 - x0) * Math.max(0, y1 - y0);
+}
+
+function overlapsFlatRegion(node: ASTNode, regions: VisualRegion[] | undefined): boolean {
+  if (!regions) return false;
+  const regionId = typeof node.props.regionId === 'string' ? node.props.regionId : undefined;
+  const nodeArea = node.bbox.w * node.bbox.h;
+  if (nodeArea <= 0) return false;
+  return regions.some((region) => (
+    region.id !== regionId
+    && bboxIntersectionArea(node.bbox, region.bbox) / nodeArea >= 0.2
+  ));
+}
+
 function findDialogCandidate(
   ast: SemanticAST,
   mask: BBox,
@@ -259,27 +284,34 @@ function findDialogCandidate(
   return best;
 }
 
-function detectGeometryOverlays(ast: SemanticAST, pageW: number, pageH: number): OverlayInfo[] {
+function detectGeometryOverlays(
+  ast: SemanticAST,
+  page: BBox,
+  regions: VisualRegion[] | undefined,
+): OverlayInfo[] {
   const out: OverlayInfo[] = [];
+  const pageRight = page.x + page.w;
+  const pageBottom = page.y + page.h;
   for (const node of walkNodes(ast.root)) {
     if (node === ast.root) continue;
-    if (!OVERLAY_CONTAINER_TYPES.has(node.type)) continue;
+    if (!GEOMETRY_OVERLAY_TYPES.has(node.type)) continue;
+    if (!overlapsFlatRegion(node, regions)) continue;
     const { x, y, w, h } = node.bbox;
-    const leftEdge = x <= pageW * EDGE_RATIO;
-    const rightEdge = x + w >= pageW * (1 - EDGE_RATIO);
+    const leftEdge = x <= page.x + page.w * EDGE_RATIO;
+    const rightEdge = x + w >= pageRight - page.w * EDGE_RATIO;
     if (
       (leftEdge || rightEdge) &&
-      h >= pageH * DRAWER_MIN_HEIGHT_RATIO &&
-      w < pageW * DRAWER_MAX_WIDTH_RATIO
+      h >= page.h * DRAWER_MIN_HEIGHT_RATIO &&
+      w < page.w * DRAWER_MAX_WIDTH_RATIO
     ) {
       out.push({ nodeId: node.id, overlayType: 'drawer', zIndex: DRAWER_Z });
       continue;
     }
-    const bottomEdge = y + h >= pageH * (1 - EDGE_RATIO);
+    const bottomEdge = y + h >= pageBottom - page.h * EDGE_RATIO;
     if (
       bottomEdge &&
-      w >= pageW * BOTTOM_SHEET_MIN_WIDTH_RATIO &&
-      h < pageH * BOTTOM_SHEET_MAX_HEIGHT_RATIO
+      w >= page.w * BOTTOM_SHEET_MIN_WIDTH_RATIO &&
+      h < page.h * BOTTOM_SHEET_MAX_HEIGHT_RATIO
     ) {
       out.push({ nodeId: node.id, overlayType: 'bottomSheet', zIndex: BOTTOM_SHEET_Z });
     }
@@ -297,22 +329,25 @@ function detectGeometryOverlays(ast: SemanticAST, pageW: number, pageH: number):
 export async function detectOverlays(
   image: ImageInput | undefined,
   ast: SemanticAST,
+  decoded?: DecodedImage,
+  regions?: VisualRegion[],
 ): Promise<OverlayInfo[]> {
   let data: Buffer | null = null;
   let imgW = 0;
   let imgH = 0;
   let stride = 0;
   if (image !== undefined) {
-    const dec = await sharp(image.buffer).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+    const dec = decoded ?? await decodeRawImage(image);
     data = dec.data;
-    imgW = dec.info.width;
-    imgH = dec.info.height;
-    stride = dec.info.channels;
+    imgW = dec.width;
+    imgH = dec.height;
+    stride = dec.stride;
   }
 
-  const pageW = data !== null ? imgW : ast.root.bbox.w;
-  const pageH = data !== null ? imgH : ast.root.bbox.h;
-  if (pageW <= 0 || pageH <= 0) return [];
+  const page = data !== null
+    ? { x: 0, y: 0, w: imgW, h: imgH }
+    : ast.root.bbox;
+  if (page.w <= 0 || page.h <= 0) return [];
 
   const overlays: OverlayInfo[] = [];
   const dialogNodeIds = new Set<string>();
@@ -333,7 +368,7 @@ export async function detectOverlays(
     }
   }
 
-  for (const info of detectGeometryOverlays(ast, pageW, pageH)) {
+  for (const info of detectGeometryOverlays(ast, page, regions)) {
     if (dialogNodeIds.has(info.nodeId)) continue;
     overlays.push(info);
   }

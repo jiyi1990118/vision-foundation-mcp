@@ -11,7 +11,30 @@ function leaf(id: string, type: ASTNode['type'], bbox: ASTNode['bbox']): ASTNode
 }
 
 describe('repeat-engine / detectRepeats', () => {
-  it('emits one repeat with count 3 for three same-type same-size buttons', () => {
+  it('emits a reusable template for two same-size list items', () => {
+    const page = ast({
+      id: 'page',
+      type: 'page',
+      bbox: { x: 0, y: 0, w: 400, h: 600 },
+      props: {},
+      children: [{
+        id: 'list',
+        type: 'list',
+        bbox: { x: 0, y: 0, w: 300, h: 100 },
+        props: {},
+        children: [
+          leaf('i1', 'listItem', { x: 0, y: 0, w: 280, h: 40 }),
+          leaf('i2', 'listItem', { x: 0, y: 60, w: 280, h: 40 }),
+        ],
+      }],
+    });
+
+    expect(detectRepeats(page)).toEqual([
+      { targetId: 'list', count: 2, templateId: 'i1', templateType: 'listItem' },
+    ]);
+  });
+
+  it('emits one repeat with count 3 for three same-size list items', () => {
     const page = ast({
       id: 'page',
       type: 'page',
@@ -19,24 +42,24 @@ describe('repeat-engine / detectRepeats', () => {
       props: {},
       children: [
         {
-          id: 'row',
-          type: 'container',
-          bbox: { x: 0, y: 0, w: 300, h: 40 },
+          id: 'list',
+          type: 'list',
+          bbox: { x: 0, y: 0, w: 300, h: 160 },
           props: {},
           children: [
-            leaf('b1', 'button', { x: 0, y: 0, w: 80, h: 40 }),
-            leaf('b2', 'button', { x: 100, y: 0, w: 80, h: 40 }),
-            leaf('b3', 'button', { x: 200, y: 0, w: 80, h: 40 }),
+            leaf('i1', 'listItem', { x: 0, y: 0, w: 280, h: 40 }),
+            leaf('i2', 'listItem', { x: 0, y: 60, w: 280, h: 40 }),
+            leaf('i3', 'listItem', { x: 0, y: 120, w: 280, h: 40 }),
           ],
         },
       ],
     });
 
     const repeats = detectRepeats(page);
-    expect(repeats).toEqual([{ targetId: 'row', count: 3 }]);
+    expect(repeats).toEqual([{ targetId: 'list', count: 3, templateId: 'i1', templateType: 'listItem' }]);
   });
 
-  it('reports the largest group when a container has multiple type groups', () => {
+  it('does not report repeated action controls as data templates', () => {
     const page = ast({
       id: 'page',
       type: 'page',
@@ -51,17 +74,17 @@ describe('repeat-engine / detectRepeats', () => {
           children: [
             leaf('b1', 'button', { x: 0, y: 0, w: 80, h: 40 }),
             leaf('b2', 'button', { x: 100, y: 0, w: 80, h: 40 }),
+            leaf('b3', 'button', { x: 200, y: 0, w: 80, h: 40 }),
             leaf('i1', 'input', { x: 0, y: 60, w: 200, h: 28 }),
             leaf('i2', 'input', { x: 0, y: 100, w: 200, h: 28 }),
+            leaf('i3', 'input', { x: 0, y: 140, w: 200, h: 28 }),
           ],
         },
       ],
     });
 
     const repeats = detectRepeats(page);
-    expect(repeats).toHaveLength(1);
-    expect(repeats[0]!.targetId).toBe('form');
-    expect(repeats[0]!.count).toBe(2);
+    expect(repeats).toEqual([]);
   });
 
   it('emits no repeat for two same-type nodes with dissimilar sizes', () => {
@@ -97,5 +120,25 @@ describe('repeat-engine / detectRepeats', () => {
     });
 
     expect(detectRepeats(page)).toEqual([]);
+  });
+
+  it('is deterministic across sibling permutations with non-transitive sizes', () => {
+    const makePage = (widths: number[]): SemanticAST => ast({
+      id: 'page',
+      type: 'page',
+      bbox: { x: 0, y: 0, w: 400, h: 600 },
+      props: {},
+      children: [{
+        id: 'list',
+        type: 'list',
+        bbox: { x: 0, y: 0, w: 200, h: 300 },
+        props: {},
+        children: widths.map((w, index) => leaf(`i${w}`, 'listItem', { x: 0, y: index * 70, w, h: 50 })),
+      }],
+    });
+
+    expect(detectRepeats(makePage([100, 115, 132]))).toEqual(
+      detectRepeats(makePage([115, 132, 100])),
+    );
   });
 });

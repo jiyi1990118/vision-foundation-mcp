@@ -8,9 +8,13 @@
  *
  * @see ./image-content-extractor.ts  (extractImageContents / ImageContentInfo)
  */
-export { extractImageContents } from './image-content-extractor.js';
+export { clampCrop, extractImageContents } from './image-content-extractor.js';
 export type { ImageContentInfo } from './image-content-extractor.js';
 export { describeImageContents } from './image-describer.js';
 export type { DescribeOptions } from './image-describer.js';
 export { embedImageDataUrls } from './image-embedder.js';
 export type { EmbedOptions } from './image-embedder.js';
+export { decodeRawImage } from './decode.js';
+export type { DecodedImage } from './decode.js';
+export { classifyMediaAreas } from './media-area-classifier.js';
+export { detectMediaAreasForAnalysis } from './media-area-detector.js';

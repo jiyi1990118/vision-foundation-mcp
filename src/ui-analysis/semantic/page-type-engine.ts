@@ -112,11 +112,19 @@ function flatten(node: ASTNode, out: ASTNode[] = []): ASTNode[] {
 
 function collectTexts(nodes: ASTNode[], ocr: VisionOcrItem[]): string[] {
   const texts: string[] = [];
+  const seen = new Set<string>();
+  const add = (text: string, bbox: ASTNode['bbox']): void => {
+    if (text.length === 0) return;
+    const key = `${text.trim().toLowerCase()}:${bbox.x},${bbox.y},${bbox.w},${bbox.h}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    texts.push(text);
+  };
   for (const n of nodes) {
-    if (n.text !== undefined && n.text.length > 0) texts.push(n.text);
+    if (n.text !== undefined) add(n.text, n.bbox);
   }
   for (const o of ocr) {
-    if (o.text.length > 0) texts.push(o.text);
+    add(o.text, o.bbox);
   }
   return texts;
 }
@@ -171,7 +179,7 @@ const RULES: PageRule[] = [
     type: 'list',
     checks: [
       (c) => (c.listItemCount >= 2 ? 'components:multi-listItem' : null),
-      (c) => (c.texts.length >= 3 ? 'ocr:multi-row' : null),
+      (c) => (c.listItemCount >= 1 && c.texts.length >= 3 ? 'ocr:multi-row' : null),
     ],
   },
   {
@@ -204,7 +212,7 @@ const RULES: PageRule[] = [
     type: 'navigation',
     checks: [
       (c) => (c.navbarTabCount >= 1 ? 'components:navbar/tab' : null),
-      (c) => (c.componentCount <= 4 ? 'content:sparse' : null),
+      (c) => (c.navbarTabCount >= 1 && c.componentCount <= 4 ? 'content:sparse' : null),
     ],
   },
 ];

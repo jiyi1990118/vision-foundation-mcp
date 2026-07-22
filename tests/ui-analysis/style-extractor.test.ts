@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import sharp from 'sharp';
-import { extractNodeStyles } from '../../src/ui-analysis/style/style-extractor.js';
+import { computeSampleGrid, extractNodeStyles } from '../../src/ui-analysis/style/style-extractor.js';
 import type { SemanticAST } from '../../src/ui-analysis/ir/types.js';
 
 async function makeSolidColorImage(r: number, g: number, b: number): Promise<Buffer> {
@@ -66,6 +66,17 @@ function colorDistance(a: string, b: string): number {
 }
 
 describe('extractNodeStyles', () => {
+  it('bounds area sampling for square and extreme-aspect regions', () => {
+    for (const [width, height] of [[1000, 1000], [10000, 1], [1, 10000], [160, 30]]) {
+      const grid = computeSampleGrid(width, height);
+      expect(grid.columns).toBeGreaterThan(0);
+      expect(grid.rows).toBeGreaterThan(0);
+      expect(grid.columns * grid.rows).toBeLessThanOrEqual(4096);
+      expect(grid.columns).toBeLessThanOrEqual(width);
+      expect(grid.rows).toBeLessThanOrEqual(height);
+    }
+  });
+
   it('samples the dominant background color of a solid region', async () => {
     const buf = await makeSolidColorImage(255, 0, 0);
     const ast: SemanticAST = {

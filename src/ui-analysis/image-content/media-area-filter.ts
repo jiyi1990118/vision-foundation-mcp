@@ -21,9 +21,10 @@
  * @see src/core/extractors/ui-layout-extractor.ts  (detectMediaAreas source)
  * @see 方案/06-回归分析与待增强点.md  (G-C1 / real-image validation)
  */
-import sharp from 'sharp';
 import type { ImageInput } from '../../types/domain.js';
 import type { MediaArea } from '../../core/extractors/ui-layout-extractor.js';
+import type { DecodedImage } from '../ir/types.js';
+import { decodeRawImage } from './decode.js';
 
 interface RGB {
   r: number;
@@ -35,6 +36,9 @@ const QUANT_SHIFT = 4;
 const RING_BAND = 4;
 const MIN_INTERIOR_DIFF = 30;
 const MIN_SAMPLES = 8;
+const MIN_FOREGROUND_RATIO = 0.08;
+const MIN_FOREGROUND_SPAN = 0.45;
+const MIN_FOREGROUND_QUADRANTS = 3;
 
 function rgbDistance(a: RGB, b: RGB): number {
   const dr = a.r - b.r;
@@ -75,17 +79,63 @@ function dominantColor(data: Buffer, x0: number, y0: number, x1: number, y1: num
   return { r: Math.round(best.r / best.count), g: Math.round(best.g / best.count), b: Math.round(best.b / best.count) };
 }
 
+function foregroundShape(
+  data: Buffer,
+  x0: number,
+  y0: number,
+  x1: number,
+  y1: number,
+  background: RGB,
+  width: number,
+  stride: number,
+): { ratio: number; xSpan: number; ySpan: number; quadrants: number } {
+  let foreground = 0;
+  let total = 0;
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  const occupiedQuadrants = new Set<number>();
+  const midX = (x0 + x1) / 2;
+  const midY = (y0 + y1) / 2;
+  for (let y = y0; y < y1; y++) {
+    for (let x = x0; x < x1; x++) {
+      const idx = (y * width + x) * stride;
+      const pixel = { r: data[idx] ?? 0, g: data[idx + 1] ?? 0, b: data[idx + 2] ?? 0 };
+      if (rgbDistance(pixel, background) >= MIN_INTERIOR_DIFF) {
+        foreground++;
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x);
+        maxY = Math.max(maxY, y);
+        occupiedQuadrants.add((x >= midX ? 1 : 0) + (y >= midY ? 2 : 0));
+      }
+      total++;
+    }
+  }
+  const sampleWidth = Math.max(1, x1 - x0);
+  const sampleHeight = Math.max(1, y1 - y0);
+  return {
+    ratio: total > 0 ? foreground / total : 0,
+    xSpan: foreground > 0 ? (maxX - minX + 1) / sampleWidth : 0,
+    ySpan: foreground > 0 ? (maxY - minY + 1) / sampleHeight : 0,
+    quadrants: occupiedQuadrants.size,
+  };
+}
+
 /**
  * Drop media areas whose interior dominant color matches the surrounding
  * background (i.e. no solid icon body - just a border / edge fragment).
  * Returns the filtered list; the input is not mutated.
  */
-export async function filterSolidMediaAreas(image: ImageInput, areas: MediaArea[]): Promise<MediaArea[]> {
+export async function filterSolidMediaAreas(
+  image: ImageInput,
+  areas: MediaArea[],
+  decoded?: DecodedImage,
+  limit?: number,
+): Promise<MediaArea[]> {
   if (areas.length === 0) return areas;
-  const { data, info } = await sharp(image.buffer).removeAlpha().raw().toBuffer({ resolveWithObject: true });
-  const width = info.width;
-  const height = info.height;
-  const stride = info.channels;
+  const { data, width, height, stride } = decoded ?? await decodeRawImage(image);
 
   const kept: MediaArea[] = [];
   for (const area of areas) {
@@ -138,7 +188,19 @@ export async function filterSolidMediaAreas(image: ImageInput, areas: MediaArea[
     }
     if (rgbDistance(interior, bg) >= MIN_INTERIOR_DIFF) {
       kept.push(area);
+      continue;
+    }
+    const shape = foregroundShape(data, ix0, iy0, ix1, iy1, bg, width, stride);
+    // Outline icons contain meaningful strokes inside the candidate interior;
+    // border fragments are usually one-dimensional or confined to one corner.
+    if (
+      shape.ratio >= MIN_FOREGROUND_RATIO
+      && shape.xSpan >= MIN_FOREGROUND_SPAN
+      && shape.ySpan >= MIN_FOREGROUND_SPAN
+      && shape.quadrants >= MIN_FOREGROUND_QUADRANTS
+    ) {
+      kept.push(area);
     }
   }
-  return kept;
+  return limit === undefined ? kept : kept.slice(0, Math.max(0, limit));
 }

@@ -94,7 +94,12 @@ function isGreenish(rgb: { r: number; g: number; b: number }): boolean {
 }
 
 function nodeColorHex(node: ASTNode): string | null {
-  const raw = node.props.color ?? node.props.fill ?? node.props.bgColor ?? node.props.background;
+  const style = node.props.style as { backgroundColor?: unknown } | undefined;
+  const raw = node.props.color
+    ?? node.props.fill
+    ?? node.props.bgColor
+    ?? node.props.background
+    ?? style?.backgroundColor;
   if (typeof raw !== 'string') return null;
   const trimmed = raw.trim();
   if (/^#?[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/.test(trimmed)) {
@@ -144,6 +149,10 @@ function inferState(node: ASTNode): { state: VariantState; reason: string } {
   const ps = node.props.state;
   if (typeof ps === 'string' && isVariantState(ps)) {
     return { state: ps, reason: `props:state=${ps}` };
+  }
+  const interactive = node.props.interactive as { disabled?: unknown } | undefined;
+  if (interactive?.disabled === true) {
+    return { state: 'disabled', reason: 'interactive:disabled' };
   }
   const text = node.text ?? '';
   if (textMatches(text, DISABLED_KEYWORDS)) {

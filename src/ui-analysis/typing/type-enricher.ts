@@ -6,8 +6,8 @@
  * iconButton / title / subtitle ...) are never emitted. This pure
  * post-pass walks the tree post-order (children before parent) and
  * rewrites `node.type` in place via geometric + textual heuristics,
- * surfacing those missing types. It only reads bbox / children / props /
- * text and mutates type; bbox / children / props are never touched.
+ * surfacing those missing types. It also annotates form-label text with
+ * `props.semanticRole = 'label'`; bbox / children are never touched.
  *
  * Promotes only generic types (unknown / container / text / input /
  * button); a specific type is never downgraded back to a generic one.
@@ -211,6 +211,7 @@ function promoteList(node: ASTNode): void {
     if (best === null || g.length > best.length) best = g;
   }
   if (best === null) return;
+  if (inferDirectionLocal(best) !== 'column') return;
   node.type = 'list';
   for (const item of best) item.type = 'listItem';
 }
@@ -292,7 +293,7 @@ function bboxIntersects(a: BBox, b: BBox): boolean {
   return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
 }
 
-function nearbyOcrMatches(node: ASTNode, ocr: VisionOcrItem[]): boolean {
+function nearbyOcrMatches(node: ASTNode, ocr: VisionOcrItem[], keywords: readonly string[]): boolean {
   const expanded: BBox = {
     x: node.bbox.x - SELECT_NEARBY_PX,
     y: node.bbox.y - SELECT_NEARBY_PX,
@@ -302,7 +303,7 @@ function nearbyOcrMatches(node: ASTNode, ocr: VisionOcrItem[]): boolean {
   for (const item of ocr) {
     if (!bboxIntersects(expanded, item.bbox)) continue;
     const lower = item.text.toLowerCase();
-    for (const kw of SELECT_KEYWORDS) {
+    for (const kw of keywords) {
       if (lower.includes(kw.toLowerCase())) return true;
     }
   }
@@ -312,7 +313,34 @@ function nearbyOcrMatches(node: ASTNode, ocr: VisionOcrItem[]): boolean {
 function promoteSelectByOcr(node: ASTNode, ocr: VisionOcrItem[] | undefined): void {
   if (node.type !== 'input') return;
   if (ocr === undefined || ocr.length === 0) return;
-  if (nearbyOcrMatches(node, ocr)) node.type = 'select';
+  if (nearbyOcrMatches(node, ocr, SELECT_KEYWORDS)) node.type = 'select';
+}
+
+const RADIO_KEYWORDS: readonly string[] = ['单选', 'radio', '○'];
+const CHECKBOX_KEYWORDS: readonly string[] = ['多选', 'checkbox', '☑', '□', '勾选'];
+const FORM_CONTROL_MAX_W = 32;
+const FORM_CONTROL_MAX_H = 32;
+
+/**
+ * Promote a small leaf `input` (control-sized, not a text field) to `radio` /
+ * `checkbox` when a nearby OCR label carries the matching keyword. Best-effort:
+ * without OCR keywords a small input is left as-is - geometry alone cannot
+ * distinguish radio (circle) from checkbox (square) because the type enricher
+ * reads no pixels. A text-field-sized input (w or h beyond the control cap) is
+ * never promoted here so a compact search box stays `input`.
+ */
+function promoteFormControl(node: ASTNode, ocr: VisionOcrItem[] | undefined): void {
+  if (node.type !== 'input') return;
+  if (node.children.length > 0) return;
+  if (node.bbox.w >= FORM_CONTROL_MAX_W || node.bbox.h >= FORM_CONTROL_MAX_H) return;
+  if (ocr === undefined || ocr.length === 0) return;
+  if (nearbyOcrMatches(node, ocr, RADIO_KEYWORDS)) {
+    node.type = 'radio';
+    return;
+  }
+  if (nearbyOcrMatches(node, ocr, CHECKBOX_KEYWORDS)) {
+    node.type = 'checkbox';
+  }
 }
 
 function verticallyOverlap(a: BBox, b: BBox): boolean {
@@ -338,11 +366,14 @@ function promoteSelectBySibling(node: ASTNode): void {
   }
 }
 
-function enrichExtra(node: ASTNode, ocr: VisionOcrItem[] | undefined): void {
-  promoteSelectBySibling(node);
-  for (const c of node.children) enrichExtra(c, ocr);
-  promoteBadge(node);
-  promoteSelectByOcr(node, ocr);
+function enrichExtra(node: ASTNode, ocr: VisionOcrItem[] | undefined, detectComponent: boolean): void {
+  if (detectComponent) promoteSelectBySibling(node);
+  for (const c of node.children) enrichExtra(c, ocr, detectComponent);
+  if (detectComponent) {
+    promoteBadge(node);
+    promoteSelectByOcr(node, ocr);
+    promoteFormControl(node, ocr);
+  }
   promoteLayout(node);
 }
 
@@ -375,6 +406,37 @@ function hierarchizeText(ast: SemanticAST): void {
 const BUTTON_MAX_W = 200;
 const BUTTON_MAX_H = 60;
 const BUTTON_MIN_BG_SAT = 0.15;
+const BUTTON_MAX_PAGE_W_RATIO = 0.95;
+const BUTTON_MAX_PAGE_H_RATIO = 0.09;
+const TEXT_REGION_MIN_IOU = 0.5;
+const TITLE_TOP_RATIO = 0.15;
+const TITLE_CENTER_TOLERANCE = 0.18;
+const LABEL_LEFT_RATIO = 0.3;
+const LABEL_TOP_EXCLUSION_RATIO = 0.12;
+const LABEL_MAX_TEXT = 12;
+const LABEL_MAX_GAP_RATIO = 0.2;
+const LABEL_MIN_VERTICAL_OVERLAP = 0.5;
+
+const BUTTON_REGION_TYPES: ReadonlySet<ComponentType> = new Set([
+  'container',
+  'unknown',
+  'footer',
+  'navbar',
+  'card',
+  'section',
+]);
+
+const TEXT_REGION_TYPES: ReadonlySet<ComponentType> = new Set([
+  'container',
+  'unknown',
+  'header',
+  'footer',
+  'navbar',
+  'card',
+  'section',
+]);
+
+const BUTTON_ACTION_TEXT = /^(?:保存|取消|确定|提交|关闭|新增(?:地址)?|删除|编辑|查询|搜索|筛选|登录|注册|添加|修改|确认|返回|下一步|上一步|下载|导出|导入|刷新|重置|兑换|使用|立即使用|去使用|领取|购买|支付|完成|继续|save|cancel|submit|close|add|delete|edit|search|filter|login|register|confirm|back|next|download|export|import|refresh|reset|redeem|use|buy|pay|continue)$/i;
 
 function hexToRgbLocal(hex: string): { r: number; g: number; b: number } | null {
   let h = hex.trim().replace(/^#/, '');
@@ -398,32 +460,153 @@ function styleBgSaturation(node: ASTNode): number {
   return max === 0 ? 0 : (max - min) / max;
 }
 
+function bboxArea(bbox: BBox): number {
+  return Math.max(0, bbox.w) * Math.max(0, bbox.h);
+}
+
+function bboxIou(a: BBox, b: BBox): number {
+  const x0 = Math.max(a.x, b.x);
+  const y0 = Math.max(a.y, b.y);
+  const x1 = Math.min(a.x + a.w, b.x + b.w);
+  const y1 = Math.min(a.y + a.h, b.y + b.h);
+  const intersection = Math.max(0, x1 - x0) * Math.max(0, y1 - y0);
+  const union = bboxArea(a) + bboxArea(b) - intersection;
+  return union > 0 ? intersection / union : 0;
+}
+
+function normalizeText(text: string): string {
+  return text.trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
+function hasMatchingTightOcr(node: ASTNode, ocr: VisionOcrItem[] | undefined): boolean {
+  if (!hasText(node) || ocr === undefined) return false;
+  const text = normalizeText(node.text!);
+  return ocr.some((item) => (
+    normalizeText(item.text) === text && bboxIou(node.bbox, item.bbox) >= TEXT_REGION_MIN_IOU
+  ));
+}
+
+function buttonSizeKind(node: ASTNode, page: BBox): 'absolute' | 'relative' | null {
+  if (node.bbox.w <= 0 || node.bbox.h <= 0) return null;
+  const absoluteSmall = node.bbox.w < BUTTON_MAX_W && node.bbox.h < BUTTON_MAX_H;
+  if (absoluteSmall) return 'absolute';
+  const pageRelative = page.w > 0 && page.h > 0
+    && node.bbox.w <= page.w * BUTTON_MAX_PAGE_W_RATIO
+    && node.bbox.h <= page.h * BUTTON_MAX_PAGE_H_RATIO;
+  return pageRelative ? 'relative' : null;
+}
+
+function isActionText(node: ASTNode): boolean {
+  return hasText(node) && BUTTON_ACTION_TEXT.test(node.text!.trim());
+}
+
+function promoteTopTitle(ast: SemanticAST): void {
+  const root = ast.root;
+  if (root.bbox.w <= 0 || root.bbox.h <= 0) return;
+  const pageCenter = root.bbox.x + root.bbox.w / 2;
+  let best: ASTNode | undefined;
+  let bestDistance = Infinity;
+  const walk = (node: ASTNode): void => {
+    if ((node.type === 'text' || node.type === 'title' || node.type === 'subtitle') && hasText(node)) {
+      const relativeTop = (node.bbox.y - root.bbox.y) / root.bbox.h;
+      const center = node.bbox.x + node.bbox.w / 2;
+      const distance = Math.abs(center - pageCenter) / root.bbox.w;
+      if (
+        relativeTop >= 0
+        && relativeTop <= TITLE_TOP_RATIO
+        && distance <= TITLE_CENTER_TOLERANCE
+        && distance < bestDistance
+      ) {
+        best = node;
+        bestDistance = distance;
+      }
+    }
+    for (const child of node.children) walk(child);
+  };
+  walk(root);
+  if (best !== undefined) best.type = 'title';
+}
+
+function verticalOverlapRatio(a: BBox, b: BBox): number {
+  const overlap = Math.max(0, Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y));
+  const smallerHeight = Math.min(a.h, b.h);
+  return smallerHeight > 0 ? overlap / smallerHeight : 0;
+}
+
+function markSemanticLabels(ast: SemanticAST): void {
+  const root = ast.root;
+  if (root.bbox.w <= 0 || root.bbox.h <= 0) return;
+  const markWithin = (parent: ASTNode): void => {
+    const textChildren = parent.children.filter((child) => (
+      (child.type === 'text' || child.type === 'title' || child.type === 'subtitle') && hasText(child)
+    ));
+    for (const candidate of textChildren) {
+      const relativeX = (candidate.bbox.x - root.bbox.x) / root.bbox.w;
+      const relativeY = (candidate.bbox.y - root.bbox.y) / root.bbox.h;
+      if (
+        relativeX > LABEL_LEFT_RATIO
+        || relativeY < LABEL_TOP_EXCLUSION_RATIO
+        || textLen(candidate) > LABEL_MAX_TEXT
+      ) continue;
+      const rightEdge = candidate.bbox.x + candidate.bbox.w;
+      const hasValue = textChildren.some((other) => (
+        other !== candidate
+        && other.bbox.x >= rightEdge
+        && other.bbox.x - rightEdge <= root.bbox.w * LABEL_MAX_GAP_RATIO
+        && verticalOverlapRatio(candidate.bbox, other.bbox) >= LABEL_MIN_VERTICAL_OVERLAP
+      ));
+      if (hasValue) {
+        candidate.type = 'text';
+        candidate.props.semanticRole = 'label';
+      }
+    }
+    for (const child of parent.children) markWithin(child);
+  };
+  markWithin(root);
+}
+
 /**
  * Correct common legacy-detector mis-classifications revealed by real-image
  * validation:
  *   - a `table` whose children are mostly cards is a card list, not a table;
- *   - a leaf `container`/`unknown` with a saturated background fill and a
- *     small footprint is a button (the legacy detector often emits buttons as
- *     generic containers).
+ *   - a compact saturated leaf is a button. Fixed-size generic candidates are
+ *     retained for compatibility; OCR action text enables page-relative
+ *     candidates such as a full-width mobile footer CTA;
+ *   - a text-bearing legacy region whose bbox tightly matches its OCR bbox is
+ *     a text node, not a structural navbar/footer/card.
  * Runs before the promotion passes so the corrected types are stable.
  */
-function correctMisclassified(ast: SemanticAST): void {
+function correctMisclassified(
+  ast: SemanticAST,
+  ocr: VisionOcrItem[] | undefined,
+  detectComponent: boolean,
+): void {
+  const page = ast.root.bbox;
   const walk = (node: ASTNode): void => {
-    if (node.type === 'table') {
+    if (detectComponent && node.type === 'table') {
       const cards = node.children.filter((c) => c.type === 'card');
       if (cards.length >= 2) {
         node.type = 'list';
         for (const c of cards) c.type = 'listItem';
       }
     }
-    if ((node.type === 'container' || node.type === 'unknown') && node.children.length === 0) {
+    if (detectComponent && BUTTON_REGION_TYPES.has(node.type) && node.children.length === 0) {
+      const generic = node.type === 'container' || node.type === 'unknown';
+      const sizeKind = buttonSizeKind(node, page);
       if (
-        node.bbox.w < BUTTON_MAX_W &&
-        node.bbox.h < BUTTON_MAX_H &&
         styleBgSaturation(node) > BUTTON_MIN_BG_SAT
+        && sizeKind !== null
+        && ((sizeKind === 'absolute' && generic) || (sizeKind === 'relative' && isActionText(node)))
       ) {
         node.type = 'button';
       }
+    }
+    if (
+      node.children.length === 0
+      && TEXT_REGION_TYPES.has(node.type)
+      && hasMatchingTightOcr(node, ocr)
+    ) {
+      node.type = 'text';
     }
     for (const c of node.children) walk(c);
   };
@@ -467,10 +650,21 @@ function pruneOutOfBounds(ast: SemanticAST): void {
   prune(ast.root);
 }
 
-export function enrichNodeTypes(ast: SemanticAST, ocr?: VisionOcrItem[]): void {
-  correctMisclassified(ast);
-  enrich(ast.root);
+export interface EnrichNodeTypeOptions {
+  detectComponent?: boolean;
+}
+
+export function enrichNodeTypes(
+  ast: SemanticAST,
+  ocr?: VisionOcrItem[],
+  options?: EnrichNodeTypeOptions,
+): void {
+  const detectComponent = options?.detectComponent !== false;
+  correctMisclassified(ast, ocr, detectComponent);
+  if (detectComponent) enrich(ast.root);
   hierarchizeText(ast);
-  enrichExtra(ast.root, ocr);
+  promoteTopTitle(ast);
+  markSemanticLabels(ast);
+  enrichExtra(ast.root, ocr, detectComponent);
   pruneOutOfBounds(ast);
 }

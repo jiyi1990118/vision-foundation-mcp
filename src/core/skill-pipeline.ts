@@ -418,6 +418,18 @@ interface UiLayout {
   footerActions: string[];
 }
 
+export interface ResolvedResultCategory {
+  category: string;
+  confidence: number;
+  originalCategory?: string;
+  originalConfidence?: number;
+  ocrLines: string[];
+  ocrItems: OcrItem[];
+  ocrText?: string;
+  uiEvidence?: UiEvidence;
+  layout?: UiLayout;
+}
+
 export interface ComposeResultOptions {
   annotations?: unknown;
   target?: TargetQuery | undefined;
@@ -598,31 +610,6 @@ export function composeResult(
   const skillsRan = Object.keys(results);
   const skillsSucceeded = skillsRan.filter((s) => results[s]!.success);
 
-  const ocrResult = results['ocr'];
-  const ocrLines = ocrResult?.success && ocrResult.data ? extractOcrLines(ocrResult.data) : [];
-  const ocrItems = ocrResult?.success && ocrResult.data ? extractOcrItems(ocrResult.data) : [];
-  const ocrText = ocrLines.length > 0 ? ocrLines.join('\n') : undefined;
-  const uiEvidence = buildUiEvidence(ocrLines);
-  const layout = buildUiLayout(ocrItems);
-
-  // Get category from classify if available
-  let category = 'unknown';
-  let confidence = 0;
-  const classifyResult = results['classify'];
-  let originalCategory: string | undefined;
-  let originalConfidence: number | undefined;
-  if (classifyResult?.success && classifyResult.data) {
-    const data = classifyResult.data as Record<string, unknown>;
-    if (data.category) {
-      category = String(data.category);
-      originalCategory = category;
-    }
-    if (data.confidence) {
-      confidence = Number(data.confidence);
-      originalConfidence = confidence;
-    }
-  }
-
   // Get summary text
   let summary = '';
   const summaryResult = results['summary'];
@@ -631,39 +618,17 @@ export function composeResult(
     summary = String(data.description ?? data.summary ?? '');
   }
 
-  // Post-classify heuristic: Apply category exclusion rules
-  // When the classifier's category conflicts with strong summary signals,
-  // correct the category using the exclusion rules and dynamic confidence.
-  const evidenceText = [summary, ocrText].filter((text): text is string => Boolean(text)).join('\n');
-  const exclusionList = CATEGORY_EXCLUSION_RULES[category];
-  if (uiEvidence && ['document', 'other', 'unknown', 'screenshot'].includes(category)) {
-    category = 'ui';
-    confidence = Math.max(confidence, 0.75);
-  } else if (exclusionList && evidenceText.length > 0) {
-    const inference = inferCategoryFromSummary(evidenceText);
-    if (inference && exclusionList.includes(inference.category)) {
-      logger.info('Post-classify heuristic corrected category', {
-        from: category,
-        to: inference.category,
-        matchCount: inference.matchCount,
-        priorityIndex: inference.priorityIndex,
-        dynamicConfidence: inference.confidence,
-        summaryPreview: evidenceText.slice(0, 80),
-        exclusionRule: `${category} -> [${exclusionList.join(', ')}]`,
-      });
-      category = inference.category;
-      confidence = inference.confidence; // Use dynamic confidence
-    } else if (inference?.category === category) {
-      // Summary confirms the model's category — keep, but flag if confidence was default
-      if (confidence === 0.7) confidence = 0.65;
-    } else {
-      // No strong signal from summary — model may have defaulted; lower confidence
-      if (confidence >= 0.7) confidence = 0.5;
-    }
-  } else if (category === 'document' && summary.length === 0) {
-    // Special case: no summary content for "document" — likely model default
-    if (confidence >= 0.7) confidence = 0.5;
-  }
+  const resolved = resolveResultCategory(results, summary);
+  const {
+    category,
+    confidence,
+    originalCategory,
+    originalConfidence,
+    ocrItems,
+    ocrText,
+    uiEvidence,
+    layout,
+  } = resolved;
 
   const ocrDrivenSummary = uiEvidence ? buildOcrDrivenUiSummary(uiEvidence) : undefined;
   if (ocrDrivenSummary && shouldPreferOcrDrivenSummary(summary, ocrText)) {
@@ -708,7 +673,9 @@ export function composeResult(
   if (uiEvidence) {
     resultMap.ui = uiEvidence;
   }
-  if (layout) {
+  // Preserve an explicitly executed `layout` skill result. The OCR-derived
+  // layout uses the same legacy key only when no skill owns it.
+  if (layout && !Object.hasOwn(resultMap, 'layout')) {
     resultMap.layout = layout;
   }
   if (options.annotations) {
@@ -762,6 +729,75 @@ export function composeResult(
   }
 
   return visionResult;
+}
+
+/** Resolve the category exactly as composeResult will publish it. */
+export function resolveResultCategory(
+  results: SkillResultSet,
+  summary = '',
+): ResolvedResultCategory {
+  const ocrResult = results['ocr'];
+  const ocrLines = ocrResult?.success && ocrResult.data ? extractOcrLines(ocrResult.data) : [];
+  const ocrItems = ocrResult?.success && ocrResult.data ? extractOcrItems(ocrResult.data) : [];
+  const ocrText = ocrLines.length > 0 ? ocrLines.join('\n') : undefined;
+  const uiEvidence = buildUiEvidence(ocrLines);
+  const layout = buildUiLayout(ocrItems);
+  let category = 'unknown';
+  let confidence = 0;
+  const classifyResult = results['classify'];
+  let originalCategory: string | undefined;
+  let originalConfidence: number | undefined;
+  if (classifyResult?.success && classifyResult.data) {
+    const data = classifyResult.data as Record<string, unknown>;
+    if (data.category) {
+      category = String(data.category);
+      originalCategory = category;
+    }
+    if (data.confidence) {
+      confidence = Number(data.confidence);
+      originalConfidence = confidence;
+    }
+  }
+
+  const evidenceText = [summary, ocrText].filter((text): text is string => Boolean(text)).join('\n');
+  const exclusionList = CATEGORY_EXCLUSION_RULES[category];
+  if (uiEvidence && ['document', 'other', 'unknown', 'screenshot'].includes(category)) {
+    category = 'ui';
+    confidence = Math.max(confidence, 0.75);
+  } else if (exclusionList && evidenceText.length > 0) {
+    const inference = inferCategoryFromSummary(evidenceText);
+    if (inference && exclusionList.includes(inference.category)) {
+      logger.info('Post-classify heuristic corrected category', {
+        from: category,
+        to: inference.category,
+        matchCount: inference.matchCount,
+        priorityIndex: inference.priorityIndex,
+        dynamicConfidence: inference.confidence,
+        summaryPreview: evidenceText.slice(0, 80),
+        exclusionRule: `${category} -> [${exclusionList.join(', ')}]`,
+      });
+      category = inference.category;
+      confidence = inference.confidence;
+    } else if (inference?.category === category) {
+      if (confidence === 0.7) confidence = 0.65;
+    } else if (confidence >= 0.7) {
+      confidence = 0.5;
+    }
+  } else if (category === 'document' && summary.length === 0 && confidence >= 0.7) {
+    confidence = 0.5;
+  }
+
+  return {
+    category,
+    confidence,
+    ...(originalCategory !== undefined ? { originalCategory } : {}),
+    ...(originalConfidence !== undefined ? { originalConfidence } : {}),
+    ocrLines,
+    ocrItems,
+    ...(ocrText !== undefined ? { ocrText } : {}),
+    ...(uiEvidence !== undefined ? { uiEvidence } : {}),
+    ...(layout !== undefined ? { layout } : {}),
+  };
 }
 
 function extractOcrText(data: unknown): string | undefined {

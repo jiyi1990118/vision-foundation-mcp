@@ -9,7 +9,7 @@
  */
 import type { ImageInput } from '../../types/domain.js';
 import type { DesignExtraction } from '../../core/extractors/design-extractor.js';
-import { extractUiLayout } from '../../core/extractors/ui-layout-extractor.js';
+import { extractUiLayoutForAnalysis } from '../adapters/index.js';
 import type { OcrItem } from '../../core/key-content-extractor.js';
 import { toLayoutIR } from '../ir/mappers.js';
 import type { LayoutIR, VisionDetection, VisionOcrItem } from '../ir/types.js';
@@ -57,7 +57,7 @@ export class UiLayoutLayoutEngine implements LayoutEngine {
       throw new Error('UiLayoutLayoutEngine.build requires an image to run extractUiLayout');
     }
     const ocrItems = visionOcrItemsToOcrItems(ocr);
-    const extraction = await extractUiLayout(image, ocrItems, undefined);
+    const extraction = await extractUiLayoutForAnalysis(image, ocrItems, undefined);
     if (this.designProvider) {
       const design = await this.designProvider(image);
       return design ? toLayoutIR(extraction, design) : toLayoutIR(extraction);

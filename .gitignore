@@ -15,6 +15,8 @@ bin/
 *.tgz
 .worktrees/
 .codegraph/
+.superpowers/
+skills-lock.json
 
 # local tool state
 .claude/

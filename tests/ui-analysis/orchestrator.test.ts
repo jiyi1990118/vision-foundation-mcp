@@ -4,6 +4,7 @@ import { runUiAnalysis } from '../../src/ui-analysis/orchestrator.js';
 import type { UiLayoutExtraction } from '../../src/core/extractors/ui-layout-extractor.js';
 import type { ImageInput } from '../../src/types/domain.js';
 import type { VisionProvider } from '../../src/providers/types.js';
+import type { ASTNode, CodegenNode } from '../../src/ui-analysis/ir/types.js';
 
 async function makeImage(): Promise<ImageInput> {
   const svg = `<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
@@ -36,6 +37,57 @@ function makeLayout(): UiLayoutExtraction {
   };
 }
 
+function collectNodeTypes(node: ASTNode | CodegenNode, out = new Map<string, string>()): Map<string, string> {
+  out.set(node.id, node.type);
+  for (const child of node.children) collectNodeTypes(child, out);
+  return out;
+}
+
+function containsText(node: CodegenNode, text: string): boolean {
+  return node.text === text || node.children.some((child) => containsText(child, text));
+}
+
+function makeCardListLayout(): UiLayoutExtraction {
+  return {
+    structure: {
+      pageType: 'list',
+      layoutType: 'stack',
+      regions: [
+        { id: 'table', type: 'table', bbox: { x: 0, y: 0, w: 300, h: 300 }, relativeArea: 1, children: [] },
+        { id: 'card-1', type: 'card', bbox: { x: 10, y: 10, w: 280, h: 80 }, relativeArea: 0.25, children: [] },
+        { id: 'card-2', type: 'card', bbox: { x: 10, y: 110, w: 280, h: 80 }, relativeArea: 0.25, children: [] },
+        { id: 'card-3', type: 'card', bbox: { x: 10, y: 210, w: 280, h: 80 }, relativeArea: 0.25, children: [] },
+      ],
+    },
+    components: [],
+    texts: [],
+    spacing: { averageGap: 20, scale: 'spacious', verticalGaps: [20, 20], horizontalGaps: [] },
+    mediaAreas: [],
+    summary: '',
+  };
+}
+
+function makePopulatedDrawerLayout(): UiLayoutExtraction {
+  return {
+    structure: {
+      pageType: 'navigation',
+      layoutType: 'sidebar',
+      regions: [
+        { id: 'drawer', type: 'content', bbox: { x: 0, y: 0, w: 100, h: 400 }, relativeArea: 0.33, children: [] },
+        { id: 'main', type: 'main', bbox: { x: 100, y: 0, w: 200, h: 400 }, relativeArea: 0.67, children: [] },
+      ],
+    },
+    components: [],
+    texts: [
+      { text: '菜单一', bbox: { x: 10, y: 30, w: 60, h: 20 }, estimatedLevel: 'body' },
+      { text: '菜单二', bbox: { x: 10, y: 70, w: 60, h: 20 }, estimatedLevel: 'body' },
+    ],
+    spacing: { averageGap: 20, scale: 'spacious', verticalGaps: [20], horizontalGaps: [] },
+    mediaAreas: [],
+    summary: '',
+  };
+}
+
 const mockProvider: VisionProvider = {
   name: 'mock',
   runtime: 'mock',
@@ -59,6 +111,7 @@ describe('runUiAnalysis orchestrator (S22)', () => {
 
     expect(result.ui).toBeDefined();
     expect(result.ui!.root.type).toBe('page');
+    expect(result.ui!.root.bbox).toEqual({ x: 0, y: 0, w: 300, h: 200 });
     expect(result.uiSemantics).toBeDefined();
     expect(result.codegenIr).toBeDefined();
     expect(result.imageContents).toBeDefined();
@@ -69,6 +122,27 @@ describe('runUiAnalysis orchestrator (S22)', () => {
     const header = result.ui!.root.children[0]!;
     expect(header.props.style).toBeDefined();
     expect(header.props.bgColor).toBe('#1677ff');
+  });
+
+  it('rebuilds codegenIr from the final enriched AST', async () => {
+    const result = await runUiAnalysis({
+      uiLayoutExtraction: makeCardListLayout(),
+      options: { exportCodegen: true },
+    });
+
+    const uiTypes = collectNodeTypes(result.ui!.root);
+    const codegenTypes = collectNodeTypes(result.codegenIr!.root);
+    expect(codegenTypes).toEqual(uiTypes);
+    expect([...uiTypes.values()]).toContain('list');
+    expect([...uiTypes.values()]).toContain('listItem');
+
+    const ids = new Set(uiTypes.keys());
+    for (const constraint of result.codegenIr!.constraints) expect(ids.has(constraint.targetId)).toBe(true);
+    for (const repeat of result.codegenIr!.repeats) {
+      expect(ids.has(repeat.targetId)).toBe(true);
+      if (repeat.templateId) expect(ids.has(repeat.templateId)).toBe(true);
+    }
+    for (const slot of result.codegenIr!.slots) expect(ids.has(slot.id)).toBe(true);
   });
 
   it('describes image contents when useLlm is true', async () => {
@@ -94,6 +168,49 @@ describe('runUiAnalysis orchestrator (S22)', () => {
 
     expect(result.ui).toBeUndefined();
     expect(result.codegenIr).toBeDefined();
+    expect(result.codegenIr!.root.bbox).toEqual({ x: 0, y: 0, w: 300, h: 200 });
+    expect(containsText(result.codegenIr!.root, '保存')).toBe(true);
+  });
+
+  it('rebuilds enriched exports even when the public tree is disabled', async () => {
+    const image = await makeImage();
+    const result = await runUiAnalysis({
+      uiLayoutExtraction: makeCardListLayout(),
+      image,
+      options: { buildTree: false, exportCodegen: true },
+    });
+
+    expect(result.ui).toBeUndefined();
+    expect([...collectNodeTypes(result.codegenIr!.root).values()]).toContain('list');
+    expect(result.codegenIr!.root.props.style).toBeDefined();
+  });
+
+  it('validates explicitly requested exports when strict mode keeps the AST private', async () => {
+    const result = await runUiAnalysis({
+      uiLayoutExtraction: makeLayout(),
+      options: { buildTree: false, exportCodegen: true, strictMode: true },
+    });
+    expect(result.ui).toBeUndefined();
+    expect(result.codegenIr).toBeDefined();
+  });
+
+  it('fails strict mode when a private AST cannot produce the requested export', async () => {
+    const malformed = makeLayout() as unknown as UiLayoutExtraction & {
+      structure: { regions: undefined };
+    };
+    malformed.structure.regions = undefined;
+
+    await expect(runUiAnalysis({
+      uiLayoutExtraction: malformed,
+      options: { buildTree: false, exportCodegen: true, strictMode: true },
+    })).rejects.toThrow(/codegen/i);
+  });
+
+  it('rejects strict mode with no public tree or explicit export to validate', async () => {
+    await expect(runUiAnalysis({
+      uiLayoutExtraction: makeLayout(),
+      options: { buildTree: false, strictMode: true },
+    })).rejects.toThrow(/export|buildTree/i);
   });
 
   it('degrades gracefully without an image (no styles, still produces ast)', async () => {
@@ -105,5 +222,94 @@ describe('runUiAnalysis orchestrator (S22)', () => {
     expect(result.ui).toBeDefined();
     expect(result.ui!.root.children[0]!.props.style).toBeUndefined();
     expect(result.uiReconstruction).toBeDefined();
+  });
+
+  it('collects skipped enrichment stages into uiReconstruction.diagnostics', async () => {
+    const badImage: ImageInput = {
+      buffer: Buffer.from('not-an-image'),
+      mimeType: 'image/png',
+      source: 'bad',
+      size: 11,
+    };
+    const result = await runUiAnalysis({
+      uiLayoutExtraction: makeLayout(),
+      image: badImage,
+      options: { buildTree: true },
+    });
+
+    expect(result.uiReconstruction).toBeDefined();
+    expect(result.uiReconstruction!.diagnostics).toBeDefined();
+    const skipped = result.uiReconstruction!.diagnostics!.skipped;
+    expect(skipped).toContain('mediaAreaFilter');
+    expect(skipped).toContain('styleExtraction');
+    expect(skipped).toContain('overlayDetection');
+  });
+
+  it('trims uiReconstruction to a root-only tree when summaryOnly is true', async () => {
+    const image = await makeImage();
+    const result = await runUiAnalysis({
+      uiLayoutExtraction: makeLayout(),
+      image,
+      options: { buildTree: true, summaryOnly: true },
+    });
+
+    expect(result.uiReconstruction).toBeDefined();
+    const recon = result.uiReconstruction!;
+    expect(recon.tree.children).toEqual([]);
+    expect(recon.constraints).toEqual([]);
+    expect(recon.images).toEqual([]);
+    expect(recon.repeats).toBeUndefined();
+    expect(recon.slots).toBeUndefined();
+    expect(recon.responsive).toBeUndefined();
+    expect(recon.stats.nodeCount).toBeGreaterThan(1);
+    expect(result.ui).toBeUndefined();
+    expect(result.uiSemantics).toBeUndefined();
+    expect(result.codegenIr).toBeUndefined();
+    expect(result.figmaJson).toBeUndefined();
+    expect(result.uiMarkdown).toBeUndefined();
+    expect(result.imageContents).toBeUndefined();
+  });
+
+  it('throws when strict mode cannot build a reconstruction', async () => {
+    const malformed = makeLayout() as unknown as UiLayoutExtraction & {
+      structure: { regions: undefined };
+    };
+    malformed.structure.regions = undefined;
+
+    await expect(runUiAnalysis({
+      uiLayoutExtraction: malformed,
+      options: { strictMode: true },
+    })).rejects.toThrow(/uiReconstruction/);
+  });
+
+  it('stops immediately when the request is already aborted', async () => {
+    const controller = new AbortController();
+    controller.abort();
+
+    await expect(runUiAnalysis({
+      uiLayoutExtraction: makeLayout(),
+      signal: controller.signal,
+    })).rejects.toMatchObject({ name: 'AbortError' });
+  });
+
+  it('does not rewrite an ordinary populated sidebar partition as a drawer', async () => {
+    const result = await runUiAnalysis({ uiLayoutExtraction: makePopulatedDrawerLayout() });
+    const sidebar = result.ui!.root.children.find((node) => node.props.regionId === 'drawer');
+    expect(sidebar?.type).not.toBe('drawer');
+    expect(sidebar?.props.overlay).toBeUndefined();
+    expect(sidebar?.children).toHaveLength(2);
+  });
+
+  it('does not infer overlays when component detection is disabled', async () => {
+    const layout = makePopulatedDrawerLayout();
+    layout.structure.layoutType = 'stack';
+    layout.structure.regions[1]!.bbox = { x: 0, y: 0, w: 300, h: 400 };
+    const result = await runUiAnalysis({
+      uiLayoutExtraction: layout,
+      options: { detectComponent: false },
+    });
+    const panel = result.ui!.root.children.find((node) => node.props.regionId === 'drawer');
+    expect(panel?.type).not.toBe('drawer');
+    expect(panel?.props.overlay).toBeUndefined();
   });
 });

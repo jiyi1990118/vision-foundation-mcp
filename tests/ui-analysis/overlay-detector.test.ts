@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import sharp from 'sharp';
 import { detectOverlays, applyOverlays } from '../../src/ui-analysis/overlay/index.js';
+import { buildSemanticAst } from '../../src/ui-analysis/ast/ast-builder.js';
 import type { SemanticAST, ASTNode, BBox } from '../../src/ui-analysis/ir/types.js';
+import type { LayoutIR } from '../../src/ui-analysis/ir/types.js';
 import type { ImageInput } from '../../src/types/domain.js';
 
 async function svgToImage(svg: string): Promise<ImageInput> {
@@ -55,44 +57,55 @@ describe('overlay-detector / detectOverlays', () => {
     expect(card.props.mask).toBeDefined();
   });
 
-  it('detects a drawer (left edge, tall, narrow) without reporting a dialog', async () => {
+  it('detects an overlapping drawer (left edge, tall, narrow) without reporting a dialog', async () => {
     const svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
       <rect x="0" y="0" width="${W}" height="${H}" fill="#ffffff"/>
       <rect x="0" y="0" width="100" height="${H}" fill="#cccccc"/>
     </svg>`;
     const image = await svgToImage(svg);
-    const ast = astWithPage(box(0, 0, W, H), [leaf('panel', 'card', box(0, 0, 100, H))]);
+    const ast = astWithPage(box(0, 0, W, H), [
+      leaf('content', 'section', box(0, 0, W, H)),
+      leaf('panel', 'card', box(0, 0, 100, H)),
+    ]);
 
-    const overlays = await detectOverlays(image, ast);
+    const overlays = await detectOverlays(image, ast, undefined, [
+      { id: 'content-region', type: 'main', bbox: box(0, 0, W, H), relativeArea: 1, children: [] },
+      { id: 'panel-region', type: 'card', bbox: box(0, 0, 100, H), relativeArea: 1 / 3, children: [] },
+    ]);
 
-    expect(overlays.length).toBe(1);
-    const o = overlays[0]!;
+    const o = overlays.find((overlay) => overlay.nodeId === 'panel')!;
     expect(o.overlayType).toBe('drawer');
     expect(o.zIndex).toBe(1000);
     expect(o.mask).toBeUndefined();
 
     applyOverlays(ast, overlays);
-    expect(ast.root.children[0]!.type).toBe('drawer');
-    expect(ast.root.children[0]!.props.overlay).toBe(true);
+    expect(ast.root.children[1]!.type).toBe('drawer');
+    expect(ast.root.children[1]!.props.overlay).toBe(true);
   });
 
-  it('detects a bottomSheet (bottom edge, wide, short)', async () => {
+  it('detects an overlapping bottomSheet (bottom edge, wide, short)', async () => {
     const svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
       <rect x="0" y="0" width="${W}" height="${H}" fill="#ffffff"/>
       <rect x="0" y="300" width="${W}" height="100" fill="#cccccc"/>
     </svg>`;
     const image = await svgToImage(svg);
-    const ast = astWithPage(box(0, 0, W, H), [leaf('sheet', 'card', box(0, 300, W, 100))]);
+    const ast = astWithPage(box(0, 0, W, H), [
+      leaf('content', 'section', box(0, 0, W, H)),
+      leaf('sheet', 'card', box(0, 300, W, 100)),
+    ]);
 
-    const overlays = await detectOverlays(image, ast);
+    const overlays = await detectOverlays(image, ast, undefined, [
+      { id: 'content-region', type: 'main', bbox: box(0, 0, W, H), relativeArea: 1, children: [] },
+      { id: 'sheet-region', type: 'card', bbox: box(0, 300, W, 100), relativeArea: 0.25, children: [] },
+    ]);
 
-    expect(overlays.length).toBe(1);
-    expect(overlays[0]!.overlayType).toBe('bottomSheet');
-    expect(overlays[0]!.zIndex).toBe(1000);
-    expect(overlays[0]!.mask).toBeUndefined();
+    const sheet = overlays.find((overlay) => overlay.nodeId === 'sheet')!;
+    expect(sheet.overlayType).toBe('bottomSheet');
+    expect(sheet.zIndex).toBe(1000);
+    expect(sheet.mask).toBeUndefined();
 
     applyOverlays(ast, overlays);
-    expect(ast.root.children[0]!.type).toBe('bottomSheet');
+    expect(ast.root.children[1]!.type).toBe('bottomSheet');
   });
 
   it('does not report a dialog for a plain centered card with no dim mask', async () => {
@@ -112,16 +125,71 @@ describe('overlay-detector / detectOverlays', () => {
     expect(ast.root.children[0]!.props.overlay).toBeUndefined();
   });
 
-  it('runs geometry-only drawer detection when no image is supplied', async () => {
-    const ast = astWithPage(box(0, 0, W, H), [leaf('panel', 'container', box(0, 0, 100, H))]);
+  it('runs geometry-only drawer detection when it overlaps underlying content', async () => {
+    const ast = astWithPage(box(0, 0, W, H), [
+      leaf('content', 'section', box(0, 0, W, H)),
+      leaf('panel', 'container', box(0, 0, 100, H)),
+    ]);
 
-    const overlays = await detectOverlays(undefined, ast);
+    const overlays = await detectOverlays(undefined, ast, undefined, [
+      { id: 'content-region', type: 'main', bbox: box(0, 0, W, H), relativeArea: 1, children: [] },
+      { id: 'panel-region', type: 'content', bbox: box(0, 0, 100, H), relativeArea: 1 / 3, children: [] },
+    ]);
 
-    expect(overlays.length).toBe(1);
-    expect(overlays[0]!.overlayType).toBe('drawer');
+    expect(overlays.find((overlay) => overlay.nodeId === 'panel')?.overlayType).toBe('drawer');
 
     applyOverlays(ast, overlays);
-    expect(ast.root.children[0]!.type).toBe('drawer');
-    expect(ast.root.children[0]!.props.zIndex).toBe(1000);
+    expect(ast.root.children[1]!.type).toBe('drawer');
+    expect(ast.root.children[1]!.props.zIndex).toBe(1000);
+  });
+
+  it('is invariant when a geometry-only page is translated away from the origin', async () => {
+    const ast = astWithPage(box(100, 50, W, H), [
+      leaf('content', 'section', box(100, 50, W, H)),
+      leaf('panel', 'container', box(100, 50, 100, H)),
+    ]);
+    const overlays = await detectOverlays(undefined, ast, undefined, [
+      { id: 'content-region', type: 'main', bbox: box(100, 50, W, H), relativeArea: 1, children: [] },
+      { id: 'panel-region', type: 'content', bbox: box(100, 50, 100, H), relativeArea: 1 / 3, children: [] },
+    ]);
+    expect(overlays).toContainEqual({ nodeId: 'panel', overlayType: 'drawer', zIndex: 1000 });
+  });
+
+  it('does not classify adjacent static columns as drawers', async () => {
+    const ast = astWithPage(box(0, 0, W, H), [
+      leaf('sidebar', 'container', box(0, 0, 100, H)),
+      leaf('main', 'section', box(100, 0, 200, H)),
+    ]);
+    ast.root.props.layoutType = 'sidebar';
+
+    expect(await detectOverlays(undefined, ast)).toEqual([]);
+  });
+
+  it('does not count an AST ancestor as an independent underlying layer', async () => {
+    const parent = leaf('parent', 'section', box(0, 0, W, H));
+    parent.children.push(leaf('nested-panel', 'container', box(0, 0, 100, H)));
+    const ast = astWithPage(box(0, 0, W, H), [parent]);
+
+    expect(await detectOverlays(undefined, ast)).toEqual([]);
+  });
+
+  it('detects an extracted sidebar overlay from flat-region overlap evidence', async () => {
+    const layout: LayoutIR = {
+      layoutType: 'stack',
+      spacing: { averageGap: 0, scale: 'compact', verticalGaps: [], horizontalGaps: [] },
+      regions: [
+        { id: 'main', type: 'main', bbox: box(0, 0, W, H), relativeArea: 1, children: [] },
+        { id: 'drawer', type: 'sidebar', bbox: box(0, 0, 100, H), relativeArea: 1 / 3, children: [] },
+      ],
+    };
+    const ast = buildSemanticAst(layout, undefined, undefined, undefined, box(0, 0, W, H));
+    const drawer = [...(function* walk(node: ASTNode): IterableIterator<ASTNode> {
+      yield node;
+      for (const child of node.children) yield* walk(child);
+    })(ast.root)].find((node) => node.props.regionId === 'drawer');
+    expect(drawer?.type).toBe('sidebar');
+
+    const overlays = await detectOverlays(undefined, ast, undefined, layout.regions);
+    expect(overlays).toContainEqual({ nodeId: drawer!.id, overlayType: 'drawer', zIndex: 1000 });
   });
 });

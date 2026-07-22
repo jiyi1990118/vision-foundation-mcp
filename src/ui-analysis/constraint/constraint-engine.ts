@@ -59,9 +59,22 @@ function inferGap(children: ASTNode[], direction: 'row' | 'column' | 'grid'): nu
     // grid: a single `gap` is inherently lossy (grid needs separate row/column
     // gaps). Emit the vertical (row) gap only as the primary spacing, never the
     // mixed x+y median which produces a meaningless value.
-    sorted = [...children].sort((a, b) => a.bbox.y - b.bbox.y);
-    for (let i = 1; i < sorted.length; i++) {
-      gaps.push(sorted[i]!.bbox.y - (sorted[i - 1]!.bbox.y + sorted[i - 1]!.bbox.h));
+    sorted = [...children].sort((a, b) => a.bbox.y - b.bbox.y || a.bbox.x - b.bbox.x);
+    const rows: Array<{ top: number; bottom: number }> = [];
+    for (const child of sorted) {
+      const top = child.bbox.y;
+      const bottom = child.bbox.y + child.bbox.h;
+      const row = rows.find((candidate) => top < candidate.bottom && bottom > candidate.top);
+      if (row !== undefined) {
+        row.top = Math.min(row.top, top);
+        row.bottom = Math.max(row.bottom, bottom);
+      } else {
+        rows.push({ top, bottom });
+      }
+    }
+    rows.sort((a, b) => a.top - b.top);
+    for (let i = 1; i < rows.length; i++) {
+      gaps.push(rows[i]!.top - rows[i - 1]!.bottom);
     }
   }
   const positive = gaps.filter((g) => g > 0);

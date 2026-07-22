@@ -78,7 +78,7 @@ describe('backward-compat: S4 integration contract', () => {
   it('VisionResult index signature accepts ui / codegenIr / figmaJson / uiMarkdown keys', () => {
     const vr = makeVisionResult();
     vr.result.ui = { root: { id: 'p', type: 'page', bbox: { x: 0, y: 0, w: 0, h: 0 }, props: {}, children: [] }, version: '1.0.0' };
-    vr.result.codegenIr = { root: { id: 'p', type: 'page', props: {}, children: [] }, constraints: [], slots: [], repeats: [] };
+    vr.result.codegenIr = { root: { id: 'p', type: 'page', bbox: { x: 0, y: 0, w: 0, h: 0 }, props: {}, children: [] }, constraints: [], slots: [], repeats: [] };
     vr.result.figmaJson = { document: { id: 'p', name: 'page', type: 'FRAME', visible: true, absoluteBoundingBox: null, fills: [] }, version: '1.0.0' };
     vr.result.uiMarkdown = '# UI Semantic AST';
 

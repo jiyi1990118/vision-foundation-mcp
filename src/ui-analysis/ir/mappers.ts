@@ -23,6 +23,9 @@ export function toVisionIRFromLayout(ext: UiLayoutExtraction): VisionIR {
     type: c.type,
     bbox: c.bbox,
     score: 1,
+    ...(c.text.trim().length > 0 ? { text: c.text } : {}),
+    state: c.state,
+    variant: c.variant,
   }));
 
   const ocr = ext.texts.map((t) => ({

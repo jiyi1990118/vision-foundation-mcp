@@ -45,9 +45,8 @@ describe('image-describer', () => {
       makeContent(0, 'icon', { x: 10, y: 10, w: 40, h: 40 }),
       makeContent(1, 'image', { x: 60, y: 60, w: 80, h: 80 }),
     ];
-    const responses = ['蓝色搜索图标', '用户头像占位图'];
-    const provider = makeMockProvider(async () => ({
-      text: responses.shift() ?? '',
+    const provider = makeMockProvider(async (req) => ({
+      text: req.image.source === 'crop:0' ? '蓝色搜索图标' : '用户头像占位图',
       duration: 0,
     }));
 
@@ -102,6 +101,35 @@ describe('image-describer', () => {
     expect(contents[2]!.description).toBeUndefined();
   });
 
+  it('stops remaining batches when the signal aborts', async () => {
+    const image = await makeSolidImage(255, 255, 255);
+    const contents: ImageContentInfo[] = Array.from({ length: 4 }, (_, i) =>
+      makeContent(i, 'icon', { x: 10 + i * 30, y: 10, w: 20, h: 20 }),
+    );
+    const controller = new AbortController();
+    let callCount = 0;
+    const provider = makeMockProvider(async () => {
+      callCount++;
+      if (callCount >= 2) {
+        controller.abort();
+      }
+      return { text: '图标', duration: 0 };
+    });
+
+    await describeImageContents(
+      provider as unknown as VisionProvider,
+      image,
+      contents,
+      { concurrency: 2, signal: controller.signal },
+    );
+
+    expect(provider.infer.mock.calls).toHaveLength(2);
+    expect(contents[0]!.description).toBe('图标');
+    expect(contents[1]!.description).toBe('图标');
+    expect(contents[2]!.description).toBeUndefined();
+    expect(contents[3]!.description).toBeUndefined();
+  });
+
   it('loads the provider when not already loaded', async () => {
     const image = await makeSolidImage(255, 255, 255);
     const contents: ImageContentInfo[] = [makeContent(0, 'icon', { x: 10, y: 10, w: 40, h: 40 })];
@@ -112,5 +140,20 @@ describe('image-describer', () => {
 
     expect(provider.load).toHaveBeenCalledTimes(1);
     expect(contents[0]!.description).toBe('齿轮设置图标');
+  });
+
+  it('uses the canonical clipped crop instead of the original negative bbox', async () => {
+    const image = await makeSolidImage(255, 255, 255);
+    const contents: ImageContentInfo[] = [{
+      ...makeContent(0, 'icon', { x: -5, y: -3, w: 40, h: 40 }),
+      crop: { x: 0, y: 0, w: 35, h: 37 },
+    }];
+    let cropSize: { width?: number; height?: number } = {};
+    const provider = makeMockProvider(async (req) => {
+      cropSize = await sharp(req.image.buffer).metadata();
+      return { text: '图标', duration: 0 };
+    });
+    await describeImageContents(provider as unknown as VisionProvider, image, contents);
+    expect({ width: cropSize.width, height: cropSize.height }).toEqual({ width: 35, height: 37 });
   });
 });

@@ -83,6 +83,37 @@ describe('semantic page-type-engine', () => {
     expect(['table', 'list']).toContain(res.pageType);
     expect(res.confidence).toBeGreaterThan(0.5);
   });
+
+  it('does not classify an empty page as navigation from sparsity alone', () => {
+    const ast: SemanticAST = {
+      root: { id: 'page', type: 'page', bbox: { x: 0, y: 0, w: 300, h: 400 }, props: {}, children: [] },
+      version: '1.0.0',
+    };
+    expect(inferPageType({ ast, layout: layout(false, []) })).toEqual({
+      pageType: 'unknown', confidence: 0, signals: [],
+    });
+  });
+
+  it('does not classify two ordinary OCR labels as a list', () => {
+    const ast: SemanticAST = {
+      root: {
+        id: 'page',
+        type: 'page',
+        bbox: { x: 0, y: 0, w: 300, h: 400 },
+        props: {},
+        children: [
+          { id: 'a', type: 'text', bbox: { x: 10, y: 10, w: 80, h: 20 }, props: {}, text: 'Alpha', children: [] },
+          { id: 'b', type: 'text', bbox: { x: 10, y: 50, w: 80, h: 20 }, props: {}, text: 'Beta', children: [] },
+        ],
+      },
+      version: '1.0.0',
+    };
+    const ocr: VisionOcrItem[] = [
+      { text: 'Alpha', bbox: { x: 10, y: 10, w: 80, h: 20 }, confidence: 1 },
+      { text: 'Beta', bbox: { x: 10, y: 50, w: 80, h: 20 }, confidence: 1 },
+    ];
+    expect(inferPageType({ ast, layout: layout(false, []), ocr }).pageType).not.toBe('list');
+  });
 });
 
 describe('semantic variant-engine', () => {
@@ -124,6 +155,31 @@ describe('semantic variant-engine', () => {
     const variants = inferVariants(ast);
     const btn = variants.find((v) => v.nodeId === 'btn')!;
     expect(btn.variant).toBe('danger');
+    expect(btn.state).toBe('disabled');
+  });
+
+  it('uses sampled style and interactive state when direct props are absent', () => {
+    const ast: SemanticAST = {
+      root: {
+        id: 'page',
+        type: 'page',
+        bbox: { x: 0, y: 0, w: 200, h: 100 },
+        props: {},
+        children: [{
+          id: 'btn',
+          type: 'button',
+          bbox: { x: 50, y: 30, w: 100, h: 40 },
+          props: {
+            style: { backgroundColor: '#1677ff' },
+            interactive: { disabled: true },
+          },
+          children: [],
+        }],
+      },
+      version: '1.0.0',
+    };
+    const btn = inferVariants(ast, theme).find((variant) => variant.nodeId === 'btn')!;
+    expect(btn.variant).toBe('primary');
     expect(btn.state).toBe('disabled');
   });
 });

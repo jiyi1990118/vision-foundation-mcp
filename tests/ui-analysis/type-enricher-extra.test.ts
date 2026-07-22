@@ -156,4 +156,38 @@ describe('type-enricher / extra rules (Stream S26)', () => {
       expect(input.type).toBe('select');
     });
   });
+
+  describe('radio / checkbox (form controls)', () => {
+    it('promotes a small input near OCR "单选" to radio', () => {
+      const input = leaf('inp', 'input', box(10, 10, 20, 20));
+      const page = ast(container('root', 'page', box(0, 0, 200, 100), [input]));
+      const ocr: VisionOcrItem[] = [ocrItem('性别（单选）', box(10, 0, 100, 12))];
+      enrichNodeTypes(page, ocr);
+      expect(input.type).toBe('radio');
+    });
+
+    it('promotes a small input near OCR "多选" to checkbox', () => {
+      const input = leaf('inp', 'input', box(10, 10, 20, 20));
+      const page = ast(container('root', 'page', box(0, 0, 200, 100), [input]));
+      const ocr: VisionOcrItem[] = [ocrItem('兴趣（多选）', box(10, 0, 100, 12))];
+      enrichNodeTypes(page, ocr);
+      expect(input.type).toBe('checkbox');
+    });
+
+    it('leaves a text-field-sized input unchanged even with a radio keyword', () => {
+      const input = leaf('inp', 'input', box(10, 10, 120, 32));
+      const page = ast(container('root', 'page', box(0, 0, 200, 100), [input]));
+      const ocr: VisionOcrItem[] = [ocrItem('单选', box(10, 10, 120, 32))];
+      enrichNodeTypes(page, ocr);
+      expect(input.type).toBe('input');
+    });
+
+    it('leaves a small input unchanged when OCR has no form-control keyword', () => {
+      const input = leaf('inp', 'input', box(10, 10, 20, 20));
+      const page = ast(container('root', 'page', box(0, 0, 200, 100), [input]));
+      const ocr: VisionOcrItem[] = [ocrItem('保存', box(10, 10, 20, 20))];
+      enrichNodeTypes(page, ocr);
+      expect(input.type).toBe('input');
+    });
+  });
 });

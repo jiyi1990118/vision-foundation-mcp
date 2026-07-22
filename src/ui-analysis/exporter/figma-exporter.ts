@@ -134,6 +134,21 @@ function strProp(props: Record<string, unknown>, key: string): string | undefine
   return typeof v === 'string' && v.length > 0 ? v : undefined;
 }
 
+function styleProps(props: Record<string, unknown>): Record<string, unknown> {
+  const style = props['style'];
+  return typeof style === 'object' && style !== null && !Array.isArray(style)
+    ? style as Record<string, unknown>
+    : {};
+}
+
+function resolvedNumProp(props: Record<string, unknown>, key: string): number | undefined {
+  return numProp(props, key) ?? numProp(styleProps(props), key);
+}
+
+function resolvedStrProp(props: Record<string, unknown>, key: string): string | undefined {
+  return strProp(props, key) ?? strProp(styleProps(props), key);
+}
+
 // ── color normalization (0-1 float, Figma gotcha) ──
 
 function toFigmaColor(input: unknown): FigmaColor | null {
@@ -172,26 +187,34 @@ function toFigmaColor(input: unknown): FigmaColor | null {
   return null;
 }
 
-function resolveFills(props: Record<string, unknown>): FigmaPaint[] {
-  const c = toFigmaColor(props['color']) ?? toFigmaColor(props['background']);
+function resolveFills(props: Record<string, unknown>, textNode: boolean): FigmaPaint[] {
+  const sampled = styleProps(props);
+  const c = textNode
+    ? toFigmaColor(props['color'])
+      ?? toFigmaColor(sampled['textColor'])
+      ?? toFigmaColor(props['background'])
+      ?? toFigmaColor(sampled['backgroundColor'])
+    : toFigmaColor(props['color'])
+      ?? toFigmaColor(props['background'])
+      ?? toFigmaColor(sampled['backgroundColor']);
   if (!c) return [];
   return [{ type: 'SOLID', color: c, opacity: 1, visible: true }];
 }
 
 function buildTextStyle(props: Record<string, unknown>): FigmaTextStyle | null {
   const style: FigmaTextStyle = {};
-  const ff = strProp(props, 'fontFamily');
+  const ff = resolvedStrProp(props, 'fontFamily');
   if (ff) style.fontFamily = ff;
-  const fw = numProp(props, 'fontWeight');
+  const fw = resolvedNumProp(props, 'fontWeight');
   if (fw !== undefined) style.fontWeight = fw;
-  const fs = numProp(props, 'fontSize');
+  const fs = resolvedNumProp(props, 'fontSize');
   if (fs !== undefined) style.fontSize = fs;
-  const ta = strProp(props, 'textAlign');
+  const ta = resolvedStrProp(props, 'textAlign');
   if (ta === 'left') style.textAlignHorizontal = 'LEFT';
   else if (ta === 'center') style.textAlignHorizontal = 'CENTER';
   else if (ta === 'right') style.textAlignHorizontal = 'RIGHT';
   else if (ta === 'justify') style.textAlignHorizontal = 'JUSTIFIED';
-  const lh = numProp(props, 'lineHeight');
+  const lh = resolvedNumProp(props, 'lineHeight');
   if (lh !== undefined) style.lineHeightPx = lh;
   return Object.keys(style).length > 0 ? style : null;
 }
@@ -213,8 +236,8 @@ function layoutModeFromConstraint(ct: CodegenConstraint | undefined): FigmaLayou
 
 function toFigmaNode(node: ASTNode, cmap: Map<string, CodegenConstraint>): FigmaNode {
   const ftype = figmaNodeType(node.type);
-  const fills = resolveFills(node.props);
-  const cornerRadius = numProp(node.props, 'borderRadius') ?? numProp(node.props, 'radius');
+  const fills = resolveFills(node.props, ftype === 'TEXT');
+  const cornerRadius = resolvedNumProp(node.props, 'borderRadius') ?? resolvedNumProp(node.props, 'radius');
 
   const figma: FigmaNode = {
     id: node.id,

@@ -22,13 +22,14 @@ function hasSidebarRegion(layout: LayoutIR): boolean {
 }
 
 function hasSidebarAst(ast: SemanticAST): boolean {
+  const pageX = ast.root.bbox.x;
   const pageW = ast.root.bbox.w;
   if (pageW <= 0) return false;
   let hit = false;
   const walk = (node: ASTNode): void => {
     if (
       node.type === 'sidebar' &&
-      node.bbox.x < pageW * 0.3 &&
+      node.bbox.x - pageX < pageW * 0.3 &&
       node.bbox.w < pageW * 0.3
     ) {
       hit = true;

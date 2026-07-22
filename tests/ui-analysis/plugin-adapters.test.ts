@@ -86,6 +86,20 @@ describe('plugin adapters', () => {
     expect(parseOcrTextToItems(JSON.stringify({ texts: [] }))).toEqual([]);
   });
 
+  it('parseOcrTextToItems rejects non-finite, reversed and invalid-confidence facts', () => {
+    const payload = JSON.stringify({
+      texts: [
+        { text: 'infinite', position: '0,0,Infinity,10', confidence: 0.9 },
+        { text: 'reversed', position: '10,10,5,5', confidence: 0.9 },
+        { text: 'high', position: '0,0,10,10', confidence: 2 },
+        { text: 'ok', position: '0,0,10,10', confidence: 0.5 },
+      ],
+    });
+    expect(parseOcrTextToItems(payload)).toEqual([
+      { text: 'ok', bbox: { x: 0, y: 0, w: 10, h: 10 }, confidence: 0.5 },
+    ]);
+  });
+
   it('visionOcrItemsToOcrItems converts bbox to the legacy x1/y1/x2/y2 box', () => {
     const items = visionOcrItemsToOcrItems([
       { text: 'hi', bbox: { x: 5, y: 6, w: 10, h: 4 }, confidence: 0.9 },

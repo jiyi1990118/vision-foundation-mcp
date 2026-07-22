@@ -2,8 +2,8 @@
  * Codegen Exporter - converts a SemanticAST into a framework-agnostic
  * CodegenIR tree. Pure, deterministic, no IO, no model calls.
  *
- * The ASTNode tree is projected onto a CodegenNode tree (dropping bbox,
- * carrying id / type / props; children recursed). Layout constraints are
+ * The ASTNode tree is projected onto a CodegenNode tree, preserving factual
+ * geometry/text plus id / type / props; children are recursed. Constraints are
  * inferred by reusing the shared constraint engine. Responsive breakpoint
  * rules are inferred when a LayoutIR is supplied (else an empty array).
  * Repeated isomorphic sibling groups are detected by the repeat engine.
@@ -31,7 +31,9 @@ function toCodegenNode(node: ASTNode): CodegenNode {
   return {
     id: node.id,
     type: node.type,
+    bbox: node.bbox,
     props: node.props,
+    ...(node.text !== undefined ? { text: node.text } : {}),
     children: node.children.map(toCodegenNode),
   };
 }
@@ -43,12 +45,15 @@ function toCodegenNode(node: ASTNode): CodegenNode {
  * are always detected from the AST.
  */
 export function toCodegenIr(ast: SemanticAST, layout?: LayoutIR): CodegenIR {
+  const repeats = detectRepeats(ast);
   return {
     root: toCodegenNode(ast.root),
     constraints: inferConstraints(ast),
     responsive: layout ? inferResponsive(ast, layout) : [],
-    slots: [],
-    repeats: detectRepeats(ast),
+    slots: repeats
+      .filter((r) => r.templateId !== undefined && r.templateType !== undefined)
+      .map((r) => ({ id: r.templateId!, name: `${r.templateType!}Template` })),
+    repeats,
   };
 }
 

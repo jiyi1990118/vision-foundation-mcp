@@ -62,11 +62,13 @@ describe('ui-analysis e2e pipeline', () => {
     expect(match!.parent!.props.regionId).toBe('r-card');
   });
 
-  it('binds OCR text to the innermost enclosing container', () => {
+  it('keeps OCR as a text node under the innermost enclosing container', () => {
     const r = analyzeUiPipeline({ uiLayoutExtraction: layout });
     const match = findWithParent(r.ui!.root, (n) => n.props.regionId === 'r-card');
     expect(match).toBeDefined();
-    expect(match!.node.text).toBe('Card Heading');
+    const heading = match!.node.children.find((node) => node.text === 'Card Heading');
+    expect(heading?.type).toBe('text');
+    expect(heading?.bbox).toEqual({ x: 220, y: 140, w: 120, h: 24 });
   });
 
   it('produces codegenIr with constraints when exportCodegen is true', () => {

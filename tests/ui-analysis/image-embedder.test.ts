@@ -51,6 +51,18 @@ describe('image-embedder', () => {
     expect(contents[0]!.dataUrl).toMatch(/^data:image\/png;base64,/);
   });
 
+  it('uses the canonical clipped crop for a negative bbox', async () => {
+    const image = await makeSolidImage(0, 0, 0);
+    const contents: ImageContentInfo[] = [{
+      ...makeContent(0, 'icon', { x: -5, y: -3, w: 40, h: 40 }),
+      crop: { x: 0, y: 0, w: 35, h: 37 },
+    }];
+    await embedImageDataUrls(image, contents);
+    const encoded = contents[0]!.dataUrl!.slice('data:image/png;base64,'.length);
+    const metadata = await sharp(Buffer.from(encoded, 'base64')).metadata();
+    expect({ width: metadata.width, height: metadata.height }).toEqual({ width: 35, height: 37 });
+  });
+
   it('skips embedding entirely when maxBytes is too small for any crop', async () => {
     const image = await makeSolidImage(255, 255, 255);
     const contents: ImageContentInfo[] = [

@@ -8,7 +8,7 @@
  * @see src/ui-analysis/ir/mappers.ts
  */
 import type { ImageInput } from '../../types/domain.js';
-import { extractUiLayout } from '../../core/extractors/ui-layout-extractor.js';
+import { extractUiLayoutForAnalysis } from '../adapters/index.js';
 import { toVisionIRFromLayout } from '../ir/mappers.js';
 import type { VisionDetection } from '../ir/types.js';
 import type { Detector } from './types.js';
@@ -28,7 +28,7 @@ export class UiLayoutDetector implements Detector {
   }
 
   async detect(image: ImageInput): Promise<VisionDetection[]> {
-    const extraction = await extractUiLayout(image, undefined, undefined);
+    const extraction = await extractUiLayoutForAnalysis(image, undefined, undefined);
     const ir = toVisionIRFromLayout(extraction);
     return ir.detections;
   }

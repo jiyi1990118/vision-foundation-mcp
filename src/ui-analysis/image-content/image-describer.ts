@@ -55,15 +55,16 @@ export async function describeImageContents(
   const metaH = meta.height ?? 1;
 
   for (let i = 0; i < targets.length; i += concurrency) {
+    if (signal?.aborted) break;
     const batch = targets.slice(i, i + concurrency);
     await Promise.all(
       batch.map(async (c) => {
         try {
-          const left = Math.max(0, Math.floor(c.bbox.x));
-          const top = Math.max(0, Math.floor(c.bbox.y));
+          const left = Math.max(0, Math.floor(c.crop.x));
+          const top = Math.max(0, Math.floor(c.crop.y));
           if (left >= metaW || top >= metaH) return;
-          const width = Math.min(metaW - left, Math.max(1, Math.floor(c.bbox.w)));
-          const height = Math.min(metaH - top, Math.max(1, Math.floor(c.bbox.h)));
+          const width = Math.min(metaW - left, Math.max(1, Math.floor(c.crop.w)));
+          const height = Math.min(metaH - top, Math.max(1, Math.floor(c.crop.h)));
           const cropBuf = await sharp(image.buffer)
             .extract({ left, top, width, height })
             .png()

@@ -58,7 +58,9 @@
         "additionalProperties": false,
         "properties": {
           "targetId": { "type": "string" },
-          "count": { "type": "integer", "minimum": 0 }
+          "count": { "type": "integer", "minimum": 0 },
+          "templateId": { "type": "string" },
+          "templateType": { "$ref": "#/$defs/componentType" }
         }
       }
     }
@@ -77,16 +79,29 @@
     },
     "codegenNode": {
       "type": "object",
-      "required": ["id", "type", "props", "children"],
+      "required": ["id", "type", "bbox", "props", "children"],
       "additionalProperties": false,
       "properties": {
         "id": { "type": "string" },
         "type": { "$ref": "#/$defs/componentType" },
+        "bbox": { "$ref": "#/$defs/bbox" },
         "props": { "type": "object", "description": "Free-form renderable properties." },
+        "text": { "type": "string" },
         "children": {
           "type": "array",
           "items": { "$ref": "#/$defs/codegenNode" }
         }
+      }
+    },
+    "bbox": {
+      "type": "object",
+      "required": ["x", "y", "w", "h"],
+      "additionalProperties": false,
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "w": { "type": "number", "minimum": 0 },
+        "h": { "type": "number", "minimum": 0 }
       }
     }
   }

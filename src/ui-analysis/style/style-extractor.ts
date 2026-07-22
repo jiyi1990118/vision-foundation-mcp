@@ -22,9 +22,9 @@
  * @see src/core/extractors/design-extractor.ts           (sharp raw-buffer pattern)
  * @see src/core/annotation-detector.ts                   (resolveWithObject scan)
  */
-import sharp from 'sharp';
 import type { ImageInput } from '../../types/domain.js';
-import type { SemanticAST, ASTNode, NodeStyle, BBox } from '../ir/types.js';
+import type { SemanticAST, ASTNode, NodeStyle, BBox, DecodedImage, GradientInfo } from '../ir/types.js';
+import { decodeRawImage } from '../image-content/decode.js';
 
 interface RGB {
   r: number;
@@ -63,6 +63,37 @@ const SHADOW_LUM_DIFF = 25;
 const SHADOW_MIN_PIXELS = 8;
 const SHADOW_MIN_RATIO = 0.06;
 const SHADOW_ALPHA = 0.2;
+const MAX_AREA_SAMPLES = 4096;
+
+const GRADIENT_MIN_SIZE = 20;
+const GRADIENT_COLOR_THRESHOLD = 30;
+const GRADIENT_SAMPLE_POINTS = 5;
+
+export function computeSampleGrid(width: number, height: number): { columns: number; rows: number } {
+  const w = Math.max(0, Math.floor(width));
+  const h = Math.max(0, Math.floor(height));
+  if (w === 0 || h === 0) return { columns: 0, rows: 0 };
+  if (w * h <= MAX_AREA_SAMPLES) return { columns: w, rows: h };
+
+  const aspect = w / h;
+  let columns = Math.min(w, Math.max(1, Math.floor(Math.sqrt(MAX_AREA_SAMPLES * aspect))));
+  const rows = Math.min(h, Math.max(1, Math.floor(MAX_AREA_SAMPLES / columns)));
+  columns = Math.min(columns, Math.max(1, Math.floor(MAX_AREA_SAMPLES / rows)));
+  return { columns, rows };
+}
+
+function sampleRect(rect: Rect, visit: (x: number, y: number) => void): void {
+  const width = rect.x1 - rect.x0;
+  const height = rect.y1 - rect.y0;
+  const { columns, rows } = computeSampleGrid(width, height);
+  for (let row = 0; row < rows; row++) {
+    const y = rect.y0 + Math.min(height - 1, Math.floor((row + 0.5) * height / rows));
+    for (let column = 0; column < columns; column++) {
+      const x = rect.x0 + Math.min(width - 1, Math.floor((column + 0.5) * width / columns));
+      visit(x, y);
+    }
+  }
+}
 
 function rgbToHex(r: number, g: number, b: number): string {
   const h = (v: number) => v.toString(16).padStart(2, '0');
@@ -102,7 +133,7 @@ function clipRect(bbox: BBox, width: number, height: number): Rect | null {
   return { x0, y0, x1, y1 };
 }
 
-function accumulate(buckets: Map<string, Bucket>, data: Buffer, x: number, y: number, width: number, stride: number): void {
+function accumulate(buckets: Map<string, Bucket>, data: Buffer, x: number, y: number, width: number, stride: number): RGB {
   const idx = (y * width + x) * stride;
   const r = data[idx] ?? 0;
   const g = data[idx + 1] ?? 0;
@@ -117,17 +148,16 @@ function accumulate(buckets: Map<string, Bucket>, data: Buffer, x: number, y: nu
   bk.sumR += r;
   bk.sumG += g;
   bk.sumB += b;
+  return { r, g, b };
 }
 
 function dominantColor(data: Buffer, rect: Rect, width: number, stride: number): RGB | null {
   const buckets = new Map<string, Bucket>();
   let total = 0;
-  for (let y = rect.y0; y < rect.y1; y++) {
-    for (let x = rect.x0; x < rect.x1; x++) {
-      accumulate(buckets, data, x, y, width, stride);
-      total++;
-    }
-  }
+  sampleRect(rect, (x, y) => {
+    accumulate(buckets, data, x, y, width, stride);
+    total++;
+  });
   if (total === 0) return null;
   let best: Bucket | undefined;
   for (const bk of buckets.values()) {
@@ -161,16 +191,21 @@ function dominantEdgeColor(data: Buffer, rect: Rect, width: number, stride: numb
   return best === undefined ? null : bucketAverage(best);
 }
 
-function darkestSignificantColor(data: Buffer, rect: Rect, width: number, stride: number): RGB | null {
+function sampleTextAppearance(
+  data: Buffer,
+  rect: Rect,
+  width: number,
+  stride: number,
+): { color: RGB | null; darkDensity: number } {
   const buckets = new Map<string, Bucket>();
   let total = 0;
-  for (let y = rect.y0; y < rect.y1; y++) {
-    for (let x = rect.x0; x < rect.x1; x++) {
-      accumulate(buckets, data, x, y, width, stride);
-      total++;
-    }
-  }
-  if (total === 0) return null;
+  let dark = 0;
+  sampleRect(rect, (x, y) => {
+    const rgb = accumulate(buckets, data, x, y, width, stride);
+    if (luminance(rgb) < DARK_LUMINANCE) dark++;
+    total++;
+  });
+  if (total === 0) return { color: null, darkDensity: 0 };
   const minCount = Math.max(2, Math.floor(total * 0.02));
   let best: Bucket | undefined;
   let bestLum = Infinity;
@@ -191,23 +226,10 @@ function darkestSignificantColor(data: Buffer, rect: Rect, width: number, stride
       }
     }
   }
-  return best === undefined ? null : bucketAverage(best);
-}
-
-function darkPixelDensity(data: Buffer, rect: Rect, width: number, stride: number): number {
-  let dark = 0;
-  let total = 0;
-  for (let y = rect.y0; y < rect.y1; y++) {
-    for (let x = rect.x0; x < rect.x1; x++) {
-      const idx = (y * width + x) * stride;
-      const r = data[idx] ?? 0;
-      const g = data[idx + 1] ?? 0;
-      const b = data[idx + 2] ?? 0;
-      if (luminance({ r, g, b }) < DARK_LUMINANCE) dark++;
-      total++;
-    }
-  }
-  return total > 0 ? dark / total : 0;
+  return {
+    color: best === undefined ? null : bucketAverage(best),
+    darkDensity: dark / total,
+  };
 }
 
 interface CornerEdges {
@@ -357,6 +379,77 @@ function detectBoxShadow(pageBg: RGB | null, ring: RGB[]): string | null {
   return `0 2px 8px rgba(${darkest.r},${darkest.g},${darkest.b},${SHADOW_ALPHA})`;
 }
 
+export function detectGradient(img: DecodedImage, bbox: BBox): GradientInfo | null {
+  const x0 = Math.max(0, Math.floor(bbox.x));
+  const y0 = Math.max(0, Math.floor(bbox.y));
+  const x1 = Math.min(img.width, Math.ceil(bbox.x + bbox.w));
+  const y1 = Math.min(img.height, Math.ceil(bbox.y + bbox.h));
+  const w = x1 - x0;
+  const h = y1 - y0;
+  if (w < GRADIENT_MIN_SIZE || h < GRADIENT_MIN_SIZE) return null;
+
+  const stride = img.stride;
+  const data = img.data;
+  const width = img.width;
+
+  // Sample top and bottom rows at several x positions
+  const sampleXs: number[] = [];
+  for (let i = 0; i < GRADIENT_SAMPLE_POINTS; i++) {
+    sampleXs.push(x0 + Math.floor((i + 0.5) * w / GRADIENT_SAMPLE_POINTS));
+  }
+
+  let topR = 0, topG = 0, topB = 0;
+  let botR = 0, botG = 0, botB = 0;
+  let count = 0;
+  for (const sx of sampleXs) {
+    const topIdx = (y0 * width + sx) * stride;
+    topR += data[topIdx] ?? 0;
+    topG += data[topIdx + 1] ?? 0;
+    topB += data[topIdx + 2] ?? 0;
+    const botIdx = ((y1 - 1) * width + sx) * stride;
+    botR += data[botIdx] ?? 0;
+    botG += data[botIdx + 1] ?? 0;
+    botB += data[botIdx + 2] ?? 0;
+    count++;
+  }
+  topR = Math.round(topR / count); topG = Math.round(topG / count); topB = Math.round(topB / count);
+  botR = Math.round(botR / count); botG = Math.round(botG / count); botB = Math.round(botB / count);
+
+  const colorDiff = Math.sqrt(
+    (topR - botR) ** 2 + (topG - botG) ** 2 + (topB - botB) ** 2,
+  );
+  if (colorDiff < GRADIENT_COLOR_THRESHOLD) return null;
+
+  // Also check that the transition is smooth (middle row is between top and bottom)
+  const midY = y0 + Math.floor(h / 2);
+  let midR = 0, midG = 0, midB = 0;
+  for (const sx of sampleXs) {
+    const midIdx = (midY * width + sx) * stride;
+    midR += data[midIdx] ?? 0;
+    midG += data[midIdx + 1] ?? 0;
+    midB += data[midIdx + 2] ?? 0;
+  }
+  midR = Math.round(midR / count); midG = Math.round(midG / count); midB = Math.round(midB / count);
+
+  // Verify smoothness: mid should be between top and bottom
+  const topLum = 0.299 * topR + 0.587 * topG + 0.114 * topB;
+  const botLum = 0.299 * botR + 0.587 * botG + 0.114 * botB;
+  const midLum = 0.299 * midR + 0.587 * midG + 0.114 * midB;
+  const minLum = Math.min(topLum, botLum);
+  const maxLum = Math.max(topLum, botLum);
+  if (midLum < minLum - 10 || midLum > maxLum + 10) return null;
+
+  return {
+    type: 'linear',
+    direction: 'to bottom',
+    stops: [
+      { offset: 0, color: rgbToHex(topR, topG, topB) },
+      { offset: 0.5, color: rgbToHex(midR, midG, midB) },
+      { offset: 1, color: rgbToHex(botR, botG, botB) },
+    ],
+  };
+}
+
 function sampleNodeStyle(node: ASTNode, data: Buffer, width: number, height: number, stride: number): NodeStyle | null {
   const rect = clipRect(node.bbox, width, height);
   if (rect === null) return null;
@@ -381,6 +474,12 @@ function sampleNodeStyle(node: ASTNode, data: Buffer, width: number, height: num
 
   const style: NodeStyle = { backgroundColor: rgbToHex(bg.r, bg.g, bg.b) };
 
+  // Gradient detection (only for larger nodes)
+  if (w >= GRADIENT_MIN_SIZE && h >= GRADIENT_MIN_SIZE) {
+    const gradient = detectGradient({ data, width, height, stride }, node.bbox);
+    if (gradient !== null) style.gradient = gradient;
+  }
+
   const edge = dominantEdgeColor(data, rect, width, stride);
   if (edge !== null && rgbDistance(edge, bg) > BORDER_COLOR_THRESHOLD) {
     style.borderColor = rgbToHex(edge.r, edge.g, edge.b);
@@ -395,13 +494,12 @@ function sampleNodeStyle(node: ASTNode, data: Buffer, width: number, height: num
 
   const isText = node.text !== undefined || node.type === 'text';
   if (isText) {
-    const txt = darkestSignificantColor(data, rect, width, stride);
-    if (txt !== null) {
-      style.textColor = rgbToHex(txt.r, txt.g, txt.b);
+    const textAppearance = sampleTextAppearance(data, rect, width, stride);
+    if (textAppearance.color !== null) {
+      style.textColor = rgbToHex(textAppearance.color.r, textAppearance.color.g, textAppearance.color.b);
     }
     style.fontSize = Math.round(node.bbox.h);
-    const density = darkPixelDensity(data, rect, width, stride);
-    style.fontWeight = density > BOLD_DENSITY ? 700 : 400;
+    style.fontWeight = textAppearance.darkDensity > BOLD_DENSITY ? 700 : 400;
   }
 
   return style;
@@ -416,11 +514,12 @@ function sampleNodeStyle(node: ASTNode, data: Buffer, width: number, height: num
  * `sharp(buffer).removeAlpha().raw().toBuffer({ resolveWithObject: true })`,
  * then every node is sampled against that single pixel buffer.
  */
-export async function extractNodeStyles(image: ImageInput, ast: SemanticAST): Promise<Map<string, NodeStyle>> {
-  const { data, info } = await sharp(image.buffer).removeAlpha().raw().toBuffer({ resolveWithObject: true });
-  const width = info.width;
-  const height = info.height;
-  const stride = info.channels;
+export async function extractNodeStyles(
+  image: ImageInput,
+  ast: SemanticAST,
+  decoded?: DecodedImage,
+): Promise<Map<string, NodeStyle>> {
+  const { data, width, height, stride } = decoded ?? await decodeRawImage(image);
 
   const result = new Map<string, NodeStyle>();
   for (const node of walkNodes(ast.root)) {

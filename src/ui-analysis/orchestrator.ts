@@ -42,6 +42,7 @@ import { inferPageType, inferVariants, buildSemanticSummary } from './semantic/i
 import { FigmaExporter, MarkdownExporter, toCodegenIr } from './exporter/index.js';
 import { validateReconstruction } from './validate.js';
 import { applyCompositeGrammar } from './composition/composite-grammar.js';
+import { layerizeBanner } from './composition/banner-layerizer.js';
 import { assignRenderModes } from './policy/reconstruction-policy.js';
 import { analyzeControlAppearance } from './control/index.js';
 import { computeQualityReport } from './policy/index.js';
@@ -331,7 +332,9 @@ export async function runUiAnalysis(input: RunUiAnalysisInput): Promise<UiAnalys
   if (pipeline.ui) {
     try {
       applyCompositeGrammar(pipeline.ui.root);
-      assignRenderModes(pipeline.ui.root);
+      assignRenderModes(pipeline.ui.root, decodedImage !== undefined
+        ? { bannerFallback: true, image: decodedImage, layerizeFn: layerizeBanner }
+        : undefined);
       throwIfAborted(input.signal);
     } catch (err) {
       throwIfAborted(input.signal);

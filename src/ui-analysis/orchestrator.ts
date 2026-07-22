@@ -48,6 +48,11 @@ import { analyzeControlAppearance } from './control/index.js';
 import { computeQualityReport } from './policy/index.js';
 import type { RenderMode } from './policy/index.js';
 import { logger } from '../utils/logger.js';
+import { DetectorHub } from './evidence/detector-hub.js';
+import { fuseEvidence } from './evidence/fusion-engine.js';
+import { OnnxDetectorAdapter } from './evidence/onnx-detector-adapter.js';
+import { OmniParserAdapter } from './evidence/omniparser-adapter.js';
+import { isValidBBox, type EvidenceCandidate } from './evidence/types.js';
 
 const MAX_MEDIA_AREAS = 20;
 
@@ -167,6 +172,99 @@ function throwIfAborted(signal: AbortSignal | undefined): void {
 }
 
 /**
+ * Multi-source detector hub. When `reconstructionMode` is `balanced` or
+ * `high_fidelity`, the existing CV component detections and OCR text entries
+ * are re-exposed as evidence sources alongside the optional ONNX UI detector
+ * and OmniParser sidecar. The fused candidates are returned for downstream
+ * AST integration; the existing CV/OCR path remains the source of truth for
+ * the AST until that integration lands.
+ *
+ * Returns `null` for `fast` mode (hub skipped) so the caller keeps the
+ * unchanged legacy code path. Any adapter failure degrades to a skipped
+ * source rather than aborting the hub.
+ */
+async function runDetectorHub(
+  layout: UiLayoutExtraction,
+  image: ImageInput | undefined,
+  mode: 'fast' | 'balanced' | 'high_fidelity',
+  signal: AbortSignal | undefined,
+): Promise<EvidenceCandidate[] | null> {
+  if (mode === 'fast') return null;
+
+  const hub = new DetectorHub({ ...(signal ? { signal } : {}), timeoutMs: 10000 });
+
+  // Register CV source from existing layout components. UiComponent carries
+  // no confidence score, so a neutral default is assigned; the fusion engine
+  // still merges/suppresses overlapping boxes via IoU.
+  const cvCandidates: EvidenceCandidate[] = layout.components
+    .map((c, i): EvidenceCandidate | null => {
+      if (!isValidBBox(c.bbox)) return null;
+      return {
+        id: `cv-${i}`,
+        type: c.type,
+        bbox: c.bbox,
+        score: 0.7,
+        sources: ['cv'],
+        ...(c.text ? { text: c.text } : {}),
+        ...(c.state && c.state !== 'default' ? { state: c.state } : {}),
+      };
+    })
+    .filter((c): c is EvidenceCandidate => c !== null);
+  if (cvCandidates.length > 0) {
+    hub.register('cv', async () => cvCandidates);
+  }
+
+  // Register OCR source. TextEntry.bbox is already the {x,y,w,h} form.
+  const ocrCandidates: EvidenceCandidate[] = layout.texts
+    .map((t, i): EvidenceCandidate | null => {
+      const bbox = t.bbox;
+      if (bbox === undefined || !isValidBBox(bbox)) return null;
+      return {
+        id: `ocr-${i}`,
+        type: 'text',
+        bbox,
+        score: 0.9,
+        sources: ['ocr'],
+        text: t.text,
+      };
+    })
+    .filter((c): c is EvidenceCandidate => c !== null);
+  if (ocrCandidates.length > 0) {
+    hub.register('ocr', async () => ocrCandidates);
+  }
+
+  // Register ONNX UI detector for balanced+ (only with a source image).
+  if ((mode === 'balanced' || mode === 'high_fidelity') && image !== undefined) {
+    try {
+      const onnxAdapter = new OnnxDetectorAdapter();
+      await onnxAdapter.initialize();
+      if (onnxAdapter.isLoaded) {
+        hub.register('ui-detector', async () => onnxAdapter.detect(image));
+      }
+    } catch {
+      // Model not available, skip
+    }
+  }
+
+  // Register OmniParser sidecar for high_fidelity (only with a source image).
+  if (mode === 'high_fidelity' && image !== undefined) {
+    try {
+      const omniAdapter = new OmniParserAdapter();
+      const available = await omniAdapter.checkAvailability();
+      if (available) {
+        hub.register('omniparser', async () => omniAdapter.detect(image));
+      }
+    } catch {
+      // Sidecar not available, skip
+    }
+  }
+
+  const candidates = await hub.runAll();
+  const fused = fuseEvidence(candidates, { iouThreshold: 0.5, wbfThreshold: 0.7 });
+  return fused.candidates;
+}
+
+/**
  * Run the full UI analysis enrichment and return whichever output fields
  * succeeded. When `strict_mode` is enabled the final reconstruction is
  * structurally validated and a failure throws (propagated to the caller);
@@ -220,6 +318,28 @@ export async function runUiAnalysis(input: RunUiAnalysisInput): Promise<UiAnalys
       skipped.push('mediaAreaFilter');
       logger.warn('ui media-area filter failed', { error: String(err) });
     }
+  }
+
+  // Detector hub: run multi-source evidence fusion when reconstruction_mode
+  // requires it. Fast mode (and undefined) skips the hub entirely so the
+  // legacy CV/OCR code path is unchanged. Fused candidates are produced for
+  // future AST integration; failures degrade to a skipped stage.
+  const reconstructionMode = opts.reconstructionMode ?? 'fast';
+  let hubCandidates: EvidenceCandidate[] | null = null;
+  if (reconstructionMode !== 'fast') {
+    try {
+      hubCandidates = await runDetectorHub(filteredLayout, input.image, reconstructionMode, input.signal);
+      throwIfAborted(input.signal);
+    } catch (err) {
+      throwIfAborted(input.signal);
+      skipped.push('detectorHub');
+      logger.warn('ui detector hub failed', { error: String(err) });
+    }
+  }
+  if (hubCandidates !== null) {
+    // Hub ran successfully; fused candidates are available for future AST
+    // integration. The existing CV/OCR path still produces the AST for now.
+    logger.debug('ui detector hub produced fused candidates', { count: hubCandidates.length });
   }
 
   const pipeline = analyzeUiPipeline({

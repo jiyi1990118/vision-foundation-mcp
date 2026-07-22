@@ -417,6 +417,7 @@ export function registerVisionAnalyzeTool(
               strictMode: options?.strict_mode === true,
               embedImages: options?.embed_images === true,
               summaryOnly: options?.summary_only === true,
+              ...(options?.reconstruction_mode ? { reconstructionMode: options.reconstruction_mode } : {}),
             };
             const hasExplicitUiExport = uiOptions.exportCodegen === true
               || uiOptions.exportFigma === true

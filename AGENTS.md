@@ -37,6 +37,91 @@
 - `SkillPipeline` currently contains parsing, repair, minimal required-field validation, retry prompt enhancement, and result composition; there is no separate ResponseValidator module yet.
 - Logs must stay off stdout for MCP stdio. Use the existing logger; it writes to stderr.
 
+## Annotation Workbench Mainline
+
+The UI annotation/training-loop work is active. Before modifying the workbench,
+read these documents in order:
+
+1. `Docs/superpowers/specs/2026-07-24-annotation-mainline-supplement.md`
+2. `Docs/superpowers/plans/2026-07-24-annotation-mainline-safety-gates.md`
+3. `Docs/02-contracts/05-annotation-spec.md`
+
+The supplement is the current project status snapshot and overrides conflicting
+older workbench wording. It records implemented baseline, known gaps, data
+truth boundaries, and the next mandatory gate.
+
+### Non-Negotiable Data Boundaries
+
+- Human-reviewed `<annotation>.json` is the only benchmark ground truth.
+- `.prediction.json`, `.ai-review.json`, `.review.json`, `.session.json`, and
+  `.bak` are sidecars; they must never be benchmark inputs.
+- The UI model is a containment tree plus a non-tree relationship graph. Do not
+  replace label, overlap, decoration, occlusion, or z-order semantics with
+  bbox-derived containment.
+- Geometry-derived containment is a candidate only. Human-confirmed containment
+  (`source: 'human'`) overrides geometric candidates. Derived containment is
+  marked `source: 'derived'`.
+- Structural rules are advisory until calibrated; they cannot auto-edit labels,
+  alter active-learning priority, or block a dataset without the documented
+  validation gate.
+- Device preview is a static screenshot viewport reference, not responsive
+  reflow verification.
+- `validateAnnotation()` runs after normalization on every save. Invalid
+  annotations are rejected. The validator checks: duplicate IDs, bbox
+  validity/bounds, single page root, containment cycles, multiple parents,
+  children/contains mismatch, and relation endpoint existence.
+
+### Current Next Gate
+
+**Gate A (contract and persistence) is complete.** Relation provenance,
+ReviewAction/ReviewSession persistence, strict tree validator, and benchmark
+eligibility enforcement are delivered.
+
+**Phase B1 (frontend review decision loop) is complete.** The workbench now
+loads `GET /api/review-session` and `GET /api/structure-validation` on entry
+load, renders Confirm/Override/Suppress buttons on prediction-difference and
+structure-finding cards, persists each action via `POST /api/review-session`,
+displays validation hard errors, and reloads session+validation after save.
+
+**Phase B3 (rule registry and suppression signatures) is complete.** Structure
+rules are registered with code, version, severity, confidence, and evidence.
+Suppression signatures (`ruleVersion + ruleCode + elementId + bboxHash + type`)
+detect stale suppressions: when an element's bbox/type changes or a rule
+version bumps, suppressed findings reopen automatically.
+
+**Workbench component type selection is grouped.** Both the selected-element
+editor and AI-proposal editor use the same native option groups (page structure,
+layout/container, text/identity, form/action, navigation/state, media, overlay,
+other), while preserving every persisted component type value.
+
+**AI suggestion overlays are outline-only.** AI proposal boxes retain their
+purple dashed border and selection state but use transparent fill, so they do
+not obscure screenshot content during human review.
+
+**Workbench layout is balanced and supports copy/paste.** The three-column grid
+is 220px/300px, screenshot entries show two-digit ordinals, and annotation
+elements can be copied (Ctrl/Cmd+C) and pasted (Ctrl/Cmd+V) within the current
+session via an internal clipboard that never touches system clipboard or
+ground-truth files.
+
+**B2 OCR baseline preparation is complete.** The annotation generator now
+parses `PpuPaddleOcrProvider` JSON responses into positioned `OcrItem`s and
+passes them to both layout extraction and UI analysis. Before human review it
+writes independent `<annotation>.json`, `.prediction.json`, and `.review.json`
+baseline files. Pilot drafts 226/229/234/241 were regenerated with OCR text
+and immutable prediction snapshots; they remain drafts until human review.
+
+Next critical path is **Phase B2: Pilot Annotation** - human-review 4 images
+(226, 229, 234, 241) using the completed review decision loop. Verify
+`.session.json` persistence, review report correctness, and benchmark loader
+counts (4 eligible / 12 draft-excluded). Then **B4: Rule Calibration**
+before any active-learning or training export work.
+
+Full roadmap is in
+`Docs/superpowers/specs/2026-07-24-annotation-mainline-supplement.md` under
+"Immediate Next Work". Verify changes with focused workbench tests plus
+`pnpm typecheck`, `pnpm lint`, `pnpm build`, and `pnpm test:unit`.
+
 
 ## Recent Optimizations
 

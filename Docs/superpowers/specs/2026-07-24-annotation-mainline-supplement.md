@@ -1,0 +1,393 @@
+# Annotation Mainline Supplement
+
+## Status and Priority
+
+This document supplements the annotation training-loop and hybrid-workbench
+designs. When it conflicts with earlier workbench wording, this document takes
+priority. Its purpose is to preserve benchmark and training integrity while
+canvas and review features expand.
+
+## Project Status Snapshot (2026-07-24)
+
+### Implemented Baseline
+
+- Local Chinese annotation workbench under `src/ui-analysis/annotation-workbench/`.
+- Human annotation, immutable pipeline prediction, AI pre-review sidecar, and
+  generated difference report are stored separately.
+- Canvas supports pan, Ctrl/Cmd-wheel zoom, ruler readout, device viewport
+  reference, human/AI/issue visibility, bbox editing, and undo/redo.
+- Canvas hit testing is model-based and selects the smallest-area visible
+  candidate first (innermost-first), rather than using SVG paint order.
+- Component type selectors are grouped by annotation role in both the selected
+  element and AI-proposal editors; grouping is presentation-only and preserves
+  the existing component type values.
+- AI proposal overlays are transparent, outline-only boxes so suggestions do
+  not obscure screenshot content during human review.
+- Three-column workbench uses a balanced 220px/300px layout; screenshot entries
+  show fixed two-digit ordinals. Selected annotation elements can be copied and
+  pasted within the session via Ctrl/Cmd+C/V or inspector buttons; paste offsets
+  12px cumulatively and clamps to image bounds.
+- Left Elements panel renders the current containment tree and linked
+  parent/child/sibling selection.
+- `normalizeAnnotationTree()` rebuilds geometry-derived `children` and
+  `contains` relations on human save.
+- Advisory structural checks currently cover isolated content, child bounds,
+  and repeated same-type sibling-size variation.
+
+### Known Current Limitations
+
+- Structure findings have no rule version, confidence, or stable suppression
+  signature in the frontend; the backend `ReviewSession` infrastructure is
+  ready but not wired to the Issues panel.
+  **Resolved in B3.** Rules now have version/confidence/evidence; suppression
+  signatures detect stale suppressions when element bbox/type or rule version
+  changes.
+- Benchmark loader enforces sidecar and draft exclusion with counts, but does
+  not yet reject annotations with open high-severity findings (requires B2
+  pilot annotation first).
+- Pilot annotation (4 images: 226, 229, 234, 241) has not been human-reviewed
+  yet; all 16 dataset images remain `DRAFT_WARNING`. Their OCR-aware pipeline
+  baselines are ready, but human review is still required before they can be
+  benchmark ground truth.
+- Device preview is only a coordinate viewport overlay, not responsive layout
+  simulation.
+- Overlap chooser, layer lock persistence, guides, snapping, multi-select, and
+  alignment are intentionally deferred.
+
+### Immediate Next Work
+
+**Gate A, Phase B1, and Phase B3 are complete.** The frontend persists review
+decisions, displays validation errors, and uses suppression signatures so
+stale suppressions reopen when elements change. Rules are registered with
+version, confidence, and evidence.
+
+The next critical path is Phase B2: pilot annotation of 4 images (226, 229,
+234, 241) using the completed review decision loop, followed by B4: rule
+calibration.
+
+#### Phase B1: Frontend Review Decision Loop (highest priority)
+
+- Load `GET /api/review-session` on entry load; restore confirmed/overridden/
+  suppressed states.
+- Add Confirm / Override / Suppress buttons to prediction-difference and
+  structure-finding cards.
+- Each action calls `POST /api/review-session` to persist.
+- Load `GET /api/structure-validation` and display hard errors; block save
+  when validation fails.
+- After save, re-fetch session and validation.
+
+**Phase B1 is complete.** Delivered:
+
+- `loadEntry` fetches `GET /api/review-session` and
+  `GET /api/structure-validation` alongside existing annotation/prediction/
+  review/aiReview/structure-issues loads.
+- `reviewStatusFor(subjectKind, subjectId)` resolves the current review
+  status from the loaded `ReviewSession` actions; returns `'auto'` when no
+  action exists.
+- `persistReviewAction(subjectKind, subjectId, action)` posts a
+  `ReviewAction` to `POST /api/review-session`, updates `state.reviewSession`
+  from the response, and re-renders the right panel.
+- `renderIssues` displays validation errors in a red panel at the top,
+  shows a suppressed-count bar with a "显示已抑制" toggle, filters suppressed
+  items from the main list, and renders Confirm/Override/Suppress buttons
+  on each prediction-difference and structure-finding card with status badges
+  and disabled-when-active states.
+- `save()` checks high-severity auto differences via `reviewStatusFor`
+  (not the local `reviewStatus` field); the backend blocks invalid saves;
+  `loadEntry` after save reloads session and validation.
+- `nextIssue()` filters by `reviewStatusFor` instead of local `reviewStatus`.
+- AI proposal accept/reject persists to the session; rejected proposals are
+  restored from the session on entry load.
+- CSS added for `.validation-errors`, `.validation-error`, `.badge.error`,
+  `.badge.confirmed/overridden/suppressed`, `.difference.confirmed/overridden/
+  suppressed`, `.suppressed-bar`, and action button color variants.
+
+#### Phase B2: Pilot Annotation (parallel with B1)
+
+- Human-review 4 pilot images: 226, 229, 234, 241.
+- Accept/modify AI proposals, correct bbox/type, confirm/suppress findings,
+  save each as reviewed.
+- Verify `.session.json`, `.review.json`, and `.prediction.json` are correct.
+
+**B2 data preparation is complete; human review is pending.** The original
+generator silently dropped OCR because it read a nonexistent `ocrItems` field
+from the generic inference response. It now parses the provider JSON response
+with `extractOcrItems()`, supplies positioned OCR to layout extraction and UI
+analysis, and creates independent draft/prediction/review baseline snapshots.
+Only the four B2 pilots were regenerated. Text-bearing nodes now exist in both
+their drafts and immutable predictions: 226=17, 229=43, 234=28, 241=51.
+This fixes the missing “显示文字” values without treating OCR or AI proposals
+as human ground truth.
+
+**Exit criteria:** 4 images reviewed, no `DRAFT_WARNING`, benchmark loader
+counts 4 eligible / 12 draft-excluded.
+
+#### Phase B3: Rule Registry and Suppression Signatures
+
+1. Extract inline structural checks into a registered `StructureRule` with
+   code, version, severity, confidence, and evidence renderer.
+2. Suppression signature: `ruleVersion + ruleCode + elementId + bboxHash + type`.
+3. Element bbox/type/parent change reopens a suppressed finding.
+4. Rule version change reopens all suppressed findings for that rule.
+
+**Phase B3 is complete.** Delivered:
+
+- `StructureRule` interface and `STRUCTURE_RULES` registry in `tree.ts`.
+  Three rules registered: `isolated-content` (v1, medium, 0.7),
+  `child-outside-parent` (v1, medium, 0.8), `sibling-size-inconsistent`
+  (v1, low, 0.5). Each rule has `description` and `evidence` renderer.
+- `StructureIssue` extended with `version`, `confidence`, `bboxHash`, `type`,
+  and `evidence` fields. `analyzeAnnotationStructure()` now iterates over
+  registered rules via `STRUCTURE_RULES.flatMap()`.
+- `bboxHash()` rounds bbox to integers and joins as `x,y,w,h`.
+- `findingSubjectId()` returns stable `code:elementId` (used as `subjectId`
+  in `ReviewAction`).
+- `findingSignature()` returns `version:code:elementId:bboxHash:type` (stored
+  in `ReviewAction.signature`).
+- `ReviewAction.signature` field added to `review-types.ts`.
+- `reviewStatusFor()` accepts optional `signature` parameter; returns
+  `undefined` (reopened) when stored `signature` mismatches current finding's
+  signature. Backward compatible: actions without `signature` skip the
+  staleness check.
+- `store.ts` `saveReviewAction()` now delegates to `applyReviewAction()`
+  from `review-types.ts` (was duplicating filter logic).
+- Frontend `structureSubjectId()` and `structureSignature()` helpers pass
+  the correct values to `reviewStatusFor()` and `persistReviewAction()`.
+- Frontend renders `evidence` paragraph in structure-finding cards.
+
+#### Phase B4: Structural Rule Calibration
+
+- Build a small reviewed holdout from B2 results.
+- Measure precision/recall for each rule independently.
+- Low-precision rules become advisory-only (no queue priority, no save block).
+
+**Exit criteria:** Each enabled rule has measured precision; uncalibrated
+rules are advisory-only.
+
+#### Phase C1: Benchmark Admissions and Exclusion Stats
+
+- Update `ui-benchmark.ts` to use `loadDatasetWithExclusions()`.
+- Output: eligible count, draft-excluded, sidecar-excluded, invalid-excluded,
+  open-high-severity-excluded.
+
+**Exit criteria:** Benchmark only measures reviewed annotations; output
+includes exclusion breakdown.
+
+#### Phase C2: Manifest and Data Export
+
+- Generate per-sample manifest with image/annotation/prediction/AI-review
+  hashes, review state, and split assignment.
+- Export human-final, pipeline-prediction, ai-pre-review, review-actions, and
+  manifest as separate fields.
+
+**Exit criteria:** Every exported sample is traceable to a reviewed source.
+
+#### Phase C3: Data Splitting
+
+- Split train/validation/test by screenshot family, not random image.
+- Same-family screenshots must be in the same split.
+
+**Exit criteria:** No family-level leakage across splits.
+
+#### Phase D: Active Learning (depends on B4 + C1)
+
+- After 20 reviewed images + 30 confirmed elements per high-frequency type +
+  calibrated structure rules.
+- Before threshold: frequency-guided priority only.
+
+#### Phase E: Advanced Canvas UX (lowest priority, parallel after B1)
+
+- Overlap chooser and keyboard cycling.
+- Layer lock and visibility persistence.
+- Ruler guides, snapping, distance measurement.
+- Multi-select, alignment, distribution.
+- Device safe-area overlays and custom presets.
+- These do not alter truth semantics and must not bypass review gates.
+
+### Gate A Delivery Record (completed 2026-07-24)
+
+- `AnnotationRelation` extended with optional `source`, `confidence`,
+  `reviewStatus` in `src/ui-analysis/benchmark/annotation-loader.ts`.
+- `ReviewAction` and `ReviewSession` types in
+  `src/ui-analysis/annotation-workbench/review-types.ts`.
+- `buildContainmentCandidates()` separates pure geometry candidate generation
+  in `src/ui-analysis/annotation-workbench/tree.ts`.
+- `normalizeAnnotationTree()` preserves human-confirmed containment
+  (`source: 'human'`) and marks geometric candidates (`source: 'derived'`).
+- `validateAnnotation()` in `src/ui-analysis/annotation-workbench/validate.ts`
+  checks: duplicate IDs, bbox validity/bounds, single page root, containment
+  cycles, multiple parents, children/contains mismatch, and relation endpoint
+  existence. Does not mutate data.
+- Store `saveAnnotation()` runs normalization then validation; rejects invalid
+  annotations with a descriptive error.
+- Store `readReviewSession()` / `saveReviewAction()` persist to
+  `<annotation>.session.json` sidecars.
+- Store `validateAnnotationFile()` returns validation result for a loaded file.
+- Server exposes `GET /api/structure-validation`, `GET /api/review-session`,
+  and `POST /api/review-session`.
+- `isSidecarFile()` excludes `.prediction.json`, `.review.json`,
+  `.ai-review.json`, `.session.json`, `.bak`.
+- `isBenchmarkEligible()` rejects draft annotations.
+- `loadDatasetWithExclusions()` returns `{ entries, excluded }` with counted
+  exclusion reasons.
+
+### Verification Baseline
+
+The latest verified commands for the current workbench baseline are:
+
+```bash
+pnpm typecheck
+pnpm lint
+pnpm build
+pnpm test:unit
+npx vitest run --fileParallelism=false \
+  tests/ui-analysis/annotation-tree.test.ts \
+  tests/ui-analysis/annotation-workbench-diff.test.ts \
+  tests/ui-analysis/annotation-workbench-store.test.ts \
+  tests/ui-analysis/annotation-workbench-server.test.ts
+```
+
+Launch the local workbench with:
+
+```bash
+pnpm ui:annotate -- benchmark/datasets/dev/app --port 4317
+```
+
+## Core Model
+
+An annotation has two complementary structures:
+
+1. A **structural tree** with one `page` root and at most one containment parent
+   per node. It drives Elements-tree navigation, parent/child/sibling review,
+   repeated-layout checks, and hierarchy metrics.
+2. A **relationship graph** for non-tree semantics: `labels`, `overlaps`,
+   `alignedWith`, `decorates`, `occludes`, and `backgroundOf`. These relations
+   must never be collapsed into containment merely because bboxes overlap.
+
+`children` and `relations[type=contains]` are equivalent serialized views of
+the structural tree. They must be regenerated consistently after an accepted
+human edit. Non-containment relations, z-order, and source provenance are
+preserved unchanged by normalization.
+
+## Containment Authority
+
+Geometric containment is a deterministic candidate generator, not an authority
+over reviewed structure.
+
+- A normalized candidate parent is the smallest element whose bbox fully
+  contains the child bbox.
+- The generator must not create a parent link from mere overlap.
+- Human-confirmed containment overrides a geometric candidate.
+- Drawers, dialogs, bottom sheets, and occluded content keep their z-order and
+  occlusion semantics; they are not reparented only due to screen geometry.
+- Ambiguous elements remain `unknown` or receive a review finding. The system
+  must not invent a confident container solely to make the tree complete.
+
+The normalizer must remain idempotent, preserve stable IDs, prevent cycles, and
+report invalid relation endpoints instead of silently dropping them.
+
+## Provenance and Review State
+
+The following artifacts remain distinct:
+
+- `<annotation>.json`: only human-reviewed ground truth.
+- `<annotation>.prediction.json`: immutable pipeline draft snapshot.
+- `<annotation>.ai-review.json`: immutable multimodal pre-review source.
+- `<annotation>.review.json`: differences, review decisions, and provenance.
+- `<annotation>.bak`: first-save safety backup.
+
+Accepting an AI proposal records its proposal identifier, original candidate,
+human patch, reviewer action, and timestamp in review data. A user may edit a
+transient proposal copy, but must never mutate the AI sidecar source file.
+
+Every prediction or structural finding needs a stable ID, rule/version,
+severity, confidence, affected node IDs, and one of `auto`, `confirmed`,
+`overridden`, or `suppressed`. Suppression applies only to the same rule version
+and node signature; a meaningful bbox/type/parent change reopens review.
+
+## Canvas Selection
+
+Canvas selection is model-based, not SVG-order-based:
+
+1. Gather every visible, unlocked human element and AI proposal whose expanded
+   bbox contains the pointer.
+2. Select the smallest-area candidate, the innermost-first rule.
+3. If areas tie, prefer the active layer; then prefer human content for safety.
+4. The selected inspector must display layer, element/proposal ID, and source.
+
+Future overlap chooser and keyboard cycling are required before large-scale
+review, but are not needed to change truth semantics. A locked layer is visible
+but excluded from hit testing; a hidden layer is excluded from rendering and hit
+testing.
+
+## Structural Findings
+
+Current rules are advisory only:
+
+- content element without a container parent;
+- child extending outside a non-page parent;
+- repeated same-type siblings with substantial size variation.
+
+They must not auto-edit annotations, influence active-learning priority, or
+become regression failures until calibrated against a human-reviewed holdout.
+Before promotion, each rule needs measured precision/recall, a stable rule
+version, evidence rendering, and a documented severity policy.
+
+## Device Preview Boundary
+
+Device preview draws a viewport reference over a static screenshot. It can show
+the coordinate range visible at a device size but does not simulate responsive
+layout, reflow, safe-area behavior, or interaction. Switching device preview
+never changes original-image coordinates, bboxes, tree relations, review state,
+or benchmark metrics.
+
+## Dataset Eligibility Gates
+
+An annotation is eligible for benchmark, regression fixture, or training export
+only when all conditions hold:
+
+1. It has no `DRAFT_WARNING` and is explicitly human-reviewed.
+2. Element IDs are unique; bboxes are finite, positive-size, and image-bounded.
+3. Tree has exactly one page root, no containment cycle, and matching `children`
+   and `contains` representations.
+4. Every graph relation references existing IDs.
+5. High-severity prediction and structure findings are confirmed, overridden,
+   or suppressed.
+6. The example manifest records image hash, annotation hash, prediction hash,
+   AI-review hash when present, review state, and split assignment.
+
+Sidecars (`.prediction.json`, `.ai-review.json`, `.review.json`, `.bak`) are
+excluded by filename and review-state validation in the loader, not merely hidden
+from the UI.
+
+## Roadmap Gates
+
+### Gate A: Contract and Persistence
+
+- Extend relation schema with source, confidence, and review status.
+- Persist AI proposal actions and structure review decisions.
+- Add validator for cycles, duplicate children, conflicting parents, and stale
+  endpoints.
+
+### Gate B: Rule Calibration
+
+- Create a reviewed structural holdout corpus.
+- Measure each rule independently; keep low-precision rules advisory.
+- Introduce a rule registry with version, evidence, and severity policy.
+
+### Gate C: Export and Regression
+
+- Write immutable reviewed manifests.
+- Split by screenshot family to prevent near-duplicate leakage.
+- Export human final labels separately from AI candidates and human patches.
+
+### Deferred Canvas Enhancements
+
+- overlap chooser and keyboard selection cycling;
+- layer locks;
+- ruler guides, snapping, and measurement;
+- device safe-area overlays and custom presets;
+- multi-select, alignment, and distribution.
+
+These UX enhancements may not modify ground truth semantics without passing
+Gate A.

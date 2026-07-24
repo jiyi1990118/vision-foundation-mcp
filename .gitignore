@@ -5,6 +5,7 @@ bin/
 *.js.map
 *.d.ts
 !*.config.js
+!src/ui-analysis/annotation-workbench/static/app.js
 .DS_Store
 **/.DS_Store
 *.log

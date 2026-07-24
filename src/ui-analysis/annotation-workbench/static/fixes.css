@@ -1,0 +1,449 @@
+/* Keep every workspace column inside the viewport and scroll only its content. */
+.workbench,
+.left-panel,
+.right-panel,
+.canvas-stage {
+  min-height: 0;
+}
+
+.left-panel,
+.right-panel,
+.canvas-stage {
+  overflow: hidden;
+}
+
+.left-content,
+.inspector-content {
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.panel-tabs,
+.left-footer,
+.inspector-footer,
+.canvas-toolbar {
+  flex: none;
+}
+
+/* Text labels must not intercept clicks intended for nearby nested boxes. */
+.label {
+  pointer-events: none;
+}
+
+/* The transparent SVG hit region expands a bbox by 2px without changing visuals. */
+.box-hit {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 4;
+  vector-effect: non-scaling-stroke;
+  cursor: pointer;
+}
+
+/* AI suggestions remain visible but never block human element selection. */
+.box.ai,
+.box-hit.passive {
+  pointer-events: none;
+}
+
+/* Selection is resolved from model geometry, not SVG paint order. */
+.box,
+.box-hit {
+  pointer-events: none;
+}
+
+/* Annotation palette: category colors are muted; state is expressed by line style. */
+.box {
+  stroke-width: 1px;
+}
+
+.box.selected,
+.box.selected.added,
+.box.selected.modified,
+.box.selected.ai,
+.box.selected.deleted {
+  stroke: #D64545 !important;
+  stroke-width: 1px !important;
+  stroke-dasharray: 5 3;
+}
+
+.box.ai {
+  stroke: #7A5BC7;
+  stroke-width: 1px;
+  stroke-dasharray: 4 3;
+  fill: transparent;
+}
+
+.box.deleted {
+  stroke: #B85C5C !important;
+  stroke-width: 1px;
+  stroke-dasharray: 2 3;
+}
+
+.box.added,
+.box.modified {
+  stroke-width: 1px !important;
+}
+
+.handle {
+  fill: #FFFFFF;
+  stroke: #D64545;
+  stroke-width: 1px;
+}
+
+.canvas-wrap {
+  display: block;
+  padding: 24px;
+}
+
+.canvas-content {
+  position: relative;
+  margin: auto;
+  box-shadow: 0 8px 28px #0008;
+}
+
+.ruler { position:absolute; z-index:4; color:#94a3b8; font:10px ui-monospace,monospace; pointer-events:none; overflow:hidden; }
+.ruler-x { left:24px; top:0; right:0; height:24px; background:#293340; border-bottom:1px solid #475569; }
+.ruler-y { left:0; top:24px; bottom:0; width:24px; background:#293340; border-right:1px solid #475569; }
+.ruler-mark { position:absolute; border-color:#64748b; border-style:solid; opacity:.8; }
+.ruler-x .ruler-mark { top:15px; height:9px; border-width:0 0 0 1px; }.ruler-y .ruler-mark { left:15px; width:9px; border-width:1px 0 0; }
+.ruler-label { position:absolute; color:#cbd5e1; }
+.ruler-x .ruler-label { top:1px; }.ruler-y .ruler-label { left:1px; transform:rotate(-90deg); transform-origin:left top; }
+.device-viewport { fill:#60A5FA0D; stroke:#60A5FA; stroke-width:1; stroke-dasharray:6 4; vector-effect:non-scaling-stroke; pointer-events:none; }
+.device-viewport-label { fill:#DBEAFE; font:12px ui-monospace,monospace; paint-order:stroke; stroke:#1E3A5F; stroke-width:3px; pointer-events:none; }
+
+.canvas-content #screenshot {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  box-shadow: none;
+  user-select: none;
+}
+
+.canvas-content #overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+}
+
+.canvas-actions { display: flex; align-items: center; gap: 5px; }
+#zoom-level { min-width: 42px; text-align: center; color: #c2cbd8; font: 12px ui-monospace, monospace; }
+
+/* Canvas controls use their own state palette instead of inheriting white-panel buttons. */
+.canvas-toolbar #zoom-out,
+.canvas-toolbar #fit-canvas,
+.canvas-toolbar #zoom-in {
+  min-width: 30px;
+  border: 1px solid #64748b;
+  background: #334155;
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.canvas-toolbar #fit-canvas {
+  min-width: 66px;
+}
+
+.canvas-toolbar #zoom-out:hover,
+.canvas-toolbar #fit-canvas:hover,
+.canvas-toolbar #zoom-in:hover {
+  border-color: #93c5fd;
+  background: #475569;
+  color: #ffffff;
+}
+
+.canvas-toolbar #zoom-out:focus-visible,
+.canvas-toolbar #fit-canvas:focus-visible,
+.canvas-toolbar #zoom-in:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+  border-color: #bfdbfe;
+  background: #1e3a5f;
+  color: #ffffff;
+}
+
+.canvas-toolbar #zoom-out:active,
+.canvas-toolbar #fit-canvas:active,
+.canvas-toolbar #zoom-in:active {
+  border-color: #60a5fa;
+  background: #1e3a5f;
+  color: #ffffff;
+}
+
+.element-details {
+  margin: 12px 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #f8fafc;
+}
+
+.element-details summary {
+  padding: 8px 10px;
+  cursor: pointer;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.element-details[open] summary {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.element-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 12px;
+  padding: 9px 10px;
+  color: #64748b;
+  font: 12px ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.element-metrics strong {
+  color: #334155;
+  font-weight: 600;
+}
+
+.help-tooltip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: 4px;
+  border: 1px solid #94a3b8;
+  border-radius: 50%;
+  color: #475569;
+  font: 700 11px/1 ui-sans-serif, system-ui, sans-serif;
+  cursor: help;
+}
+
+.field-label {
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+}
+
+.ai-proposal-editor {
+  margin-bottom: 14px;
+  padding: 11px;
+  border: 1px solid #d8ccf6;
+  border-radius: 8px;
+  background: #faf8ff;
+}
+
+.adjustment-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.adjustment-groups section {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  padding: 7px;
+  border: 1px solid #e2e8f0;
+  border-radius: 7px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.direction-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 28px);
+  grid-template-rows: repeat(3, 28px);
+  place-items: center;
+}
+
+.direction-pad button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-color: #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.direction-pad button:hover {
+  border-color: #93c5fd;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.direction-pad i {
+  color: #94a3b8;
+  font-style: normal;
+  font-size: 12px;
+}
+
+.direction-pad button[data-nudge="up"],
+.direction-pad button[data-ai-nudge="up"] { grid-column: 2; grid-row: 1; }
+.direction-pad button[data-nudge="left"],
+.direction-pad button[data-ai-nudge="left"] { grid-column: 1; grid-row: 2; }
+.direction-pad i { grid-column: 2; grid-row: 2; }
+.direction-pad button[data-nudge="right"],
+.direction-pad button[data-ai-nudge="right"] { grid-column: 3; grid-row: 2; }
+.direction-pad button[data-nudge="down"],
+.direction-pad button[data-ai-nudge="down"] { grid-column: 2; grid-row: 3; }
+
+.tree-hint { margin: 8px 0; color: #7c8898; font-size: 11px; line-height: 1.4; }
+.element-tree { gap: 2px; }
+.tree-node { display: block; margin: 0; }
+.tree-node > summary { display: flex; align-items: center; min-height: 29px; padding: 4px 5px; border-radius: 5px; cursor: pointer; list-style: none; }
+.tree-node > summary::-webkit-details-marker { display: none; }
+.tree-node > summary::before { content: '›'; width: 13px; color: #7c8999; font-size: 16px; transition: transform .12s ease; }
+.tree-node[open] > summary::before { transform: rotate(90deg); }
+.tree-node.leaf > summary::before { content: ''; }
+.tree-node > summary:hover { background: #f1f5f9; }
+.tree-node.selected > summary { background: #e8f0ff; color: #1d4ed8; }
+.tree-node.related > summary { background: #f7faff; }
+.tree-node .tree-children { margin-left: 14px; padding-left: 5px; border-left: 1px solid #dce5ef; }
+.tree-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.tree-label code { color: #7c8999; font-size: 10px; }
+.tree-meta { margin-left: auto; color: #8a96a6; font-size: 10px; }
+.tree-warning { color: #c2410c; }
+
+@media (max-width: 420px) {
+  .adjustment-groups { grid-template-columns: 1fr; }
+}
+
+.help-tooltip-content {
+  position: absolute;
+  z-index: 20;
+  left: 22px;
+  top: -7px;
+  width: 272px;
+  padding: 10px 11px;
+  border: 1px solid #cbd5e1;
+  border-radius: 7px;
+  background: #1e293b;
+  color: #f8fafc;
+  box-shadow: 0 8px 20px #0f172a33;
+  font: 12px/1.55 "PingFang SC", "Microsoft YaHei", sans-serif;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(2px);
+  transition: opacity .12s ease, transform .12s ease;
+}
+
+.help-tooltip:hover .help-tooltip-content,
+.help-tooltip:focus-visible .help-tooltip-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.help-tooltip:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+/* B1: Validation error display */
+.validation-errors {
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #fca5a5;
+  border-radius: 7px;
+  background: #fef2f2;
+}
+
+.validation-errors .error-header {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #b91c1c;
+}
+
+.validation-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  font-size: 12px;
+  color: #7f1d1d;
+}
+
+.validation-error .badge.error {
+  flex: none;
+  color: #fff;
+  background: #dc2626;
+}
+
+.validation-error span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+
+.validation-error button.locate {
+  flex: none;
+  font-size: 11px;
+  padding: 3px 6px;
+}
+
+/* B1: Review status badges */
+.badge.confirmed { color: #15803d; background: #dcfce7; }
+.badge.overridden { color: #1d4ed8; background: #dbeafe; }
+.badge.suppressed { color: #6b7280; background: #f3f4f6; }
+
+/* B1: Difference card review states */
+.difference.confirmed { border-left-color: #15803d; }
+.difference.overridden { border-left-color: #1d4ed8; }
+.difference.suppressed { opacity: .5; border-left-color: #d1d5db; }
+
+/* B1: Suppressed items toggle bar */
+.suppressed-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #f9fafb;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.suppressed-bar .toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+}
+
+/* B1: Action button variants in difference cards */
+.difference-actions { flex-wrap: wrap; gap: 4px; }
+.difference-actions .confirm { color: #15803d; }
+.difference-actions .confirm:hover:not(:disabled) { border-color: #15803d; background: #f0fdf4; }
+.difference-actions .override { color: #1d4ed8; }
+.difference-actions .override:hover:not(:disabled) { border-color: #1d4ed8; background: #eff6ff; }
+.difference-actions .suppress { color: #b45309; }
+.difference-actions .suppress:hover:not(:disabled) { border-color: #b45309; background: #fffbeb; }
+.difference-actions .locate { color: #475569; }
+.difference-actions .badge { flex: none; }
+
+/* B3: Evidence paragraph in structure-finding cards */
+.difference .evidence {
+  margin: 4px 0;
+  padding: 5px 8px;
+  border-radius: 5px;
+  background: #f1f5f9;
+  font: 11px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #475569;
+}
+
+/* Screenshot list: fixed two-digit ordinal before each filename. */
+.screenshot-item { display:grid; grid-template-columns:22px 1fr; gap:6px; align-items:start; }
+.shot-ordinal { font:600 12px ui-monospace,monospace; color:#94a3b8; text-align:center; padding-top:1px; }
+.screenshot-item.active .shot-ordinal { color:#285ccf; }

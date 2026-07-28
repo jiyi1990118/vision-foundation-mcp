@@ -122,4 +122,15 @@ describe('workbench tool system (hand/select/draw)', () => {
     const css = await readFile(cssUrl, 'utf8');
     expect(css).toContain('.box.drawing');
   });
+
+  it('binds nudge buttons via event delegation (survives outerHTML replacement)', async () => {
+    const js = await readFile(appUrl, 'utf8');
+    expect(js).toContain("closest('[data-nudge]')");
+    expect(js).not.toContain("querySelectorAll('[data-nudge]').forEach(b=>b.onclick");
+  });
+
+  it('resets dirty + history before reloading after save (no abandon-edit prompt)', async () => {
+    const js = await readFile(appUrl, 'utf8');
+    expect(js).toContain('state.dirty=false;state.history=[];state.historyIndex=0;await loadEntry(state.index)');
+  });
 });

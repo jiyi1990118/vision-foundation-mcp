@@ -1,0 +1,30 @@
+{
+  "differences": [
+    {
+      "id": "match:image:0,660,1140,1980:image:0,660,1140,1980",
+      "category": "wrong_structure",
+      "predictionId": "image:0,660,1140,1980",
+      "annotationId": "image:0,660,1140,1980",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:page:0,0,1200,2670:page:0,0,1200,2670",
+      "category": "wrong_structure",
+      "predictionId": "page:0,0,1200,2670",
+      "annotationId": "page:0,0,1200,2670",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    }
+  ]
+}

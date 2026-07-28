@@ -1,0 +1,69 @@
+{
+  "differences": [
+    {
+      "id": "match:card:150,516,900,399:card:150,516,900,399",
+      "category": "wrong_structure",
+      "predictionId": "card:150,516,900,399",
+      "annotationId": "card:150,516,900,399",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:card:36,1785,501,378:card:36,1785,501,378",
+      "category": "wrong_structure",
+      "predictionId": "card:36,1785,501,378",
+      "annotationId": "card:36,1785,501,378",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:image:0,0,1200,360:image:0,0,1200,360",
+      "category": "wrong_structure",
+      "predictionId": "image:0,0,1200,360",
+      "annotationId": "image:0,0,1200,360",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:image:0,480,1200,1800:image:0,480,1200,1800",
+      "category": "wrong_structure",
+      "predictionId": "image:0,480,1200,1800",
+      "annotationId": "image:0,480,1200,1800",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:table:3,882,1194,888:table:3,882,1194,888",
+      "category": "wrong_structure",
+      "predictionId": "table:3,882,1194,888",
+      "annotationId": "table:3,882,1194,888",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    }
+  ]
+}

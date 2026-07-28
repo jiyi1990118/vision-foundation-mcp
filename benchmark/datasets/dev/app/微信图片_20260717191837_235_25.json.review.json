@@ -1,0 +1,69 @@
+{
+  "differences": [
+    {
+      "id": "match:card:15,1506,1170,390:card:15,1506,1170,390",
+      "category": "wrong_structure",
+      "predictionId": "card:15,1506,1170,390",
+      "annotationId": "card:15,1506,1170,390",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:footer:3,2469,1194,156:footer:3,2469,1194,156",
+      "category": "wrong_structure",
+      "predictionId": "footer:3,2469,1194,156",
+      "annotationId": "footer:3,2469,1194,156",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:image:0,0,1200,1380:image:0,0,1200,1380",
+      "category": "wrong_structure",
+      "predictionId": "image:0,0,1200,1380",
+      "annotationId": "image:0,0,1200,1380",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:page:0,0,1200,2670:page:0,0,1200,2670",
+      "category": "wrong_structure",
+      "predictionId": "page:0,0,1200,2670",
+      "annotationId": "page:0,0,1200,2670",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:table:15,885,1170,618:table:15,885,1170,618",
+      "category": "wrong_structure",
+      "predictionId": "table:15,885,1170,618",
+      "annotationId": "table:15,885,1170,618",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    }
+  ]
+}

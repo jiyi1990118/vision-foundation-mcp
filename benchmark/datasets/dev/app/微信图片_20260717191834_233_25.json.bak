@@ -20,13 +20,13 @@
       },
       "render": "native",
       "children": [
-        "image:0,1080,540,780",
-        "image:0,180,1200,540",
-        "image:0,2220,1200,420",
+        "table:3,285,1194,774",
         "table:21,333,1140,732",
-        "table:24,1080,1152,537",
         "table:24,1629,1152,597",
-        "table:3,285,1194,774"
+        "table:24,1080,1152,537",
+        "image:0,180,1200,540",
+        "image:0,1080,540,780",
+        "image:0,2220,1200,420"
       ]
     },
     {
@@ -51,12 +51,12 @@
       },
       "render": "native",
       "children": [
-        "container:303,936,219,48",
         "container:69,834,285,60",
+        "container:303,936,219,48",
+        "image:60,540,600,240",
         "icon:1080,840,60,60",
-        "icon:300,930,210,60",
         "icon:60,930,210,60",
-        "image:60,540,600,240"
+        "icon:300,930,210,60"
       ]
     },
     {
@@ -178,12 +178,12 @@
       },
       "render": "native",
       "children": [
-        "container:327,1938,273,48",
-        "container:483,1938,207,48",
         "container:516,2091,309,45",
-        "container:57,1938,258,48",
+        "container:327,1938,273,48",
         "container:795,1938,270,48",
-        "container:822,2088,228,48"
+        "container:57,1938,258,48",
+        "container:822,2088,228,48",
+        "container:483,1938,207,48"
       ]
     },
     {
@@ -263,9 +263,9 @@
       },
       "render": "native",
       "children": [
-        "icon:1020,1230,120,90",
         "icon:720,1230,150,60",
-        "icon:900,1230,90,90"
+        "icon:900,1230,90,90",
+        "icon:1020,1230,120,90"
       ]
     },
     {
@@ -312,13 +312,13 @@
       },
       "render": "native",
       "children": [
-        "container:492,183,162,57",
         "container:723,657,285,48",
-        "container:780,582,171,51",
         "container:93,183,216,57",
-        "icon:780,570,180,60",
+        "container:492,183,162,57",
+        "container:780,582,171,51",
+        "icon:960,180,210,60",
         "icon:810,270,240,240",
-        "icon:960,180,210,60"
+        "icon:780,570,180,60"
       ]
     },
     {
@@ -423,15 +423,15 @@
       },
       "render": "native",
       "children": [
+        "navbar:57,1215,372,48",
         "container:225,1788,291,48",
-        "container:57,1272,186,45",
-        "container:81,1110,150,57",
-        "container:87,1512,153,54",
         "container:87,1674,225,54",
-        "icon:330,1350,180,60",
+        "container:81,1110,150,57",
+        "container:57,1272,186,45",
+        "container:87,1512,153,54",
         "icon:60,1350,240,90",
-        "icon:60,1500,180,60",
-        "navbar:57,1215,372,48"
+        "icon:330,1350,180,60",
+        "icon:60,1500,180,60"
       ]
     },
     {
@@ -558,10 +558,10 @@
       },
       "render": "native",
       "children": [
-        "container:24,2517,165,60",
-        "container:69,2364,174,48",
         "container:897,2259,225,204",
         "container:96,2283,351,54",
+        "container:24,2517,165,60",
+        "container:69,2364,174,48",
         "icon:150,2430,210,60",
         "icon:960,2520,150,60"
       ]
@@ -633,304 +633,9 @@
       "render": "native"
     }
   ],
-  "relations": [
-    {
-      "from": "footer:3,2235,1194,390",
-      "to": "container:24,2517,165,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "footer:3,2235,1194,390",
-      "to": "container:69,2364,174,48",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "footer:3,2235,1194,390",
-      "to": "container:897,2259,225,204",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "footer:3,2235,1194,390",
-      "to": "container:96,2283,351,54",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "footer:3,2235,1194,390",
-      "to": "icon:150,2430,210,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "footer:3,2235,1194,390",
-      "to": "icon:960,2520,150,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "icon:60,930,210,60",
-      "to": "container:69,936,189,51",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "icon:960,180,210,60",
-      "to": "container:963,189,204,45",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,1080,540,780",
-      "to": "container:225,1788,291,48",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,1080,540,780",
-      "to": "container:57,1272,186,45",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,1080,540,780",
-      "to": "container:81,1110,150,57",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,1080,540,780",
-      "to": "container:87,1512,153,54",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,1080,540,780",
-      "to": "container:87,1674,225,54",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,1080,540,780",
-      "to": "icon:330,1350,180,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,1080,540,780",
-      "to": "icon:60,1350,240,90",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,1080,540,780",
-      "to": "icon:60,1500,180,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,1080,540,780",
-      "to": "navbar:57,1215,372,48",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,180,1200,540",
-      "to": "container:492,183,162,57",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,180,1200,540",
-      "to": "container:723,657,285,48",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,180,1200,540",
-      "to": "container:780,582,171,51",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,180,1200,540",
-      "to": "container:93,183,216,57",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,180,1200,540",
-      "to": "icon:780,570,180,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,180,1200,540",
-      "to": "icon:810,270,240,240",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,180,1200,540",
-      "to": "icon:960,180,210,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,2220,1200,420",
-      "to": "footer:3,2235,1194,390",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:60,540,600,240",
-      "to": "navbar:66,546,513,195",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "navbar:66,546,513,195",
-      "to": "icon:240,570,180,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "image:0,1080,540,780",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "image:0,180,1200,540",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "image:0,2220,1200,420",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "table:21,333,1140,732",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "table:24,1080,1152,537",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "table:24,1629,1152,597",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "table:3,285,1194,774",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:21,333,1140,732",
-      "to": "container:303,936,219,48",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:21,333,1140,732",
-      "to": "container:69,834,285,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:21,333,1140,732",
-      "to": "icon:1080,840,60,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:21,333,1140,732",
-      "to": "icon:300,930,210,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:21,333,1140,732",
-      "to": "icon:60,930,210,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:21,333,1140,732",
-      "to": "image:60,540,600,240",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:24,1080,1152,537",
-      "to": "icon:1020,1230,120,90",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:24,1080,1152,537",
-      "to": "icon:720,1230,150,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:24,1080,1152,537",
-      "to": "icon:900,1230,90,90",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:24,1629,1152,597",
-      "to": "container:327,1938,273,48",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:24,1629,1152,597",
-      "to": "container:483,1938,207,48",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:24,1629,1152,597",
-      "to": "container:516,2091,309,45",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:24,1629,1152,597",
-      "to": "container:57,1938,258,48",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:24,1629,1152,597",
-      "to": "container:795,1938,270,48",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:24,1629,1152,597",
-      "to": "container:822,2088,228,48",
-      "type": "contains",
-      "source": "derived"
-    }
-  ],
+  "relations": [],
   "zOrder": [],
   "warnings": [
-    "human-reviewed: local-workbench"
+    "pipeline-generated draft annotation - not human verified"
   ]
 }

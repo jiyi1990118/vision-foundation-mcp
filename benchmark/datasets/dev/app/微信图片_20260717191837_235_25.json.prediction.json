@@ -20,11 +20,11 @@
       },
       "render": "native",
       "children": [
+        "table:15,885,1170,618",
         "card:15,1506,1170,390",
         "footer:3,2469,1194,156",
-        "icon:840,2460,60,180",
         "image:0,0,1200,1380",
-        "table:15,885,1170,618"
+        "icon:840,2460,60,180"
       ]
     },
     {
@@ -38,13 +38,13 @@
       },
       "render": "native",
       "children": [
-        "card:426,1014,333,309",
         "card:48,1014,339,309",
         "card:804,1014,339,309",
-        "icon:1020,1380,90,60",
-        "icon:270,1380,90,60",
+        "card:426,1014,333,309",
         "icon:30,900,210,90",
-        "icon:660,1380,90,60"
+        "icon:270,1380,90,60",
+        "icon:660,1380,90,60",
+        "icon:1020,1380,90,60"
       ]
     },
     {
@@ -149,16 +149,16 @@
       },
       "render": "native",
       "children": [
+        "container:48,1641,255,51",
+        "container:72,1539,198,54",
+        "container:48,1698,204,48",
+        "container:918,1647,90,90",
         "container:1071,1647,90,90",
         "container:165,1791,144,51",
-        "container:48,1641,255,51",
-        "container:48,1698,204,48",
-        "container:72,1539,198,54",
-        "container:918,1647,90,90",
-        "icon:1080,1650,90,90",
         "icon:60,1650,270,90",
-        "icon:60,1770,240,90",
-        "icon:930,1650,120,90"
+        "icon:930,1650,120,90",
+        "icon:1080,1650,90,90",
+        "icon:60,1770,240,90"
       ]
     },
     {
@@ -283,9 +283,9 @@
       "render": "native",
       "children": [
         "container:198,2562,345,48",
-        "container:252,2493,147,54",
         "container:57,2481,111,114",
         "container:954,2517,159,57",
+        "container:252,2493,147,54",
         "icon:60,2490,120,90",
         "icon:960,2520,150,60"
       ]
@@ -367,25 +367,25 @@
       },
       "render": "native",
       "children": [
-        "container:336,459,207,51",
-        "container:453,156,216,54",
-        "container:48,762,165,60",
-        "container:663,546,339,57",
-        "container:786,222,171,45",
-        "container:966,222,201,45",
-        "header:3,129,1194,12",
         "header:3,285,1194,195",
+        "navbar:3,615,1194,111",
+        "navbar:684,156,453,54",
+        "container:663,546,339,57",
+        "header:3,129,1194,12",
+        "container:453,156,216,54",
+        "navbar:3,864,1194,9",
+        "container:336,459,207,51",
+        "container:48,762,165,60",
+        "container:966,222,201,45",
+        "container:786,222,171,45",
+        "icon:690,150,150,60",
+        "icon:930,150,150,60",
+        "icon:90,180,120,60",
+        "icon:180,270,60,90",
         "icon:1020,270,180,90",
         "icon:1080,540,90,60",
-        "icon:180,270,60,90",
-        "icon:60,750,150,60",
-        "icon:690,150,150,60",
         "icon:690,570,60,60",
-        "icon:90,180,120,60",
-        "icon:930,150,150,60",
-        "navbar:3,615,1194,111",
-        "navbar:3,864,1194,9",
-        "navbar:684,156,453,54"
+        "icon:60,750,150,60"
       ]
     },
     {
@@ -635,310 +635,9 @@
       "render": "native"
     }
   ],
-  "relations": [
-    {
-      "from": "card:15,1506,1170,390",
-      "to": "container:1071,1647,90,90",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "card:15,1506,1170,390",
-      "to": "container:165,1791,144,51",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "card:15,1506,1170,390",
-      "to": "container:48,1641,255,51",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "card:15,1506,1170,390",
-      "to": "container:48,1698,204,48",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "card:15,1506,1170,390",
-      "to": "container:72,1539,198,54",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "card:15,1506,1170,390",
-      "to": "container:918,1647,90,90",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "card:15,1506,1170,390",
-      "to": "icon:1080,1650,90,90",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "card:15,1506,1170,390",
-      "to": "icon:60,1650,270,90",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "card:15,1506,1170,390",
-      "to": "icon:60,1770,240,90",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "card:15,1506,1170,390",
-      "to": "icon:930,1650,120,90",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "footer:3,2469,1194,156",
-      "to": "container:198,2562,345,48",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "footer:3,2469,1194,156",
-      "to": "container:252,2493,147,54",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "footer:3,2469,1194,156",
-      "to": "container:57,2481,111,114",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "footer:3,2469,1194,156",
-      "to": "container:954,2517,159,57",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "footer:3,2469,1194,156",
-      "to": "icon:60,2490,120,90",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "footer:3,2469,1194,156",
-      "to": "icon:960,2520,150,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "header:3,285,1194,195",
-      "to": "container:321,327,303,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "header:3,285,1194,195",
-      "to": "container:720,318,180,69",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "icon:30,900,210,90",
-      "to": "container:69,921,168,48",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "container:336,459,207,51",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "container:453,156,216,54",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "container:48,762,165,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "container:663,546,339,57",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "container:786,222,171,45",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "container:966,222,201,45",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "header:3,129,1194,12",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "header:3,285,1194,195",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "icon:1020,270,180,90",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "icon:1080,540,90,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "icon:180,270,60,90",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "icon:60,750,150,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "icon:690,150,150,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "icon:690,570,60,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "icon:90,180,120,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "icon:930,150,150,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "navbar:3,615,1194,111",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "navbar:3,864,1194,9",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,0,1200,1380",
-      "to": "navbar:684,156,453,54",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "card:15,1506,1170,390",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "footer:3,2469,1194,156",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "icon:840,2460,60,180",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "image:0,0,1200,1380",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "table:15,885,1170,618",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:15,885,1170,618",
-      "to": "card:426,1014,333,309",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:15,885,1170,618",
-      "to": "card:48,1014,339,309",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:15,885,1170,618",
-      "to": "card:804,1014,339,309",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:15,885,1170,618",
-      "to": "icon:1020,1380,90,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:15,885,1170,618",
-      "to": "icon:270,1380,90,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:15,885,1170,618",
-      "to": "icon:30,900,210,90",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "table:15,885,1170,618",
-      "to": "icon:660,1380,90,60",
-      "type": "contains",
-      "source": "derived"
-    }
-  ],
+  "relations": [],
   "zOrder": [],
   "warnings": [
-    "human-reviewed: local-workbench"
+    "pipeline-generated draft annotation - not human verified"
   ]
 }

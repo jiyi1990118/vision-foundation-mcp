@@ -1,0 +1,95 @@
+{
+  "differences": [
+    {
+      "id": "match:footer:3,2235,1194,390:footer:3,2235,1194,390",
+      "category": "wrong_structure",
+      "predictionId": "footer:3,2235,1194,390",
+      "annotationId": "footer:3,2235,1194,390",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:image:0,1080,540,780:image:0,1080,540,780",
+      "category": "wrong_structure",
+      "predictionId": "image:0,1080,540,780",
+      "annotationId": "image:0,1080,540,780",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:image:0,180,1200,540:image:0,180,1200,540",
+      "category": "wrong_structure",
+      "predictionId": "image:0,180,1200,540",
+      "annotationId": "image:0,180,1200,540",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:page:0,0,1200,2670:page:0,0,1200,2670",
+      "category": "wrong_structure",
+      "predictionId": "page:0,0,1200,2670",
+      "annotationId": "page:0,0,1200,2670",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:table:21,333,1140,732:table:21,333,1140,732",
+      "category": "wrong_structure",
+      "predictionId": "table:21,333,1140,732",
+      "annotationId": "table:21,333,1140,732",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:table:24,1080,1152,537:table:24,1080,1152,537",
+      "category": "wrong_structure",
+      "predictionId": "table:24,1080,1152,537",
+      "annotationId": "table:24,1080,1152,537",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:table:24,1629,1152,597:table:24,1629,1152,597",
+      "category": "wrong_structure",
+      "predictionId": "table:24,1629,1152,597",
+      "annotationId": "table:24,1629,1152,597",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    }
+  ]
+}

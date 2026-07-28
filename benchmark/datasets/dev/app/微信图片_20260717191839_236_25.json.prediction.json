@@ -20,36 +20,36 @@
       },
       "render": "native",
       "children": [
-        "container:1047,1788,90,93",
-        "container:228,1809,327,51",
-        "container:228,2328,189,54",
-        "container:273,1944,237,51",
-        "container:33,1695,189,51",
-        "container:33,2079,189,51",
-        "container:63,1785,135,105",
-        "container:63,1917,138,111",
-        "container:63,2172,135,102",
-        "container:63,2301,135,108",
-        "container:912,2172,93,93",
-        "container:921,1788,93,93",
-        "container:921,1926,93,93",
         "footer:3,2445,1194,180",
+        "container:228,1809,327,51",
+        "container:63,1917,138,111",
+        "container:63,2301,135,108",
+        "container:63,1785,135,105",
+        "container:63,2172,135,102",
+        "navbar:30,1899,1140,12",
+        "navbar:30,2034,1140,12",
         "footer:30,2283,1140,12",
         "footer:30,2418,1140,12",
-        "icon:1050,2430,90,60",
-        "icon:240,2190,90,60",
+        "container:273,1944,237,51",
+        "container:228,2328,189,54",
+        "container:33,1695,189,51",
+        "container:33,2079,189,51",
+        "container:921,1788,93,93",
+        "container:921,1926,93,93",
+        "container:912,2172,93,93",
+        "container:1047,1788,90,93",
+        "image:0,60,780,900",
+        "image:0,1020,360,600",
         "icon:30,1680,180,60",
-        "icon:30,2070,180,60",
         "icon:60,1770,120,120",
         "icon:60,1920,150,120",
-        "icon:60,2310,150,90",
         "icon:930,1920,210,120",
+        "icon:30,2070,180,60",
         "icon:990,2160,150,120",
+        "icon:240,2190,90,60",
+        "icon:60,2310,150,90",
         "icon:990,2310,150,90",
-        "image:0,1020,360,600",
-        "image:0,60,780,900",
-        "navbar:30,1899,1140,12",
-        "navbar:30,2034,1140,12"
+        "icon:1050,2430,90,60"
       ]
     },
     {
@@ -63,8 +63,8 @@
       },
       "render": "native",
       "children": [
-        "container:237,2556,189,54",
         "container:966,2520,192,57",
+        "container:237,2556,189,54",
         "icon:690,2490,120,120"
       ]
     },
@@ -313,13 +313,13 @@
       },
       "render": "native",
       "children": [
-        "card:420,651,348,234",
         "card:45,207,366,282",
         "card:51,648,354,285",
-        "container:498,888,195,45",
+        "card:420,651,348,234",
         "container:525,267,123,150",
-        "icon:510,270,210,210",
+        "container:498,888,195,45",
         "icon:60,150,90,120",
+        "icon:510,270,210,210",
         "icon:60,540,90,60"
       ]
     },
@@ -639,310 +639,9 @@
       "render": "native"
     }
   ],
-  "relations": [
-    {
-      "from": "card:45,207,366,282",
-      "to": "icon:150,240,180,240",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "card:51,1275,261,303",
-      "to": "icon:90,1290,60,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "footer:3,2445,1194,180",
-      "to": "container:237,2556,189,54",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "footer:3,2445,1194,180",
-      "to": "container:966,2520,192,57",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "footer:3,2445,1194,180",
-      "to": "icon:690,2490,120,120",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "icon:150,240,180,240",
-      "to": "container:159,267,120,147",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "icon:690,2490,120,120",
-      "to": "container:711,2502,93,93",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "icon:930,1920,210,120",
-      "to": "container:1047,1926,90,93",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,1020,360,600",
-      "to": "card:51,1275,261,303",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,1020,360,600",
-      "to": "container:33,1041,210,51",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,1020,360,600",
-      "to": "icon:60,1170,90,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,1020,360,600",
-      "to": "icon:60,1500,210,90",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,60,780,900",
-      "to": "card:420,651,348,234",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,60,780,900",
-      "to": "card:45,207,366,282",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,60,780,900",
-      "to": "card:51,648,354,285",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,60,780,900",
-      "to": "container:498,888,195,45",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,60,780,900",
-      "to": "container:525,267,123,150",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,60,780,900",
-      "to": "icon:510,270,210,210",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,60,780,900",
-      "to": "icon:60,150,90,120",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "image:0,60,780,900",
-      "to": "icon:60,540,90,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "container:1047,1788,90,93",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "container:228,1809,327,51",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "container:228,2328,189,54",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "container:273,1944,237,51",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "container:33,1695,189,51",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "container:33,2079,189,51",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "container:63,1785,135,105",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "container:63,1917,138,111",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "container:63,2172,135,102",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "container:63,2301,135,108",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "container:912,2172,93,93",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "container:921,1788,93,93",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "container:921,1926,93,93",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "footer:3,2445,1194,180",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "footer:30,2283,1140,12",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "footer:30,2418,1140,12",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "icon:1050,2430,90,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "icon:240,2190,90,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "icon:30,1680,180,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "icon:30,2070,180,60",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "icon:60,1770,120,120",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "icon:60,1920,150,120",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "icon:60,2310,150,90",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "icon:930,1920,210,120",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "icon:990,2160,150,120",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "icon:990,2310,150,90",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "image:0,1020,360,600",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "image:0,60,780,900",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "navbar:30,1899,1140,12",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
-      "from": "page:0,0,1200,2670",
-      "to": "navbar:30,2034,1140,12",
-      "type": "contains",
-      "source": "derived"
-    }
-  ],
+  "relations": [],
   "zOrder": [],
   "warnings": [
-    "human-reviewed: local-workbench"
+    "pipeline-generated draft annotation - not human verified"
   ]
 }

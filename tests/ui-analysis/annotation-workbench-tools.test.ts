@@ -20,10 +20,24 @@ describe('workbench tool system (hand/select/draw)', () => {
     expect(js).toContain('function endDraw(');
   });
 
-  it('branches selectCanvasTarget on draw and hand tools', async () => {
+  it('branches selectCanvasTarget on the draw tool', async () => {
     const js = await readFile(appUrl, 'utf8');
     expect(js).toContain("if(state.tool==='draw'){startDraw(event);return}");
-    expect(js).toContain("if(state.tool==='hand')");
+  });
+
+  it('shows a move cursor on non-page element hover, pan cursor on page/empty', async () => {
+    const js = await readFile(appUrl, "utf8");
+    expect(js).toContain("(t&&!(t.kind==='human'&&t.element.type==='page'))?'move':''");
+  });
+
+  it('treats the page element as a pan background (drag pans, not moves)', async () => {
+    const js = await readFile(appUrl, 'utf8');
+    expect(js).toContain("target.kind==='human'&&target.element.type==='page'");
+  });
+
+  it('tags resize handles with a direction class for cursors', async () => {
+    const js = await readFile(appUrl, 'utf8');
+    expect(js).toContain('`handle handle-${handle}`');
   });
 
   it('routes pointermove/up through the draw gesture', async () => {
@@ -32,10 +46,10 @@ describe('workbench tool system (hand/select/draw)', () => {
     expect(js).toContain('if(state.draw&&state.draw.pointerId===e.pointerId)return endDraw(e)');
   });
 
-  it('only renders resize handles in the select tool', async () => {
+  it('renders resize handles in any non-draw tool', async () => {
     const js = await readFile(appUrl, 'utf8');
-    expect(js).toContain("state.selectedProposal===i&&state.tool==='select'");
-    expect(js).toContain("el.id===state.selectedId&&state.tool==='select'");
+    expect(js).toContain("state.selectedProposal===i&&state.tool!=='draw'");
+    expect(js).toContain("el.id===state.selectedId&&state.tool!=='draw'");
   });
 
   it('renders a draw preview rectangle while drawing', async () => {
@@ -49,6 +63,18 @@ describe('workbench tool system (hand/select/draw)', () => {
     expect(js).toContain("type:'unknown'");
     expect(js).toContain('b.w>=5&&b.h>=5');
     expect(js).toContain("setTool('select')");
+  });
+
+  it('re-renders rulers on canvas scroll', async () => {
+    const js = await readFile(appUrl, 'utf8');
+    expect(js).toContain("canvasWrap.addEventListener('scroll'");
+  });
+
+  it('supports space+drag to pan anywhere', async () => {
+    const js = await readFile(appUrl, 'utf8');
+    expect(js).toContain('state.space');
+    expect(js).toContain("if(state.space){startPan(event);return}");
+    expect(js).toContain("e.key===' '");
   });
 
   it('binds H/V/N and Escape keyboard shortcuts', async () => {

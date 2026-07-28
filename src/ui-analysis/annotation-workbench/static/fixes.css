@@ -458,9 +458,13 @@
 /* Tool switcher buttons in the canvas toolbar */
 .tool-group { display: flex; gap: 2px; padding: 0 4px; border-right: 1px solid #475569; margin-right: 4px; }
 .tool-btn { min-width: 30px; border: 1px solid #64748b; background: #334155; color: #f8fafc; font-size: 14px; line-height: 1; padding: 6px; cursor: pointer; }
-.tool-btn:hover:not(.active) { border-color: #93c5fd; background: #475569; color: #ffffff; }
-.tool-btn.active { border-color: #60a5fa; background: #1e3a5f; color: #ffffff; }
+.tool-btn:hover { border-color: #93c5fd; background: #475569; color: #ffffff; }
+.tool-btn.active, .tool-btn.active:hover { border-color: #60a5fa; background: #1e3a5f; color: #ffffff; }
 .tool-btn:focus-visible { outline: 2px solid #60a5fa; outline-offset: 2px; }
+
+/* Resize handle cursors by direction (Photoshop-like) */
+.handle-nw, .handle-se { cursor: nwse-resize; }
+.handle-ne, .handle-sw { cursor: nesw-resize; }
 
 /* Mask (scrim) element type: semi-transparent dark fill + purple dashed border */
 .box.mask { fill: rgba(15, 23, 42, 0.35); stroke: #7A5BC7; stroke-dasharray: 4 3; }

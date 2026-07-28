@@ -150,6 +150,7 @@ export type ComponentType =
   | 'dialog'
   | 'drawer'
   | 'bottomSheet'
+  | 'mask'
   | 'unknown';
 
 // ── 5. ASTNode ──

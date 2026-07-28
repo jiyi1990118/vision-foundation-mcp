@@ -57,6 +57,26 @@ describe('overlay-detector / detectOverlays', () => {
     expect(card.props.mask).toBeDefined();
   });
 
+  it('emits a mask (scrim) element as a first-class node when a dialog has a mask', async () => {
+    const svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="0" width="${W}" height="${H}" fill="#ffffff"/>
+      <rect x="0" y="0" width="${W}" height="${H}" fill="#333333"/>
+      <rect x="100" y="150" width="100" height="100" fill="#ffffff" stroke="#d9d9d9"/>
+    </svg>`;
+    const image = await svgToImage(svg);
+    const ast = astWithPage(box(0, 0, W, H), [leaf('card', 'card', box(100, 150, 100, 100))]);
+    const overlays = await detectOverlays(image, ast);
+    applyOverlays(ast, overlays);
+
+    const maskNode = ast.root.children.find((c) => c.type === 'mask');
+    expect(maskNode).toBeDefined();
+    expect(maskNode!.id).toBe('card-mask');
+    expect(maskNode!.bbox.w).toBeGreaterThan(0);
+    expect(maskNode!.bbox.h).toBeGreaterThan(0);
+    expect(maskNode!.props.scrim).toBe(true);
+    expect(maskNode!.props.zIndex).toBe(999);
+  });
+
   it('detects an overlapping drawer (left edge, tall, narrow) without reporting a dialog', async () => {
     const svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
       <rect x="0" y="0" width="${W}" height="${H}" fill="#ffffff"/>

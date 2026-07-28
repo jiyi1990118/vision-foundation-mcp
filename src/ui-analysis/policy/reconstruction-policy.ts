@@ -102,6 +102,14 @@ export function assignRenderModes(root: ASTNode, options?: PolicyOptions): void 
       return;
     }
 
+    // Mask (scrim) is a visual occlusion layer, not an interactive component.
+    if (node.type === 'mask') {
+      render = { mode: 'semantic-only' };
+      node.props.render = render;
+      for (const child of node.children) walk(child, render.mode);
+      return;
+    }
+
     // Default: native for containers and everything else.
     render = { mode: 'native' };
     node.props.render = render;

@@ -114,6 +114,7 @@ const RECTANGLE_TYPES: ReadonlySet<ComponentType> = new Set<ComponentType>([
   'textarea',
   'select',
   'dropdown',
+  'mask',
 ]);
 
 function figmaNodeType(type: ComponentType): FigmaNodeType {

@@ -387,12 +387,26 @@ export function applyOverlays(ast: SemanticAST, overlays: OverlayInfo[]): void {
   if (overlays.length === 0) return;
   const map = new Map<string, OverlayInfo>();
   for (const o of overlays) map.set(o.nodeId, o);
+  const maskNodes: ASTNode[] = [];
   for (const node of walkNodes(ast.root)) {
     const info = map.get(node.id);
     if (info === undefined) continue;
     node.type = info.overlayType;
     node.props.overlay = true;
     node.props.zIndex = info.zIndex;
-    if (info.mask !== undefined) node.props.mask = info.mask;
+    if (info.mask !== undefined) {
+      node.props.mask = info.mask;
+      // Emit the scrim as a first-class `mask` element so downstream
+      // recognition / annotation / export treats it as an occluding layer
+      // rather than only a dialog prop. Sits just below the overlay in z.
+      maskNodes.push({
+        id: `${node.id}-mask`,
+        type: 'mask',
+        bbox: info.mask,
+        props: { overlay: true, zIndex: info.zIndex - 1, scrim: true },
+        children: [],
+      });
+    }
   }
+  for (const m of maskNodes) ast.root.children.push(m);
 }

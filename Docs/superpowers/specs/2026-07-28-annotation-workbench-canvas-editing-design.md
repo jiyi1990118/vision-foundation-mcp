@@ -117,3 +117,28 @@ resize 手柄仅在 `select` 工具下渲染并响应。
 
 - `pnpm typecheck` / `pnpm lint` / `pnpm build` / `pnpm test:unit`
 - 浏览器实测：手型拖动平移、H/V/N 切换、框选创建元素、mask 类型与 scrim 视觉
+
+## 实现修订（反馈驱动）
+
+首次实现后根据审核反馈调整：
+
+- **光标**：手型默认 `grab`；悬停非 page 元素变 `move`；resize 手柄按方向变
+  `nwse-resize`/`nesw-resize`（Photoshop 式）。page 背景仍为 `grab`（拖动 page = 平移）。
+- **平移**：拖动 page 背景/空白 = 平移；**按住空格 + 拖动 = 任意位置平移**（标准设计工具交互）。
+  手型与选择工具均支持元素移动/缩放，差异仅在空白区光标（grab vs default）。
+- **工具按钮**：激活态 hover 不再变白（`.tool-btn.active:hover` 保持深蓝 `#1e3a5f`）。
+- **标尺**：刻度按内容实际位置（`getBoundingClientRect`）定位，随缩放重排步长、随滚动
+  重新渲染（`canvas-wrap` `scroll` 监听），不再"变短"或"不放大"。
+
+## 遮盖层 mask：从编辑区类型升级为识别管线类型
+
+`mask` 不只是工作台手动可选类型，而是**元素识别管线产出的一等类型**：
+
+- `ComponentType`（`ir/types.ts`）新增 `'mask'`。
+- `applyOverlays`（`overlay-detector.ts`）：当 dialog 检测到 mask 区域时，除在 dialog 节点
+  存 `props.mask` 外，额外向 `ast.root.children` 追加一个 `type:'mask'` 节点（bbox = 遮罩区，
+  `zIndex = dialogZ - 1`，`props.scrim = true`），供下游识别/标注/导出当作遮挡层处理。
+- `assignRenderModes`：`mask` -> `semantic-only`（视觉层，非可交互组件）。
+- `figmaNodeType`：`mask` -> `RECTANGLE`。
+- 标注生成脚本 `collectNodes` 递归遍历 AST，mask 节点以 `type:'mask'` 写入标注 JSON。
+- 工作台 `TYPE_NAMES`/`COMPONENT_TYPE_GROUPS` 已含 `mask`（浮层组）+ scrim 视觉样式。

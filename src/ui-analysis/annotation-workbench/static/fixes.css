@@ -448,3 +448,22 @@
 .screenshot-item .item-meta { grid-column:1 / -1; }
 .shot-ordinal { font:600 12px ui-monospace,monospace; color:#94a3b8; text-align:center; padding-top:1px; }
 .screenshot-item.active .shot-ordinal { color:#285ccf; }
+
+/* Canvas tool cursors: hand = grab/pan, select = default, draw = crosshair */
+.canvas-wrap[data-tool="hand"] { cursor: grab; }
+.canvas-wrap[data-tool="hand"].panning { cursor: grabbing; }
+.canvas-wrap[data-tool="select"] { cursor: default; }
+.canvas-wrap[data-tool="draw"] { cursor: crosshair; }
+
+/* Tool switcher buttons in the canvas toolbar */
+.tool-group { display: flex; gap: 2px; padding: 0 4px; border-right: 1px solid #475569; margin-right: 4px; }
+.tool-btn { min-width: 30px; border: 1px solid #64748b; background: #334155; color: #f8fafc; font-size: 14px; line-height: 1; padding: 6px; cursor: pointer; }
+.tool-btn:hover:not(.active) { border-color: #93c5fd; background: #475569; color: #ffffff; }
+.tool-btn.active { border-color: #60a5fa; background: #1e3a5f; color: #ffffff; }
+.tool-btn:focus-visible { outline: 2px solid #60a5fa; outline-offset: 2px; }
+
+/* Mask (scrim) element type: semi-transparent dark fill + purple dashed border */
+.box.mask { fill: rgba(15, 23, 42, 0.35); stroke: #7A5BC7; stroke-dasharray: 4 3; }
+
+/* Draw preview rectangle while dragging in draw mode */
+.box.drawing { fill: transparent; stroke: #60a5fa; stroke-dasharray: 4 3; }

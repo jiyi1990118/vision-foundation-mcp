@@ -40,3 +40,18 @@ export interface QualityReport {
   unexplainedAreaRatio: number;
   warnings: string[];
 }
+
+export interface QualityReportNode {
+  id: string;
+  type: string;
+  bbox: BBox;
+  render: { mode: RenderMode };
+  evidence?: unknown[];
+}
+
+export interface QualityReportInput {
+  nodes: QualityReportNode[];
+  totalNodes: number;
+  imageWidth?: number;
+  imageHeight?: number;
+}

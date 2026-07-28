@@ -1,0 +1,431 @@
+{
+  "image": "微信图片_20260717191842_237_25.jpg",
+  "imageSize": {
+    "width": 1200,
+    "height": 2670
+  },
+  "platform": "app",
+  "theme": "light",
+  "language": "zh",
+  "dpi": "standard",
+  "elements": [
+    {
+      "id": "page:0,0,1200,2670",
+      "type": "page",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 2670
+      },
+      "render": "native",
+      "children": [
+        "container:3,174,135,93",
+        "image:0,180,1200,2460"
+      ]
+    },
+    {
+      "id": "container:3,174,135,93",
+      "type": "container",
+      "bbox": {
+        "x": 3,
+        "y": 174,
+        "w": 135,
+        "h": 93
+      },
+      "render": "native"
+    },
+    {
+      "id": "image:0,180,1200,2460",
+      "type": "image",
+      "bbox": {
+        "x": 0,
+        "y": 180,
+        "w": 1200,
+        "h": 2460
+      },
+      "render": "native",
+      "children": [
+        "footer:3,2184,1194,441",
+        "card:15,714,384,483",
+        "card:21,1224,372,348",
+        "card:414,1224,372,348",
+        "card:807,1224,372,348",
+        "card:21,1731,372,348",
+        "card:414,1731,372,348",
+        "card:807,1731,372,348",
+        "card:414,720,372,345",
+        "card:807,720,372,345",
+        "header:30,336,903,48",
+        "navbar:282,285,372,45",
+        "container:876,285,285,45",
+        "header:153,255,1044,12",
+        "container:54,621,213,57",
+        "container:30,390,264,45",
+        "container:189,525,186,60",
+        "container:939,339,210,45",
+        "container:447,1134,186,42",
+        "container:840,1134,186,42",
+        "container:51,1638,186,42",
+        "container:447,1638,186,42",
+        "container:300,390,171,45",
+        "container:840,1638,183,42",
+        "container:840,2091,183,42",
+        "container:54,2091,180,42",
+        "icon:60,630,210,60"
+      ]
+    },
+    {
+      "id": "footer:3,2184,1194,441",
+      "type": "footer",
+      "bbox": {
+        "x": 3,
+        "y": 2184,
+        "w": 1194,
+        "h": 441
+      },
+      "render": "native",
+      "children": [
+        "container:966,2520,192,57",
+        "container:747,2502,90,93",
+        "container:624,2502,90,90",
+        "icon:30,2520,210,60"
+      ]
+    },
+    {
+      "id": "container:966,2520,192,57",
+      "type": "button",
+      "bbox": {
+        "x": 966,
+        "y": 2520,
+        "w": 192,
+        "h": 57
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:747,2502,90,93",
+      "type": "container",
+      "bbox": {
+        "x": 747,
+        "y": 2502,
+        "w": 90,
+        "h": 93
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:624,2502,90,90",
+      "type": "container",
+      "bbox": {
+        "x": 624,
+        "y": 2502,
+        "w": 90,
+        "h": 90
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:30,2520,210,60",
+      "type": "icon",
+      "bbox": {
+        "x": 30,
+        "y": 2520,
+        "w": 210,
+        "h": 60
+      },
+      "render": "native"
+    },
+    {
+      "id": "card:15,714,384,483",
+      "type": "card",
+      "bbox": {
+        "x": 15,
+        "y": 714,
+        "w": 384,
+        "h": 483
+      },
+      "render": "native"
+    },
+    {
+      "id": "card:21,1224,372,348",
+      "type": "card",
+      "bbox": {
+        "x": 21,
+        "y": 1224,
+        "w": 372,
+        "h": 348
+      },
+      "render": "native"
+    },
+    {
+      "id": "card:414,1224,372,348",
+      "type": "card",
+      "bbox": {
+        "x": 414,
+        "y": 1224,
+        "w": 372,
+        "h": 348
+      },
+      "render": "native"
+    },
+    {
+      "id": "card:807,1224,372,348",
+      "type": "card",
+      "bbox": {
+        "x": 807,
+        "y": 1224,
+        "w": 372,
+        "h": 348
+      },
+      "render": "native"
+    },
+    {
+      "id": "card:21,1731,372,348",
+      "type": "card",
+      "bbox": {
+        "x": 21,
+        "y": 1731,
+        "w": 372,
+        "h": 348
+      },
+      "render": "native"
+    },
+    {
+      "id": "card:414,1731,372,348",
+      "type": "card",
+      "bbox": {
+        "x": 414,
+        "y": 1731,
+        "w": 372,
+        "h": 348
+      },
+      "render": "native"
+    },
+    {
+      "id": "card:807,1731,372,348",
+      "type": "card",
+      "bbox": {
+        "x": 807,
+        "y": 1731,
+        "w": 372,
+        "h": 348
+      },
+      "render": "native"
+    },
+    {
+      "id": "card:414,720,372,345",
+      "type": "card",
+      "bbox": {
+        "x": 414,
+        "y": 720,
+        "w": 372,
+        "h": 345
+      },
+      "render": "native"
+    },
+    {
+      "id": "card:807,720,372,345",
+      "type": "card",
+      "bbox": {
+        "x": 807,
+        "y": 720,
+        "w": 372,
+        "h": 345
+      },
+      "render": "native"
+    },
+    {
+      "id": "header:30,336,903,48",
+      "type": "header",
+      "bbox": {
+        "x": 30,
+        "y": 336,
+        "w": 903,
+        "h": 48
+      },
+      "render": "native"
+    },
+    {
+      "id": "navbar:282,285,372,45",
+      "type": "navbar",
+      "bbox": {
+        "x": 282,
+        "y": 285,
+        "w": 372,
+        "h": 45
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:876,285,285,45",
+      "type": "container",
+      "bbox": {
+        "x": 876,
+        "y": 285,
+        "w": 285,
+        "h": 45
+      },
+      "render": "native"
+    },
+    {
+      "id": "header:153,255,1044,12",
+      "type": "header",
+      "bbox": {
+        "x": 153,
+        "y": 255,
+        "w": 1044,
+        "h": 12
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:54,621,213,57",
+      "type": "container",
+      "bbox": {
+        "x": 54,
+        "y": 621,
+        "w": 213,
+        "h": 57
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:30,390,264,45",
+      "type": "container",
+      "bbox": {
+        "x": 30,
+        "y": 390,
+        "w": 264,
+        "h": 45
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:189,525,186,60",
+      "type": "container",
+      "bbox": {
+        "x": 189,
+        "y": 525,
+        "w": 186,
+        "h": 60
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:939,339,210,45",
+      "type": "container",
+      "bbox": {
+        "x": 939,
+        "y": 339,
+        "w": 210,
+        "h": 45
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:447,1134,186,42",
+      "type": "container",
+      "bbox": {
+        "x": 447,
+        "y": 1134,
+        "w": 186,
+        "h": 42
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:840,1134,186,42",
+      "type": "container",
+      "bbox": {
+        "x": 840,
+        "y": 1134,
+        "w": 186,
+        "h": 42
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:51,1638,186,42",
+      "type": "container",
+      "bbox": {
+        "x": 51,
+        "y": 1638,
+        "w": 186,
+        "h": 42
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:447,1638,186,42",
+      "type": "container",
+      "bbox": {
+        "x": 447,
+        "y": 1638,
+        "w": 186,
+        "h": 42
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:300,390,171,45",
+      "type": "container",
+      "bbox": {
+        "x": 300,
+        "y": 390,
+        "w": 171,
+        "h": 45
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:840,1638,183,42",
+      "type": "container",
+      "bbox": {
+        "x": 840,
+        "y": 1638,
+        "w": 183,
+        "h": 42
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:840,2091,183,42",
+      "type": "container",
+      "bbox": {
+        "x": 840,
+        "y": 2091,
+        "w": 183,
+        "h": 42
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:54,2091,180,42",
+      "type": "container",
+      "bbox": {
+        "x": 54,
+        "y": 2091,
+        "w": 180,
+        "h": 42
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:60,630,210,60",
+      "type": "icon",
+      "bbox": {
+        "x": 60,
+        "y": 630,
+        "w": 210,
+        "h": 60
+      },
+      "render": "native"
+    }
+  ],
+  "relations": [],
+  "zOrder": [],
+  "warnings": [
+    "pipeline-generated draft annotation - not human verified"
+  ]
+}

@@ -22,7 +22,7 @@ import type { UiLayoutExtraction } from '../core/extractors/ui-layout-extractor.
 import type { DesignExtraction } from '../core/extractors/design-extractor.js';
 import type { OcrItem } from '../core/key-content-extractor.js';
 import type { VisionProvider } from '../providers/types.js';
-import type { SemanticAST, CodegenIR, VisionOcrItem, DecodedImage, ASTNode } from './ir/types.js';
+import type { SemanticAST, CodegenIR, VisionOcrItem, DecodedImage, ASTNode, BBox } from './ir/types.js';
 import type { UiReconstructionSpec } from './reconstruction/index.js';
 import type { PageType, VariantInfo } from './semantic/index.js';
 import type { ImageContentInfo } from './image-content/index.js';
@@ -53,6 +53,7 @@ import { fuseEvidence } from './evidence/fusion-engine.js';
 import { OnnxDetectorAdapter } from './evidence/onnx-detector-adapter.js';
 import { OmniParserAdapter } from './evidence/omniparser-adapter.js';
 import { isValidBBox, type EvidenceCandidate } from './evidence/types.js';
+import { projectEvidenceToNodes, injectEvidenceIntoAst } from './evidence/ast-projection.js';
 
 const MAX_MEDIA_AREAS = 20;
 
@@ -205,13 +206,35 @@ async function runDetectorHub(
         bbox: c.bbox,
         score: 0.7,
         sources: ['cv'],
+        sourceVotes: [{ source: 'cv', score: 0.7, type: c.type }],
         ...(c.text ? { text: c.text } : {}),
         ...(c.state && c.state !== 'default' ? { state: c.state } : {}),
       };
     })
     .filter((c): c is EvidenceCandidate => c !== null);
-  if (cvCandidates.length > 0) {
-    hub.register('cv', async () => cvCandidates);
+
+  // Register structural regions as CV evidence. The legacy extractor often
+  // produces 0 fine-grained components but populates structure.regions
+  // (header/main/card/nav/...). These coarse regions are the primary CV
+  // signal for most images and must be available as evidence so the quality
+  // report can compute critical-element coverage.
+  const regionCandidates: EvidenceCandidate[] = layout.structure.regions
+    .map((r, i): EvidenceCandidate | null => {
+      if (!isValidBBox(r.bbox)) return null;
+      return {
+        id: `cv-region-${i}`,
+        type: r.type,
+        bbox: r.bbox,
+        score: 0.6,
+        sources: ['cv'],
+        sourceVotes: [{ source: 'cv', score: 0.6, type: r.type }],
+      };
+    })
+    .filter((c): c is EvidenceCandidate => c !== null);
+
+  const allCvCandidates = [...cvCandidates, ...regionCandidates];
+  if (allCvCandidates.length > 0) {
+    hub.register('cv', async () => allCvCandidates);
   }
 
   // Register OCR source. TextEntry.bbox is already the {x,y,w,h} form.
@@ -225,6 +248,7 @@ async function runDetectorHub(
         bbox,
         score: 0.9,
         sources: ['ocr'],
+        sourceVotes: [{ source: 'ocr', score: 0.9, type: 'text' }],
         text: t.text,
       };
     })
@@ -336,9 +360,7 @@ export async function runUiAnalysis(input: RunUiAnalysisInput): Promise<UiAnalys
       logger.warn('ui detector hub failed', { error: String(err) });
     }
   }
-  if (hubCandidates !== null) {
-    // Hub ran successfully; fused candidates are available for future AST
-    // integration. The existing CV/OCR path still produces the AST for now.
+  if (hubCandidates !== null && hubCandidates.length > 0) {
     logger.debug('ui detector hub produced fused candidates', { count: hubCandidates.length });
   }
 
@@ -359,6 +381,23 @@ export async function runUiAnalysis(input: RunUiAnalysisInput): Promise<UiAnalys
       useLlm: opts.useLlm === true,
     },
   });
+
+  // Evidence reflow (A1): project fused detector-hub candidates onto AST
+  // nodes and attach per-node evidence metadata. This makes the multi-source
+  // fusion result consumable by the quality report (critical-element
+  // coverage) and downstream diagnostics. Fast mode produces no candidates
+  // so this is a no-op there.
+  if (pipeline.ui && hubCandidates !== null && hubCandidates.length > 0) {
+    try {
+      const evidenceMap = projectEvidenceToNodes(hubCandidates, pipeline.ui);
+      injectEvidenceIntoAst(pipeline.ui, evidenceMap);
+      throwIfAborted(input.signal);
+    } catch (err) {
+      throwIfAborted(input.signal);
+      skipped.push('evidenceProjection');
+      logger.warn('ui evidence projection failed', { error: String(err) });
+    }
+  }
 
   if (input.image && pipeline.ui) {
     try {
@@ -616,10 +655,13 @@ export async function runUiAnalysis(input: RunUiAnalysisInput): Promise<UiAnalys
           : {}),
         ...(skipped.length > 0 ? { diagnostics: { skipped } } : {}),
         ...(pipeline.ui ? {
-          quality: computeQualityReport(
-            collectRenderNodes(pipeline.ui.root),
-            countNodes(pipeline.ui.root),
-          ),
+          quality: computeQualityReport({
+            nodes: collectRenderNodes(pipeline.ui.root),
+            totalNodes: countNodes(pipeline.ui.root),
+            ...(decodedImage
+              ? { imageWidth: decodedImage.width, imageHeight: decodedImage.height }
+              : {}),
+          }),
         } : {}),
       });
       if (opts.detectLayout === false) {
@@ -669,12 +711,31 @@ export async function runUiAnalysis(input: RunUiAnalysisInput): Promise<UiAnalys
   return result;
 }
 
-function collectRenderNodes(node: ASTNode): Array<{ id: string; render: { mode: RenderMode } }> {
-  const result: Array<{ id: string; render: { mode: RenderMode } }> = [];
+function collectRenderNodes(node: ASTNode): Array<{
+  id: string;
+  type: string;
+  bbox: BBox;
+  render: { mode: RenderMode };
+  evidence?: unknown[];
+}> {
+  const result: Array<{
+    id: string;
+    type: string;
+    bbox: BBox;
+    render: { mode: RenderMode };
+    evidence?: unknown[];
+  }> = [];
   const walk = (n: ASTNode): void => {
     const render = n.props.render;
     if (render !== null && typeof render === 'object' && 'mode' in render) {
-      result.push({ id: n.id, render: render as { mode: RenderMode } });
+      const evidence = n.props.evidence;
+      result.push({
+        id: n.id,
+        type: n.type,
+        bbox: n.bbox,
+        render: render as { mode: RenderMode },
+        ...(Array.isArray(evidence) && evidence.length > 0 ? { evidence } : {}),
+      });
     }
     for (const c of n.children) walk(c);
   };

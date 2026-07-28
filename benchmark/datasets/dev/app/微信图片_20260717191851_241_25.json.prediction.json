@@ -1,0 +1,1520 @@
+{
+  "image": "微信图片_20260717191851_241_25.jpg",
+  "imageSize": {
+    "width": 1200,
+    "height": 2670
+  },
+  "platform": "app",
+  "theme": "light",
+  "language": "zh",
+  "dpi": "standard",
+  "elements": [
+    {
+      "id": "page:0,0,1200,2670",
+      "type": "page",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 2670
+      },
+      "render": "native",
+      "children": [
+        "avatar:1139,1464,61,71",
+        "badge:221,713,75,59",
+        "badge:367,713,125,59",
+        "badge:559,713,88,59",
+        "badge:772,1068,117,96",
+        "card:42,300,324,327",
+        "container:147,1623,159,45",
+        "container:213,1284,132,48",
+        "container:273,1167,159,45",
+        "container:303,2538,144,81",
+        "container:336,876,171,48",
+        "container:405,447,297,141",
+        "container:45,1167,162,45",
+        "container:45,876,252,48",
+        "container:45,945,327,66",
+        "container:462,1803,237,45",
+        "container:501,1167,159,45",
+        "container:531,351,75,99",
+        "container:537,2544,117,96",
+        "container:606,159,285,105",
+        "container:606,351,198,75",
+        "container:63,2562,102,57",
+        "container:69,1269,126,132",
+        "container:729,1167,195,45",
+        "container:819,1290,246,90",
+        "container:849,714,306,114",
+        "container:921,159,102,105",
+        "container:993,1167,159,45",
+        "icon:0,1470,210,90",
+        "icon:1050,150,120,120",
+        "icon:1080,1260,60,60",
+        "icon:120,1260,60,120",
+        "icon:120,1320,60,120",
+        "icon:300,1080,120,60",
+        "icon:540,1080,120,60",
+        "icon:540,2550,120,90",
+        "icon:60,1560,60,120",
+        "icon:660,120,180,60",
+        "icon:660,240,180,60",
+        "icon:840,360,60,60",
+        "icon:930,150,90,90",
+        "image:0,120,360,600",
+        "navbar:3,660,1194,42",
+        "text:1018,1068,113,92",
+        "text:1026,2553,92,75",
+        "text:1060,1619,83,54",
+        "text:200,768,113,58",
+        "text:209,1343,208,42",
+        "text:271,1460,117,71",
+        "text:309,1076,92,75",
+        "text:33,763,113,71",
+        "text:375,772,109,54",
+        "text:401,442,383,42",
+        "text:405,359,404,58",
+        "text:42,880,646,42",
+        "text:46,1460,129,75",
+        "text:488,1469,117,58",
+        "text:542,768,117,58",
+        "text:63,42,116,58",
+        "text:701,1469,125,58",
+        "text:768,2557,133,71",
+        "text:79,1076,96,75",
+        "text:797,42,371,54",
+        "text:922,1469,121,58"
+      ]
+    },
+    {
+      "id": "card:42,300,324,327",
+      "type": "card",
+      "bbox": {
+        "x": 42,
+        "y": 300,
+        "w": 324,
+        "h": 327
+      },
+      "render": "native",
+      "children": [
+        "container:276,537,78,81",
+        "icon:300,360,60,60",
+        "icon:300,420,60,120",
+        "icon:300,480,60,120"
+      ]
+    },
+    {
+      "id": "container:276,537,78,81",
+      "type": "container",
+      "bbox": {
+        "x": 276,
+        "y": 537,
+        "w": 78,
+        "h": 81
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:300,360,60,60",
+      "type": "icon",
+      "bbox": {
+        "x": 300,
+        "y": 360,
+        "w": 60,
+        "h": 60
+      },
+      "render": "native",
+      "text": "沙中的韭菜根"
+    },
+    {
+      "id": "icon:300,420,60,120",
+      "type": "icon",
+      "bbox": {
+        "x": 300,
+        "y": 420,
+        "w": 60,
+        "h": 120
+      },
+      "render": "native",
+      "text": "抖音号：838541178品"
+    },
+    {
+      "id": "icon:300,480,60,120",
+      "type": "icon",
+      "bbox": {
+        "x": 300,
+        "y": 480,
+        "w": 60,
+        "h": 120
+      },
+      "render": "native",
+      "text": "创建AI 形象>"
+    },
+    {
+      "id": "navbar:3,660,1194,42",
+      "type": "navbar",
+      "bbox": {
+        "x": 3,
+        "y": 660,
+        "w": 1194,
+        "h": 42
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:405,447,297,141",
+      "type": "column",
+      "bbox": {
+        "x": 405,
+        "y": 447,
+        "w": 297,
+        "h": 141
+      },
+      "render": "native",
+      "children": [
+        "text:417,526,267,41"
+      ]
+    },
+    {
+      "id": "text:401,442,383,42",
+      "type": "text",
+      "bbox": {
+        "x": 401,
+        "y": 442,
+        "w": 383,
+        "h": 42
+      },
+      "render": "native",
+      "text": "抖音号：838541178品"
+    },
+    {
+      "id": "text:417,526,267,41",
+      "type": "text",
+      "bbox": {
+        "x": 417,
+        "y": 526,
+        "w": 267,
+        "h": 41
+      },
+      "render": "native",
+      "text": "创建AI 形象>"
+    },
+    {
+      "id": "container:849,714,306,114",
+      "type": "container",
+      "bbox": {
+        "x": 849,
+        "y": 714,
+        "w": 306,
+        "h": 114
+      },
+      "render": "native",
+      "children": [
+        "container:909,744,186,54"
+      ]
+    },
+    {
+      "id": "container:909,744,186,54",
+      "type": "text",
+      "bbox": {
+        "x": 909,
+        "y": 744,
+        "w": 186,
+        "h": 54
+      },
+      "render": "native",
+      "text": "编辑主页"
+    },
+    {
+      "id": "container:606,159,285,105",
+      "type": "container",
+      "bbox": {
+        "x": 606,
+        "y": 159,
+        "w": 285,
+        "h": 105
+      },
+      "render": "native",
+      "children": [
+        "text:630,184,238,54"
+      ]
+    },
+    {
+      "id": "text:630,184,238,54",
+      "type": "text",
+      "bbox": {
+        "x": 630,
+        "y": 184,
+        "w": 238,
+        "h": 54
+      },
+      "render": "native",
+      "text": "新访客7"
+    },
+    {
+      "id": "container:819,1290,246,90",
+      "type": "container",
+      "bbox": {
+        "x": 819,
+        "y": 1290,
+        "w": 246,
+        "h": 90
+      },
+      "render": "native",
+      "children": [
+        "text:851,1306,188,54"
+      ]
+    },
+    {
+      "id": "text:851,1306,188,54",
+      "type": "text",
+      "bbox": {
+        "x": 851,
+        "y": 1306,
+        "w": 188,
+        "h": 54
+      },
+      "render": "native",
+      "text": "去发布"
+    },
+    {
+      "id": "container:45,945,327,66",
+      "type": "container",
+      "bbox": {
+        "x": 45,
+        "y": 945,
+        "w": 327,
+        "h": 66
+      },
+      "render": "native",
+      "children": [
+        "container:102,954,258,45"
+      ]
+    },
+    {
+      "id": "container:102,954,258,45",
+      "type": "text",
+      "bbox": {
+        "x": 102,
+        "y": 954,
+        "w": 258,
+        "h": 45
+      },
+      "render": "native",
+      "text": "+ 添加性别等标签"
+    },
+    {
+      "id": "container:69,1269,126,132",
+      "type": "container",
+      "bbox": {
+        "x": 69,
+        "y": 1269,
+        "w": 126,
+        "h": 132
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:606,351,198,75",
+      "type": "container",
+      "bbox": {
+        "x": 606,
+        "y": 351,
+        "w": 198,
+        "h": 75
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:405,359,404,58",
+      "type": "title",
+      "bbox": {
+        "x": 405,
+        "y": 359,
+        "w": 404,
+        "h": 58
+      },
+      "render": "native",
+      "text": "沙中的韭菜根"
+    },
+    {
+      "id": "container:45,876,252,48",
+      "type": "container",
+      "bbox": {
+        "x": 45,
+        "y": 876,
+        "w": 252,
+        "h": 48
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:303,2538,144,81",
+      "type": "title",
+      "bbox": {
+        "x": 303,
+        "y": 2538,
+        "w": 144,
+        "h": 81
+      },
+      "render": "native",
+      "text": "朋友"
+    },
+    {
+      "id": "container:537,2544,117,96",
+      "type": "container",
+      "bbox": {
+        "x": 537,
+        "y": 2544,
+        "w": 117,
+        "h": 96
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:921,159,102,105",
+      "type": "container",
+      "bbox": {
+        "x": 921,
+        "y": 159,
+        "w": 102,
+        "h": 105
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:462,1803,237,45",
+      "type": "text",
+      "bbox": {
+        "x": 462,
+        "y": 1803,
+        "w": 237,
+        "h": 45
+      },
+      "render": "native",
+      "text": "暂时没有更多了"
+    },
+    {
+      "id": "container:729,1167,195,45",
+      "type": "text",
+      "bbox": {
+        "x": 729,
+        "y": 1167,
+        "w": 195,
+        "h": 45
+      },
+      "render": "native",
+      "text": "常访问的人"
+    },
+    {
+      "id": "container:336,876,171,48",
+      "type": "container",
+      "bbox": {
+        "x": 336,
+        "y": 876,
+        "w": 171,
+        "h": 48
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:42,880,646,42",
+      "type": "text",
+      "bbox": {
+        "x": 42,
+        "y": 880,
+        "w": 646,
+        "h": 42
+      },
+      "render": "native",
+      "text": "点击添加介绍，让大家认识你..."
+    },
+    {
+      "id": "container:531,351,75,99",
+      "type": "container",
+      "bbox": {
+        "x": 531,
+        "y": 351,
+        "w": 75,
+        "h": 99
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:45,1167,162,45",
+      "type": "text",
+      "bbox": {
+        "x": 45,
+        "y": 1167,
+        "w": 162,
+        "h": 45
+      },
+      "render": "native",
+      "text": "我的订单",
+      "semanticRole": "label"
+    },
+    {
+      "id": "container:273,1167,159,45",
+      "type": "text",
+      "bbox": {
+        "x": 273,
+        "y": 1167,
+        "w": 159,
+        "h": 45
+      },
+      "render": "native",
+      "text": "观看历史",
+      "semanticRole": "label"
+    },
+    {
+      "id": "container:501,1167,159,45",
+      "type": "text",
+      "bbox": {
+        "x": 501,
+        "y": 1167,
+        "w": 159,
+        "h": 45
+      },
+      "render": "native",
+      "text": "我的钱包"
+    },
+    {
+      "id": "container:993,1167,159,45",
+      "type": "text",
+      "bbox": {
+        "x": 993,
+        "y": 1167,
+        "w": 159,
+        "h": 45
+      },
+      "render": "native",
+      "text": "全部功能"
+    },
+    {
+      "id": "container:147,1623,159,45",
+      "type": "text",
+      "bbox": {
+        "x": 147,
+        "y": 1623,
+        "w": 159,
+        "h": 45
+      },
+      "render": "native",
+      "text": "私密作品"
+    },
+    {
+      "id": "container:213,1284,132,48",
+      "type": "text",
+      "bbox": {
+        "x": 213,
+        "y": 1284,
+        "w": 132,
+        "h": 48
+      },
+      "render": "native",
+      "text": "九节鞭"
+    },
+    {
+      "id": "container:63,2562,102,57",
+      "type": "text",
+      "bbox": {
+        "x": 63,
+        "y": 2562,
+        "w": 102,
+        "h": 57
+      },
+      "render": "native",
+      "text": "首页",
+      "semanticRole": "label"
+    },
+    {
+      "id": "badge:221,713,75,59",
+      "type": "badge",
+      "bbox": {
+        "x": 220.99999999999997,
+        "y": 713,
+        "w": 75.00000000000003,
+        "h": 59
+      },
+      "render": "native",
+      "text": "8",
+      "variant": "default"
+    },
+    {
+      "id": "badge:367,713,125,59",
+      "type": "badge",
+      "bbox": {
+        "x": 367,
+        "y": 713,
+        "w": 125,
+        "h": 59
+      },
+      "render": "native",
+      "text": "359",
+      "variant": "default"
+    },
+    {
+      "id": "badge:559,713,88,59",
+      "type": "badge",
+      "bbox": {
+        "x": 559,
+        "y": 713,
+        "w": 88,
+        "h": 59
+      },
+      "render": "native",
+      "text": "11",
+      "variant": "default"
+    },
+    {
+      "id": "badge:772,1068,117,96",
+      "type": "badge",
+      "bbox": {
+        "x": 772,
+        "y": 1068,
+        "w": 117,
+        "h": 96
+      },
+      "render": "native",
+      "text": "0",
+      "variant": "default"
+    },
+    {
+      "id": "avatar:1139,1464,61,71",
+      "type": "avatar",
+      "bbox": {
+        "x": 1139,
+        "y": 1464,
+        "w": 61,
+        "h": 71
+      },
+      "render": "native",
+      "text": "喜",
+      "variant": "default"
+    },
+    {
+      "id": "image:0,120,360,600",
+      "type": "image",
+      "bbox": {
+        "x": 0,
+        "y": 120,
+        "w": 360,
+        "h": 600
+      },
+      "render": "native",
+      "children": [
+        "container:45,159,294,108",
+        "icon:30,150,300,120"
+      ]
+    },
+    {
+      "id": "container:45,159,294,108",
+      "type": "container",
+      "bbox": {
+        "x": 45,
+        "y": 159,
+        "w": 294,
+        "h": 108
+      },
+      "render": "native",
+      "children": [
+        "container:141,189,162,45"
+      ]
+    },
+    {
+      "id": "container:141,189,162,45",
+      "type": "button",
+      "bbox": {
+        "x": 141,
+        "y": 189,
+        "w": 162,
+        "h": 45
+      },
+      "render": "native",
+      "text": "+添加朋友"
+    },
+    {
+      "id": "icon:30,150,300,120",
+      "type": "icon",
+      "bbox": {
+        "x": 30,
+        "y": 150,
+        "w": 300,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:660,120,180,60",
+      "type": "icon",
+      "bbox": {
+        "x": 660,
+        "y": 120,
+        "w": 180,
+        "h": 60
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:930,150,90,90",
+      "type": "icon",
+      "bbox": {
+        "x": 930,
+        "y": 150,
+        "w": 90,
+        "h": 90
+      },
+      "render": "native",
+      "text": "新访客7"
+    },
+    {
+      "id": "icon:1050,150,120,120",
+      "type": "icon",
+      "bbox": {
+        "x": 1050,
+        "y": 150,
+        "w": 120,
+        "h": 120
+      },
+      "render": "native",
+      "children": [
+        "container:1053,159,102,105"
+      ]
+    },
+    {
+      "id": "container:1053,159,102,105",
+      "type": "container",
+      "bbox": {
+        "x": 1053,
+        "y": 159,
+        "w": 102,
+        "h": 105
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:660,240,180,60",
+      "type": "icon",
+      "bbox": {
+        "x": 660,
+        "y": 240,
+        "w": 180,
+        "h": 60
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:840,360,60,60",
+      "type": "icon",
+      "bbox": {
+        "x": 840,
+        "y": 360,
+        "w": 60,
+        "h": 60
+      },
+      "render": "native",
+      "text": "沙中的韭菜根"
+    },
+    {
+      "id": "icon:300,1080,120,60",
+      "type": "icon",
+      "bbox": {
+        "x": 300,
+        "y": 1080,
+        "w": 120,
+        "h": 60
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:540,1080,120,60",
+      "type": "icon",
+      "bbox": {
+        "x": 540,
+        "y": 1080,
+        "w": 120,
+        "h": 60
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:1050,1080,60,60",
+      "type": "icon",
+      "bbox": {
+        "x": 1050,
+        "y": 1080,
+        "w": 60,
+        "h": 60
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:120,1260,60,120",
+      "type": "icon",
+      "bbox": {
+        "x": 120,
+        "y": 1260,
+        "w": 60,
+        "h": 120
+      },
+      "render": "native",
+      "text": "九节鞭"
+    },
+    {
+      "id": "icon:1080,1260,60,60",
+      "type": "icon",
+      "bbox": {
+        "x": 1080,
+        "y": 1260,
+        "w": 60,
+        "h": 60
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:120,1320,60,120",
+      "type": "icon",
+      "bbox": {
+        "x": 120,
+        "y": 1320,
+        "w": 60,
+        "h": 120
+      },
+      "render": "native",
+      "text": "1.9万人参与"
+    },
+    {
+      "id": "icon:0,1470,210,90",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 1470,
+        "w": 210,
+        "h": 90
+      },
+      "render": "native",
+      "text": "日常"
+    },
+    {
+      "id": "icon:60,1560,60,120",
+      "type": "icon",
+      "bbox": {
+        "x": 60,
+        "y": 1560,
+        "w": 60,
+        "h": 120
+      },
+      "render": "native",
+      "text": "私密作品"
+    },
+    {
+      "id": "icon:540,2550,120,90",
+      "type": "icon",
+      "bbox": {
+        "x": 540,
+        "y": 2550,
+        "w": 120,
+        "h": 90
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:63,42,116,58",
+      "type": "text",
+      "bbox": {
+        "x": 63,
+        "y": 42,
+        "w": 116,
+        "h": 58
+      },
+      "render": "native",
+      "text": "7:15"
+    },
+    {
+      "id": "text:797,42,371,54",
+      "type": "text",
+      "bbox": {
+        "x": 797,
+        "y": 42,
+        "w": 371,
+        "h": 54
+      },
+      "render": "native",
+      "text": "95G5G44"
+    },
+    {
+      "id": "text:33,763,113,71",
+      "type": "text",
+      "bbox": {
+        "x": 33,
+        "y": 763,
+        "w": 113,
+        "h": 71
+      },
+      "render": "native",
+      "text": "获赞",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:200,768,113,58",
+      "type": "text",
+      "bbox": {
+        "x": 200,
+        "y": 768,
+        "w": 113,
+        "h": 58
+      },
+      "render": "native",
+      "text": "互关",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:542,768,117,58",
+      "type": "text",
+      "bbox": {
+        "x": 542,
+        "y": 768,
+        "w": 117,
+        "h": 58
+      },
+      "render": "native",
+      "text": "粉丝"
+    },
+    {
+      "id": "text:375,772,109,54",
+      "type": "text",
+      "bbox": {
+        "x": 375,
+        "y": 772,
+        "w": 109,
+        "h": 54
+      },
+      "render": "native",
+      "text": "关注"
+    },
+    {
+      "id": "text:79,1076,96,75",
+      "type": "text",
+      "bbox": {
+        "x": 79,
+        "y": 1076,
+        "w": 96,
+        "h": 75
+      },
+      "render": "native",
+      "text": "只",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:309,1076,92,75",
+      "type": "subtitle",
+      "bbox": {
+        "x": 309,
+        "y": 1076,
+        "w": 92,
+        "h": 75
+      },
+      "render": "native",
+      "text": "①"
+    },
+    {
+      "id": "text:1018,1068,113,92",
+      "type": "title",
+      "bbox": {
+        "x": 1018,
+        "y": 1068,
+        "w": 113,
+        "h": 92
+      },
+      "render": "native",
+      "text": "吕",
+      "children": [
+        "icon:1050,1080,60,60"
+      ]
+    },
+    {
+      "id": "text:209,1343,208,42",
+      "type": "text",
+      "bbox": {
+        "x": 209,
+        "y": 1343,
+        "w": 208,
+        "h": 42
+      },
+      "render": "native",
+      "text": "1.9万人参与"
+    },
+    {
+      "id": "text:46,1460,129,75",
+      "type": "text",
+      "bbox": {
+        "x": 46,
+        "y": 1460,
+        "w": 129,
+        "h": 75
+      },
+      "render": "native",
+      "text": "作品",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:271,1460,117,71",
+      "type": "text",
+      "bbox": {
+        "x": 271,
+        "y": 1460,
+        "w": 117,
+        "h": 71
+      },
+      "render": "native",
+      "text": "日常",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:488,1469,117,58",
+      "type": "text",
+      "bbox": {
+        "x": 488,
+        "y": 1469,
+        "w": 117,
+        "h": 58
+      },
+      "render": "native",
+      "text": "评价"
+    },
+    {
+      "id": "text:701,1469,125,58",
+      "type": "text",
+      "bbox": {
+        "x": 701,
+        "y": 1469,
+        "w": 125,
+        "h": 58
+      },
+      "render": "native",
+      "text": "推荐"
+    },
+    {
+      "id": "text:922,1469,121,58",
+      "type": "text",
+      "bbox": {
+        "x": 922,
+        "y": 1469,
+        "w": 121,
+        "h": 58
+      },
+      "render": "native",
+      "text": "收藏"
+    },
+    {
+      "id": "text:1060,1619,83,54",
+      "type": "text",
+      "bbox": {
+        "x": 1060,
+        "y": 1619,
+        "w": 83,
+        "h": 54
+      },
+      "render": "native",
+      "text": "1>"
+    },
+    {
+      "id": "text:768,2557,133,71",
+      "type": "subtitle",
+      "bbox": {
+        "x": 768,
+        "y": 2557,
+        "w": 133,
+        "h": 71
+      },
+      "render": "native",
+      "text": "消息"
+    },
+    {
+      "id": "text:1026,2553,92,75",
+      "type": "subtitle",
+      "bbox": {
+        "x": 1026,
+        "y": 2553,
+        "w": 92,
+        "h": 75
+      },
+      "render": "native",
+      "text": "我"
+    }
+  ],
+  "relations": [
+    {
+      "from": "card:42,300,324,327",
+      "to": "container:276,537,78,81",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:42,300,324,327",
+      "to": "icon:300,360,60,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:42,300,324,327",
+      "to": "icon:300,420,60,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:42,300,324,327",
+      "to": "icon:300,480,60,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:405,447,297,141",
+      "to": "text:417,526,267,41",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:45,159,294,108",
+      "to": "container:141,189,162,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:45,945,327,66",
+      "to": "container:102,954,258,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:606,159,285,105",
+      "to": "text:630,184,238,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:819,1290,246,90",
+      "to": "text:851,1306,188,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:849,714,306,114",
+      "to": "container:909,744,186,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "icon:1050,150,120,120",
+      "to": "container:1053,159,102,105",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "image:0,120,360,600",
+      "to": "container:45,159,294,108",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "image:0,120,360,600",
+      "to": "icon:30,150,300,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "avatar:1139,1464,61,71",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "badge:221,713,75,59",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "badge:367,713,125,59",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "badge:559,713,88,59",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "badge:772,1068,117,96",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "card:42,300,324,327",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:147,1623,159,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:213,1284,132,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:273,1167,159,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:303,2538,144,81",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:336,876,171,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:405,447,297,141",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:45,1167,162,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:45,876,252,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:45,945,327,66",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:462,1803,237,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:501,1167,159,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:531,351,75,99",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:537,2544,117,96",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:606,159,285,105",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:606,351,198,75",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:63,2562,102,57",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:69,1269,126,132",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:729,1167,195,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:819,1290,246,90",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:849,714,306,114",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:921,159,102,105",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:993,1167,159,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:0,1470,210,90",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:1050,150,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:1080,1260,60,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:120,1260,60,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:120,1320,60,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:300,1080,120,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:540,1080,120,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:540,2550,120,90",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:60,1560,60,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:660,120,180,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:660,240,180,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:840,360,60,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:930,150,90,90",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "image:0,120,360,600",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:3,660,1194,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:1018,1068,113,92",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:1026,2553,92,75",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:1060,1619,83,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:200,768,113,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:209,1343,208,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:271,1460,117,71",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:309,1076,92,75",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:33,763,113,71",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:375,772,109,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:401,442,383,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:405,359,404,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:42,880,646,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:46,1460,129,75",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:488,1469,117,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:542,768,117,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:63,42,116,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:701,1469,125,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:768,2557,133,71",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:79,1076,96,75",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:797,42,371,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:922,1469,121,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "text:1018,1068,113,92",
+      "to": "icon:1050,1080,60,60",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
+  "zOrder": [],
+  "warnings": [
+    "pipeline-generated draft annotation - not human verified"
+  ]
+}

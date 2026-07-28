@@ -1,0 +1,16 @@
+{
+  "source": "current-multimodal-model",
+  "status": "AI 初审建议，必须人工确认",
+  "summary": "抖音个人主页。原草案缺少明确的个人资料头部、统计信息、功能入口、标签栏和底部导航等语义组件，并将这些区域误标为 container/icon。",
+  "proposals": [
+    { "kind": "add", "type": "header", "bbox": { "x": 0, "y": 95, "w": 1200, "h": 520 }, "note": "蓝色个人资料头部，含添加朋友、新访客、搜索、菜单、头像、昵称和创建 AI 形象。" },
+    { "kind": "add", "type": "avatar", "bbox": { "x": 50, "y": 230, "w": 290, "h": 290 }, "note": "圆形用户头像。" },
+    { "kind": "add", "type": "button", "bbox": { "x": 65, "y": 120, "w": 275, "h": 85 }, "text": "添加朋友" },
+    { "kind": "add", "type": "button", "bbox": { "x": 635, "y": 120, "w": 280, "h": 85 }, "text": "新访客 7" },
+    { "kind": "add", "type": "card", "bbox": { "x": 0, "y": 600, "w": 1200, "h": 1200 }, "note": "白色资料和功能主体卡片。" },
+    { "kind": "add", "type": "row", "bbox": { "x": 45, "y": 665, "w": 1110, "h": 135 }, "text": "获赞、互关、关注、粉丝、编辑主页" },
+    { "kind": "add", "type": "row", "bbox": { "x": 40, "y": 1000, "w": 1120, "h": 150 }, "text": "我的订单、观看历史、我的钱包、常访问的人、全部功能" },
+    { "kind": "add", "type": "tab", "bbox": { "x": 0, "y": 1470, "w": 1200, "h": 95 }, "text": "作品、日常、评价、推荐、收藏" },
+    { "kind": "add", "type": "navbar", "bbox": { "x": 0, "y": 2530, "w": 1200, "h": 140 }, "text": "首页、朋友、发布、消息、我" }
+  ]
+}

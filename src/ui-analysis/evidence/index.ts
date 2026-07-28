@@ -1,4 +1,4 @@
-export type { EvidenceCandidate, EvidenceIR, EvidenceSource } from './types.js';
+export type { EvidenceCandidate, EvidenceIR, EvidenceSource, SourceVote } from './types.js';
 export { isValidBBox } from './types.js';
 
 import type { EvidenceCandidate, EvidenceIR } from './types.js';

@@ -1,15 +1,16 @@
 /**
  * P4 Benchmark runner - runs the full UI analysis pipeline over real UI
- * screenshots in no-annotation mode and emits a coverage/stability report.
+ * screenshots and emits a coverage/stability report.
  *
- * Unlike ui-realimage-check.ts (which prints per-image stats), this script:
- * - Uses the benchmark runner (extractPredictionsFromAst + runBenchmark)
- * - Computes per-image coverage, node count, render mode distribution
- * - Computes cross-image stability (determinism check: same image -> same node count)
- * - Emits a JSON report to stdout or a file
+ * Two modes:
+ *   1. Coverage mode (default): no ground-truth annotations. Computes per-image
+ *      coverage, node count, render mode distribution, and determinism check.
+ *   2. Annotated mode (--annotations <dir>): loads ground-truth annotation JSON
+ *      files from <dir>, computes IoU/recall/precision/F1 against predictions.
  *
  * Usage:
  *   npx tsx scripts/ui-benchmark.ts [dir] [output.json]
+ *   npx tsx scripts/ui-benchmark.ts --annotations <dir> [output.json]
  *   dir defaults to ~/Desktop/UI
  */
 import { readdir, readFile, writeFile } from 'node:fs/promises';
@@ -19,7 +20,13 @@ import sharp from 'sharp';
 import { extractUiLayoutForAnalysis } from '../src/ui-analysis/adapters/index.js';
 import { extractDesignTokens } from '../src/core/extractors/design-extractor.js';
 import { runUiAnalysis } from '../src/ui-analysis/orchestrator.js';
-import { extractPredictionsFromAst } from '../src/ui-analysis/benchmark/index.js';
+import {
+  extractPredictionsFromAst,
+  astToPredictions,
+  loadDatasetWithExclusions,
+  annotationToGroundTruth,
+  computeMetrics,
+} from '../src/ui-analysis/benchmark/index.js';
 import type { ImageInput } from '../src/types/domain.js';
 
 interface ImageResult {
@@ -131,9 +138,157 @@ async function runSingleImage(
   };
 }
 
+async function runAnnotatedBenchmark(
+  datasetDir: string,
+  outputPath: string | undefined,
+): Promise<void> {
+  const { entries, excluded } = loadDatasetWithExclusions(datasetDir);
+  if (entries.length === 0) {
+    console.error(`no annotation+image pairs found in ${datasetDir}`);
+    process.exit(1);
+  }
+  const excludedByReason = excluded.reduce<Record<string, number>>((counts, item) => {
+    counts[item.reason] = (counts[item.reason] ?? 0) + 1;
+    return counts;
+  }, {});
+  const exclusionCounts = {
+    eligible: entries.length,
+    draftExcluded: excluded.filter((item) => item.reason.startsWith('draft:')).length,
+    sidecarExcluded: excluded.filter((item) => item.reason === 'sidecar').length,
+    invalidExcluded: excluded.filter((item) => item.reason.startsWith('invalid:')).length,
+    openHighSeverityExcluded: excluded.filter((item) => item.reason === 'open-high-severity').length,
+  };
+  console.log(`annotated benchmark: ${entries.length} eligible images in ${datasetDir}`);
+  if (excluded.length > 0) {
+    console.log(`excluded: ${excluded.length} (${Object.entries(excludedByReason).map(([reason, count]) => `${reason}=${count}`).join(', ')})`);
+  }
+  console.log('');
+
+  interface AnnotatedImageResult {
+    image: string;
+    recall: number;
+    precision: number;
+    f1: number;
+    matched: number;
+    gtCount: number;
+    predCount: number;
+    error?: string;
+  }
+
+  const perImage: AnnotatedImageResult[] = [];
+  let succeeded = 0;
+  let failed = 0;
+
+  for (const { annotation, imagePath } of entries) {
+    const imageName = annotation.image;
+    process.stdout.write(`  ${imageName}...`);
+    try {
+      const buffer = await readFile(imagePath);
+      const { width, height } = await getDimensions(buffer);
+      const image: ImageInput = { buffer, mimeType: mimeOf(imageName), source: imageName, size: buffer.length };
+      const design = await extractDesignTokens(image).catch(() => undefined);
+      const layout = await extractUiLayoutForAnalysis(
+        image,
+        undefined,
+        design?.palette.map((p) => ({ hex: p.hex, role: p.role })),
+      );
+      const result = await runUiAnalysis({
+        uiLayoutExtraction: layout,
+        ...(design ? { designExtraction: design } : {}),
+        image,
+      });
+      const recon = result.uiReconstruction;
+      if (!recon) {
+        perImage.push({ image: imageName, recall: 0, precision: 0, f1: 0, matched: 0, gtCount: annotation.elements.length, predCount: 0, error: 'no-reconstruction' });
+        failed++;
+        console.log(' ERROR: no reconstruction');
+        continue;
+      }
+      const preds = astToPredictions({ root: recon.tree });
+      const gt = annotationToGroundTruth(annotation);
+      const metrics = computeMetrics(gt, preds, { iouThreshold: 0.5, imageWidth: width, imageHeight: height });
+      perImage.push({
+        image: imageName,
+        recall: metrics.recall,
+        precision: metrics.precision,
+        f1: metrics.f1,
+        matched: metrics.matchedCount,
+        gtCount: metrics.gtCount,
+        predCount: metrics.predCount,
+      });
+      succeeded++;
+      console.log(` ok (R=${(metrics.recall * 100).toFixed(1)}%, P=${(metrics.precision * 100).toFixed(1)}%, F1=${metrics.f1.toFixed(3)})`);
+    } catch (e) {
+      perImage.push({ image: imageName, recall: 0, precision: 0, f1: 0, matched: 0, gtCount: 0, predCount: 0, error: String(e).slice(0, 200) });
+      failed++;
+      console.log(` ERROR: ${String(e).slice(0, 100)}`);
+    }
+  }
+
+  const count = Math.max(1, perImage.length);
+  const meanRecall = perImage.reduce((s, r) => s + r.recall, 0) / count;
+  const meanPrecision = perImage.reduce((s, r) => s + r.precision, 0) / count;
+  const meanF1 = perImage.reduce((s, r) => s + r.f1, 0) / count;
+
+  const report = {
+    mode: 'annotated' as const,
+    totalImages: entries.length,
+    exclusions: {
+      ...exclusionCounts,
+      totalExcluded: excluded.length,
+      byReason: excludedByReason,
+      items: excluded,
+    },
+    succeeded,
+    failed,
+    meanRecall,
+    meanPrecision,
+    meanF1,
+    perImage,
+  };
+
+  const json = JSON.stringify(report, null, 2);
+  if (outputPath !== undefined && outputPath.length > 0) {
+    await writeFile(outputPath, json, 'utf-8');
+    console.log(`\nReport written to ${outputPath}`);
+  } else {
+    console.log(`\n${json}`);
+  }
+
+  console.log(`\nSummary: ${succeeded}/${entries.length} succeeded, mean R=${(meanRecall * 100).toFixed(1)}%, P=${(meanPrecision * 100).toFixed(1)}%, F1=${meanF1.toFixed(3)}`);
+}
+
 async function main(): Promise<void> {
-  const dir = process.argv[2] ?? join(homedir(), 'Desktop', 'UI');
-  const outputPath = process.argv[3];
+  const args = process.argv.slice(2);
+
+  // Filter out flag arguments and their values (e.g. --runs 1) so they
+  // aren't treated as positional paths. Absolute paths (starting with /)
+  // are never consumed as flag values.
+  const skip = new Set<number>();
+  for (let i = 0; i < args.length; i++) {
+    if (args[i]!.startsWith('--')) {
+      skip.add(i);
+      const next = args[i + 1];
+      if (next !== undefined && !next.startsWith('--') && !/^\//.test(next)) {
+        skip.add(i + 1);
+      }
+    }
+  }
+  const positional = args.filter((_, i) => !skip.has(i));
+
+  const annotationsIdx = args.indexOf('--annotations');
+  if (annotationsIdx !== -1) {
+    const datasetDir = args[annotationsIdx + 1];
+    if (!datasetDir) {
+      console.error('--annotations requires a directory argument');
+      process.exit(1);
+    }
+    await runAnnotatedBenchmark(datasetDir, positional[0]);
+    return;
+  }
+
+  const dir = positional[0] ?? join(homedir(), 'Desktop', 'UI');
+  const outputPath = positional[1];
   const files = (await readdir(dir)).filter((f) => /\.(jpg|jpeg|png)$/i.test(f)).sort();
   if (files.length === 0) {
     console.error(`no images in ${dir}`);

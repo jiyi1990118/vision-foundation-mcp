@@ -1,0 +1,14 @@
+{
+  "source": "current-multimodal-model",
+  "status": "AI 初审建议，必须人工确认",
+  "summary": "提交订单页上打开“选择送餐地址”底部弹层。原草案错误地拆成商品图片和 navbar；应优先恢复底部弹层、地址卡片和按钮。",
+  "proposals": [
+    { "kind": "add", "type": "container", "bbox": { "x": 0, "y": 100, "w": 1200, "h": 1130 }, "note": "被弹层遮罩的提交订单页面。" },
+    { "kind": "add", "type": "bottomSheet", "bbox": { "x": 0, "y": 1220, "w": 1200, "h": 1450 }, "note": "“选择送餐地址”白色底部弹层。" },
+    { "kind": "add", "type": "header", "bbox": { "x": 0, "y": 1220, "w": 1200, "h": 140 }, "text": "选择送餐地址", "note": "含关闭图标的弹层标题栏。" },
+    { "kind": "add", "type": "card", "bbox": { "x": 45, "y": 1420, "w": 1110, "h": 340 }, "text": "瑞和新苑南区江航路60弄", "note": "已选择地址卡，包含编辑、删除、保存以及地址、联系人、手机号。" },
+    { "kind": "add", "type": "button", "bbox": { "x": 1020, "y": 1450, "w": 150, "h": 65 }, "text": "编辑" },
+    { "kind": "add", "type": "button", "bbox": { "x": 1020, "y": 1585, "w": 150, "h": 65 }, "text": "保存" },
+    { "kind": "add", "type": "button", "bbox": { "x": 45, "y": 2480, "w": 1110, "h": 150 }, "text": "新增送餐地址", "note": "弹层固定底部主操作按钮。" }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "differences": [
+    {
+      "id": "annotation:icon:30,180,180,60",
+      "category": "missed",
+      "annotationId": "icon:30,180,180,60",
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review recall for icon detection"
+      ]
+    },
+    {
+      "id": "match:container:492,183,216,57:container:492,183,216,57",
+      "category": "wrong_type",
+      "predictionId": "container:492,183,216,57",
+      "annotationId": "container:492,183,216,57",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review container to text type disambiguation"
+      ]
+    },
+    {
+      "id": "match:container:93,183,105,57:container:93,183,105,57",
+      "category": "wrong_type",
+      "predictionId": "container:93,183,105,57",
+      "annotationId": "container:93,183,105,57",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review container to text type disambiguation"
+      ]
+    },
+    {
+      "id": "match:page:0,0,1200,2670:page:0,0,1200,2670",
+      "category": "wrong_structure",
+      "predictionId": "page:0,0,1200,2670",
+      "annotationId": "page:0,0,1200,2670",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "prediction:icon:30,180,180,60",
+      "category": "false_positive",
+      "predictionId": "icon:30,180,180,60",
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review precision for icon detection"
+      ]
+    },
+    {
+      "id": "prediction:image:0,180,1200,480",
+      "category": "false_positive",
+      "predictionId": "image:0,180,1200,480",
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review precision for image detection"
+      ]
+    }
+  ]
+}

@@ -2,12 +2,26 @@ import type { BBox } from '../ir/types.js';
 
 export type EvidenceSource = 'cv' | 'ocr' | 'ui-detector' | 'omniparser' | 'pixel' | 'vlm';
 
+/**
+ * Per-source provenance vote. When candidates from multiple sources fuse,
+ * each source's independent detection (type + score) is preserved here so
+ * downstream consumers can audit which source contributed what.
+ */
+export interface SourceVote {
+  source: EvidenceSource;
+  score: number;
+  /** The type this source independently detected (may differ from the fused type). */
+  type?: string;
+}
+
 export interface EvidenceCandidate {
   id: string;
   type: string;
   bbox: BBox;
   score: number;
   sources: EvidenceSource[];
+  /** Per-source breakdown of how this fused candidate was assembled. */
+  sourceVotes?: SourceVote[];
   text?: string;
   state?: string;
   variant?: string;

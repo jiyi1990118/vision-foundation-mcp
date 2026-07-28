@@ -1,0 +1,16 @@
+{
+  "source": "current-multimodal-model",
+  "status": "AI 初审建议，必须人工确认",
+  "summary": "地址修改表单。原草案将文字和表单内容大量标为 icon/container，缺少可编辑控件和底部主按钮。",
+  "proposals": [
+    { "kind": "replace", "target": "header:3,285,1194,12", "type": "header", "bbox": { "x": 0, "y": 120, "w": 1200, "h": 170 }, "note": "顶部返回和标题“地址修改”所在导航栏。" },
+    { "kind": "add", "type": "row", "bbox": { "x": 45, "y": 360, "w": 1110, "h": 120 }, "text": "送餐地址 瑞和新苑南区江航路60弄", "note": "含定位图标和右箭头的地址选择行。" },
+    { "kind": "add", "type": "input", "bbox": { "x": 280, "y": 570, "w": 850, "h": 145 }, "text": "江航路60弄瑞和新苑38号楼501室", "note": "门牌号输入框。" },
+    { "kind": "add", "type": "input", "bbox": { "x": 280, "y": 800, "w": 850, "h": 140 }, "text": "许先生", "note": "联系人输入框。" },
+    { "kind": "add", "type": "radio", "bbox": { "x": 280, "y": 1015, "w": 85, "h": 85 }, "text": "先生", "note": "已选性别。" },
+    { "kind": "add", "type": "radio", "bbox": { "x": 530, "y": 1015, "w": 85, "h": 85 }, "text": "女士", "note": "未选性别。" },
+    { "kind": "add", "type": "input", "bbox": { "x": 280, "y": 1180, "w": 850, "h": 140 }, "text": "15000789207", "note": "手机号输入框。" },
+    { "kind": "add", "type": "row", "bbox": { "x": 0, "y": 1390, "w": 1200, "h": 90 }, "text": "智能填写地址", "note": "可展开的辅助输入行。" },
+    { "kind": "add", "type": "button", "bbox": { "x": 65, "y": 2440, "w": 1070, "h": 150 }, "text": "修改", "note": "固定底部主操作按钮。" }
+  ]
+}

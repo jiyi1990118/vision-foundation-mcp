@@ -1,0 +1,117 @@
+{
+  "differences": [
+    {
+      "id": "annotation:icon:30,180,180,60",
+      "category": "missed",
+      "annotationId": "icon:30,180,180,60",
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review recall for icon detection"
+      ]
+    },
+    {
+      "id": "match:card:45,1248,1110,297:card:45,1248,1110,297",
+      "category": "wrong_structure",
+      "predictionId": "card:45,1248,1110,297",
+      "annotationId": "card:45,1248,1110,297",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:header:48,306,864,111:header:48,306,864,111",
+      "category": "wrong_structure",
+      "predictionId": "header:48,306,864,111",
+      "annotationId": "header:48,306,864,111",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:image:0,420,1200,1140:image:0,420,1200,1140",
+      "category": "wrong_structure",
+      "predictionId": "image:0,420,1200,1140",
+      "annotationId": "image:0,420,1200,1140",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:navbar:381,1266,471,213:navbar:381,1266,471,213",
+      "category": "wrong_structure",
+      "predictionId": "navbar:381,1266,471,213",
+      "annotationId": "navbar:381,1266,471,213",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:navbar:381,624,471,213:navbar:381,624,471,213",
+      "category": "wrong_structure",
+      "predictionId": "navbar:381,624,471,213",
+      "annotationId": "navbar:381,624,471,213",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:navbar:381,945,471,213:navbar:381,945,471,213",
+      "category": "wrong_structure",
+      "predictionId": "navbar:381,945,471,213",
+      "annotationId": "navbar:381,945,471,213",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "match:page:0,0,1200,2670:page:0,0,1200,2670",
+      "category": "wrong_structure",
+      "predictionId": "page:0,0,1200,2670",
+      "annotationId": "page:0,0,1200,2670",
+      "iou": 1,
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review containment and semantic-role inference"
+      ]
+    },
+    {
+      "id": "prediction:icon:30,180,180,60",
+      "category": "false_positive",
+      "predictionId": "icon:30,180,180,60",
+      "severity": "medium",
+      "confidence": 1,
+      "reviewStatus": "auto",
+      "ruleHints": [
+        "review precision for icon detection"
+      ]
+    }
+  ]
+}

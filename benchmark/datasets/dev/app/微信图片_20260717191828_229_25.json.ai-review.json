@@ -1,0 +1,18 @@
+{
+  "source": "current-multimodal-model",
+  "status": "AI 初审建议，必须人工确认",
+  "summary": "左侧会员/账户抽屉覆盖在点餐首页上。原草案错误地把整页标为 table，并把抽屉主体拆成 image 和 icon。",
+  "proposals": [
+    { "kind": "replace", "target": "table:3,129,1194,2499", "type": "drawer", "bbox": { "x": 0, "y": 100, "w": 815, "h": 2570 }, "note": "白色左侧抽屉主体。" },
+    { "kind": "add", "type": "container", "bbox": { "x": 815, "y": 100, "w": 385, "h": 2570 }, "note": "抽屉右侧半透明遮罩和被遮挡的首页，不应标为 table。" },
+    { "kind": "add", "type": "header", "bbox": { "x": 0, "y": 100, "w": 815, "h": 320 }, "note": "红色会员资料区，包含头像、会员中心、昵称和积分。" },
+    { "kind": "add", "type": "avatar", "bbox": { "x": 65, "y": 145, "w": 165, "h": 165 }, "note": "用户头像。" },
+    { "kind": "add", "type": "row", "bbox": { "x": 45, "y": 395, "w": 700, "h": 95 }, "text": "我的优惠券" },
+    { "kind": "add", "type": "row", "bbox": { "x": 45, "y": 490, "w": 700, "h": 95 }, "text": "我的订单/发票" },
+    { "kind": "add", "type": "row", "bbox": { "x": 45, "y": 585, "w": 700, "h": 95 }, "text": "特惠活动" },
+    { "kind": "add", "type": "row", "bbox": { "x": 45, "y": 680, "w": 700, "h": 95 }, "text": "地址管理" },
+    { "kind": "add", "type": "row", "bbox": { "x": 45, "y": 775, "w": 700, "h": 95 }, "text": "门店查询" },
+    { "kind": "add", "type": "button", "bbox": { "x": 20, "y": 2340, "w": 330, "h": 85 }, "text": "在线客服" },
+    { "kind": "add", "type": "button", "bbox": { "x": 20, "y": 2450, "w": 770, "h": 90 }, "text": "电话客服 4001597597" }
+  ]
+}

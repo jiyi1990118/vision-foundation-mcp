@@ -488,3 +488,9 @@
 .layer-lock:hover, .layer-toggle-vis:hover { background: #334155; color: #f8fafc; }
 .tree-node.locked > summary { opacity: 0.6; }
 .tree-node.locked > summary .tree-label { text-decoration: line-through; text-decoration-color: #64748b; text-decoration-thickness: 1px; }
+
+/* Snapping indicator lines (Phase E) */
+.snap-line { stroke: #22d3ee; stroke-width: 1; stroke-dasharray: 3 2; opacity: 0.7; pointer-events: none; }
+
+/* Distance measurement labels (Phase E) */
+.distance-label { fill: #22d3ee; font-size: 11px; font-weight: 600; pointer-events: none; opacity: 0.8; }

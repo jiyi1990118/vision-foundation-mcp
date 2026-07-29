@@ -7,9 +7,10 @@
  * no family-level leakage.
  *
  * Usage:
- *   npx tsx scripts/ui-dataset-export.ts <dataset-dir> [output.json] [--splits] [--seed N]
+ *   npx tsx scripts/ui-dataset-export.ts <dataset-dir> [--output <report.json>] [--splits] [--seed N]
  */
-import { writeFile } from 'node:fs/promises';
+import { writeFile, mkdir } from 'node:fs/promises';
+import { dirname } from 'node:path';
 import {
   exportDataset,
   assignSplits,
@@ -18,17 +19,45 @@ import {
   type SplitAssignment,
 } from '../src/ui-analysis/benchmark/index.js';
 
+function parseArgs(argv: string[]): {
+  datasetDir: string;
+  outputPath: string | undefined;
+  wantSplits: boolean;
+  seed: number;
+} {
+  const positional: string[] = [];
+  let outputPath: string | undefined;
+  let wantSplits = false;
+  let seed = 0;
+
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i]!;
+    if (arg === '--splits') {
+      wantSplits = true;
+    } else if (arg === '--seed') {
+      seed = Number(argv[++i] ?? 0);
+    } else if (arg.startsWith('--seed=')) {
+      seed = Number(arg.slice('--seed='.length) || 0);
+    } else if (arg === '--output' || arg === '-o') {
+      outputPath = argv[++i];
+    } else if (arg.startsWith('--output=')) {
+      outputPath = arg.slice('--output='.length);
+    } else if (arg.startsWith('-')) {
+      console.error(`unknown flag: ${arg}`);
+      process.exit(1);
+    } else {
+      positional.push(arg);
+    }
+  }
+
+  return { datasetDir: positional[0], outputPath, wantSplits, seed };
+}
+
 function main(): void {
-  const args = process.argv.slice(2);
-  const positional = args.filter((a) => !a.startsWith('--'));
-  const datasetDir = positional[0];
-  const outputPath = positional[1];
-  const wantSplits = args.includes('--splits');
-  const seedIdx = args.indexOf('--seed');
-  const seed = seedIdx !== -1 ? Number(args[seedIdx + 1] ?? 0) : 0;
+  const { datasetDir, outputPath, wantSplits, seed } = parseArgs(process.argv.slice(2));
 
   if (!datasetDir) {
-    console.error('usage: npx tsx scripts/ui-dataset-export.ts <dataset-dir> [output.json] [--splits] [--seed N]');
+    console.error('usage: npx tsx scripts/ui-dataset-export.ts <dataset-dir> [--output <report.json>] [--splits] [--seed N]');
     process.exit(1);
   }
 
@@ -37,7 +66,6 @@ function main(): void {
     console.error(`no eligible (reviewed) annotations found in ${datasetDir}`);
     process.exit(1);
   }
-
   console.log(`dataset export: ${samples.length} eligible samples from ${datasetDir}`);
 
   let splitAssignment: SplitAssignment | null = null;
@@ -67,10 +95,12 @@ function main(): void {
 
   const json = JSON.stringify(report, null, 2);
   if (outputPath) {
-    writeFile(outputPath, json, 'utf-8').then(() => {
-      console.log(`Report written to ${outputPath}`);
-      printSummary(samples, splitAssignment);
-    });
+    mkdir(dirname(outputPath), { recursive: true })
+      .then(() => writeFile(outputPath, json, 'utf-8'))
+      .then(() => {
+        console.log(`Report written to ${outputPath}`);
+        printSummary(samples, splitAssignment);
+      });
   } else {
     console.log(json);
     printSummary(samples, splitAssignment);

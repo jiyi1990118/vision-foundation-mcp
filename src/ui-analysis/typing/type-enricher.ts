@@ -66,6 +66,9 @@ const BADGE_TEXT_MAX_W = 80;
 const BADGE_TEXT_MAX_H = 28;
 const BADGE_TEXT_KEYWORDS = /^(?:new|hot|vip|pro|plus|live|beta|sale|top|up|3d|hd|4k|8k|限时特惠|限时|特惠|推荐|热门|精选|新品|爆款|首发|独家|官方|认证|已认证|未认证|未读消息|未读|已读|在线|离线|忙碌|勿扰|隐身|满减|直降|包邮|即将售罄|售罄|缺货|预售|预约|会员|免费|优惠|折扣)$/i;
 const BADGE_NUMERIC = /^\d+(?:\.\d+)?(?:\+)?$/;
+const BADGE_SPLIT_PATTERN = /^(.+?)\s*(\d+)$/;
+const BADGE_SPLIT_MAX_DIGITS = 4;
+const BADGE_SPLIT_CJK = /[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]/;
 const SELECT_NEARBY_PX = 20;
 const SELECT_SIBLING_MAX = 48;
 const LAYOUT_MIN_CHILDREN = 2;
@@ -667,6 +670,45 @@ function pruneOutOfBounds(ast: SemanticAST): void {
   prune(ast.root);
 }
 
+function isValidBadgeSplitLabel(label: string): boolean {
+  if (label.length === 0) return false;
+  if (BADGE_SPLIT_CJK.test(label)) return true;
+  return (label.match(/[a-zA-Z]/g) ?? []).length >= 2;
+}
+
+function splitBadgeElements(node: ASTNode): void {
+  for (const child of node.children) splitBadgeElements(child);
+  if (node.children.length > 0) return;
+  if (node.type !== 'text' && node.type !== 'subtitle') return;
+  const text = node.text;
+  if (text === undefined) return;
+  const match = BADGE_SPLIT_PATTERN.exec(text.trim());
+  if (match === null) return;
+  const labelPart = match[1]!;
+  const numberPart = match[2]!;
+  if (!isValidBadgeSplitLabel(labelPart)) return;
+  if (numberPart.length > BADGE_SPLIT_MAX_DIGITS) return;
+
+  const labelLen = labelPart.length;
+  const numberLen = numberPart.length;
+  const totalLen = labelLen + numberLen;
+  if (totalLen <= 0) return;
+
+  const { x, y, w, h } = node.bbox;
+  const badgeWidth = w * (numberLen / totalLen);
+  const badge: ASTNode = {
+    id: `${node.id}__badge`,
+    type: 'badge',
+    bbox: { x: x + w - badgeWidth, y, w: badgeWidth, h },
+    text: numberPart,
+    props: {},
+    children: [],
+  };
+  node.text = labelPart;
+  node.bbox = { x, y, w: w - badgeWidth, h };
+  node.children.push(badge);
+}
+
 export interface EnrichNodeTypeOptions {
   detectComponent?: boolean;
 }
@@ -678,6 +720,7 @@ export function enrichNodeTypes(
 ): void {
   const detectComponent = options?.detectComponent !== false;
   correctMisclassified(ast, ocr, detectComponent);
+  splitBadgeElements(ast.root);
   if (detectComponent) enrich(ast.root);
   hierarchizeText(ast);
   promoteTopTitle(ast);

@@ -22,6 +22,7 @@
       "children": [
         "container:138,126,186,90",
         "container:150,258,450,60",
+        "container:150,258,450,60__badge",
         "container:210,1756,264,90",
         "container:210,474,342,90",
         "container:330,1091,366,84",
@@ -74,6 +75,7 @@
       },
       "render": "native",
       "children": [
+        "text:206,521,244,38__badge",
         "text:210,480,341,34"
       ]
     },
@@ -95,11 +97,23 @@
       "bbox": {
         "x": 206,
         "y": 521,
-        "w": 244,
+        "w": 209.14285714285714,
         "h": 38
       },
       "render": "native",
-      "text": "颜色: 黑白 / 尺码: 42"
+      "text": "颜色: 黑白 / 尺码:"
+    },
+    {
+      "id": "text:206,521,244,38__badge",
+      "type": "badge",
+      "bbox": {
+        "x": 415.14285714285717,
+        "y": 521,
+        "w": 34.857142857142854,
+        "h": 38
+      },
+      "render": "native",
+      "text": "42"
     },
     {
       "id": "container:330,1091,366,84",
@@ -267,12 +281,24 @@
       "bbox": {
         "x": 150,
         "y": 257.75637393767704,
-        "w": 450,
+        "w": 412.5,
         "h": 59.94334277620396
       },
       "render": "native",
-      "text": "待付款3待发货5待收货4",
+      "text": "待付款3待发货5待收货",
       "semanticRole": "label"
+    },
+    {
+      "id": "container:150,258,450,60__badge",
+      "type": "badge",
+      "bbox": {
+        "x": 562.5,
+        "y": 257.75637393767704,
+        "w": 37.5,
+        "h": 59.94334277620396
+      },
+      "render": "native",
+      "text": "4"
     },
     {
       "id": "container:210,1756,264,90",
@@ -828,6 +854,12 @@
     },
     {
       "from": "container:210,474,342,90",
+      "to": "text:206,521,244,38__badge",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:210,474,342,90",
       "to": "text:210,480,341,34",
       "type": "contains",
       "source": "derived"
@@ -937,6 +969,12 @@
     {
       "from": "page:0,0,2400,2116",
       "to": "container:150,258,450,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2116",
+      "to": "container:150,258,450,60__badge",
       "type": "contains",
       "source": "derived"
     },

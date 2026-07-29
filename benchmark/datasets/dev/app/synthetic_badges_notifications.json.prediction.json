@@ -54,13 +54,16 @@
         "text:203,1391,75,38",
         "text:206,1335,68,64",
         "text:210,233,135,37",
+        "text:210,233,135,37__badge",
         "text:2123,1331,71,68",
         "text:2126,1391,72,38",
         "text:30,124,176,49",
         "text:34,19,86,49",
         "text:394,236,139,38",
+        "text:394,236,139,38__badge",
         "text:551,1279,79,37",
         "text:585,229,135,49",
+        "text:585,229,135,49__badge",
         "text:596,818,124,37",
         "text:600,664,120,37",
         "text:611,1125,109,38",
@@ -485,12 +488,24 @@
       "bbox": {
         "x": 210,
         "y": 233,
-        "w": 135,
+        "w": 67.5,
         "h": 37
       },
       "render": "native",
-      "text": "评论28",
+      "text": "评论",
       "semanticRole": "label"
+    },
+    {
+      "id": "text:210,233,135,37__badge",
+      "type": "badge",
+      "bbox": {
+        "x": 277.5,
+        "y": 233,
+        "w": 67.5,
+        "h": 37
+      },
+      "render": "native",
+      "text": "28"
     },
     {
       "id": "text:394,236,139,38",
@@ -498,12 +513,24 @@
       "bbox": {
         "x": 394,
         "y": 236,
-        "w": 139,
+        "w": 69.5,
         "h": 38
       },
       "render": "native",
-      "text": "点赞56",
+      "text": "点赞",
       "semanticRole": "label"
+    },
+    {
+      "id": "text:394,236,139,38__badge",
+      "type": "badge",
+      "bbox": {
+        "x": 463.5,
+        "y": 236,
+        "w": 69.5,
+        "h": 38
+      },
+      "render": "native",
+      "text": "56"
     },
     {
       "id": "text:585,229,135,49",
@@ -511,11 +538,23 @@
       "bbox": {
         "x": 585,
         "y": 229,
-        "w": 135,
+        "w": 67.5,
         "h": 49
       },
       "render": "native",
-      "text": "关注12"
+      "text": "关注"
+    },
+    {
+      "id": "text:585,229,135,49__badge",
+      "type": "badge",
+      "bbox": {
+        "x": 652.5,
+        "y": 229,
+        "w": 67.5,
+        "h": 49
+      },
+      "render": "native",
+      "text": "12"
     },
     {
       "id": "text:645,356,79,38",
@@ -949,6 +988,12 @@
     },
     {
       "from": "page:0,0,2400,1550",
+      "to": "text:210,233,135,37__badge",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1550",
       "to": "text:2123,1331,71,68",
       "type": "contains",
       "source": "derived"
@@ -979,6 +1024,12 @@
     },
     {
       "from": "page:0,0,2400,1550",
+      "to": "text:394,236,139,38__badge",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1550",
       "to": "text:551,1279,79,37",
       "type": "contains",
       "source": "derived"
@@ -986,6 +1037,12 @@
     {
       "from": "page:0,0,2400,1550",
       "to": "text:585,229,135,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1550",
+      "to": "text:585,229,135,49__badge",
       "type": "contains",
       "source": "derived"
     },

@@ -240,4 +240,101 @@ describe('type-enricher / extra rules (Stream S26)', () => {
       expect(input.type).toBe('input');
     });
   });
+
+  describe('badge splitter (label + trailing number)', () => {
+    it('splits "私信 12" into label "私信" + badge "12"', () => {
+      const page = ast(
+        container('root', 'page', box(0, 0, 375, 812), [
+          leaf('t', 'text', box(50, 400, 80, 24), '私信 12'),
+        ]),
+      );
+      enrichNodeTypes(page);
+      const node = page.root.children[0]!;
+      expect(node.text).toBe('私信');
+      expect(node.children.length).toBe(1);
+      const badge = node.children[0]!;
+      expect(badge.id).toBe('t__badge');
+      expect(badge.type).toBe('badge');
+      expect(badge.text).toBe('12');
+      expect(badge.bbox).toEqual({ x: 90, y: 400, w: 40, h: 24 });
+      expect(node.bbox).toEqual({ x: 50, y: 400, w: 40, h: 24 });
+    });
+
+    it('splits "群聊8" into label "群聊" + badge "8"', () => {
+      const page = ast(
+        container('root', 'page', box(0, 0, 375, 812), [
+          leaf('t', 'text', box(50, 400, 90, 24), '群聊8'),
+        ]),
+      );
+      enrichNodeTypes(page);
+      const node = page.root.children[0]!;
+      expect(node.text).toBe('群聊');
+      expect(node.children.length).toBe(1);
+      const badge = node.children[0]!;
+      expect(badge.type).toBe('badge');
+      expect(badge.text).toBe('8');
+    });
+
+    it('splits a subtitle node into label + badge', () => {
+      const page = ast(
+        container('root', 'page', box(0, 0, 375, 812), [
+          leaf('t', 'subtitle', box(50, 400, 90, 24), '通知25'),
+        ]),
+      );
+      enrichNodeTypes(page);
+      const node = page.root.children[0]!;
+      expect(node.text).toBe('通知');
+      const badge = node.children[0]!;
+      expect(badge.type).toBe('badge');
+      expect(badge.text).toBe('25');
+    });
+
+    it('does not split "100%" (not a trailing-number badge pattern)', () => {
+      const page = ast(
+        container('root', 'page', box(0, 0, 375, 812), [
+          leaf('t', 'text', box(50, 400, 80, 24), '100%'),
+        ]),
+      );
+      enrichNodeTypes(page);
+      const node = page.root.children[0]!;
+      expect(node.text).toBe('100%');
+      expect(node.children.length).toBe(0);
+    });
+
+    it('does not split "9:41" (clock time, label has no CJK / 2 latin letters)', () => {
+      const page = ast(
+        container('root', 'page', box(0, 0, 375, 812), [
+          leaf('t', 'text', box(50, 400, 80, 24), '9:41'),
+        ]),
+      );
+      enrichNodeTypes(page);
+      const node = page.root.children[0]!;
+      expect(node.text).toBe('9:41');
+      expect(node.children.length).toBe(0);
+    });
+
+    it('does not split a bare number "12"', () => {
+      const page = ast(
+        container('root', 'page', box(0, 0, 375, 812), [
+          leaf('t', 'text', box(50, 400, 80, 24), '12'),
+        ]),
+      );
+      enrichNodeTypes(page);
+      const node = page.root.children[0]!;
+      expect(node.text).toBe('12');
+      expect(node.children.length).toBe(0);
+    });
+
+    it('does not split a node that already has children', () => {
+      const parent = container('t', 'text', box(50, 400, 80, 24), [
+        leaf('c', 'text', box(55, 404, 20, 16), 'x'),
+      ]);
+      parent.text = '私信 12';
+      const page = ast(container('root', 'page', box(0, 0, 375, 812), [parent]));
+      enrichNodeTypes(page);
+      expect(parent.text).toBe('私信 12');
+      expect(parent.children.length).toBe(1);
+      expect(parent.children[0]!.id).toBe('c');
+    });
+  });
 });

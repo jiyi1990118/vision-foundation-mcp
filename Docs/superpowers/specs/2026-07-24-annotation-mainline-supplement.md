@@ -226,19 +226,23 @@ delivered via `scripts/ui-auto-calibrate.ts`.
 
 Current threshold status:
 - 50 reviewed images (met, need 20+).
-- 9/25 element types have 30+ confirmed samples (text, icon, container, subtitle,
-  navbar, column, title, card, image). 16 types need more screenshots;
-  badge (26) is closest.
+- 10/25 element types have 30+ confirmed samples (text, icon, container, subtitle,
+  navbar, column, title, card, image, badge). 15 types need more screenshots.
+  Badge (30) crossed threshold after implementing a badge splitter in
+  type-enricher that separates trailing numbers from label text
+  (e.g. "私信 12" -> text "私信" + badge "12").
 - 2/3 structure rules calibrated and enforced:
-  - `sibling-size-inconsistent` v1: 894 findings, 894 reviewed,
-    precision=63.4%, enforced.
+  - `sibling-size-inconsistent` v1: 917 findings, 917 reviewed,
+    precision=62.9%, enforced.
   - `sibling-overlap` v1: 24 findings, 24 reviewed, precision=100.0%,
     enforced.
 - 1/3 rule advisory-only:
-  - `isolated-content` v2: 1004 findings, 1004 reviewed, precision=32.9%.
-    330 confirmed (real isolation issues), 674 suppressed (legitimate
-    page-level elements). Below 50% enforcement threshold.
+  - `isolated-content` v2: 1031 findings, 1031 reviewed, precision=32.3%.
+    Below 50% enforcement threshold. Advisory-only.
 - 0 findings remain as auto (all reviewed).
+- **Dataset export validated end-to-end**: 47 eligible samples exported
+  with family-based train/val/test splits, 0 leakage, 200 SHA-256 hashes
+  verified. Pipeline is training-ready.
 - Synthetic data: 28 HTML-rendered screenshots included as ground truth
   (source: 'synthetic-html'). They expand type coverage but are limited by
   the AI's visual classification accuracy - e.g. badge/button/tab/select

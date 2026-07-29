@@ -50,10 +50,13 @@
         "text:2123,1331,71,68",
         "text:2126,1391,72,38",
         "text:214,251,131,38",
+        "text:214,251,131,38__badge",
         "text:23,131,108,53",
         "text:23,244,135,49",
+        "text:23,244,135,49__badge",
         "text:34,26,86,38",
         "text:394,248,139,37",
+        "text:394,248,139,37__badge",
         "text:533,120,82,49",
         "text:589,244,127,49",
         "text:596,818,124,37",
@@ -337,7 +340,10 @@
         "w": 120,
         "h": 240
       },
-      "render": "native"
+      "render": "native",
+      "children": [
+        "text:589,244,127,49__badge"
+      ]
     },
     {
       "id": "icon:0,360,120,120",
@@ -554,12 +560,24 @@
       "bbox": {
         "x": 23,
         "y": 244,
-        "w": 135,
+        "w": 67.5,
         "h": 49
       },
       "render": "native",
-      "text": "私信 12",
+      "text": "私信",
       "semanticRole": "label"
+    },
+    {
+      "id": "text:23,244,135,49__badge",
+      "type": "badge",
+      "bbox": {
+        "x": 90.5,
+        "y": 244,
+        "w": 67.5,
+        "h": 49
+      },
+      "render": "native",
+      "text": "12"
     },
     {
       "id": "text:214,251,131,38",
@@ -567,12 +585,24 @@
       "bbox": {
         "x": 214,
         "y": 251,
-        "w": 131,
+        "w": 87.33333333333334,
         "h": 38
       },
       "render": "native",
-      "text": "群聊8",
+      "text": "群聊",
       "semanticRole": "label"
+    },
+    {
+      "id": "text:214,251,131,38__badge",
+      "type": "badge",
+      "bbox": {
+        "x": 301.3333333333333,
+        "y": 251,
+        "w": 43.666666666666664,
+        "h": 38
+      },
+      "render": "native",
+      "text": "8"
     },
     {
       "id": "text:394,248,139,37",
@@ -580,12 +610,24 @@
       "bbox": {
         "x": 394,
         "y": 248,
-        "w": 139,
+        "w": 69.5,
         "h": 37
       },
       "render": "native",
-      "text": "通知25",
+      "text": "通知",
       "semanticRole": "label"
+    },
+    {
+      "id": "text:394,248,139,37__badge",
+      "type": "badge",
+      "bbox": {
+        "x": 463.5,
+        "y": 248,
+        "w": 69.5,
+        "h": 37
+      },
+      "render": "native",
+      "text": "25"
     },
     {
       "id": "text:589,244,127,49",
@@ -593,11 +635,23 @@
       "bbox": {
         "x": 589,
         "y": 244,
-        "w": 127,
+        "w": 84.66666666666667,
         "h": 49
       },
       "render": "native",
-      "text": "系统 3"
+      "text": "系统"
+    },
+    {
+      "id": "text:589,244,127,49__badge",
+      "type": "badge",
+      "bbox": {
+        "x": 673.6666666666666,
+        "y": 244,
+        "w": 42.33333333333333,
+        "h": 49
+      },
+      "render": "native",
+      "text": "3"
     },
     {
       "id": "text:645,356,79,38",
@@ -849,6 +903,12 @@
       "source": "derived"
     },
     {
+      "from": "icon:600,120,120,240",
+      "to": "text:589,244,127,49__badge",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
       "from": "image:0,1440,360,240",
       "to": "container:150,1584,186,90",
       "type": "contains",
@@ -1048,6 +1108,12 @@
     },
     {
       "from": "page:0,0,2400,1704",
+      "to": "text:214,251,131,38__badge",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1704",
       "to": "text:23,131,108,53",
       "type": "contains",
       "source": "derived"
@@ -1060,6 +1126,12 @@
     },
     {
       "from": "page:0,0,2400,1704",
+      "to": "text:23,244,135,49__badge",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1704",
       "to": "text:34,26,86,38",
       "type": "contains",
       "source": "derived"
@@ -1067,6 +1139,12 @@
     {
       "from": "page:0,0,2400,1704",
       "to": "text:394,248,139,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1704",
+      "to": "text:394,248,139,37__badge",
       "type": "contains",
       "source": "derived"
     },

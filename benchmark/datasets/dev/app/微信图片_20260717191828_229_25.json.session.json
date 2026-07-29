@@ -6,6 +6,54 @@
       "subjectId": "0",
       "action": "accepted",
       "createdAt": "2026-07-28T07:40:25.241Z"
+    },
+    {
+      "id": "auto-ef4d0303-e7f4-40bc-9374-5b7327ea28fb",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:228,1299,282,51",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:container:228,1299,282,51:228,1299,282,51:text",
+      "createdAt": "2026-07-29T05:30:19.803Z"
+    },
+    {
+      "id": "auto-a00d7dd4-97e7-417b-89c0-edd8ff509376",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:480,1680,300,90",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:icon:480,1680,300,90:480,1680,300,90:icon",
+      "createdAt": "2026-07-29T05:30:19.805Z"
+    },
+    {
+      "id": "auto-54c36f69-909d-4a73-9549-5da823a9e405",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:60,180,180,240",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:icon:60,180,180,240:60,180,180,240:icon",
+      "createdAt": "2026-07-29T05:30:19.806Z"
+    },
+    {
+      "id": "auto-73ea4cd6-470e-4115-a964-faf3458a8ab0",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:903,579,213,201",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:container:903,579,213,201:903,579,213,201:container",
+      "createdAt": "2026-07-29T05:30:19.807Z"
+    },
+    {
+      "id": "auto-16be3421-4ec6-40f7-b808-a849dce31623",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:945,1074,240,246",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:container:945,1074,240,246:945,1074,240,246:container",
+      "createdAt": "2026-07-29T05:30:19.809Z"
+    },
+    {
+      "id": "auto-846cf94f-484d-46fe-a64a-41549143ed57",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:984,1461,162,189",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:container:984,1461,162,189:984,1461,162,189:container",
+      "createdAt": "2026-07-29T05:30:19.812Z"
     }
   ]
 }

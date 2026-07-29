@@ -118,9 +118,13 @@ describe('STRUCTURE_RULES registry', () => {
     }
   });
 
-  it('marks all rules advisory-only until calibrated', () => {
+  it('marks uncalibrated rules advisory-only and calibrated rules enforced', () => {
     for (const rule of STRUCTURE_RULES) {
-      expect(rule.advisoryOnly).toBe(true);
+      if (rule.code === 'sibling-size-inconsistent') {
+        expect(rule.advisoryOnly).toBe(false);
+      } else {
+        expect(rule.advisoryOnly).toBe(true);
+      }
     }
   });
 });

@@ -1,0 +1,52 @@
+{
+  "actions": [
+    {
+      "id": "auto-9546189e-f0fe-4182-83dd-596937ec9a0d",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:381,477,138,51",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:container:381,477,138,51:381,477,138,51:text",
+      "createdAt": "2026-07-29T05:30:19.792Z"
+    },
+    {
+      "id": "auto-68f29bd9-da85-4174-99b7-35bc7e0bbf0e",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:930,477,237,51",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:container:930,477,237,51:930,477,237,51:text",
+      "createdAt": "2026-07-29T05:30:19.793Z"
+    },
+    {
+      "id": "auto-d7ee9288-3b27-47a4-8bf7-8854b44582fb",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:186,342,81,45",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:container:186,342,81,45:186,342,81,45:container",
+      "createdAt": "2026-07-29T05:30:19.794Z"
+    },
+    {
+      "id": "auto-e3b01060-ddcd-46e9-84cb-1f2c7167f852",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:435,342,213,45",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:container:435,342,213,45:435,342,213,45:container",
+      "createdAt": "2026-07-29T05:30:19.796Z"
+    },
+    {
+      "id": "auto-c9d5986f-61ff-4a85-89b6-2e8ca527ffa5",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:99,342,87,45",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:container:99,342,87,45:99,342,87,45:container",
+      "createdAt": "2026-07-29T05:30:19.798Z"
+    },
+    {
+      "id": "auto-23cc367c-4a87-442c-aa8f-b7bc8cc555cc",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:381,1398,171,48",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:container:381,1398,171,48:381,1398,171,48:text",
+      "createdAt": "2026-07-29T05:30:19.799Z"
+    }
+  ]
+}

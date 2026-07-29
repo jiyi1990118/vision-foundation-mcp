@@ -1,0 +1,52 @@
+{
+  "actions": [
+    {
+      "id": "auto-a5ed6ae2-61e4-44e9-a2a3-0808e1233107",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:381,477,138,51",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:container:381,477,138,51:381,477,138,51:text",
+      "createdAt": "2026-07-29T05:30:20.033Z"
+    },
+    {
+      "id": "auto-d7fc6342-9b1d-45a3-93b8-eab7120288db",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:930,477,237,51",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:container:930,477,237,51:930,477,237,51:text",
+      "createdAt": "2026-07-29T05:30:20.034Z"
+    },
+    {
+      "id": "auto-6e32df63-166c-424c-8286-ed6ce5def35d",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:navbar:354,1185,492,51",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:navbar:354,1185,492,51:354,1185,492,51:text",
+      "createdAt": "2026-07-29T05:30:20.034Z"
+    },
+    {
+      "id": "auto-20c39d93-48d1-4f6e-aea5-517cfe6f9c01",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:801,42,334,54",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:801,42,334,54:801,42,334,54:text",
+      "createdAt": "2026-07-29T05:30:20.035Z"
+    },
+    {
+      "id": "auto-6a41547a-0bdb-41d8-8c5c-aedfd1eb3854",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:435,342,213,45",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:container:435,342,213,45:435,342,213,45:container",
+      "createdAt": "2026-07-29T05:30:20.035Z"
+    },
+    {
+      "id": "auto-382e7f6e-bc81-4405-bac3-08b52fcc2140",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:1023,48,102,48",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:container:1023,48,102,48:1023,48,102,48:container",
+      "createdAt": "2026-07-29T05:30:20.036Z"
+    }
+  ]
+}

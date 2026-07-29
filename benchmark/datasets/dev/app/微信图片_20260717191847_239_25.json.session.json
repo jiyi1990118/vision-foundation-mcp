@@ -1,0 +1,100 @@
+{
+  "actions": [
+    {
+      "id": "auto-aed5ed67-cc0f-4701-a0f7-ba1a58823633",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:30,180,180,120",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:icon:30,180,180,120:30,180,180,120:icon",
+      "createdAt": "2026-07-29T05:30:19.927Z"
+    },
+    {
+      "id": "auto-f4bb888f-5220-4af5-90ea-19a5d138a9be",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:840,2460,60,120",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:icon:840,2460,60,120:840,2460,60,120:icon",
+      "createdAt": "2026-07-29T05:30:19.928Z"
+    },
+    {
+      "id": "auto-c064a3e7-f018-4825-bf21-b821d6f2f8fc",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:21,254,192,42",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:21,254,192,42:21,254,192,42:text",
+      "createdAt": "2026-07-29T05:30:19.928Z"
+    },
+    {
+      "id": "auto-75ddd7ed-efe2-46e3-98f9-d4d5d799571e",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:275,254,92,42",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:275,254,92,42:275,254,92,42:text",
+      "createdAt": "2026-07-29T05:30:19.929Z"
+    },
+    {
+      "id": "auto-31557b97-f49a-42cf-935e-62716b8e6f90",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:638,188,493,54",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:638,188,493,54:638,188,493,54:text",
+      "createdAt": "2026-07-29T05:30:19.930Z"
+    },
+    {
+      "id": "auto-6a4a2df1-4ae6-4caf-9ff1-42e17c8c8b8a",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:597,546,246,138",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:container:597,546,246,138:597,546,246,138:container",
+      "createdAt": "2026-07-29T05:30:19.930Z"
+    },
+    {
+      "id": "auto-1a4d6db3-1631-4f87-a992-038c4e2449af",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:117,2549,634,33",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:117,2549,634,33:117,2549,634,33:text",
+      "createdAt": "2026-07-29T05:30:19.931Z"
+    },
+    {
+      "id": "auto-3ff2f148-261a-4446-91da-28e45ae189ad",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:table:627,816,570,543",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:table:627,816,570,543:627,816,570,543:table",
+      "createdAt": "2026-07-29T05:30:19.932Z"
+    },
+    {
+      "id": "auto-410f001f-929e-4ada-a798-55a697fc9031",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:card:36,1785,501,378",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:card:36,1785,501,378:36,1785,501,378:listItem",
+      "createdAt": "2026-07-29T05:30:19.933Z"
+    },
+    {
+      "id": "auto-54c21efe-2f3e-4d22-b5f1-64a4135d0638",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:60,1620,120,120",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:icon:60,1620,120,120:60,1620,120,120:icon",
+      "createdAt": "2026-07-29T05:30:19.933Z"
+    },
+    {
+      "id": "auto-179b7509-b993-4bb8-86ed-4c3f834231d1",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:210,2004,144,135",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:container:210,2004,144,135:210,2004,144,135:container",
+      "createdAt": "2026-07-29T05:30:19.934Z"
+    },
+    {
+      "id": "auto-bd5bda4b-0043-472b-909c-f391e3ac7988",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:75,2094,113,42",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:75,2094,113,42:75,2094,113,42:text",
+      "createdAt": "2026-07-29T05:30:19.935Z"
+    }
+  ]
+}

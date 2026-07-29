@@ -210,7 +210,7 @@ const RULE_SIBLING_SIZE_INCONSISTENT: StructureRule = {
   severity: 'low',
   confidence: 0.5,
   description: '同级同类型元素的尺寸与中位数差异超过 25%',
-  advisoryOnly: true,
+  advisoryOnly: false,
   evaluate(annotation: AnnotationFile): StructureIssue[] {
     const { byId } = buildParentMap(annotation);
     const issues: StructureIssue[] = [];

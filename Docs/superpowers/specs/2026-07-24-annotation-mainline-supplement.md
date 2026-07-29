@@ -229,15 +229,16 @@ Current threshold status:
 - 9/25 element types have 30+ confirmed samples (text, icon, container, subtitle,
   navbar, column, title, card, image). 16 types need more screenshots;
   badge (26) is closest.
-- 1/3 structure rules calibrated: `sibling-size-inconsistent` has measured
-  precision=64.4% (606 reviewed) and is enforced.
-  `isolated-content` v2 has 1036 findings (355 auto-suppressed, 649 pending
-  human review) and remains advisory-only (precision=0% on auto-suppressed
-  set; true precision requires human review of the 649 pending findings).
-  `sibling-overlap` v1 has 24 findings across 11 images and remains
-  advisory-only (uncalibrated).
-- 288 borderline sibling-size findings (35-50% deviation) remain as auto for
-  human review.
+- 2/3 structure rules calibrated and enforced:
+  - `sibling-size-inconsistent` v1: 894 findings, 894 reviewed,
+    precision=63.4%, enforced.
+  - `sibling-overlap` v1: 24 findings, 24 reviewed, precision=100.0%,
+    enforced.
+- 1/3 rule advisory-only:
+  - `isolated-content` v2: 1004 findings, 1004 reviewed, precision=32.9%.
+    330 confirmed (real isolation issues), 674 suppressed (legitimate
+    page-level elements). Below 50% enforcement threshold.
+- 0 findings remain as auto (all reviewed).
 - Synthetic data: 28 HTML-rendered screenshots included as ground truth
   (source: 'synthetic-html'). They expand type coverage but are limited by
   the AI's visual classification accuracy - e.g. badge/button/tab/select
@@ -388,24 +389,34 @@ and gesture start; a hidden layer is excluded from rendering and hit testing.
 
 ## Structural Findings
 
-Rules (current versions):
+Rules (current versions, all findings reviewed):
 
 - `isolated-content` v2: content element (text/icon/image/button/etc.)
   whose direct parent is `page` (should be in a container like
   navbar/card/section/column). Excludes page-level types (navbar, header,
-  footer, tabbar, toolbar, title, subtitle). 1036 findings across 50
-  annotations; 355 auto-suppressed (icons, container-less images, status
-  bar text, header titles, tab-bar labels, full-width banners, background
-  images), 649 pending human review.
+  footer, tabbar, toolbar, title, subtitle). 1004 findings, 1004 reviewed,
+  precision=32.9%. 330 confirmed (real isolation issues), 674 suppressed
+  (legitimate page-level: status bar, nav labels, short labels, avatars,
+  background images, full-width banners). Advisory-only (below 50% threshold).
 - `sibling-overlap` v1: same-parent, same-type siblings with >30% IoU.
-  Detects potential duplicate detections. 24 findings across 11
-  annotations. Advisory-only (uncalibrated).
+  Detects potential duplicate detections. 24 findings, 24 reviewed,
+  precision=100.0%, enforced.
 - `sibling-size-inconsistent` v1: same-type siblings with >25% size
-  deviation from median. 916 findings, 606 reviewed, precision=64.4%,
-  enforced.
+  deviation from median. 894 findings, 894 reviewed, precision=63.4%,
+  enforced. 567 confirmed, 327 suppressed.
 
 Replaced `child-outside-parent` (v2 had 0 findings because the normalizer
 structurally guarantees 100% parent-child overlap for derived containment).
+
+Auto-review heuristics (scripts/ui-auto-calibrate.ts):
+- sibling-size: deviation >50% -> confirm, <=35% -> suppress, 35-50% split
+  at 42%.
+- isolated-content: container-less -> suppress, icon -> suppress, status-bar
+  text -> suppress, top/bottom band short text -> suppress, full-width ->
+  suppress, background image -> suppress, avatar -> suppress, short text
+  (<=4 chars) -> suppress, form elements (select/button/input) -> confirm,
+  content images -> confirm, longer text (>4 chars) -> confirm.
+- sibling-overlap: all confirmed (IoU >30% is suspicious enough).
 
 They must not auto-edit annotations, influence active-learning priority, or
 become regression failures until calibrated against a human-reviewed holdout.

@@ -119,6 +119,110 @@
       "action": "suppressed",
       "signature": "2:isolated-content:text:611,26,105,38:611,26,105,38:text",
       "createdAt": "2026-07-29T07:38:24.522Z"
+    },
+    {
+      "id": "auto-a1fa77f8-89c2-41cc-bd4a-c2d7cf1b0acd",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:229,491,292,34",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:229,491,292,34:229,491,292,34:text",
+      "createdAt": "2026-07-29T07:52:31.865Z"
+    },
+    {
+      "id": "auto-ad6fcd4a-299f-4a09-8459-9a735cea52bb",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:53,593,135,37",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:53,593,135,37:53,593,135,37:text",
+      "createdAt": "2026-07-29T07:52:31.865Z"
+    },
+    {
+      "id": "auto-b4d7d6e0-51b8-4112-84f3-beabfd7a1971",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:94,870,172,34",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:94,870,172,34:94,870,172,34:text",
+      "createdAt": "2026-07-29T07:52:31.866Z"
+    },
+    {
+      "id": "auto-b4f8ac39-a7a5-4926-8907-5ddc73f41fdc",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:53,968,146,37",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:53,968,146,37:53,968,146,37:text",
+      "createdAt": "2026-07-29T07:52:31.866Z"
+    },
+    {
+      "id": "auto-1101d73e-5ed2-4345-bc07-ebdea95f9989",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:536,971,147,38",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:536,971,147,38:536,971,147,38:text",
+      "createdAt": "2026-07-29T07:52:31.867Z"
+    },
+    {
+      "id": "auto-05179da0-fafe-4252-b9f5-2cff5ba2557b",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:281,1339,188,37",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:281,1339,188,37:281,1339,188,37:text",
+      "createdAt": "2026-07-29T07:52:31.867Z"
+    },
+    {
+      "id": "auto-dea0a5d1-0f0d-4f76-b833-66a6b5f839dc",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:956,1376,488,34",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:956,1376,488,34:956,1376,488,34:text",
+      "createdAt": "2026-07-29T07:52:31.868Z"
+    },
+    {
+      "id": "auto-9f080ba2-bd74-47e1-86f5-455d327f8d20",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:263,1609,213,34",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:263,1609,213,34:263,1609,213,34:text",
+      "createdAt": "2026-07-29T07:52:31.868Z"
+    },
+    {
+      "id": "auto-a09cb37a-b6d0-4f40-8e04-41b13f091d26",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:120,1440,120,120",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:icon:120,1440,120,120:120,1440,120,120:icon",
+      "createdAt": "2026-07-29T07:52:31.869Z"
+    },
+    {
+      "id": "auto-552ca52d-7338-4958-9a5c-13771a263890",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:60,600,360,120",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:icon:60,600,360,120:60,600,360,120:icon",
+      "createdAt": "2026-07-29T07:52:31.869Z"
+    },
+    {
+      "id": "auto-bc96be1d-f62c-47cd-8187-08b91c2e9a82",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:60,960,120,120",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:icon:60,960,120,120:60,960,120,120:icon",
+      "createdAt": "2026-07-29T07:52:31.870Z"
+    },
+    {
+      "id": "auto-902ba206-7943-4b91-b809-e882acb2f6a3",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:34,26,86,38",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:34,26,86,38:34,26,86,38:text",
+      "createdAt": "2026-07-29T07:52:31.871Z"
+    },
+    {
+      "id": "auto-cd308c1d-4334-4827-9a77-b3e3ddb52e4c",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:611,26,105,38",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:611,26,105,38:611,26,105,38:text",
+      "createdAt": "2026-07-29T07:52:31.871Z"
     }
   ]
 }

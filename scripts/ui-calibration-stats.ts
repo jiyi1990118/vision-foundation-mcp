@@ -1,5 +1,4 @@
 import { readFile } from 'node:fs/promises';
-import { loadDatasetWithExclusions } from '../src/ui-analysis/benchmark/annotation-loader.js';
 import {
   analyzeAnnotationStructure,
   findingSubjectId,
@@ -10,18 +9,20 @@ import {
   calibrateStructureRules,
   aggregateCalibration,
 } from '../src/ui-analysis/annotation-workbench/calibration.js';
+import {
+  loadAnnotationsForCalibration,
+} from './ui-auto-calibrate.js';
 import type { ReviewSession } from '../src/ui-analysis/annotation-workbench/review-types.js';
 
 async function main(): Promise<void> {
   const datasetDir = process.argv[2] ?? 'benchmark/datasets/dev/app';
-  const { entries } = loadDatasetWithExclusions(datasetDir);
-  console.log(`Eligible annotations: ${entries.length}\n`);
+  const entries = loadAnnotationsForCalibration(datasetDir);
+  console.log(`Annotations: ${entries.length}\n`);
 
   const allCounts = [];
   const ruleCounts: Record<string, { raised: number; confirmed: number; suppressed: number; auto: number }> = {};
 
-  for (const { annotation, imagePath } of entries) {
-    const annotationPath = imagePath.replace(/\.(jpg|jpeg|png)$/i, '.json');
+  for (const { annotation, annotationPath } of entries) {
     let session: ReviewSession = { actions: [] };
     try {
       const raw = await readFile(`${annotationPath}.session.json`, 'utf-8');

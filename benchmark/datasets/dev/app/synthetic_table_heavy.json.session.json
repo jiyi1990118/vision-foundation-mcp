@@ -199,6 +199,262 @@
       "action": "suppressed",
       "signature": "2:isolated-content:text:611,26,105,38:611,26,105,38:text",
       "createdAt": "2026-07-29T07:38:24.556Z"
+    },
+    {
+      "id": "auto-e718d1cd-8683-4c0f-863a-acad393d5760",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:210,1151,199,38",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:210,1151,199,38:210,1151,199,38:text",
+      "createdAt": "2026-07-29T07:52:32.056Z"
+    },
+    {
+      "id": "auto-c25cf5ca-5709-40f3-b7ca-60985aadc111",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:218,1609,191,37",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:218,1609,191,37:218,1609,191,37:text",
+      "createdAt": "2026-07-29T07:52:32.056Z"
+    },
+    {
+      "id": "auto-70c28444-0463-4385-b53b-85d5e1e5cdf5",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:214,1721,195,38",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:214,1721,195,38:214,1721,195,38:text",
+      "createdAt": "2026-07-29T07:52:32.057Z"
+    },
+    {
+      "id": "auto-d2d8fed0-ee80-47db-b669-cb537d9c7d05",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:214,806,225,38",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:214,806,225,38:214,806,225,38:text",
+      "createdAt": "2026-07-29T07:52:32.057Z"
+    },
+    {
+      "id": "auto-b46b8717-f12f-4066-a6d7-03da26559532",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:53,634,161,37",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:53,634,161,37:53,634,161,37:text",
+      "createdAt": "2026-07-29T07:52:32.058Z"
+    },
+    {
+      "id": "auto-c48dc934-433d-424c-8680-e47b0a0deb53",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:578,634,120,37",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:578,634,120,37:578,634,120,37:text",
+      "createdAt": "2026-07-29T07:52:32.059Z"
+    },
+    {
+      "id": "auto-48b9bf02-c6af-4f93-8cfa-fc0aa2898799",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:49,716,82,38",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:49,716,82,38:49,716,82,38:text",
+      "createdAt": "2026-07-29T07:52:32.060Z"
+    },
+    {
+      "id": "auto-7f872188-3116-4b8e-9adb-3afc0fa8b57f",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:124,716,79,38",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:124,716,79,38:124,716,79,38:text",
+      "createdAt": "2026-07-29T07:52:32.060Z"
+    },
+    {
+      "id": "auto-2740cc1b-0b29-454e-92df-6866369ddcc2",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:514,716,71,38",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:514,716,71,38:514,716,71,38:text",
+      "createdAt": "2026-07-29T07:52:32.061Z"
+    },
+    {
+      "id": "auto-545ba72a-79f7-471f-a233-472ef716ea1f",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:623,716,78,38",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:623,716,78,38:623,716,78,38:text",
+      "createdAt": "2026-07-29T07:52:32.061Z"
+    },
+    {
+      "id": "auto-e2556998-a03d-4fdb-ac41-59f96a630f2f",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:480,810,105,38",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:480,810,105,38:480,810,105,38:text",
+      "createdAt": "2026-07-29T07:52:32.062Z"
+    },
+    {
+      "id": "auto-c16c41f5-f468-4097-b39f-3e4894bdf07a",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:634,810,67,38",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:634,810,67,38:634,810,67,38:text",
+      "createdAt": "2026-07-29T07:52:32.062Z"
+    },
+    {
+      "id": "auto-5a6794db-b4c0-401e-8868-fb7dd2b95cc7",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:488,926,93,34",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:488,926,93,34:488,926,93,34:text",
+      "createdAt": "2026-07-29T07:52:32.063Z"
+    },
+    {
+      "id": "auto-3309a57e-c3a2-4c24-bf7b-11879a31acee",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:484,1039,101,37",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:484,1039,101,37:484,1039,101,37:text",
+      "createdAt": "2026-07-29T07:52:32.064Z"
+    },
+    {
+      "id": "auto-93f8eafa-024e-45cf-9948-f6fd37107290",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:634,1039,64,34",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:634,1039,64,34:634,1039,64,34:text",
+      "createdAt": "2026-07-29T07:52:32.065Z"
+    },
+    {
+      "id": "auto-63277608-38a7-433c-88bf-d4f48ac88d60",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:484,1151,105,38",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:484,1151,105,38:484,1151,105,38:text",
+      "createdAt": "2026-07-29T07:52:32.066Z"
+    },
+    {
+      "id": "auto-ff9c36b3-a6e5-4e9e-85cd-8e686f719402",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:634,1155,64,34",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:634,1155,64,34:634,1155,64,34:text",
+      "createdAt": "2026-07-29T07:52:32.068Z"
+    },
+    {
+      "id": "auto-531651f5-88c6-49f8-abbf-931940372f21",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:480,1268,105,37",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:480,1268,105,37:480,1268,105,37:text",
+      "createdAt": "2026-07-29T07:52:32.068Z"
+    },
+    {
+      "id": "auto-ac51b8c4-a526-46fa-b221-6646ee4ef0c0",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:480,1380,105,38",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:480,1380,105,38:480,1380,105,38:text",
+      "createdAt": "2026-07-29T07:52:32.069Z"
+    },
+    {
+      "id": "auto-3dafe5d6-8857-4c1a-a2c7-7ef79b25edda",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:488,1496,97,38",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:488,1496,97,38:488,1496,97,38:text",
+      "createdAt": "2026-07-29T07:52:32.069Z"
+    },
+    {
+      "id": "auto-d4c1763f-e91c-4bd3-85ef-e62d42cb6c90",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:488,1609,97,37",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:488,1609,97,37:488,1609,97,37:text",
+      "createdAt": "2026-07-29T07:52:32.070Z"
+    },
+    {
+      "id": "auto-5c7f0294-ef78-43bc-ab9d-6011b8e0b4e3",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:484,1725,101,34",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:484,1725,101,34:484,1725,101,34:text",
+      "createdAt": "2026-07-29T07:52:32.071Z"
+    },
+    {
+      "id": "auto-f8e24d9d-43fe-434e-95c1-53c89d5dbade",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:480,1838,105,37",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:480,1838,105,37:480,1838,105,37:text",
+      "createdAt": "2026-07-29T07:52:32.072Z"
+    },
+    {
+      "id": "auto-8d82e7be-0562-4e3f-8905-cfe84bc8a5f4",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:630,1838,71,37",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:630,1838,71,37:630,1838,71,37:text",
+      "createdAt": "2026-07-29T07:52:32.072Z"
+    },
+    {
+      "id": "auto-2ec1f2b8-9aa4-4c41-ac8a-4f1e7e49ce85",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:56,1950,169,34",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:56,1950,169,34:56,1950,169,34:text",
+      "createdAt": "2026-07-29T07:52:32.073Z"
+    },
+    {
+      "id": "auto-6d9b64fa-2841-4550-b68e-d2c6e27e27d5",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:248,2051,258,30",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:248,2051,258,30:248,2051,258,30:text",
+      "createdAt": "2026-07-29T07:52:32.073Z"
+    },
+    {
+      "id": "auto-bdf7f995-e20f-4a64-b51e-cadbee915f6f",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:138,1015,174,84",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:container:138,1015,174,84:138,1015,174,84:container",
+      "createdAt": "2026-07-29T07:52:32.075Z"
+    },
+    {
+      "id": "auto-8a364c3d-d721-4b9d-8fbd-f36ce2ccb16d",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:540,240,180,180",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:icon:540,240,180,180:540,240,180,180:icon",
+      "createdAt": "2026-07-29T07:52:32.076Z"
+    },
+    {
+      "id": "auto-6e8d088d-ad86-47dc-bf83-03adde1a5c79",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:634,1039,64,34",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:634,1039,64,34:634,1039,64,34:text",
+      "createdAt": "2026-07-29T07:52:32.076Z"
+    },
+    {
+      "id": "auto-e483868f-7724-468d-84fd-eabe0e37e919",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:634,1155,64,34",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:634,1155,64,34:634,1155,64,34:text",
+      "createdAt": "2026-07-29T07:52:32.077Z"
+    },
+    {
+      "id": "auto-b75d6213-8fa8-4833-aef9-138f0d7be4ea",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:634,810,67,38",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:634,810,67,38:634,810,67,38:text",
+      "createdAt": "2026-07-29T07:52:32.078Z"
+    },
+    {
+      "id": "auto-50b01011-25f2-4358-a67b-16bf3a3cb0ee",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:135,510,195,38",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:135,510,195,38:135,510,195,38:text",
+      "createdAt": "2026-07-29T07:52:32.078Z"
     }
   ]
 }

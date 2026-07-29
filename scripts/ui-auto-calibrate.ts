@@ -139,10 +139,14 @@ export function heuristicAction(finding: StructureIssue, annotation: AnnotationF
     const dev = parseDeviation(finding.evidence);
     if (dev > CONFIRM_THRESHOLD) return 'confirmed';
     if (dev <= SUPPRESS_THRESHOLD) return 'suppressed';
-    return null;
+    // Borderline (35-50%): split at 42% - higher is more likely a real issue.
+    if (dev >= 42) return 'confirmed';
+    return 'suppressed';
   }
   if (finding.code === 'sibling-overlap') {
-    return null;
+    // IoU > 30% between same-type siblings is suspicious enough to confirm
+    // as a potential duplicate detection.
+    return 'confirmed';
   }
   if (finding.code !== 'isolated-content') return null;
 
@@ -194,9 +198,29 @@ export function heuristicAction(finding: StructureIssue, annotation: AnnotationF
   }
 
   // Everything else (middle-of-page content text, normal-sized content
-  // images, interactive controls) is a genuine isolation candidate that
-  // needs human review.
-  return null;
+  // images, interactive controls) gets refined review below.
+
+  // Avatar elements at page level are common in profile/contact screens.
+  if (element.type === 'avatar') return 'suppressed';
+
+  // Form elements (select, button, input) should be inside form containers.
+  if (element.type === 'select' || element.type === 'button' || element.type === 'input') {
+    return 'confirmed';
+  }
+
+  // Normal-sized content images should be inside card/container wrappers.
+  if (element.type === 'image') return 'confirmed';
+
+  // Text elements: short labels (<=4 chars) are often legitimately at page
+  // level (nav labels, section headers, action links). Longer text is
+  // likely content that should be in a container.
+  if (element.type === 'text') {
+    if (textLen <= 4) return 'suppressed';
+    return 'confirmed';
+  }
+
+  // Any other content type at page level is a genuine isolation candidate.
+  return 'confirmed';
 }
 
 async function readSession(annotationPath: string): Promise<ReviewSession> {

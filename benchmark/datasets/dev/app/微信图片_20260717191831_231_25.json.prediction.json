@@ -19,30 +19,52 @@
         "h": 2670
       },
       "render": "native",
+      "semanticRole": "formField",
       "children": [
+        "avatar:38,1018,108,96",
+        "badge:834,42,292,54",
+        "container:1002,1032,165,72",
+        "container:1002,867,165,72",
+        "container:168,2076,207,45",
+        "container:168,2322,279,45",
+        "container:33,1287,189,51",
+        "container:33,684,330,51",
+        "container:540,2076,264,45",
+        "container:561,1407,348,48",
+        "container:597,1584,183,48",
+        "container:78,2199,255,48",
+        "container:816,1830,243,48",
+        "container:978,525,189,51",
         "footer:63,2430,1074,195",
         "header:48,321,1104,129",
-        "navbar:144,960,834,93",
-        "navbar:303,174,594,111",
-        "navbar:156,1074,414,96",
-        "navbar:582,1065,396,96",
-        "navbar:144,873,528,54",
+        "icon:1080,2460,60,180",
+        "icon:480,180,60,120",
+        "icon:60,2520,60,120",
+        "icon:60,840,60,120",
+        "icon:660,180,60,120",
+        "icon:840,240,60,60",
+        "input:29,680,338,54",
         "navbar:108,525,420,54",
-        "container:33,684,330,51",
-        "container:561,1407,348,48",
-        "container:1002,867,165,72",
-        "container:978,525,189,51",
-        "container:33,1287,189,51",
-        "icon:30,180,180,60",
-        "icon:30,780,150,60",
-        "icon:60,1020,60,90",
-        "icon:990,1020,180,90",
-        "icon:150,1080,150,60",
-        "icon:30,1290,180,60",
-        "icon:1050,1290,90,60",
-        "icon:90,1410,300,90",
-        "image:60,1560,1020,1080",
-        "icon:1080,2460,60,180"
+        "navbar:132,1707,618,48",
+        "navbar:144,873,528,54",
+        "navbar:144,960,834,93",
+        "navbar:156,1074,414,96",
+        "navbar:303,174,594,111",
+        "navbar:456,2199,408,48",
+        "navbar:522,2322,381,45",
+        "navbar:582,1065,396,96",
+        "navbar:78,1584,519,48",
+        "navbar:78,1830,534,48",
+        "navbar:78,1953,702,48",
+        "text:1035,1285,133,54",
+        "text:146,1081,159,70",
+        "text:25,171,192,75",
+        "text:25,780,188,54",
+        "text:446,2078,543,41",
+        "text:58,42,113,58",
+        "text:63,1456,91,58",
+        "text:79,1410,1002,38",
+        "text:79,2203,785,37"
       ]
     },
     {
@@ -56,8 +78,9 @@
       },
       "render": "native",
       "children": [
+        "container:492,2517,216,60",
         "footer:72,2430,660,51",
-        "container:492,2517,216,60"
+        "text:526,2441,479,33"
       ]
     },
     {
@@ -69,18 +92,46 @@
         "w": 660,
         "h": 51
       },
-      "render": "native"
+      "render": "native",
+      "children": [
+        "text:79,2441,334,33"
+      ]
+    },
+    {
+      "id": "text:79,2441,334,33",
+      "type": "text",
+      "bbox": {
+        "x": 79,
+        "y": 2441,
+        "w": 334,
+        "h": 33
+      },
+      "render": "native",
+      "text": "漕宝路地铁站9号"
     },
     {
       "id": "container:492,2517,216,60",
-      "type": "container",
+      "type": "button",
       "bbox": {
         "x": 492,
         "y": 2517,
         "w": 216,
         "h": 60
       },
-      "render": "native"
+      "render": "native",
+      "text": "新增地址"
+    },
+    {
+      "id": "text:526,2441,479,33",
+      "type": "text",
+      "bbox": {
+        "x": 526,
+        "y": 2441,
+        "w": 479,
+        "h": 33
+      },
+      "render": "native",
+      "text": "亚信口腔(径汇口日光中心)"
     },
     {
       "id": "header:48,321,1104,129",
@@ -93,19 +144,34 @@
       },
       "render": "native",
       "children": [
-        "icon:90,360,150,60"
+        "text:367,355,513,54",
+        "text:96,355,167,58"
       ]
     },
     {
-      "id": "icon:90,360,150,60",
-      "type": "icon",
+      "id": "text:96,355,167,58",
+      "type": "text",
       "bbox": {
-        "x": 90,
-        "y": 360,
-        "w": 150,
-        "h": 60
+        "x": 96,
+        "y": 355,
+        "w": 167,
+        "h": 58
       },
-      "render": "native"
+      "render": "native",
+      "text": "上海市",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:367,355,513,54",
+      "type": "text",
+      "bbox": {
+        "x": 367,
+        "y": 355,
+        "w": 513,
+        "h": 54
+      },
+      "render": "native",
+      "text": "Q小区/写字楼/学校 等"
     },
     {
       "id": "navbar:144,960,834,93",
@@ -123,14 +189,15 @@
     },
     {
       "id": "navbar:159,975,636,51",
-      "type": "navbar",
+      "type": "text",
       "bbox": {
         "x": 159,
         "y": 975,
         "w": 636,
         "h": 51
       },
-      "render": "native"
+      "render": "native",
+      "text": "江航路60弄瑞和新苑38号楼501室"
     },
     {
       "id": "navbar:303,174,594,111",
@@ -141,7 +208,48 @@
         "w": 594,
         "h": 111
       },
-      "render": "native"
+      "render": "native",
+      "children": [
+        "text:350,196,117,58",
+        "text:542,192,117,71",
+        "text:734,192,117,71"
+      ]
+    },
+    {
+      "id": "text:350,196,117,58",
+      "type": "text",
+      "bbox": {
+        "x": 350,
+        "y": 196,
+        "w": 117,
+        "h": 58
+      },
+      "render": "native",
+      "text": "外送"
+    },
+    {
+      "id": "text:542,192,117,71",
+      "type": "title",
+      "bbox": {
+        "x": 542,
+        "y": 192,
+        "w": 117,
+        "h": 71
+      },
+      "render": "native",
+      "text": "外带"
+    },
+    {
+      "id": "text:734,192,117,71",
+      "type": "subtitle",
+      "bbox": {
+        "x": 734,
+        "y": 192,
+        "w": 117,
+        "h": 71
+      },
+      "render": "native",
+      "text": "堂食"
     },
     {
       "id": "navbar:156,1074,414,96",
@@ -155,6 +263,18 @@
       "render": "native"
     },
     {
+      "id": "text:146,1081,159,70",
+      "type": "subtitle",
+      "bbox": {
+        "x": 146,
+        "y": 1081,
+        "w": 159,
+        "h": 70
+      },
+      "render": "native",
+      "text": "许先生"
+    },
+    {
       "id": "navbar:582,1065,396,96",
       "type": "navbar",
       "bbox": {
@@ -165,6 +285,7 @@
       },
       "render": "native",
       "children": [
+        "badge:592,1097,280,42",
         "container:600,1095,267,45"
       ]
     },
@@ -180,26 +301,124 @@
       "render": "native"
     },
     {
+      "id": "badge:592,1097,280,42",
+      "type": "badge",
+      "bbox": {
+        "x": 592,
+        "y": 1097,
+        "w": 280,
+        "h": 42
+      },
+      "render": "native",
+      "text": "15000789207",
+      "variant": "default"
+    },
+    {
+      "id": "navbar:78,1953,702,48",
+      "type": "text",
+      "bbox": {
+        "x": 78,
+        "y": 1953,
+        "w": 702,
+        "h": 48
+      },
+      "render": "native",
+      "text": "卡普兰芭蕾舞学校(徐汇日月光中心店)"
+    },
+    {
+      "id": "navbar:132,1707,618,48",
+      "type": "text",
+      "bbox": {
+        "x": 132,
+        "y": 1707,
+        "w": 618,
+        "h": 48
+      },
+      "render": "native",
+      "text": "A+儿童成长中心(徐汇日月光中心店)"
+    },
+    {
       "id": "navbar:144,873,528,54",
-      "type": "navbar",
+      "type": "text",
       "bbox": {
         "x": 144,
         "y": 873,
         "w": 528,
         "h": 54
       },
-      "render": "native"
+      "render": "native",
+      "text": "瑞和新苑南区江航路60弄"
+    },
+    {
+      "id": "navbar:78,1830,534,48",
+      "type": "text",
+      "bbox": {
+        "x": 78,
+        "y": 1830,
+        "w": 534,
+        "h": 48
+      },
+      "render": "native",
+      "text": "乐翔轮滑(徐汇日月光中心店)"
+    },
+    {
+      "id": "navbar:78,1584,519,48",
+      "type": "text",
+      "bbox": {
+        "x": 78,
+        "y": 1584,
+        "w": 519,
+        "h": 48
+      },
+      "render": "native",
+      "text": "赵汝飞练字硬笔书法(徐汇日月光校区)"
     },
     {
       "id": "navbar:108,525,420,54",
-      "type": "navbar",
+      "type": "text",
       "bbox": {
         "x": 108,
         "y": 525,
         "w": 420,
         "h": 54
       },
+      "render": "native",
+      "text": "田林街道漕宝路31号"
+    },
+    {
+      "id": "navbar:456,2199,408,48",
+      "type": "navbar",
+      "bbox": {
+        "x": 456,
+        "y": 2199,
+        "w": 408,
+        "h": 48
+      },
       "render": "native"
+    },
+    {
+      "id": "text:79,2203,785,37",
+      "type": "text",
+      "bbox": {
+        "x": 79,
+        "y": 2203,
+        "w": 785,
+        "h": 37
+      },
+      "render": "native",
+      "text": "星控大师美术·书法·素养(徐汇日月光校区)"
+    },
+    {
+      "id": "navbar:522,2322,381,45",
+      "type": "text",
+      "bbox": {
+        "x": 522,
+        "y": 2322,
+        "w": 381,
+        "h": 45
+      },
+      "render": "native",
+      "text": "漕宝路地铁站10号口"
     },
     {
       "id": "container:33,684,330,51",
@@ -224,255 +443,29 @@
       "render": "native"
     },
     {
-      "id": "container:1002,867,165,72",
-      "type": "container",
+      "id": "text:79,1410,1002,38",
+      "type": "text",
       "bbox": {
-        "x": 1002,
-        "y": 867,
-        "w": 165,
-        "h": 72
-      },
-      "render": "native",
-      "children": [
-        "icon:1050,870,60,60"
-      ]
-    },
-    {
-      "id": "icon:1050,870,60,60",
-      "type": "icon",
-      "bbox": {
-        "x": 1050,
-        "y": 870,
-        "w": 60,
-        "h": 60
-      },
-      "render": "native"
-    },
-    {
-      "id": "container:978,525,189,51",
-      "type": "container",
-      "bbox": {
-        "x": 978,
-        "y": 525,
-        "w": 189,
-        "h": 51
-      },
-      "render": "native"
-    },
-    {
-      "id": "container:33,1287,189,51",
-      "type": "container",
-      "bbox": {
-        "x": 33,
-        "y": 1287,
-        "w": 189,
-        "h": 51
-      },
-      "render": "native"
-    },
-    {
-      "id": "icon:30,180,180,60",
-      "type": "icon",
-      "bbox": {
-        "x": 30,
-        "y": 180,
-        "w": 180,
-        "h": 60
-      },
-      "render": "native"
-    },
-    {
-      "id": "icon:30,780,150,60",
-      "type": "icon",
-      "bbox": {
-        "x": 30,
-        "y": 780,
-        "w": 150,
-        "h": 60
-      },
-      "render": "native"
-    },
-    {
-      "id": "icon:60,1020,60,90",
-      "type": "icon",
-      "bbox": {
-        "x": 60,
-        "y": 1020,
-        "w": 60,
-        "h": 90
-      },
-      "render": "native"
-    },
-    {
-      "id": "icon:990,1020,180,90",
-      "type": "icon",
-      "bbox": {
-        "x": 990,
-        "y": 1020,
-        "w": 180,
-        "h": 90
-      },
-      "render": "native",
-      "children": [
-        "container:1002,1032,165,72"
-      ]
-    },
-    {
-      "id": "container:1002,1032,165,72",
-      "type": "container",
-      "bbox": {
-        "x": 1002,
-        "y": 1032,
-        "w": 165,
-        "h": 72
-      },
-      "render": "native"
-    },
-    {
-      "id": "icon:150,1080,150,60",
-      "type": "icon",
-      "bbox": {
-        "x": 150,
-        "y": 1080,
-        "w": 150,
-        "h": 60
-      },
-      "render": "native"
-    },
-    {
-      "id": "icon:30,1290,180,60",
-      "type": "icon",
-      "bbox": {
-        "x": 30,
-        "y": 1290,
-        "w": 180,
-        "h": 60
-      },
-      "render": "native"
-    },
-    {
-      "id": "icon:1050,1290,90,60",
-      "type": "icon",
-      "bbox": {
-        "x": 1050,
-        "y": 1290,
-        "w": 90,
-        "h": 60
-      },
-      "render": "native"
-    },
-    {
-      "id": "icon:90,1410,300,90",
-      "type": "icon",
-      "bbox": {
-        "x": 90,
+        "x": 79,
         "y": 1410,
-        "w": 300,
-        "h": 90
-      },
-      "render": "native"
-    },
-    {
-      "id": "image:60,1560,1020,1080",
-      "type": "image",
-      "bbox": {
-        "x": 60,
-        "y": 1560,
-        "w": 1020,
-        "h": 1080
+        "w": 1002,
+        "h": 38
       },
       "render": "native",
-      "children": [
-        "navbar:78,1953,702,48",
-        "navbar:132,1707,618,48",
-        "navbar:78,1830,534,48",
-        "navbar:78,1584,519,48",
-        "navbar:456,2199,408,48",
-        "navbar:522,2322,381,45",
-        "container:168,2322,279,45",
-        "container:78,2199,255,48",
-        "container:540,2076,264,45",
-        "container:816,1830,243,48",
-        "container:168,2076,207,45",
-        "container:597,1584,183,48"
-      ]
-    },
-    {
-      "id": "navbar:78,1953,702,48",
-      "type": "navbar",
-      "bbox": {
-        "x": 78,
-        "y": 1953,
-        "w": 702,
-        "h": 48
-      },
-      "render": "native"
-    },
-    {
-      "id": "navbar:132,1707,618,48",
-      "type": "navbar",
-      "bbox": {
-        "x": 132,
-        "y": 1707,
-        "w": 618,
-        "h": 48
-      },
-      "render": "native"
-    },
-    {
-      "id": "navbar:78,1830,534,48",
-      "type": "navbar",
-      "bbox": {
-        "x": 78,
-        "y": 1830,
-        "w": 534,
-        "h": 48
-      },
-      "render": "native"
-    },
-    {
-      "id": "navbar:78,1584,519,48",
-      "type": "navbar",
-      "bbox": {
-        "x": 78,
-        "y": 1584,
-        "w": 519,
-        "h": 48
-      },
-      "render": "native"
-    },
-    {
-      "id": "navbar:456,2199,408,48",
-      "type": "navbar",
-      "bbox": {
-        "x": 456,
-        "y": 2199,
-        "w": 408,
-        "h": 48
-      },
-      "render": "native"
-    },
-    {
-      "id": "navbar:522,2322,381,45",
-      "type": "navbar",
-      "bbox": {
-        "x": 522,
-        "y": 2322,
-        "w": 381,
-        "h": 45
-      },
-      "render": "native"
+      "text": "赋歌琴行·雅马哈·卡瓦依·赛乐尔钢琴(徐汇日月光中心"
     },
     {
       "id": "container:168,2322,279,45",
-      "type": "container",
+      "type": "text",
       "bbox": {
         "x": 168,
         "y": 2322,
         "w": 279,
         "h": 45
       },
-      "render": "native"
+      "render": "native",
+      "text": "徐汇日月光中心A座",
+      "semanticRole": "label"
     },
     {
       "id": "container:78,2199,255,48",
@@ -486,6 +479,60 @@
       "render": "native"
     },
     {
+      "id": "container:1002,867,165,72",
+      "type": "container",
+      "bbox": {
+        "x": 1002,
+        "y": 867,
+        "w": 165,
+        "h": 72
+      },
+      "render": "native",
+      "children": [
+        "button:1022,872,134,54"
+      ]
+    },
+    {
+      "id": "button:1022,872,134,54",
+      "type": "button",
+      "bbox": {
+        "x": 1021.9999999999999,
+        "y": 871.9999999999999,
+        "w": 134.0000000000001,
+        "h": 54
+      },
+      "render": "native",
+      "text": "编辑",
+      "variant": "default"
+    },
+    {
+      "id": "container:1002,1032,165,72",
+      "type": "container",
+      "bbox": {
+        "x": 1002,
+        "y": 1032,
+        "w": 165,
+        "h": 72
+      },
+      "render": "native",
+      "children": [
+        "button:1018,1039,142,58"
+      ]
+    },
+    {
+      "id": "button:1018,1039,142,58",
+      "type": "button",
+      "bbox": {
+        "x": 1018,
+        "y": 1039,
+        "w": 142,
+        "h": 58
+      },
+      "render": "native",
+      "text": "保存",
+      "variant": "primary"
+    },
+    {
       "id": "container:540,2076,264,45",
       "type": "container",
       "bbox": {
@@ -497,26 +544,64 @@
       "render": "native"
     },
     {
+      "id": "text:446,2078,543,41",
+      "type": "text",
+      "bbox": {
+        "x": 446,
+        "y": 2078,
+        "w": 543,
+        "h": 41
+      },
+      "render": "native",
+      "text": "厚贞日式烤肉(徐汇日月光店)"
+    },
+    {
       "id": "container:816,1830,243,48",
-      "type": "container",
+      "type": "text",
       "bbox": {
         "x": 816,
         "y": 1830,
         "w": 243,
         "h": 48
       },
-      "render": "native"
+      "render": "native",
+      "text": "徐汇日月光中心D座"
+    },
+    {
+      "id": "container:978,525,189,51",
+      "type": "text",
+      "bbox": {
+        "x": 978,
+        "y": 525,
+        "w": 189,
+        "h": 51
+      },
+      "render": "native",
+      "text": "重新定位"
+    },
+    {
+      "id": "container:33,1287,189,51",
+      "type": "text",
+      "bbox": {
+        "x": 33,
+        "y": 1287,
+        "w": 189,
+        "h": 51
+      },
+      "render": "native",
+      "text": "附近地址"
     },
     {
       "id": "container:168,2076,207,45",
-      "type": "container",
+      "type": "text",
       "bbox": {
         "x": 168,
         "y": 2076,
         "w": 207,
         "h": 45
       },
-      "render": "native"
+      "render": "native",
+      "text": "徐汇日月光中心"
     },
     {
       "id": "container:597,1584,183,48",
@@ -530,6 +615,92 @@
       "render": "native"
     },
     {
+      "id": "badge:834,42,292,54",
+      "type": "badge",
+      "bbox": {
+        "x": 834,
+        "y": 42,
+        "w": 292,
+        "h": 54
+      },
+      "render": "native",
+      "text": "5543",
+      "variant": "default"
+    },
+    {
+      "id": "input:29,680,338,54",
+      "type": "select",
+      "bbox": {
+        "x": 29,
+        "y": 680,
+        "w": 338,
+        "h": 54
+      },
+      "render": "native",
+      "text": "请选择外送地址",
+      "variant": "default"
+    },
+    {
+      "id": "avatar:38,1018,108,96",
+      "type": "avatar",
+      "bbox": {
+        "x": 38,
+        "y": 1018,
+        "w": 108,
+        "h": 96
+      },
+      "render": "native",
+      "text": "四",
+      "variant": "default"
+    },
+    {
+      "id": "icon:480,180,60,120",
+      "type": "icon",
+      "bbox": {
+        "x": 480,
+        "y": 180,
+        "w": 60,
+        "h": 120
+      },
+      "render": "native",
+      "text": "外带"
+    },
+    {
+      "id": "icon:660,180,60,120",
+      "type": "icon",
+      "bbox": {
+        "x": 660,
+        "y": 180,
+        "w": 60,
+        "h": 120
+      },
+      "render": "native",
+      "text": "外带"
+    },
+    {
+      "id": "icon:840,240,60,60",
+      "type": "icon",
+      "bbox": {
+        "x": 840,
+        "y": 240,
+        "w": 60,
+        "h": 60
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:60,840,60,120",
+      "type": "icon",
+      "bbox": {
+        "x": 60,
+        "y": 840,
+        "w": 60,
+        "h": 120
+      },
+      "render": "native",
+      "text": "瑞和新苑南区江航路60弄"
+    },
+    {
       "id": "icon:1080,2460,60,180",
       "type": "icon",
       "bbox": {
@@ -539,9 +710,429 @@
         "h": 180
       },
       "render": "native"
+    },
+    {
+      "id": "icon:60,2520,60,120",
+      "type": "icon",
+      "bbox": {
+        "x": 60,
+        "y": 2520,
+        "w": 60,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:58,42,113,58",
+      "type": "text",
+      "bbox": {
+        "x": 58,
+        "y": 42,
+        "w": 113,
+        "h": 58
+      },
+      "render": "native",
+      "text": "7:17"
+    },
+    {
+      "id": "text:25,171,192,75",
+      "type": "subtitle",
+      "bbox": {
+        "x": 25,
+        "y": 171,
+        "w": 192,
+        "h": 75
+      },
+      "render": "native",
+      "text": "く 返回"
+    },
+    {
+      "id": "text:25,780,188,54",
+      "type": "text",
+      "bbox": {
+        "x": 25,
+        "y": 780,
+        "w": 188,
+        "h": 54
+      },
+      "render": "native",
+      "text": "我的地址"
+    },
+    {
+      "id": "text:1035,1285,133,54",
+      "type": "text",
+      "bbox": {
+        "x": 1035,
+        "y": 1285,
+        "w": 133,
+        "h": 54
+      },
+      "render": "native",
+      "text": "更多>"
+    },
+    {
+      "id": "text:63,1456,91,58",
+      "type": "text",
+      "bbox": {
+        "x": 63,
+        "y": 1456,
+        "w": 91,
+        "h": 58
+      },
+      "render": "native",
+      "text": "店)"
     }
   ],
-  "relations": [],
+  "relations": [
+    {
+      "from": "container:1002,1032,165,72",
+      "to": "button:1018,1039,142,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:1002,867,165,72",
+      "to": "button:1022,872,134,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:63,2430,1074,195",
+      "to": "container:492,2517,216,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:63,2430,1074,195",
+      "to": "footer:72,2430,660,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:63,2430,1074,195",
+      "to": "text:526,2441,479,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:72,2430,660,51",
+      "to": "text:79,2441,334,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "header:48,321,1104,129",
+      "to": "text:367,355,513,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "header:48,321,1104,129",
+      "to": "text:96,355,167,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "navbar:144,960,834,93",
+      "to": "navbar:159,975,636,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "navbar:303,174,594,111",
+      "to": "text:350,196,117,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "navbar:303,174,594,111",
+      "to": "text:542,192,117,71",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "navbar:303,174,594,111",
+      "to": "text:734,192,117,71",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "navbar:582,1065,396,96",
+      "to": "badge:592,1097,280,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "navbar:582,1065,396,96",
+      "to": "container:600,1095,267,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "avatar:38,1018,108,96",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "badge:834,42,292,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:1002,1032,165,72",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:1002,867,165,72",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:168,2076,207,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:168,2322,279,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:33,1287,189,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:33,684,330,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:540,2076,264,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:561,1407,348,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:597,1584,183,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:78,2199,255,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:816,1830,243,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:978,525,189,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "footer:63,2430,1074,195",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "header:48,321,1104,129",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:1080,2460,60,180",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:480,180,60,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:60,2520,60,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:60,840,60,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:660,180,60,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:840,240,60,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "input:29,680,338,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:108,525,420,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:132,1707,618,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:144,873,528,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:144,960,834,93",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:156,1074,414,96",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:303,174,594,111",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:456,2199,408,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:522,2322,381,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:582,1065,396,96",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:78,1584,519,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:78,1830,534,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:78,1953,702,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:1035,1285,133,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:146,1081,159,70",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:25,171,192,75",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:25,780,188,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:446,2078,543,41",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:58,42,113,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:63,1456,91,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:79,1410,1002,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:79,2203,785,37",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
   "zOrder": [],
   "warnings": [
     "pipeline-generated draft annotation - not human verified"

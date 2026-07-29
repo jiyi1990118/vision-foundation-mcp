@@ -20,59 +20,45 @@
       },
       "render": "native",
       "children": [
-        "container:3,174,135,93",
-        "image:0,180,1200,2460"
-      ]
-    },
-    {
-      "id": "container:3,174,135,93",
-      "type": "container",
-      "bbox": {
-        "x": 3,
-        "y": 174,
-        "w": 135,
-        "h": 93
-      },
-      "render": "native"
-    },
-    {
-      "id": "image:0,180,1200,2460",
-      "type": "image",
-      "bbox": {
-        "x": 0,
-        "y": 180,
-        "w": 1200,
-        "h": 2460
-      },
-      "render": "native",
-      "children": [
-        "footer:3,2184,1194,441",
         "card:15,714,384,483",
         "card:21,1224,372,348",
-        "card:414,1224,372,348",
-        "card:807,1224,372,348",
         "card:21,1731,372,348",
+        "card:414,1224,372,348",
         "card:414,1731,372,348",
-        "card:807,1731,372,348",
         "card:414,720,372,345",
+        "card:807,1224,372,348",
+        "card:807,1731,372,348",
         "card:807,720,372,345",
-        "header:30,336,903,48",
-        "navbar:282,285,372,45",
-        "container:876,285,285,45",
-        "header:153,255,1044,12",
-        "container:54,621,213,57",
-        "container:30,390,264,45",
         "container:189,525,186,60",
-        "container:939,339,210,45",
-        "container:447,1134,186,42",
-        "container:840,1134,186,42",
-        "container:51,1638,186,42",
-        "container:447,1638,186,42",
+        "container:3,174,135,93",
+        "container:30,390,264,45",
         "container:300,390,171,45",
+        "container:447,1638,186,42",
+        "container:51,1638,186,42",
+        "container:54,2091,180,42",
+        "container:54,621,213,57",
         "container:840,1638,183,42",
         "container:840,2091,183,42",
-        "container:54,2091,180,42",
-        "icon:60,630,210,60"
+        "container:876,285,285,45",
+        "container:939,339,210,45",
+        "footer:3,2184,1194,441",
+        "header:153,255,1044,12",
+        "header:30,336,903,48",
+        "icon:360,720,60,120",
+        "icon:360,960,60,60",
+        "image:0,1080,1200,420",
+        "navbar:282,285,372,45",
+        "tab:17,167,129,75",
+        "text:138,1581,133,42",
+        "text:21,1531,375,42",
+        "text:25,284,1143,41",
+        "text:29,526,388,58",
+        "text:417,1531,371,38",
+        "text:446,2094,184,38",
+        "text:509,1072,184,42",
+        "text:534,1581,134,42",
+        "text:63,42,116,58",
+        "text:834,42,297,54"
       ]
     },
     {
@@ -86,10 +72,12 @@
       },
       "render": "native",
       "children": [
-        "container:966,2520,192,57",
-        "container:747,2502,90,93",
         "container:624,2502,90,90",
-        "icon:30,2520,210,60"
+        "container:747,2502,90,93",
+        "container:966,2520,192,57",
+        "icon:780,2460,60,120",
+        "text:13,2520,241,58",
+        "text:242,2532,138,42"
       ]
     },
     {
@@ -101,7 +89,8 @@
         "w": 192,
         "h": 57
       },
-      "render": "native"
+      "render": "native",
+      "text": "加入购物车"
     },
     {
       "id": "container:747,2502,90,93",
@@ -126,15 +115,40 @@
       "render": "native"
     },
     {
-      "id": "icon:30,2520,210,60",
+      "id": "icon:780,2460,60,120",
       "type": "icon",
       "bbox": {
-        "x": 30,
-        "y": 2520,
-        "w": 210,
-        "h": 60
+        "x": 780,
+        "y": 2460,
+        "w": 60,
+        "h": 120
       },
-      "render": "native"
+      "render": "native",
+      "text": "加入购物车"
+    },
+    {
+      "id": "text:13,2520,241,58",
+      "type": "subtitle",
+      "bbox": {
+        "x": 13,
+        "y": 2520,
+        "w": 241,
+        "h": 58
+      },
+      "render": "native",
+      "text": "¥79.00"
+    },
+    {
+      "id": "text:242,2532,138,42",
+      "type": "text",
+      "bbox": {
+        "x": 242,
+        "y": 2532,
+        "w": 138,
+        "h": 42
+      },
+      "render": "native",
+      "text": "131.90"
     },
     {
       "id": "card:15,714,384,483",
@@ -145,7 +159,35 @@
         "w": 384,
         "h": 483
       },
-      "render": "native"
+      "render": "native",
+      "children": [
+        "text:42,1022,333,42",
+        "text:54,1135,188,37"
+      ]
+    },
+    {
+      "id": "text:42,1022,333,42",
+      "type": "text",
+      "bbox": {
+        "x": 42,
+        "y": 1022,
+        "w": 333,
+        "h": 42
+      },
+      "render": "native",
+      "text": "经典意式肉酱比萨"
+    },
+    {
+      "id": "text:54,1135,188,37",
+      "type": "text",
+      "bbox": {
+        "x": 54,
+        "y": 1135,
+        "w": 188,
+        "h": 37
+      },
+      "render": "native",
+      "text": "+¥0¥39起"
     },
     {
       "id": "card:21,1224,372,348",
@@ -159,6 +201,18 @@
       "render": "native"
     },
     {
+      "id": "text:21,1531,375,42",
+      "type": "text",
+      "bbox": {
+        "x": 21,
+        "y": 1531,
+        "w": 375,
+        "h": 42
+      },
+      "render": "native",
+      "text": "德克萨斯风味烤肉似"
+    },
+    {
       "id": "card:414,1224,372,348",
       "type": "card",
       "bbox": {
@@ -170,6 +224,18 @@
       "render": "native"
     },
     {
+      "id": "text:417,1531,371,38",
+      "type": "text",
+      "bbox": {
+        "x": 417,
+        "y": 1531,
+        "w": 371,
+        "h": 38
+      },
+      "render": "native",
+      "text": "摩洛哥风情浓溢鸡腿"
+    },
+    {
       "id": "card:807,1224,372,348",
       "type": "card",
       "bbox": {
@@ -178,7 +244,35 @@
         "w": 372,
         "h": 348
       },
-      "render": "native"
+      "render": "native",
+      "children": [
+        "text:809,1531,367,38",
+        "text:826,1256,92,54"
+      ]
+    },
+    {
+      "id": "text:826,1256,92,54",
+      "type": "subtitle",
+      "bbox": {
+        "x": 826,
+        "y": 1256,
+        "w": 92,
+        "h": 54
+      },
+      "render": "native",
+      "text": "招牌"
+    },
+    {
+      "id": "text:809,1531,367,38",
+      "type": "text",
+      "bbox": {
+        "x": 809,
+        "y": 1531,
+        "w": 367,
+        "h": 38
+      },
+      "render": "native",
+      "text": "美国风情土豆培根比"
     },
     {
       "id": "card:21,1731,372,348",
@@ -189,7 +283,22 @@
         "w": 372,
         "h": 348
       },
-      "render": "native"
+      "render": "native",
+      "children": [
+        "text:79,2036,259,42"
+      ]
+    },
+    {
+      "id": "text:79,2036,259,42",
+      "type": "text",
+      "bbox": {
+        "x": 79,
+        "y": 2036,
+        "w": 259,
+        "h": 42
+      },
+      "render": "native",
+      "text": "缤纷水果比萨"
     },
     {
       "id": "card:414,1731,372,348",
@@ -200,7 +309,22 @@
         "w": 372,
         "h": 348
       },
-      "render": "native"
+      "render": "native",
+      "children": [
+        "text:455,2036,296,42"
+      ]
+    },
+    {
+      "id": "text:455,2036,296,42",
+      "type": "text",
+      "bbox": {
+        "x": 455,
+        "y": 2036,
+        "w": 296,
+        "h": 42
+      },
+      "render": "native",
+      "text": "可可布朗尼比萨"
     },
     {
       "id": "card:807,1731,372,348",
@@ -211,7 +335,22 @@
         "w": 372,
         "h": 348
       },
-      "render": "native"
+      "render": "native",
+      "children": [
+        "text:851,2036,288,37"
+      ]
+    },
+    {
+      "id": "text:851,2036,288,37",
+      "type": "text",
+      "bbox": {
+        "x": 851,
+        "y": 2036,
+        "w": 288,
+        "h": 37
+      },
+      "render": "native",
+      "text": "夏威夷风情比萨"
     },
     {
       "id": "card:414,720,372,345",
@@ -222,7 +361,49 @@
         "w": 372,
         "h": 345
       },
-      "render": "native"
+      "render": "native",
+      "children": [
+        "badge:430,747,87,41",
+        "icon:720,960,60,60",
+        "text:421,1026,363,38"
+      ]
+    },
+    {
+      "id": "badge:430,747,87,41",
+      "type": "badge",
+      "bbox": {
+        "x": 429.99999999999994,
+        "y": 747,
+        "w": 87.00000000000006,
+        "h": 40.999999999999886
+      },
+      "render": "native",
+      "text": "NEW",
+      "variant": "default"
+    },
+    {
+      "id": "icon:720,960,60,60",
+      "type": "icon",
+      "bbox": {
+        "x": 720,
+        "y": 960,
+        "w": 60,
+        "h": 60
+      },
+      "render": "native",
+      "text": "韩式炸鸡滋香比萨"
+    },
+    {
+      "id": "text:421,1026,363,38",
+      "type": "text",
+      "bbox": {
+        "x": 421,
+        "y": 1026,
+        "w": 363,
+        "h": 38
+      },
+      "render": "native",
+      "text": "新加坡砂煲风味腊肠"
     },
     {
       "id": "card:807,720,372,345",
@@ -233,18 +414,34 @@
         "w": 372,
         "h": 345
       },
-      "render": "native"
+      "render": "native",
+      "children": [
+        "text:826,1022,334,42"
+      ]
+    },
+    {
+      "id": "text:826,1022,334,42",
+      "type": "text",
+      "bbox": {
+        "x": 826,
+        "y": 1022,
+        "w": 334,
+        "h": 42
+      },
+      "render": "native",
+      "text": "韩式炸鸡滋香比萨"
     },
     {
       "id": "header:30,336,903,48",
-      "type": "header",
+      "type": "text",
       "bbox": {
         "x": 30,
         "y": 336,
         "w": 903,
         "h": 48
       },
-      "render": "native"
+      "render": "native",
+      "text": "萨+法式香草风味凤尾虾(5只)+招牌蛋挞(2个)+胡萝卜沃柑橙VC"
     },
     {
       "id": "navbar:282,285,372,45",
@@ -258,6 +455,18 @@
       "render": "native"
     },
     {
+      "id": "text:25,284,1143,41",
+      "type": "title",
+      "bbox": {
+        "x": 25,
+        "y": 284,
+        "w": 1143,
+        "h": 41
+      },
+      "render": "native",
+      "text": "9\"(英寸)手拍经典意式肉酱比萨+9\"(英寸)手拍经典意式肉酱比"
+    },
+    {
       "id": "container:876,285,285,45",
       "type": "container",
       "bbox": {
@@ -265,6 +474,17 @@
         "y": 285,
         "w": 285,
         "h": 45
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:3,174,135,93",
+      "type": "container",
+      "bbox": {
+        "x": 3,
+        "y": 174,
+        "w": 135,
+        "h": 93
       },
       "render": "native"
     },
@@ -281,25 +501,27 @@
     },
     {
       "id": "container:54,621,213,57",
-      "type": "container",
+      "type": "subtitle",
       "bbox": {
         "x": 54,
         "y": 621,
         "w": 213,
         "h": 57
       },
-      "render": "native"
+      "render": "native",
+      "text": "比萨种类"
     },
     {
       "id": "container:30,390,264,45",
-      "type": "container",
+      "type": "text",
       "bbox": {
         "x": 30,
         "y": 390,
         "w": 264,
         "h": 45
       },
-      "render": "native"
+      "render": "native",
+      "text": "悦享杯-标准杯标准糖x2"
     },
     {
       "id": "container:189,525,186,60",
@@ -313,6 +535,18 @@
       "render": "native"
     },
     {
+      "id": "text:29,526,388,58",
+      "type": "subtitle",
+      "bbox": {
+        "x": 29,
+        "y": 526,
+        "w": 388,
+        "h": 58
+      },
+      "render": "native",
+      "text": "比萨（任选1份）"
+    },
+    {
       "id": "container:939,339,210,45",
       "type": "container",
       "bbox": {
@@ -324,48 +558,29 @@
       "render": "native"
     },
     {
-      "id": "container:447,1134,186,42",
-      "type": "container",
-      "bbox": {
-        "x": 447,
-        "y": 1134,
-        "w": 186,
-        "h": 42
-      },
-      "render": "native"
-    },
-    {
-      "id": "container:840,1134,186,42",
-      "type": "container",
-      "bbox": {
-        "x": 840,
-        "y": 1134,
-        "w": 186,
-        "h": 42
-      },
-      "render": "native"
-    },
-    {
       "id": "container:51,1638,186,42",
-      "type": "container",
+      "type": "text",
       "bbox": {
         "x": 51,
         "y": 1638,
         "w": 186,
         "h": 42
       },
-      "render": "native"
+      "render": "native",
+      "text": "+¥0¥39起",
+      "semanticRole": "label"
     },
     {
       "id": "container:447,1638,186,42",
-      "type": "container",
+      "type": "text",
       "bbox": {
         "x": 447,
         "y": 1638,
         "w": 186,
         "h": 42
       },
-      "render": "native"
+      "render": "native",
+      "text": "+¥0¥39起"
     },
     {
       "id": "container:300,390,171,45",
@@ -380,50 +595,578 @@
     },
     {
       "id": "container:840,1638,183,42",
-      "type": "container",
+      "type": "text",
       "bbox": {
         "x": 840,
         "y": 1638,
         "w": 183,
         "h": 42
       },
-      "render": "native"
+      "render": "native",
+      "text": "+¥7¥46起"
     },
     {
       "id": "container:840,2091,183,42",
-      "type": "container",
+      "type": "text",
       "bbox": {
         "x": 840,
         "y": 2091,
         "w": 183,
         "h": 42
       },
-      "render": "native"
+      "render": "native",
+      "text": "+¥7¥46起"
     },
     {
       "id": "container:54,2091,180,42",
-      "type": "container",
+      "type": "text",
       "bbox": {
         "x": 54,
         "y": 2091,
         "w": 180,
         "h": 42
       },
-      "render": "native"
+      "render": "native",
+      "text": "+¥7¥46起",
+      "semanticRole": "label"
     },
     {
-      "id": "icon:60,630,210,60",
+      "id": "tab:17,167,129,75",
+      "type": "tab",
+      "bbox": {
+        "x": 17,
+        "y": 167,
+        "w": 129,
+        "h": 74.99999999999997
+      },
+      "render": "native",
+      "text": "详情",
+      "variant": "default"
+    },
+    {
+      "id": "icon:360,720,60,120",
       "type": "icon",
       "bbox": {
-        "x": 60,
-        "y": 630,
-        "w": 210,
+        "x": 360,
+        "y": 720,
+        "w": 60,
+        "h": 120
+      },
+      "render": "native",
+      "text": "NEW"
+    },
+    {
+      "id": "icon:360,960,60,60",
+      "type": "icon",
+      "bbox": {
+        "x": 360,
+        "y": 960,
+        "w": 60,
         "h": 60
       },
-      "render": "native"
+      "render": "native",
+      "text": "新加坡砂煲风味腊肠"
+    },
+    {
+      "id": "image:0,1080,1200,420",
+      "type": "image",
+      "bbox": {
+        "x": 0,
+        "y": 1080,
+        "w": 1200,
+        "h": 420
+      },
+      "render": "native",
+      "children": [
+        "container:447,1134,186,42",
+        "container:840,1134,186,42",
+        "icon:360,1080,60,120",
+        "icon:720,1200,60,120"
+      ]
+    },
+    {
+      "id": "container:447,1134,186,42",
+      "type": "text",
+      "bbox": {
+        "x": 447,
+        "y": 1134,
+        "w": 186,
+        "h": 42
+      },
+      "render": "native",
+      "text": "+¥0¥39起"
+    },
+    {
+      "id": "container:840,1134,186,42",
+      "type": "text",
+      "bbox": {
+        "x": 840,
+        "y": 1134,
+        "w": 186,
+        "h": 42
+      },
+      "render": "native",
+      "text": "+¥0¥39起"
+    },
+    {
+      "id": "icon:360,1080,60,120",
+      "type": "icon",
+      "bbox": {
+        "x": 360,
+        "y": 1080,
+        "w": 60,
+        "h": 120
+      },
+      "render": "native",
+      "text": "+¥0¥39起"
+    },
+    {
+      "id": "icon:720,1200,60,120",
+      "type": "icon",
+      "bbox": {
+        "x": 720,
+        "y": 1200,
+        "w": 60,
+        "h": 120
+      },
+      "render": "native",
+      "text": "招牌"
+    },
+    {
+      "id": "text:63,42,116,58",
+      "type": "subtitle",
+      "bbox": {
+        "x": 63,
+        "y": 42,
+        "w": 116,
+        "h": 58
+      },
+      "render": "native",
+      "text": "7:16"
+    },
+    {
+      "id": "text:834,42,297,54",
+      "type": "subtitle",
+      "bbox": {
+        "x": 834,
+        "y": 42,
+        "w": 297,
+        "h": 54
+      },
+      "render": "native",
+      "text": "5 G 44"
+    },
+    {
+      "id": "text:509,1072,184,42",
+      "type": "text",
+      "bbox": {
+        "x": 509,
+        "y": 1072,
+        "w": 184,
+        "h": 42
+      },
+      "render": "native",
+      "text": "鸡肉比萨"
+    },
+    {
+      "id": "text:138,1581,133,42",
+      "type": "text",
+      "bbox": {
+        "x": 138,
+        "y": 1581,
+        "w": 133,
+        "h": 42
+      },
+      "render": "native",
+      "text": "锦比萨"
+    },
+    {
+      "id": "text:534,1581,134,42",
+      "type": "text",
+      "bbox": {
+        "x": 534,
+        "y": 1581,
+        "w": 134,
+        "h": 42
+      },
+      "render": "native",
+      "text": "肉比萨"
+    },
+    {
+      "id": "text:446,2094,184,38",
+      "type": "text",
+      "bbox": {
+        "x": 446,
+        "y": 2094,
+        "w": 184,
+        "h": 38
+      },
+      "render": "native",
+      "text": "+¥7¥46起"
     }
   ],
-  "relations": [],
+  "relations": [
+    {
+      "from": "card:15,714,384,483",
+      "to": "text:42,1022,333,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:15,714,384,483",
+      "to": "text:54,1135,188,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:21,1731,372,348",
+      "to": "text:79,2036,259,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:414,1731,372,348",
+      "to": "text:455,2036,296,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:414,720,372,345",
+      "to": "badge:430,747,87,41",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:414,720,372,345",
+      "to": "icon:720,960,60,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:414,720,372,345",
+      "to": "text:421,1026,363,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:807,1224,372,348",
+      "to": "text:809,1531,367,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:807,1224,372,348",
+      "to": "text:826,1256,92,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:807,1731,372,348",
+      "to": "text:851,2036,288,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:807,720,372,345",
+      "to": "text:826,1022,334,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2184,1194,441",
+      "to": "container:624,2502,90,90",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2184,1194,441",
+      "to": "container:747,2502,90,93",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2184,1194,441",
+      "to": "container:966,2520,192,57",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2184,1194,441",
+      "to": "icon:780,2460,60,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2184,1194,441",
+      "to": "text:13,2520,241,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2184,1194,441",
+      "to": "text:242,2532,138,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "image:0,1080,1200,420",
+      "to": "container:447,1134,186,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "image:0,1080,1200,420",
+      "to": "container:840,1134,186,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "image:0,1080,1200,420",
+      "to": "icon:360,1080,60,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "image:0,1080,1200,420",
+      "to": "icon:720,1200,60,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "card:15,714,384,483",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "card:21,1224,372,348",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "card:21,1731,372,348",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "card:414,1224,372,348",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "card:414,1731,372,348",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "card:414,720,372,345",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "card:807,1224,372,348",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "card:807,1731,372,348",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "card:807,720,372,345",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:189,525,186,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:3,174,135,93",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:30,390,264,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:300,390,171,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:447,1638,186,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:51,1638,186,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:54,2091,180,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:54,621,213,57",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:840,1638,183,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:840,2091,183,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:876,285,285,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:939,339,210,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "footer:3,2184,1194,441",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "header:153,255,1044,12",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "header:30,336,903,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:360,720,60,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:360,960,60,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "image:0,1080,1200,420",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:282,285,372,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "tab:17,167,129,75",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:138,1581,133,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:21,1531,375,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:25,284,1143,41",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:29,526,388,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:417,1531,371,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:446,2094,184,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:509,1072,184,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:534,1581,134,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:63,42,116,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:834,42,297,54",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
   "zOrder": [],
   "warnings": [
     "pipeline-generated draft annotation - not human verified"

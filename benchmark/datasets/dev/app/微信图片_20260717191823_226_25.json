@@ -22,6 +22,7 @@
       "children": [
         "badge:309,1235,283,42",
         "badge:834,38,292,54",
+        "container:279,1014,87,87",
         "container:282,426,63,63",
         "container:315,1236,267,42",
         "container:315,834,129,45",
@@ -313,7 +314,7 @@
     },
     {
       "id": "container:282,426,63,63",
-      "type": "icon",
+      "type": "container",
       "bbox": {
         "x": 282,
         "y": 426,
@@ -352,16 +353,13 @@
       "id": "icon:270,1020,90,90",
       "type": "icon",
       "bbox": {
-        "x": 276,
-        "y": 1013,
+        "x": 270,
+        "y": 1020,
         "w": 90,
         "h": 90
       },
       "render": "native",
-      "text": "先生",
-      "children": [
-        "container:279,1014,87,87"
-      ]
+      "text": "先生"
     },
     {
       "id": "text:58,38,113,58",
@@ -384,12 +382,6 @@
       "source": "derived"
     },
     {
-      "from": "icon:270,1020,90,90",
-      "to": "container:279,1014,87,87",
-      "type": "contains",
-      "source": "derived"
-    },
-    {
       "from": "page:0,0,1200,2670",
       "to": "badge:309,1235,283,42",
       "type": "contains",
@@ -398,6 +390,12 @@
     {
       "from": "page:0,0,1200,2670",
       "to": "badge:834,38,292,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:279,1014,87,87",
       "type": "contains",
       "source": "derived"
     },

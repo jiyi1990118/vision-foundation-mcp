@@ -20,10 +20,25 @@
       },
       "render": "native",
       "children": [
-        "footer:63,2433,1074,162",
-        "navbar:3,684,1194,6",
+        "badge:834,38,292,54",
+        "button:738,588,167,59",
+        "container:132,591,189,51",
+        "container:237,480,270,45",
+        "container:45,582,78,75",
+        "container:48,477,144,51",
+        "container:492,183,216,57",
+        "container:747,594,144,54",
+        "container:969,594,150,54",
         "footer:3,2619,1194,6",
-        "image:0,180,1200,480"
+        "footer:63,2433,1074,162",
+        "header:3,285,1194,12",
+        "header:3,321,1194,6",
+        "icon:0,540,120,120",
+        "navbar:3,684,1194,6",
+        "navbar:48,348,453,48",
+        "navbar:48,411,636,48",
+        "text:25,171,192,75",
+        "text:58,38,113,58"
       ]
     },
     {
@@ -42,84 +57,39 @@
     },
     {
       "id": "container:492,2484,216,57",
-      "type": "container",
+      "type": "button",
       "bbox": {
         "x": 492,
         "y": 2484,
         "w": 216,
         "h": 57
       },
-      "render": "native"
-    },
-    {
-      "id": "navbar:3,684,1194,6",
-      "type": "navbar",
-      "bbox": {
-        "x": 3,
-        "y": 684,
-        "w": 1194,
-        "h": 6
-      },
-      "render": "native"
-    },
-    {
-      "id": "footer:3,2619,1194,6",
-      "type": "footer",
-      "bbox": {
-        "x": 3,
-        "y": 2619,
-        "w": 1194,
-        "h": 6
-      },
-      "render": "native"
-    },
-    {
-      "id": "image:0,180,1200,480",
-      "type": "image",
-      "bbox": {
-        "x": 0,
-        "y": 180,
-        "w": 1200,
-        "h": 480
-      },
       "render": "native",
-      "children": [
-        "navbar:48,411,636,48",
-        "navbar:48,348,453,48",
-        "header:3,285,1194,12",
-        "container:492,183,216,57",
-        "container:237,480,270,45",
-        "container:969,594,150,54",
-        "container:747,594,144,54",
-        "container:48,477,144,51",
-        "header:3,321,1194,6",
-        "icon:30,180,180,60",
-        "icon:30,570,300,90",
-        "icon:750,600,150,60",
-        "icon:960,600,150,60"
-      ]
+      "text": "新增地址"
     },
     {
       "id": "navbar:48,411,636,48",
-      "type": "navbar",
+      "type": "text",
       "bbox": {
         "x": 48,
         "y": 411,
         "w": 636,
         "h": 48
       },
-      "render": "native"
+      "render": "native",
+      "text": "江航路60弄瑞和新苑38号楼501室"
     },
     {
       "id": "navbar:48,348,453,48",
-      "type": "navbar",
+      "type": "text",
       "bbox": {
         "x": 48,
         "y": 348,
         "w": 453,
         "h": 48
       },
-      "render": "native"
+      "render": "native",
+      "text": "瑞和新苑南区江航路60弄"
     },
     {
       "id": "header:3,285,1194,12",
@@ -134,36 +104,51 @@
     },
     {
       "id": "container:492,183,216,57",
-      "type": "container",
+      "type": "title",
       "bbox": {
         "x": 492,
         "y": 183,
         "w": 216,
         "h": 57
       },
-      "render": "native"
+      "render": "native",
+      "text": "地址列表"
     },
     {
       "id": "container:237,480,270,45",
-      "type": "container",
+      "type": "text",
       "bbox": {
         "x": 237,
         "y": 480,
         "w": 270,
         "h": 45
       },
-      "render": "native"
+      "render": "native",
+      "text": "许先生150****9207"
+    },
+    {
+      "id": "container:132,591,189,51",
+      "type": "text",
+      "bbox": {
+        "x": 132,
+        "y": 591,
+        "w": 189,
+        "h": 51
+      },
+      "render": "native",
+      "text": "设为默认"
     },
     {
       "id": "container:969,594,150,54",
-      "type": "container",
+      "type": "text",
       "bbox": {
         "x": 969,
         "y": 594,
         "w": 150,
         "h": 54
       },
-      "render": "native"
+      "render": "native",
+      "text": "应删除"
     },
     {
       "id": "container:747,594,144,54",
@@ -199,18 +184,26 @@
       "render": "native"
     },
     {
-      "id": "icon:30,180,180,60",
-      "type": "icon",
+      "id": "navbar:3,684,1194,6",
+      "type": "navbar",
       "bbox": {
-        "x": 30,
-        "y": 180,
-        "w": 180,
-        "h": 60
+        "x": 3,
+        "y": 684,
+        "w": 1194,
+        "h": 6
       },
-      "render": "native",
-      "children": [
-        "container:93,183,105,57"
-      ]
+      "render": "native"
+    },
+    {
+      "id": "footer:3,2619,1194,6",
+      "type": "footer",
+      "bbox": {
+        "x": 3,
+        "y": 2619,
+        "w": 1194,
+        "h": 6
+      },
+      "render": "native"
     },
     {
       "id": "container:93,183,105,57",
@@ -224,30 +217,19 @@
       "render": "native"
     },
     {
-      "id": "icon:30,570,300,90",
-      "type": "icon",
+      "id": "text:25,171,192,75",
+      "type": "subtitle",
       "bbox": {
-        "x": 30,
-        "y": 570,
-        "w": 300,
-        "h": 90
+        "x": 25,
+        "y": 171,
+        "w": 192,
+        "h": 75
       },
       "render": "native",
+      "text": "く 返回",
       "children": [
-        "container:132,591,189,51",
-        "container:45,582,78,75"
+        "container:93,183,105,57"
       ]
-    },
-    {
-      "id": "container:132,591,189,51",
-      "type": "container",
-      "bbox": {
-        "x": 132,
-        "y": 591,
-        "w": 189,
-        "h": 51
-      },
-      "render": "native"
     },
     {
       "id": "container:45,582,78,75",
@@ -261,29 +243,183 @@
       "render": "native"
     },
     {
-      "id": "icon:750,600,150,60",
+      "id": "badge:834,38,292,54",
+      "type": "badge",
+      "bbox": {
+        "x": 834,
+        "y": 38,
+        "w": 292,
+        "h": 54
+      },
+      "render": "native",
+      "text": "5543",
+      "variant": "default"
+    },
+    {
+      "id": "button:738,588,167,59",
+      "type": "button",
+      "bbox": {
+        "x": 738,
+        "y": 588,
+        "w": 166.9999999999999,
+        "h": 59
+      },
+      "render": "native",
+      "text": "编辑",
+      "variant": "default"
+    },
+    {
+      "id": "icon:0,540,120,120",
       "type": "icon",
       "bbox": {
-        "x": 750,
-        "y": 600,
-        "w": 150,
-        "h": 60
+        "x": 0,
+        "y": 540,
+        "w": 120,
+        "h": 120
       },
       "render": "native"
     },
     {
-      "id": "icon:960,600,150,60",
-      "type": "icon",
+      "id": "text:58,38,113,58",
+      "type": "text",
       "bbox": {
-        "x": 960,
-        "y": 600,
-        "w": 150,
-        "h": 60
+        "x": 58,
+        "y": 38,
+        "w": 113,
+        "h": 58
       },
-      "render": "native"
+      "render": "native",
+      "text": "7:17"
     }
   ],
-  "relations": [],
+  "relations": [
+    {
+      "from": "footer:63,2433,1074,162",
+      "to": "container:492,2484,216,57",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "badge:834,38,292,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "button:738,588,167,59",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:132,591,189,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:237,480,270,45",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:45,582,78,75",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:48,477,144,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:492,183,216,57",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:747,594,144,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:969,594,150,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "footer:3,2619,1194,6",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "footer:63,2433,1074,162",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "header:3,285,1194,12",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "header:3,321,1194,6",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:0,540,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:3,684,1194,6",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:48,348,453,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:48,411,636,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:25,171,192,75",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:58,38,113,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "text:25,171,192,75",
+      "to": "container:93,183,105,57",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
   "zOrder": [],
   "warnings": [
     "pipeline-generated draft annotation - not human verified"

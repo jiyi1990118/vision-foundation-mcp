@@ -20,6 +20,8 @@ import sharp from 'sharp';
 import { extractUiLayoutForAnalysis } from '../src/ui-analysis/adapters/index.js';
 import { extractDesignTokens } from '../src/core/extractors/design-extractor.js';
 import { runUiAnalysis } from '../src/ui-analysis/orchestrator.js';
+import { PpuPaddleOcrProvider } from '../src/providers/ppu-paddle-ocr/provider.js';
+import { ocrItemsFromInferenceResponse } from '../src/ui-analysis/annotation-workbench/generation.js';
 import {
   extractPredictionsFromAst,
   astToPredictions,
@@ -179,6 +181,8 @@ async function runAnnotatedBenchmark(
   let succeeded = 0;
   let failed = 0;
 
+  const ocrProvider = new PpuPaddleOcrProvider();
+
   for (const { annotation, imagePath } of entries) {
     const imageName = annotation.image;
     process.stdout.write(`  ${imageName}...`);
@@ -187,15 +191,24 @@ async function runAnnotatedBenchmark(
       const { width, height } = await getDimensions(buffer);
       const image: ImageInput = { buffer, mimeType: mimeOf(imageName), source: imageName, size: buffer.length };
       const design = await extractDesignTokens(image).catch(() => undefined);
+      let ocrItems;
+      try {
+        const ocrResult = await ocrProvider.infer({ image, prompt: '', maxTokens: 0, temperature: 0 });
+        ocrItems = ocrItemsFromInferenceResponse(ocrResult);
+      } catch {
+        ocrItems = undefined;
+      }
       const layout = await extractUiLayoutForAnalysis(
         image,
-        undefined,
+        ocrItems,
         design?.palette.map((p) => ({ hex: p.hex, role: p.role })),
       );
       const result = await runUiAnalysis({
         uiLayoutExtraction: layout,
         ...(design ? { designExtraction: design } : {}),
+        ...(ocrItems ? { ocrItems } : {}),
         image,
+        options: { reconstructionMode: 'balanced' },
       });
       const recon = result.uiReconstruction;
       if (!recon) {

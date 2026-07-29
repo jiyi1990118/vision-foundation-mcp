@@ -1,0 +1,850 @@
+{
+  "image": "synthetic_toggle_buttons.jpg",
+  "imageSize": {
+    "width": 2400,
+    "height": 2236
+  },
+  "platform": "app",
+  "theme": "light",
+  "language": "zh",
+  "dpi": "standard",
+  "elements": [
+    {
+      "id": "page:0,0,2400,2236",
+      "type": "page",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 2400,
+        "h": 2236
+      },
+      "render": "native",
+      "children": [
+        "container:378,2068,348,114",
+        "container:54,1145,234,84",
+        "container:54,1283,234,84",
+        "container:54,1415,258,84",
+        "container:54,1804,228,84",
+        "container:54,1936,258,84",
+        "container:54,360,282,84",
+        "container:54,492,282,84",
+        "container:54,629,186,78",
+        "container:54,761,258,84",
+        "container:54,893,210,84",
+        "container:60,1667,252,84",
+        "icon:360,1918,360,240",
+        "text:120,2096,154,53",
+        "text:289,120,172,53",
+        "text:34,19,86,49",
+        "text:49,1144,109,49",
+        "text:53,1058,161,37",
+        "text:53,1279,82,49",
+        "text:53,1324,236,37",
+        "text:53,1418,105,37",
+        "text:53,1673,161,37",
+        "text:53,1714,262,37",
+        "text:53,1800,161,49",
+        "text:53,1943,187,37",
+        "text:53,1980,262,38",
+        "text:53,266,135,38",
+        "text:53,360,135,38",
+        "text:53,495,131,38",
+        "text:53,623,135,48",
+        "text:53,668,191,37",
+        "text:53,761,161,38",
+        "text:53,896,135,38",
+        "text:53,938,213,37",
+        "text:56,1579,158,37",
+        "text:611,26,105,38"
+      ]
+    },
+    {
+      "id": "container:378,2068,348,114",
+      "type": "container",
+      "bbox": {
+        "x": 378,
+        "y": 2068.1501340482573,
+        "w": 348,
+        "h": 113.89812332439669
+      },
+      "render": "native",
+      "children": [
+        "text:476,2100,150,49"
+      ]
+    },
+    {
+      "id": "text:476,2100,150,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 476,
+        "y": 2100,
+        "w": 150,
+        "h": 49
+      },
+      "render": "native",
+      "text": "保存设置"
+    },
+    {
+      "id": "container:54,360,282,84",
+      "type": "column",
+      "bbox": {
+        "x": 54,
+        "y": 359.6782841823057,
+        "w": 282,
+        "h": 83.92493297587134
+      },
+      "render": "native",
+      "children": [
+        "text:56,401,278,34"
+      ]
+    },
+    {
+      "id": "text:53,360,135,38",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 360,
+        "w": 135,
+        "h": 38
+      },
+      "render": "native",
+      "text": "消息通知"
+    },
+    {
+      "id": "text:56,401,278,34",
+      "type": "text",
+      "bbox": {
+        "x": 56,
+        "y": 401,
+        "w": 278,
+        "h": 34
+      },
+      "render": "native",
+      "text": "接收私信和群聊消息推送"
+    },
+    {
+      "id": "container:54,492,282,84",
+      "type": "column",
+      "bbox": {
+        "x": 54,
+        "y": 491.56032171581774,
+        "w": 282,
+        "h": 83.92493297587134
+      },
+      "render": "native",
+      "children": [
+        "text:56,536,278,34"
+      ]
+    },
+    {
+      "id": "text:53,495,131,38",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 495,
+        "w": 131,
+        "h": 38
+      },
+      "render": "native",
+      "text": "评论回复"
+    },
+    {
+      "id": "text:56,536,278,34",
+      "type": "text",
+      "bbox": {
+        "x": 56,
+        "y": 536,
+        "w": 278,
+        "h": 34
+      },
+      "render": "native",
+      "text": "有人评论你的帖子时通知"
+    },
+    {
+      "id": "container:54,761,258,84",
+      "type": "column",
+      "bbox": {
+        "x": 54,
+        "y": 761.319034852547,
+        "w": 258,
+        "h": 83.92493297587134
+      },
+      "render": "native",
+      "children": [
+        "text:56,803,255,33"
+      ]
+    },
+    {
+      "id": "text:53,761,161,38",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 761,
+        "w": 161,
+        "h": 38
+      },
+      "render": "native",
+      "text": "新粉丝关注"
+    },
+    {
+      "id": "text:56,803,255,33",
+      "type": "text",
+      "bbox": {
+        "x": 56,
+        "y": 803,
+        "w": 255,
+        "h": 33
+      },
+      "render": "native",
+      "text": "有新用户关注你时通知"
+    },
+    {
+      "id": "container:54,1415,258,84",
+      "type": "column",
+      "bbox": {
+        "x": 54,
+        "y": 1414.7345844504023,
+        "w": 258,
+        "h": 83.92493297587134
+      },
+      "render": "native",
+      "children": [
+        "text:56,1459,255,34"
+      ]
+    },
+    {
+      "id": "text:53,1418,105,37",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 1418,
+        "w": 105,
+        "h": 37
+      },
+      "render": "native",
+      "text": "呼吸灯"
+    },
+    {
+      "id": "text:56,1459,255,34",
+      "type": "text",
+      "bbox": {
+        "x": 56,
+        "y": 1459,
+        "w": 255,
+        "h": 34
+      },
+      "render": "native",
+      "text": "未读消息时闪烁指示灯"
+    },
+    {
+      "id": "container:54,1936,258,84",
+      "type": "column",
+      "bbox": {
+        "x": 54,
+        "y": 1936.2680965147454,
+        "w": 258,
+        "h": 83.92493297587134
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:53,1943,187,37",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 1943,
+        "w": 187,
+        "h": 37
+      },
+      "render": "native",
+      "text": "允许特别关心"
+    },
+    {
+      "id": "text:53,1980,262,38",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 1980,
+        "w": 262,
+        "h": 38
+      },
+      "render": "native",
+      "text": "特别关心的人仍可通知"
+    },
+    {
+      "id": "container:60,1667,252,84",
+      "type": "column",
+      "bbox": {
+        "x": 60,
+        "y": 1666.5093833780163,
+        "w": 252,
+        "h": 83.92493297587134
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:53,1673,161,37",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 1673,
+        "w": 161,
+        "h": 37
+      },
+      "render": "native",
+      "text": "开启免打扰"
+    },
+    {
+      "id": "text:53,1714,262,37",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 1714,
+        "w": 262,
+        "h": 37
+      },
+      "render": "native",
+      "text": "开启后不接收任何通知"
+    },
+    {
+      "id": "container:54,1145,234,84",
+      "type": "column",
+      "bbox": {
+        "x": 54,
+        "y": 1144.975871313673,
+        "w": 234,
+        "h": 83.92493297587134
+      },
+      "render": "native",
+      "children": [
+        "text:56,1193,229,33"
+      ]
+    },
+    {
+      "id": "text:49,1144,109,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 49,
+        "y": 1144,
+        "w": 109,
+        "h": 49
+      },
+      "render": "native",
+      "text": "提示音"
+    },
+    {
+      "id": "text:56,1193,229,33",
+      "type": "text",
+      "bbox": {
+        "x": 56,
+        "y": 1193,
+        "w": 229,
+        "h": 33
+      },
+      "render": "native",
+      "text": "收到通知时播放声音"
+    },
+    {
+      "id": "container:54,1283,234,84",
+      "type": "column",
+      "bbox": {
+        "x": 54,
+        "y": 1282.85254691689,
+        "w": 234,
+        "h": 83.92493297587134
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:53,1279,82,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 53,
+        "y": 1279,
+        "w": 82,
+        "h": 49
+      },
+      "render": "native",
+      "text": "震动"
+    },
+    {
+      "id": "text:53,1324,236,37",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 1324,
+        "w": 236,
+        "h": 37
+      },
+      "render": "native",
+      "text": "收到通知时手机震动"
+    },
+    {
+      "id": "container:54,1804,228,84",
+      "type": "column",
+      "bbox": {
+        "x": 54,
+        "y": 1804.3860589812334,
+        "w": 228,
+        "h": 83.92493297587134
+      },
+      "render": "native",
+      "children": [
+        "text:56,1849,225,34"
+      ]
+    },
+    {
+      "id": "text:53,1800,161,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 53,
+        "y": 1800,
+        "w": 161,
+        "h": 49
+      },
+      "render": "native",
+      "text": "定时免打扰"
+    },
+    {
+      "id": "text:56,1849,225,34",
+      "type": "text",
+      "bbox": {
+        "x": 56,
+        "y": 1849,
+        "w": 225,
+        "h": 34
+      },
+      "render": "native",
+      "text": "每天 22:00 - 07:00"
+    },
+    {
+      "id": "container:54,893,210,84",
+      "type": "column",
+      "bbox": {
+        "x": 54,
+        "y": 893.2010723860591,
+        "w": 210,
+        "h": 83.92493297587134
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:53,896,135,38",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 896,
+        "w": 135,
+        "h": 38
+      },
+      "render": "native",
+      "text": "系统公告"
+    },
+    {
+      "id": "text:53,938,213,37",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 938,
+        "w": 213,
+        "h": 37
+      },
+      "render": "native",
+      "text": "接收官方系统消息"
+    },
+    {
+      "id": "container:54,629,186,78",
+      "type": "column",
+      "bbox": {
+        "x": 54,
+        "y": 629.4369973190348,
+        "w": 186,
+        "h": 77.93029490616618
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:53,623,135,48",
+      "type": "subtitle",
+      "bbox": {
+        "x": 53,
+        "y": 623,
+        "w": 135,
+        "h": 48
+      },
+      "render": "native",
+      "text": "点赞提醒"
+    },
+    {
+      "id": "text:53,668,191,37",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 668,
+        "w": 191,
+        "h": 37
+      },
+      "render": "native",
+      "text": "有人点赞时通知"
+    },
+    {
+      "id": "icon:360,1918,360,240",
+      "type": "icon",
+      "bbox": {
+        "x": 360,
+        "y": 1918.28418230563,
+        "w": 360,
+        "h": 239.7855227882037
+      },
+      "render": "native",
+      "text": "特别关心的人仍可通知"
+    },
+    {
+      "id": "text:34,19,86,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 34,
+        "y": 19,
+        "w": 86,
+        "h": 49
+      },
+      "render": "native",
+      "text": "9:41"
+    },
+    {
+      "id": "text:611,26,105,38",
+      "type": "text",
+      "bbox": {
+        "x": 611,
+        "y": 26,
+        "w": 105,
+        "h": 38
+      },
+      "render": "native",
+      "text": "100%"
+    },
+    {
+      "id": "text:289,120,172,53",
+      "type": "subtitle",
+      "bbox": {
+        "x": 289,
+        "y": 120,
+        "w": 172,
+        "h": 53
+      },
+      "render": "native",
+      "text": "通知设置"
+    },
+    {
+      "id": "text:53,266,135,38",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 266,
+        "w": 135,
+        "h": 38
+      },
+      "render": "native",
+      "text": "推送通知"
+    },
+    {
+      "id": "text:53,1058,161,37",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 1058,
+        "w": 161,
+        "h": 37
+      },
+      "render": "native",
+      "text": "声音与震动"
+    },
+    {
+      "id": "text:56,1579,158,37",
+      "type": "text",
+      "bbox": {
+        "x": 56,
+        "y": 1579,
+        "w": 158,
+        "h": 37
+      },
+      "render": "native",
+      "text": "免打扰模式"
+    },
+    {
+      "id": "text:120,2096,154,53",
+      "type": "subtitle",
+      "bbox": {
+        "x": 120,
+        "y": 2096,
+        "w": 154,
+        "h": 53
+      },
+      "render": "native",
+      "text": "恢复默认"
+    }
+  ],
+  "relations": [
+    {
+      "from": "container:378,2068,348,114",
+      "to": "text:476,2100,150,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,1145,234,84",
+      "to": "text:56,1193,229,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,1415,258,84",
+      "to": "text:56,1459,255,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,1804,228,84",
+      "to": "text:56,1849,225,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,360,282,84",
+      "to": "text:56,401,278,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,492,282,84",
+      "to": "text:56,536,278,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,761,258,84",
+      "to": "text:56,803,255,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "container:378,2068,348,114",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "container:54,1145,234,84",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "container:54,1283,234,84",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "container:54,1415,258,84",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "container:54,1804,228,84",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "container:54,1936,258,84",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "container:54,360,282,84",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "container:54,492,282,84",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "container:54,629,186,78",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "container:54,761,258,84",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "container:54,893,210,84",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "container:60,1667,252,84",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "icon:360,1918,360,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:120,2096,154,53",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:289,120,172,53",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:34,19,86,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:49,1144,109,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,1058,161,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,1279,82,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,1324,236,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,1418,105,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,1673,161,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,1714,262,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,1800,161,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,1943,187,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,1980,262,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,266,135,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,360,135,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,495,131,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,623,135,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,668,191,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,761,161,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,896,135,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:53,938,213,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:56,1579,158,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2236",
+      "to": "text:611,26,105,38",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
+  "zOrder": [],
+  "warnings": [],
+  "source": "synthetic-html"
+}

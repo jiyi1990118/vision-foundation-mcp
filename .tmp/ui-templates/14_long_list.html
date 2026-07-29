@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=375, initial-scale=1.0">
+<title>Long List</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { width: 375px; margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .status-bar { height: 44px; }
+</style>
+</head>
+<body class="bg-gray-50">
+  <!-- Status bar -->
+  <div class="status-bar bg-white flex items-center justify-between px-6 text-sm font-semibold">
+    <span>9:41</span>
+    <span>100%</span>
+  </div>
+
+  <!-- Header -->
+  <div class="bg-white px-5 py-4 border-b border-gray-100 sticky top-0 z-10">
+    <div class="flex items-center justify-between">
+      <h1 class="text-xl font-bold">消息列表</h1>
+      <div class="flex items-center gap-4">
+        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <div class="relative">
+          <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search bar -->
+  <div class="bg-white px-5 py-3 border-b border-gray-100">
+    <div class="flex items-center bg-gray-100 rounded-xl px-4 py-2.5">
+      <svg class="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <span class="text-sm text-gray-400">搜索消息</span>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="bg-white flex border-b border-gray-100">
+    <div class="flex-1 py-3 text-center border-b-2 border-blue-500">
+      <div class="flex items-center justify-center">
+        <span class="text-sm font-semibold text-blue-600">全部</span>
+      </div>
+    </div>
+    <div class="flex-1 py-3 text-center">
+      <div class="flex items-center justify-center">
+        <span class="text-sm text-gray-500">未读</span>
+        <span class="ml-1 px-1.5 py-0.5 text-xs font-bold bg-red-500 text-white rounded-full">8</span>
+      </div>
+    </div>
+    <div class="flex-1 py-3 text-center">
+      <span class="text-sm text-gray-500">群组</span>
+    </div>
+    <div class="flex-1 py-3 text-center">
+      <span class="text-sm text-gray-500">公众号</span>
+    </div>
+  </div>
+
+  <!-- List items -->
+  <div class="bg-white">
+    <!-- Item 1 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold text-lg">张</div>
+        <div class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">9</div>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">张经理</span>
+          <span class="text-xs text-gray-400">上午 10:32</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">项目报告已经发给你了，看一下有没有问题</div>
+      </div>
+    </div>
+
+    <!-- Item 2 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-teal-500 flex items-center justify-center text-white font-bold text-lg">产</div>
+        <span class="absolute -top-1 -right-1 px-1.5 py-0.5 text-xs font-bold bg-red-500 text-white rounded-full">99+</span>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">产品设计讨论组</span>
+          <span class="text-xs text-gray-400">上午 09:45</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">李明轩: 新的设计稿已经上传，大家看看</div>
+      </div>
+    </div>
+
+    <!-- Item 3 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-white font-bold text-lg">李</div>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">李明轩</span>
+          <span class="text-xs text-gray-400">昨天</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">[图片] 这是我今天拍的照片</div>
+      </div>
+    </div>
+
+    <!-- Item 4 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-white font-bold text-lg">王</div>
+        <div class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">2</div>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">王思琪</span>
+          <span class="text-xs text-gray-400">昨天</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">好的，明天下午两点会议室见</div>
+      </div>
+    </div>
+
+    <!-- Item 5 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white font-bold text-lg">技</div>
+        <span class="absolute -top-1 -right-1 px-1.5 py-0.5 text-xs font-bold bg-red-500 text-white rounded-full">12</span>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">技术分享群</span>
+          <span class="text-xs text-gray-400">周一</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">张雅琳: 下周分享主题：React 19 新特性</div>
+      </div>
+    </div>
+
+    <!-- Item 6 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-white font-bold text-lg">陈</div>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">陈志远</span>
+          <span class="text-xs text-gray-400">周一</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">收到，我这边没问题</div>
+      </div>
+    </div>
+
+    <!-- Item 7 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center text-white font-bold text-lg">刘</div>
+        <div class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">5</div>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">刘晓彤</span>
+          <span class="text-xs text-gray-400">周日</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">[语音] 00:35</div>
+      </div>
+    </div>
+
+    <!-- Item 8 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg">赵</div>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">赵明华</span>
+          <span class="text-xs text-gray-400">上周</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">文件传输助手的图片</div>
+      </div>
+    </div>
+
+    <!-- Item 9 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-teal-400 to-green-500 flex items-center justify-center text-white font-bold text-lg">周</div>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">周小雅</span>
+          <span class="text-xs text-gray-400">上周</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">周末一起吃饭吗？</div>
+      </div>
+    </div>
+
+    <!-- Item 10 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-red-400 to-pink-500 flex items-center justify-center text-white font-bold text-lg">订</div>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">订单助手</span>
+          <span class="text-xs text-gray-400">7月20日</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">您的订单已发货，预计明天送达</div>
+      </div>
+    </div>
+
+    <!-- Item 11 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-violet-400 to-indigo-600 flex items-center justify-center text-white font-bold text-lg">系</div>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">系统通知</span>
+          <span class="text-xs text-gray-400">7月18日</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">账号安全提醒：检测到新设备登录</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,873 @@
+{
+  "image": "synthetic_tabs_music.jpg",
+  "imageSize": {
+    "width": 2400,
+    "height": 1668
+  },
+  "platform": "app",
+  "theme": "dark",
+  "language": "zh",
+  "dpi": "standard",
+  "elements": [
+    {
+      "id": "page:0,0,2400,1668",
+      "type": "page",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 2400,
+        "h": 1668
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:24,480,234,270",
+      "type": "column",
+      "bbox": {
+        "x": 24,
+        "y": 480,
+        "w": 234,
+        "h": 270
+      },
+      "render": "native",
+      "children": [
+        "icon:120,600,120,120",
+        "text:34,713,180,33"
+      ]
+    },
+    {
+      "id": "icon:120,600,120,120",
+      "type": "icon",
+      "bbox": {
+        "x": 120,
+        "y": 600,
+        "w": 120,
+        "h": 120
+      },
+      "render": "native",
+      "text": "英文摇滚经典"
+    },
+    {
+      "id": "text:34,713,180,33",
+      "type": "text",
+      "bbox": {
+        "x": 34,
+        "y": 713,
+        "w": 180,
+        "h": 33
+      },
+      "render": "native",
+      "text": "华语流行热歌榜"
+    },
+    {
+      "id": "container:492,480,228,270",
+      "type": "dialog",
+      "bbox": {
+        "x": 492,
+        "y": 480,
+        "w": 228,
+        "h": 270
+      },
+      "render": "native",
+      "children": [
+        "text:495,713,131,33"
+      ]
+    },
+    {
+      "id": "text:495,713,131,33",
+      "type": "text",
+      "bbox": {
+        "x": 495,
+        "y": 713,
+        "w": 131,
+        "h": 33
+      },
+      "render": "native",
+      "text": "轻音乐纯享"
+    },
+    {
+      "id": "container:264,480,222,270",
+      "type": "container",
+      "bbox": {
+        "x": 264,
+        "y": 480,
+        "w": 222,
+        "h": 270
+      },
+      "render": "native",
+      "children": [
+        "text:266,713,158,33"
+      ]
+    },
+    {
+      "id": "text:266,713,158,33",
+      "type": "text",
+      "bbox": {
+        "x": 266,
+        "y": 713,
+        "w": 158,
+        "h": 33
+      },
+      "render": "native",
+      "text": "英文摇滚经典"
+    },
+    {
+      "id": "container:90,888,324,102",
+      "type": "container",
+      "bbox": {
+        "x": 90,
+        "y": 888,
+        "w": 324,
+        "h": 102
+      },
+      "render": "native",
+      "children": [
+        "text:203,900,206,34"
+      ]
+    },
+    {
+      "id": "text:203,900,206,34",
+      "type": "text",
+      "bbox": {
+        "x": 203,
+        "y": 900,
+        "w": 206,
+        "h": 34
+      },
+      "render": "native",
+      "text": "夜空中最亮的星"
+    },
+    {
+      "id": "container:30,306,258,84",
+      "type": "row",
+      "bbox": {
+        "x": 30,
+        "y": 306,
+        "w": 258,
+        "h": 84
+      },
+      "render": "native",
+      "children": [
+        "text:195,326,75,38",
+        "text:60,319,83,49"
+      ]
+    },
+    {
+      "id": "text:60,319,83,49",
+      "type": "text",
+      "bbox": {
+        "x": 60,
+        "y": 319,
+        "w": 83,
+        "h": 49
+      },
+      "render": "native",
+      "text": "全部",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:195,326,75,38",
+      "type": "text",
+      "bbox": {
+        "x": 195,
+        "y": 326,
+        "w": 75,
+        "h": 38
+      },
+      "render": "native",
+      "text": "流行"
+    },
+    {
+      "id": "container:444,306,252,78",
+      "type": "row",
+      "bbox": {
+        "x": 444,
+        "y": 306,
+        "w": 252,
+        "h": 78
+      },
+      "render": "native",
+      "children": [
+        "text:469,326,75,38",
+        "text:604,319,82,49"
+      ]
+    },
+    {
+      "id": "text:469,326,75,38",
+      "type": "text",
+      "bbox": {
+        "x": 469,
+        "y": 326,
+        "w": 75,
+        "h": 38
+      },
+      "render": "native",
+      "text": "电子",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:604,319,82,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 604,
+        "y": 319,
+        "w": 82,
+        "h": 49
+      },
+      "render": "native",
+      "text": "民谣"
+    },
+    {
+      "id": "container:90,1272,240,60",
+      "type": "container",
+      "bbox": {
+        "x": 90,
+        "y": 1272,
+        "w": 240,
+        "h": 60
+      },
+      "render": "native",
+      "children": [
+        "text:195,1283,135,37"
+      ]
+    },
+    {
+      "id": "text:195,1283,135,37",
+      "type": "text",
+      "bbox": {
+        "x": 195,
+        "y": 1283,
+        "w": 135,
+        "h": 37
+      },
+      "render": "native",
+      "text": "平凡之路"
+    },
+    {
+      "id": "icon:600,60,120,120",
+      "type": "icon",
+      "bbox": {
+        "x": 600,
+        "y": 60,
+        "w": 120,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:600,120,120,120",
+      "type": "icon",
+      "bbox": {
+        "x": 600,
+        "y": 120,
+        "w": 120,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "image:0,480,720,240",
+      "type": "image",
+      "bbox": {
+        "x": 0,
+        "y": 480,
+        "w": 720,
+        "h": 240
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:1140,1320,120,120",
+      "type": "icon",
+      "bbox": {
+        "x": 1140,
+        "y": 1320,
+        "w": 120,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:38,26,78,34",
+      "type": "text",
+      "bbox": {
+        "x": 38,
+        "y": 26,
+        "w": 78,
+        "h": 34
+      },
+      "render": "native",
+      "text": "9:41"
+    },
+    {
+      "id": "text:623,30,82,30",
+      "type": "text",
+      "bbox": {
+        "x": 623,
+        "y": 30,
+        "w": 82,
+        "h": 30
+      },
+      "render": "native",
+      "text": "100%"
+    },
+    {
+      "id": "text:30,113,101,63",
+      "type": "title",
+      "bbox": {
+        "x": 30,
+        "y": 113,
+        "w": 101,
+        "h": 63
+      },
+      "render": "native",
+      "text": "音乐"
+    },
+    {
+      "id": "text:30,225,90,38",
+      "type": "text",
+      "bbox": {
+        "x": 30,
+        "y": 225,
+        "w": 90,
+        "h": 38
+      },
+      "render": "native",
+      "text": "推荐",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:135,225,98,34",
+      "type": "text",
+      "bbox": {
+        "x": 135,
+        "y": 225,
+        "w": 98,
+        "h": 34
+      },
+      "render": "native",
+      "text": "歌单",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:214,225,161,34",
+      "type": "text",
+      "bbox": {
+        "x": 214,
+        "y": 225,
+        "w": 161,
+        "h": 34
+      },
+      "render": "native",
+      "text": "排行榜",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:368,225,105,34",
+      "type": "text",
+      "bbox": {
+        "x": 368,
+        "y": 225,
+        "w": 105,
+        "h": 34
+      },
+      "render": "native",
+      "text": "歌手",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:476,225,94,34",
+      "type": "text",
+      "bbox": {
+        "x": 476,
+        "y": 225,
+        "w": 94,
+        "h": 34
+      },
+      "render": "native",
+      "text": "电台",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:578,225,97,38",
+      "type": "text",
+      "bbox": {
+        "x": 578,
+        "y": 225,
+        "w": 97,
+        "h": 38
+      },
+      "render": "native",
+      "text": "直播"
+    },
+    {
+      "id": "text:330,319,79,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 330,
+        "y": 319,
+        "w": 79,
+        "h": 49
+      },
+      "render": "native",
+      "text": "摇滚"
+    },
+    {
+      "id": "text:30,424,161,37",
+      "type": "text",
+      "bbox": {
+        "x": 30,
+        "y": 424,
+        "w": 161,
+        "h": 37
+      },
+      "render": "native",
+      "text": "精选歌单",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:615,428,101,33",
+      "type": "text",
+      "bbox": {
+        "x": 615,
+        "y": 428,
+        "w": 101,
+        "h": 33
+      },
+      "render": "native",
+      "text": "更多→"
+    },
+    {
+      "id": "text:34,799,157,49",
+      "type": "text",
+      "bbox": {
+        "x": 34,
+        "y": 799,
+        "w": 157,
+        "h": 49
+      },
+      "render": "native",
+      "text": "热门歌曲",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:420,806,71,38",
+      "type": "text",
+      "bbox": {
+        "x": 420,
+        "y": 806,
+        "w": 71,
+        "h": 38
+      },
+      "render": "native",
+      "text": "日榜",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:630,806,64,34",
+      "type": "text",
+      "bbox": {
+        "x": 630,
+        "y": 806,
+        "w": 64,
+        "h": 34
+      },
+      "render": "native",
+      "text": "总榜"
+    },
+    {
+      "id": "text:206,1028,117,33",
+      "type": "text",
+      "bbox": {
+        "x": 206,
+        "y": 1028,
+        "w": 117,
+        "h": 33
+      },
+      "render": "native",
+      "text": "光年之外"
+    },
+    {
+      "id": "text:210,1069,75,34",
+      "type": "text",
+      "bbox": {
+        "x": 210,
+        "y": 1069,
+        "w": 75,
+        "h": 34
+      },
+      "render": "native",
+      "text": "邓紫棋"
+    },
+    {
+      "id": "text:203,1159,90,34",
+      "type": "text",
+      "bbox": {
+        "x": 203,
+        "y": 1159,
+        "w": 90,
+        "h": 34
+      },
+      "render": "native",
+      "text": "起风了"
+    },
+    {
+      "id": "text:210,1200,143,30",
+      "type": "text",
+      "bbox": {
+        "x": 210,
+        "y": 1200,
+        "w": 143,
+        "h": 30
+      },
+      "render": "native",
+      "text": "买辣椒也用券"
+    },
+    {
+      "id": "text:686,1395,72,38",
+      "type": "text",
+      "bbox": {
+        "x": 686,
+        "y": 1395,
+        "w": 72,
+        "h": 38
+      },
+      "render": "native",
+      "text": "发现"
+    },
+    {
+      "id": "text:1646,1395,68,38",
+      "type": "text",
+      "bbox": {
+        "x": 1646,
+        "y": 1395,
+        "w": 68,
+        "h": 38
+      },
+      "render": "native",
+      "text": "歌单"
+    },
+    {
+      "id": "text:2123,1395,75,38",
+      "type": "text",
+      "bbox": {
+        "x": 2123,
+        "y": 1395,
+        "w": 75,
+        "h": 38
+      },
+      "render": "native",
+      "text": "我的"
+    },
+    {
+      "id": "container:492,480,228,270-mask",
+      "type": "mask",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 2400,
+        "h": 1668
+      },
+      "render": "native",
+      "children": [
+        "container:24,480,234,270",
+        "container:264,480,222,270",
+        "container:30,306,258,84",
+        "container:444,306,252,78",
+        "container:492,480,228,270",
+        "container:90,1272,240,60",
+        "container:90,888,324,102",
+        "icon:1140,1320,120,120",
+        "icon:600,120,120,120",
+        "icon:600,60,120,120",
+        "image:0,480,720,240",
+        "text:135,225,98,34",
+        "text:1646,1395,68,38",
+        "text:203,1159,90,34",
+        "text:206,1028,117,33",
+        "text:210,1069,75,34",
+        "text:210,1200,143,30",
+        "text:2123,1395,75,38",
+        "text:214,225,161,34",
+        "text:30,113,101,63",
+        "text:30,225,90,38",
+        "text:30,424,161,37",
+        "text:330,319,79,49",
+        "text:34,799,157,49",
+        "text:368,225,105,34",
+        "text:38,26,78,34",
+        "text:420,806,71,38",
+        "text:476,225,94,34",
+        "text:578,225,97,38",
+        "text:615,428,101,33",
+        "text:623,30,82,30",
+        "text:630,806,64,34",
+        "text:686,1395,72,38"
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "from": "container:24,480,234,270",
+      "to": "icon:120,600,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:24,480,234,270",
+      "to": "text:34,713,180,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:264,480,222,270",
+      "to": "text:266,713,158,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:30,306,258,84",
+      "to": "text:195,326,75,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:30,306,258,84",
+      "to": "text:60,319,83,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:444,306,252,78",
+      "to": "text:469,326,75,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:444,306,252,78",
+      "to": "text:604,319,82,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270",
+      "to": "text:495,713,131,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "container:24,480,234,270",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "container:264,480,222,270",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "container:30,306,258,84",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "container:444,306,252,78",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "container:492,480,228,270",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "container:90,1272,240,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "container:90,888,324,102",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "icon:1140,1320,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "icon:600,120,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "icon:600,60,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "image:0,480,720,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:135,225,98,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:1646,1395,68,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:203,1159,90,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:206,1028,117,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:210,1069,75,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:210,1200,143,30",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:2123,1395,75,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:214,225,161,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:30,113,101,63",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:30,225,90,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:30,424,161,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:330,319,79,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:34,799,157,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:368,225,105,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:38,26,78,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:420,806,71,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:476,225,94,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:578,225,97,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:615,428,101,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:623,30,82,30",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:630,806,64,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:492,480,228,270-mask",
+      "to": "text:686,1395,72,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:90,1272,240,60",
+      "to": "text:195,1283,135,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:90,888,324,102",
+      "to": "text:203,900,206,34",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
+  "zOrder": [],
+  "warnings": [
+    "pipeline-generated draft annotation - not human verified"
+  ]
+}

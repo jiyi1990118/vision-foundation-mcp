@@ -1,0 +1,52 @@
+{
+  "actions": [
+    {
+      "id": "auto-9a29f078-6d23-4758-b549-e92ed4040810",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:1140,1320,120,120",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:icon:1140,1320,120,120:1140,1320,120,120:icon",
+      "createdAt": "2026-07-29T06:02:53.184Z"
+    },
+    {
+      "id": "auto-2eac1aa6-98b0-48f1-b673-22301fd2969c",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:240,840,360,120",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:icon:240,840,360,120:240,840,360,120:icon",
+      "createdAt": "2026-07-29T06:02:53.184Z"
+    },
+    {
+      "id": "auto-bd311030-c38c-496e-b89c-c4f4ee60bf56",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:600,300,120,240",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:icon:600,300,120,240:600,300,120,240:icon",
+      "createdAt": "2026-07-29T06:02:53.185Z"
+    },
+    {
+      "id": "auto-39f9f8a2-34f2-4944-9301-15037a9d251f",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:30,120,244,38",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:30,120,244,38:30,120,244,38:text",
+      "createdAt": "2026-07-29T06:02:53.186Z"
+    },
+    {
+      "id": "auto-dc37e3ca-3e97-46af-9d2b-fe3b238f38ed",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:615,26,98,34",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:615,26,98,34:615,26,98,34:text",
+      "createdAt": "2026-07-29T06:02:53.187Z"
+    },
+    {
+      "id": "auto-581ebbd5-492b-4c15-952a-5590c02c86a2",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:555,1268,143,48",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:555,1268,143,48:555,1268,143,48:subtitle",
+      "createdAt": "2026-07-29T06:02:53.191Z"
+    }
+  ]
+}

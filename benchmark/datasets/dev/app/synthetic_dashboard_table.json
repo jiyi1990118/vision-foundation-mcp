@@ -1,0 +1,1193 @@
+{
+  "image": "synthetic_dashboard_table.jpg",
+  "imageSize": {
+    "width": 2400,
+    "height": 1976
+  },
+  "platform": "app",
+  "theme": "light",
+  "language": "zh",
+  "dpi": "standard",
+  "elements": [
+    {
+      "id": "page:0,0,2400,1976",
+      "type": "page",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 2400,
+        "h": 1976
+      },
+      "render": "native",
+      "children": [
+        "card:24,1598,702,198",
+        "container:30,120,210,102",
+        "container:420,450,270,66",
+        "container:420,733,270,66",
+        "container:66,444,264,72",
+        "container:66,739,264,60",
+        "icon:0,1622,360,180",
+        "icon:120,1141,240,300",
+        "icon:360,1562,120,120",
+        "icon:480,1622,240,180",
+        "icon:540,120,180,120",
+        "icon:60,601,240,180",
+        "icon:60,961,300,120",
+        "text:1463,1339,71,52",
+        "text:1463,1395,75,38",
+        "text:191,1046,139,38",
+        "text:195,1136,135,49",
+        "text:2063,1331,75,68",
+        "text:2063,1395,78,38",
+        "text:244,315,101,38",
+        "text:255,589,90,49",
+        "text:26,165,188,53",
+        "text:30,120,214,38",
+        "text:34,19,86,49",
+        "text:405,315,120,38",
+        "text:405,364,120,52",
+        "text:405,596,101,38",
+        "text:405,645,146,53",
+        "text:469,1046,101,38",
+        "text:469,1238,105,48",
+        "text:473,964,97,37",
+        "text:476,1140,94,49",
+        "text:49,596,101,38",
+        "text:49,645,206,53",
+        "text:53,1523,161,37",
+        "text:53,315,120,38",
+        "text:53,364,180,52",
+        "text:53,878,213,48",
+        "text:53,964,75,37",
+        "text:581,1526,113,34",
+        "text:596,885,98,38",
+        "text:600,1046,98,38",
+        "text:600,1241,98,38",
+        "text:600,960,98,49",
+        "text:604,319,90,34",
+        "text:608,1144,90,37",
+        "text:611,26,105,38",
+        "text:615,596,83,34",
+        "text:863,1335,75,64",
+        "text:863,1395,78,38"
+      ]
+    },
+    {
+      "id": "card:24,1598,702,198",
+      "type": "card",
+      "bbox": {
+        "x": 24,
+        "y": 1597.6170212765958,
+        "w": 702,
+        "h": 198.20060790273556
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:64,1658,206,33",
+      "type": "text",
+      "bbox": {
+        "x": 64,
+        "y": 1658,
+        "w": 206,
+        "h": 33
+      },
+      "render": "native",
+      "text": "生成数据报表"
+    },
+    {
+      "id": "text:83,1706,277,34",
+      "type": "text",
+      "bbox": {
+        "x": 83,
+        "y": 1706,
+        "w": 277,
+        "h": 34
+      },
+      "render": "native",
+      "text": "一键导出本月详细数据"
+    },
+    {
+      "id": "container:30,120,210,102",
+      "type": "column",
+      "bbox": {
+        "x": 30,
+        "y": 120.12158054711247,
+        "w": 210,
+        "h": 102.10334346504558
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:30,120,214,38",
+      "type": "text",
+      "bbox": {
+        "x": 30,
+        "y": 120,
+        "w": 214,
+        "h": 38
+      },
+      "render": "native",
+      "text": "7月29日 星期三"
+    },
+    {
+      "id": "text:26,165,188,53",
+      "type": "subtitle",
+      "bbox": {
+        "x": 26,
+        "y": 165,
+        "w": 188,
+        "h": 53
+      },
+      "render": "native",
+      "text": "数据看板"
+    },
+    {
+      "id": "container:66,444,264,72",
+      "type": "container",
+      "bbox": {
+        "x": 66,
+        "y": 444.4498480243161,
+        "w": 264,
+        "h": 72.07294832826744
+      },
+      "render": "native",
+      "children": [
+        "text:68,476,161,34"
+      ]
+    },
+    {
+      "id": "text:68,476,161,34",
+      "type": "text",
+      "bbox": {
+        "x": 68,
+        "y": 476,
+        "w": 161,
+        "h": 34
+      },
+      "render": "native",
+      "text": "an"
+    },
+    {
+      "id": "container:420,450,270,66",
+      "type": "container",
+      "bbox": {
+        "x": 420,
+        "y": 450.4559270516717,
+        "w": 270,
+        "h": 66.06686930091183
+      },
+      "render": "native",
+      "children": [
+        "text:424,480,154,30"
+      ]
+    },
+    {
+      "id": "text:424,480,154,30",
+      "type": "text",
+      "bbox": {
+        "x": 424,
+        "y": 480,
+        "w": 154,
+        "h": 30
+      },
+      "render": "native",
+      "text": "Bon"
+    },
+    {
+      "id": "container:420,733,270,66",
+      "type": "container",
+      "bbox": {
+        "x": 420,
+        "y": 732.741641337386,
+        "w": 270,
+        "h": 66.06686930091189
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:66,739,264,60",
+      "type": "container",
+      "bbox": {
+        "x": 66,
+        "y": 738.7477203647417,
+        "w": 264,
+        "h": 60.06079027355622
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:540,120,180,120",
+      "type": "icon",
+      "bbox": {
+        "x": 540,
+        "y": 120.12158054711247,
+        "w": 180,
+        "h": 120.12158054711247
+      },
+      "render": "native",
+      "children": [
+        "text:555,143,60,48"
+      ]
+    },
+    {
+      "id": "icon:60,601,240,180",
+      "type": "icon",
+      "bbox": {
+        "x": 60,
+        "y": 600.6079027355623,
+        "w": 240,
+        "h": 180.18237082066867
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:60,961,300,120",
+      "type": "icon",
+      "bbox": {
+        "x": 60,
+        "y": 960.9726443768998,
+        "w": 300,
+        "h": 120.12158054711244
+      },
+      "render": "native",
+      "children": [
+        "text:124,964,79,37"
+      ]
+    },
+    {
+      "id": "icon:120,1141,240,300",
+      "type": "icon",
+      "bbox": {
+        "x": 120,
+        "y": 1141.1550151975684,
+        "w": 240,
+        "h": 300.3039513677811
+      },
+      "render": "native",
+      "children": [
+        "text:191,1238,139,48",
+        "text:266,1395,72,38"
+      ]
+    },
+    {
+      "id": "icon:360,1562,120,120",
+      "type": "icon",
+      "bbox": {
+        "x": 360,
+        "y": 1561.580547112462,
+        "w": 120,
+        "h": 120.12158054711244
+      },
+      "render": "native",
+      "text": "查看全部"
+    },
+    {
+      "id": "icon:0,1622,360,180",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 1621.6413373860182,
+        "w": 360,
+        "h": 180.18237082066867
+      },
+      "render": "native",
+      "children": [
+        "text:64,1658,206,33",
+        "text:83,1706,277,34"
+      ]
+    },
+    {
+      "id": "icon:480,1622,240,180",
+      "type": "icon",
+      "bbox": {
+        "x": 480,
+        "y": 1621.6413373860182,
+        "w": 240,
+        "h": 180.18237082066867
+      },
+      "render": "native",
+      "children": [
+        "container:486,1646,204,102"
+      ]
+    },
+    {
+      "id": "container:486,1646,204,102",
+      "type": "container",
+      "bbox": {
+        "x": 486,
+        "y": 1645.6656534954407,
+        "w": 204,
+        "h": 102.10334346504555
+      },
+      "render": "native",
+      "children": [
+        "text:521,1673,139,48"
+      ]
+    },
+    {
+      "id": "text:521,1673,139,48",
+      "type": "subtitle",
+      "bbox": {
+        "x": 521,
+        "y": 1673,
+        "w": 139,
+        "h": 48
+      },
+      "render": "native",
+      "text": "立即生成"
+    },
+    {
+      "id": "text:34,19,86,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 34,
+        "y": 19,
+        "w": 86,
+        "h": 49
+      },
+      "render": "native",
+      "text": "9:41"
+    },
+    {
+      "id": "text:611,26,105,38",
+      "type": "text",
+      "bbox": {
+        "x": 611,
+        "y": 26,
+        "w": 105,
+        "h": 38
+      },
+      "render": "native",
+      "text": "100%"
+    },
+    {
+      "id": "text:555,143,60,48",
+      "type": "subtitle",
+      "bbox": {
+        "x": 555,
+        "y": 143,
+        "w": 60,
+        "h": 48
+      },
+      "render": "native",
+      "text": "696"
+    },
+    {
+      "id": "text:53,315,120,38",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 315,
+        "w": 120,
+        "h": 38
+      },
+      "render": "native",
+      "text": "今日访问",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:244,315,101,38",
+      "type": "text",
+      "bbox": {
+        "x": 244,
+        "y": 315,
+        "w": 101,
+        "h": 38
+      },
+      "render": "native",
+      "text": "↑18%",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:405,315,120,38",
+      "type": "text",
+      "bbox": {
+        "x": 405,
+        "y": 315,
+        "w": 120,
+        "h": 38
+      },
+      "render": "native",
+      "text": "新增用户",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:604,319,90,34",
+      "type": "text",
+      "bbox": {
+        "x": 604,
+        "y": 319,
+        "w": 90,
+        "h": 34
+      },
+      "render": "native",
+      "text": "↑12%"
+    },
+    {
+      "id": "text:53,364,180,52",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 364,
+        "w": 180,
+        "h": 52
+      },
+      "render": "native",
+      "text": "12,845",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:405,364,120,52",
+      "type": "subtitle",
+      "bbox": {
+        "x": 405,
+        "y": 364,
+        "w": 120,
+        "h": 52
+      },
+      "render": "native",
+      "text": "856"
+    },
+    {
+      "id": "text:49,596,101,38",
+      "type": "text",
+      "bbox": {
+        "x": 49,
+        "y": 596,
+        "w": 101,
+        "h": 38
+      },
+      "render": "native",
+      "text": "成交额",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:255,589,90,49",
+      "type": "text",
+      "bbox": {
+        "x": 255,
+        "y": 589,
+        "w": 90,
+        "h": 49
+      },
+      "render": "native",
+      "text": "↓3%",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:405,596,101,38",
+      "type": "text",
+      "bbox": {
+        "x": 405,
+        "y": 596,
+        "w": 101,
+        "h": 38
+      },
+      "render": "native",
+      "text": "转化率",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:615,596,83,34",
+      "type": "text",
+      "bbox": {
+        "x": 615,
+        "y": 596,
+        "w": 83,
+        "h": 34
+      },
+      "render": "native",
+      "text": "↑5%"
+    },
+    {
+      "id": "text:49,645,206,53",
+      "type": "text",
+      "bbox": {
+        "x": 49,
+        "y": 645,
+        "w": 206,
+        "h": 53
+      },
+      "render": "native",
+      "text": "￥68.5K",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:405,645,146,53",
+      "type": "subtitle",
+      "bbox": {
+        "x": 405,
+        "y": 645,
+        "w": 146,
+        "h": 53
+      },
+      "render": "native",
+      "text": "3.8%"
+    },
+    {
+      "id": "text:53,878,213,48",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 878,
+        "w": 213,
+        "h": 48
+      },
+      "render": "native",
+      "text": "渠道业绩排行",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:596,885,98,38",
+      "type": "text",
+      "bbox": {
+        "x": 596,
+        "y": 885,
+        "w": 98,
+        "h": 38
+      },
+      "render": "native",
+      "text": "本周"
+    },
+    {
+      "id": "text:53,964,75,37",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 964,
+        "w": 75,
+        "h": 37
+      },
+      "render": "native",
+      "text": "排名",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:124,964,79,37",
+      "type": "text",
+      "bbox": {
+        "x": 124,
+        "y": 964,
+        "w": 79,
+        "h": 37
+      },
+      "render": "native",
+      "text": "渠道",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:473,964,97,37",
+      "type": "text",
+      "bbox": {
+        "x": 473,
+        "y": 964,
+        "w": 97,
+        "h": 37
+      },
+      "render": "native",
+      "text": "访问量",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:600,960,98,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 600,
+        "y": 960,
+        "w": 98,
+        "h": 49
+      },
+      "render": "native",
+      "text": "转化率"
+    },
+    {
+      "id": "text:191,1046,139,38",
+      "type": "text",
+      "bbox": {
+        "x": 191,
+        "y": 1046,
+        "w": 139,
+        "h": 38
+      },
+      "render": "native",
+      "text": "自然搜索",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:469,1046,101,38",
+      "type": "text",
+      "bbox": {
+        "x": 469,
+        "y": 1046,
+        "w": 101,
+        "h": 38
+      },
+      "render": "native",
+      "text": "4,523",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:600,1046,98,38",
+      "type": "text",
+      "bbox": {
+        "x": 600,
+        "y": 1046,
+        "w": 98,
+        "h": 38
+      },
+      "render": "native",
+      "text": "5.2%"
+    },
+    {
+      "id": "text:195,1136,135,49",
+      "type": "text",
+      "bbox": {
+        "x": 195,
+        "y": 1136,
+        "w": 135,
+        "h": 49
+      },
+      "render": "native",
+      "text": "社交媒体",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:476,1140,94,49",
+      "type": "text",
+      "bbox": {
+        "x": 476,
+        "y": 1140,
+        "w": 94,
+        "h": 49
+      },
+      "render": "native",
+      "text": "3,102",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:608,1144,90,37",
+      "type": "text",
+      "bbox": {
+        "x": 608,
+        "y": 1144,
+        "w": 90,
+        "h": 37
+      },
+      "render": "native",
+      "text": "4.1%"
+    },
+    {
+      "id": "text:191,1238,139,48",
+      "type": "text",
+      "bbox": {
+        "x": 191,
+        "y": 1238,
+        "w": 139,
+        "h": 48
+      },
+      "render": "native",
+      "text": "付费广告",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:469,1238,105,48",
+      "type": "text",
+      "bbox": {
+        "x": 469,
+        "y": 1238,
+        "w": 105,
+        "h": 48
+      },
+      "render": "native",
+      "text": "2,856",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:600,1241,98,38",
+      "type": "text",
+      "bbox": {
+        "x": 600,
+        "y": 1241,
+        "w": 98,
+        "h": 38
+      },
+      "render": "native",
+      "text": "2.8%"
+    },
+    {
+      "id": "text:863,1335,75,64",
+      "type": "title",
+      "bbox": {
+        "x": 863,
+        "y": 1335,
+        "w": 75,
+        "h": 64
+      },
+      "render": "native",
+      "text": "三"
+    },
+    {
+      "id": "text:1463,1339,71,52",
+      "type": "subtitle",
+      "bbox": {
+        "x": 1463,
+        "y": 1339,
+        "w": 71,
+        "h": 52
+      },
+      "render": "native",
+      "text": "③"
+    },
+    {
+      "id": "text:2063,1331,75,68",
+      "type": "title",
+      "bbox": {
+        "x": 2063,
+        "y": 1331,
+        "w": 75,
+        "h": 68
+      },
+      "render": "native",
+      "text": "0"
+    },
+    {
+      "id": "text:266,1395,72,38",
+      "type": "text",
+      "bbox": {
+        "x": 266,
+        "y": 1395,
+        "w": 72,
+        "h": 38
+      },
+      "render": "native",
+      "text": "看板"
+    },
+    {
+      "id": "text:863,1395,78,38",
+      "type": "text",
+      "bbox": {
+        "x": 863,
+        "y": 1395,
+        "w": 78,
+        "h": 38
+      },
+      "render": "native",
+      "text": "报表"
+    },
+    {
+      "id": "text:1463,1395,75,38",
+      "type": "text",
+      "bbox": {
+        "x": 1463,
+        "y": 1395,
+        "w": 75,
+        "h": 38
+      },
+      "render": "native",
+      "text": "财务"
+    },
+    {
+      "id": "text:2063,1395,78,38",
+      "type": "text",
+      "bbox": {
+        "x": 2063,
+        "y": 1395,
+        "w": 78,
+        "h": 38
+      },
+      "render": "native",
+      "text": "我的"
+    },
+    {
+      "id": "text:53,1523,161,37",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 1523,
+        "w": 161,
+        "h": 37
+      },
+      "render": "native",
+      "text": "共12个渠道",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:581,1526,113,34",
+      "type": "text",
+      "bbox": {
+        "x": 581,
+        "y": 1526,
+        "w": 113,
+        "h": 34
+      },
+      "render": "native",
+      "text": "查看全部"
+    }
+  ],
+  "relations": [
+    {
+      "from": "container:420,450,270,66",
+      "to": "text:424,480,154,30",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:486,1646,204,102",
+      "to": "text:521,1673,139,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:66,444,264,72",
+      "to": "text:68,476,161,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "icon:0,1622,360,180",
+      "to": "text:64,1658,206,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "icon:0,1622,360,180",
+      "to": "text:83,1706,277,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "icon:120,1141,240,300",
+      "to": "text:191,1238,139,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "icon:120,1141,240,300",
+      "to": "text:266,1395,72,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "icon:480,1622,240,180",
+      "to": "container:486,1646,204,102",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "icon:540,120,180,120",
+      "to": "text:555,143,60,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "icon:60,961,300,120",
+      "to": "text:124,964,79,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "card:24,1598,702,198",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "container:30,120,210,102",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "container:420,450,270,66",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "container:420,733,270,66",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "container:66,444,264,72",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "container:66,739,264,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "icon:0,1622,360,180",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "icon:120,1141,240,300",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "icon:360,1562,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "icon:480,1622,240,180",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "icon:540,120,180,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "icon:60,601,240,180",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "icon:60,961,300,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:1463,1339,71,52",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:1463,1395,75,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:191,1046,139,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:195,1136,135,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:2063,1331,75,68",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:2063,1395,78,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:244,315,101,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:255,589,90,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:26,165,188,53",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:30,120,214,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:34,19,86,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:405,315,120,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:405,364,120,52",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:405,596,101,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:405,645,146,53",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:469,1046,101,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:469,1238,105,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:473,964,97,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:476,1140,94,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:49,596,101,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:49,645,206,53",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:53,1523,161,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:53,315,120,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:53,364,180,52",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:53,878,213,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:53,964,75,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:581,1526,113,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:596,885,98,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:600,1046,98,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:600,1241,98,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:600,960,98,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:604,319,90,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:608,1144,90,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:611,26,105,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:615,596,83,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:863,1335,75,64",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1976",
+      "to": "text:863,1395,78,38",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
+  "zOrder": [],
+  "warnings": [],
+  "source": "synthetic-html"
+}

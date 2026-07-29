@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=375, initial-scale=1.0">
+<title>Settings List</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { width: 375px; margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .status-bar { height: 44px; }
+  .toggle { position: relative; width: 44px; height: 26px; background: #e5e7eb; border-radius: 9999px; }
+  .toggle.active { background: #3b82f6; }
+  .toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 22px; height: 22px; background: white; border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+  .toggle.active::after { transform: translateX(18px); }
+</style>
+</head>
+<body class="bg-gray-100">
+  <!-- Status bar -->
+  <div class="status-bar bg-gray-100 flex items-center justify-between px-6 text-sm font-semibold">
+    <span>9:41</span>
+    <span>100%</span>
+  </div>
+
+  <!-- Header -->
+  <div class="bg-gray-100 px-5 py-3 flex items-center justify-between">
+    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    <h1 class="text-lg font-semibold">设置</h1>
+    <div class="w-6"></div>
+  </div>
+
+  <!-- User profile header -->
+  <div class="bg-white mx-4 rounded-2xl p-5 flex items-center shadow-sm">
+    <div class="relative">
+      <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-2xl font-bold">
+        张
+      </div>
+      <div class="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-blue-500 text-white text-xs rounded-full flex items-center justify-center border-2 border-white">
+        v
+      </div>
+    </div>
+    <div class="ml-4 flex-1">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-lg">张小凡</span>
+        <span class="px-1.5 py-0.5 text-xs font-semibold bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded">VIP</span>
+      </div>
+      <div class="text-sm text-gray-400 mt-0.5">ID: 10086520</div>
+      <div class="text-xs text-blue-500 mt-1">点击编辑个人资料 →</div>
+    </div>
+    <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+  </div>
+
+  <!-- Account section -->
+  <div class="mt-4 mx-4">
+    <div class="text-xs text-gray-400 font-medium mb-2 px-1">账户</div>
+    <div class="bg-white rounded-2xl overflow-hidden shadow-sm divide-y divide-gray-50">
+      <div class="flex items-center px-4 py-3.5">
+        <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+          <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        </div>
+        <span class="ml-3 text-sm text-gray-800">个人资料</span>
+        <span class="ml-auto text-sm text-gray-400">已完善</span>
+        <svg class="w-4 h-4 text-gray-300 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </div>
+      <div class="flex items-center px-4 py-3.5">
+        <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
+          <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        </div>
+        <span class="ml-3 text-sm text-gray-800">账号与安全</span>
+        <span class="ml-auto text-xs px-2 py-0.5 bg-red-100 text-red-500 rounded-full font-medium">待验证</span>
+        <svg class="w-4 h-4 text-gray-300 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </div>
+      <div class="flex items-center px-4 py-3.5">
+        <div class="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
+          <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+        </div>
+        <span class="ml-3 text-sm text-gray-800">我的钱包</span>
+        <span class="ml-auto text-sm font-semibold text-gray-700">¥ 258.00</span>
+        <svg class="w-4 h-4 text-gray-300 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications section -->
+  <div class="mt-4 mx-4">
+    <div class="text-xs text-gray-400 font-medium mb-2 px-1">通知与隐私</div>
+    <div class="bg-white rounded-2xl overflow-hidden shadow-sm divide-y divide-gray-50">
+      <div class="flex items-center px-4 py-3.5">
+        <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center">
+          <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+        </div>
+        <span class="ml-3 text-sm text-gray-800">消息通知</span>
+        <span class="ml-auto"><div class="toggle active"></div></span>
+      </div>
+      <div class="flex items-center px-4 py-3.5">
+        <div class="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center">
+          <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+        </div>
+        <div>
+          <span class="ml-3 text-sm text-gray-800">推送提醒</span>
+          <span class="ml-2 px-1.5 py-0.5 text-xs font-semibold bg-blue-100 text-blue-600 rounded">NEW</span>
+        </div>
+        <span class="ml-auto"><div class="toggle active"></div></span>
+      </div>
+      <div class="flex items-center px-4 py-3.5">
+        <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
+          <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        </div>
+        <span class="ml-3 text-sm text-gray-800">隐私设置</span>
+        <svg class="w-4 h-4 text-gray-300 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </div>
+      <div class="flex items-center px-4 py-3.5">
+        <div class="w-8 h-8 rounded-lg bg-teal-100 flex items-center justify-center">
+          <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <span class="ml-3 text-sm text-gray-800">勿扰模式</span>
+        <span class="ml-auto"><div class="toggle"></div></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Other section -->
+  <div class="mt-4 mx-4 mb-8">
+    <div class="text-xs text-gray-400 font-medium mb-2 px-1">通用</div>
+    <div class="bg-white rounded-2xl overflow-hidden shadow-sm divide-y divide-gray-50">
+      <div class="flex items-center px-4 py-3.5">
+        <div class="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
+          <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <span class="ml-3 text-sm text-gray-800">通用设置</span>
+        <svg class="w-4 h-4 text-gray-300 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </div>
+      <div class="flex items-center px-4 py-3.5">
+        <div class="w-8 h-8 rounded-lg bg-yellow-100 flex items-center justify-center">
+          <svg class="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <span class="ml-3 text-sm text-gray-800">帮助中心</span>
+        <svg class="w-4 h-4 text-gray-300 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </div>
+      <div class="flex items-center px-4 py-3.5">
+        <div class="w-8 h-8 rounded-lg bg-pink-100 flex items-center justify-center">
+          <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        </div>
+        <span class="ml-3 text-sm text-gray-800">关于我们</span>
+        <span class="ml-auto text-xs text-gray-400">v2.5.0</span>
+        <svg class="w-4 h-4 text-gray-300 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logout button -->
+  <div class="mx-4 mb-8">
+    <button class="w-full py-3.5 bg-white text-red-500 font-semibold rounded-2xl shadow-sm">
+      退出登录
+    </button>
+  </div>
+</body>
+</html>

@@ -1,0 +1,901 @@
+{
+  "image": "synthetic_form_selects.jpg",
+  "imageSize": {
+    "width": 2400,
+    "height": 3362
+  },
+  "platform": "app",
+  "theme": "light",
+  "language": "zh",
+  "dpi": "standard",
+  "elements": [
+    {
+      "id": "page:0,0,2400,3362",
+      "type": "page",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 2400,
+        "h": 3362
+      },
+      "render": "native",
+      "semanticRole": "formField",
+      "children": [
+        "container:24,3062,348,114",
+        "container:378,3056,348,126",
+        "container:54,1087,612,54",
+        "container:54,2155,606,48",
+        "container:54,534,612,54",
+        "container:60,1603,600,48",
+        "container:60,1783,606,54",
+        "container:60,2479,606,54",
+        "container:60,2852,600,48",
+        "container:60,354,600,48",
+        "image:240,2882,480,360",
+        "input:47,2653,179,68",
+        "text:16,5,121,74",
+        "text:278,110,184,69",
+        "text:37,263,178,73",
+        "text:399,972,137,68",
+        "text:42,1329,168,68",
+        "text:42,2143,152,53",
+        "text:42,2390,168,68",
+        "text:42,341,158,69",
+        "text:42,525,105,69",
+        "text:42,893,158,68",
+        "text:47,1077,95,68",
+        "text:47,1403,153,68",
+        "text:47,1586,147,69",
+        "text:47,1770,147,69",
+        "text:47,1954,153,68",
+        "text:47,2474,258,53",
+        "text:47,2837,205,68",
+        "text:53,709,147,68",
+        "text:594,5,136,74",
+        "text:63,410,126,89",
+        "text:63,972,158,73",
+        "text:630,116,100,68",
+        "text:68,1156,174,73",
+        "text:68,1665,179,74",
+        "text:68,2217,121,73",
+        "text:68,2548,153,73",
+        "text:74,1487,168,68",
+        "text:74,1854,173,69",
+        "text:74,2742,267,53",
+        "text:74,2915,178,74",
+        "text:79,2038,163,69",
+        "text:79,798,257,53"
+      ]
+    },
+    {
+      "id": "container:378,3056,348,126",
+      "type": "container",
+      "bbox": {
+        "x": 378,
+        "y": 3055.8178571428575,
+        "w": 348,
+        "h": 126.07499999999982
+      },
+      "render": "native",
+      "children": [
+        "text:499,3084,105,68"
+      ]
+    },
+    {
+      "id": "text:499,3084,105,68",
+      "type": "text",
+      "bbox": {
+        "x": 499,
+        "y": 3084,
+        "w": 105,
+        "h": 68
+      },
+      "render": "native",
+      "text": "提交"
+    },
+    {
+      "id": "container:24,3062,348,114",
+      "type": "container",
+      "bbox": {
+        "x": 24,
+        "y": 3061.821428571429,
+        "w": 348,
+        "h": 114.06785714285706
+      },
+      "render": "native",
+      "children": [
+        "text:147,3084,105,68"
+      ]
+    },
+    {
+      "id": "text:147,3084,105,68",
+      "type": "text",
+      "bbox": {
+        "x": 147,
+        "y": 3084,
+        "w": 105,
+        "h": 68
+      },
+      "render": "native",
+      "text": "取消"
+    },
+    {
+      "id": "container:54,534,612,54",
+      "type": "container",
+      "bbox": {
+        "x": 54,
+        "y": 534.3178571428572,
+        "w": 612,
+        "h": 54.032142857142844
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:42,525,105,69",
+      "type": "text",
+      "bbox": {
+        "x": 42,
+        "y": 525,
+        "w": 105,
+        "h": 69
+      },
+      "render": "native",
+      "text": "性别"
+    },
+    {
+      "id": "container:54,1087,612,54",
+      "type": "container",
+      "bbox": {
+        "x": 54,
+        "y": 1086.6464285714287,
+        "w": 612,
+        "h": 54.032142857142844
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:47,1077,95,68",
+      "type": "text",
+      "bbox": {
+        "x": 47,
+        "y": 1077,
+        "w": 95,
+        "h": 68
+      },
+      "render": "native",
+      "text": "职业"
+    },
+    {
+      "id": "container:60,1783,606,54",
+      "type": "container",
+      "bbox": {
+        "x": 60,
+        "y": 1783.0607142857143,
+        "w": 606,
+        "h": 54.032142857142844
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:47,1770,147,69",
+      "type": "text",
+      "bbox": {
+        "x": 47,
+        "y": 1770,
+        "w": 147,
+        "h": 69
+      },
+      "render": "native",
+      "text": "主题模式"
+    },
+    {
+      "id": "container:60,2479,606,54",
+      "type": "container",
+      "bbox": {
+        "x": 60,
+        "y": 2479.4750000000004,
+        "w": 606,
+        "h": 54.032142857142844
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:47,2474,258,53",
+      "type": "text",
+      "bbox": {
+        "x": 47,
+        "y": 2474,
+        "w": 258,
+        "h": 53
+      },
+      "render": "native",
+      "text": "谁可以看我的资料"
+    },
+    {
+      "id": "container:54,2155,606,48",
+      "type": "container",
+      "bbox": {
+        "x": 54,
+        "y": 2155.282142857143,
+        "w": 606,
+        "h": 48.02857142857147
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:42,2143,152,53",
+      "type": "text",
+      "bbox": {
+        "x": 42,
+        "y": 2143,
+        "w": 152,
+        "h": 53
+      },
+      "render": "native",
+      "text": "字体大小"
+    },
+    {
+      "id": "container:60,354,600,48",
+      "type": "container",
+      "bbox": {
+        "x": 60,
+        "y": 354.2107142857143,
+        "w": 600,
+        "h": 48.02857142857141
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:42,341,158,69",
+      "type": "text",
+      "bbox": {
+        "x": 42,
+        "y": 341,
+        "w": 158,
+        "h": 69
+      },
+      "render": "native",
+      "text": "真实姓名"
+    },
+    {
+      "id": "container:60,1603,600,48",
+      "type": "container",
+      "bbox": {
+        "x": 60,
+        "y": 1602.9535714285716,
+        "w": 600,
+        "h": 48.02857142857147
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:47,1586,147,69",
+      "type": "text",
+      "bbox": {
+        "x": 47,
+        "y": 1586,
+        "w": 147,
+        "h": 69
+      },
+      "render": "native",
+      "text": "语言偏好"
+    },
+    {
+      "id": "container:60,2852,600,48",
+      "type": "container",
+      "bbox": {
+        "x": 60,
+        "y": 2851.696428571429,
+        "w": 600,
+        "h": 48.02857142857147
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:47,2837,205,68",
+      "type": "text",
+      "bbox": {
+        "x": 47,
+        "y": 2837,
+        "w": 205,
+        "h": 68
+      },
+      "render": "native",
+      "text": "数据保存位置"
+    },
+    {
+      "id": "input:47,2653,179,68",
+      "type": "input",
+      "bbox": {
+        "x": 47,
+        "y": 2653.0000000000005,
+        "w": 179,
+        "h": 68
+      },
+      "render": "native",
+      "text": "搜索可见性",
+      "variant": "default"
+    },
+    {
+      "id": "image:240,2882,480,360",
+      "type": "image",
+      "bbox": {
+        "x": 240,
+        "y": 2881.714285714286,
+        "w": 480,
+        "h": 360.2142857142858
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:16,5,121,74",
+      "type": "text",
+      "bbox": {
+        "x": 16,
+        "y": 5,
+        "w": 121,
+        "h": 74
+      },
+      "render": "native",
+      "text": "9:41"
+    },
+    {
+      "id": "text:594,5,136,74",
+      "type": "text",
+      "bbox": {
+        "x": 594,
+        "y": 5,
+        "w": 136,
+        "h": 74
+      },
+      "render": "native",
+      "text": "100%"
+    },
+    {
+      "id": "text:278,110,184,69",
+      "type": "text",
+      "bbox": {
+        "x": 278,
+        "y": 110,
+        "w": 184,
+        "h": 69
+      },
+      "render": "native",
+      "text": "填写资料"
+    },
+    {
+      "id": "text:630,116,100,68",
+      "type": "text",
+      "bbox": {
+        "x": 630,
+        "y": 116,
+        "w": 100,
+        "h": 68
+      },
+      "render": "native",
+      "text": "保存"
+    },
+    {
+      "id": "text:37,263,178,73",
+      "type": "text",
+      "bbox": {
+        "x": 37,
+        "y": 263,
+        "w": 178,
+        "h": 73
+      },
+      "render": "native",
+      "text": "基本信息"
+    },
+    {
+      "id": "text:63,410,126,89",
+      "type": "subtitle",
+      "bbox": {
+        "x": 63,
+        "y": 410,
+        "w": 126,
+        "h": 89
+      },
+      "render": "native",
+      "text": "张三"
+    },
+    {
+      "id": "text:53,709,147,68",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 709,
+        "w": 147,
+        "h": 68
+      },
+      "render": "native",
+      "text": "出生日期"
+    },
+    {
+      "id": "text:79,798,257,53",
+      "type": "text",
+      "bbox": {
+        "x": 79,
+        "y": 798,
+        "w": 257,
+        "h": 53
+      },
+      "render": "native",
+      "text": "1995年6月15日"
+    },
+    {
+      "id": "text:42,893,158,68",
+      "type": "text",
+      "bbox": {
+        "x": 42,
+        "y": 893,
+        "w": 158,
+        "h": 68
+      },
+      "render": "native",
+      "text": "所在地区"
+    },
+    {
+      "id": "text:63,972,158,73",
+      "type": "text",
+      "bbox": {
+        "x": 63,
+        "y": 972,
+        "w": 158,
+        "h": 73
+      },
+      "render": "native",
+      "text": "广东省",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:399,972,137,68",
+      "type": "text",
+      "bbox": {
+        "x": 399,
+        "y": 972,
+        "w": 137,
+        "h": 68
+      },
+      "render": "native",
+      "text": "深圳市"
+    },
+    {
+      "id": "text:68,1156,174,73",
+      "type": "text",
+      "bbox": {
+        "x": 68,
+        "y": 1156,
+        "w": 174,
+        "h": 73
+      },
+      "render": "native",
+      "text": "互联网/IT"
+    },
+    {
+      "id": "text:42,1329,168,68",
+      "type": "text",
+      "bbox": {
+        "x": 42,
+        "y": 1329,
+        "w": 168,
+        "h": 68
+      },
+      "render": "native",
+      "text": "偏好设置"
+    },
+    {
+      "id": "text:47,1403,153,68",
+      "type": "text",
+      "bbox": {
+        "x": 47,
+        "y": 1403,
+        "w": 153,
+        "h": 68
+      },
+      "render": "native",
+      "text": "兴趣标签"
+    },
+    {
+      "id": "text:74,1487,168,68",
+      "type": "text",
+      "bbox": {
+        "x": 74,
+        "y": 1487,
+        "w": 168,
+        "h": 68
+      },
+      "render": "native",
+      "text": "科技数码"
+    },
+    {
+      "id": "text:68,1665,179,74",
+      "type": "text",
+      "bbox": {
+        "x": 68,
+        "y": 1665,
+        "w": 179,
+        "h": 74
+      },
+      "render": "native",
+      "text": "简体中文"
+    },
+    {
+      "id": "text:74,1854,173,69",
+      "type": "text",
+      "bbox": {
+        "x": 74,
+        "y": 1854,
+        "w": 173,
+        "h": 69
+      },
+      "render": "native",
+      "text": "跟随系统"
+    },
+    {
+      "id": "text:47,1954,153,68",
+      "type": "text",
+      "bbox": {
+        "x": 47,
+        "y": 1954,
+        "w": 153,
+        "h": 68
+      },
+      "render": "native",
+      "text": "通知声音"
+    },
+    {
+      "id": "text:79,2038,163,69",
+      "type": "text",
+      "bbox": {
+        "x": 79,
+        "y": 2038,
+        "w": 163,
+        "h": 69
+      },
+      "render": "native",
+      "text": "默认铃声"
+    },
+    {
+      "id": "text:68,2217,121,73",
+      "type": "text",
+      "bbox": {
+        "x": 68,
+        "y": 2217,
+        "w": 121,
+        "h": 73
+      },
+      "render": "native",
+      "text": "标准"
+    },
+    {
+      "id": "text:42,2390,168,68",
+      "type": "text",
+      "bbox": {
+        "x": 42,
+        "y": 2390,
+        "w": 168,
+        "h": 68
+      },
+      "render": "native",
+      "text": "隐私设置"
+    },
+    {
+      "id": "text:68,2548,153,73",
+      "type": "text",
+      "bbox": {
+        "x": 68,
+        "y": 2548,
+        "w": 153,
+        "h": 73
+      },
+      "render": "native",
+      "text": "所有人"
+    },
+    {
+      "id": "text:74,2742,267,53",
+      "type": "text",
+      "bbox": {
+        "x": 74,
+        "y": 2742,
+        "w": 267,
+        "h": 53
+      },
+      "render": "native",
+      "text": "通过手机号搜索"
+    },
+    {
+      "id": "text:74,2915,178,74",
+      "type": "text",
+      "bbox": {
+        "x": 74,
+        "y": 2915,
+        "w": 178,
+        "h": 74
+      },
+      "render": "native",
+      "text": "中国大陆"
+    }
+  ],
+  "relations": [
+    {
+      "from": "container:24,3062,348,114",
+      "to": "text:147,3084,105,68",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:378,3056,348,126",
+      "to": "text:499,3084,105,68",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "container:24,3062,348,114",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "container:378,3056,348,126",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "container:54,1087,612,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "container:54,2155,606,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "container:54,534,612,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "container:60,1603,600,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "container:60,1783,606,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "container:60,2479,606,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "container:60,2852,600,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "container:60,354,600,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "image:240,2882,480,360",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "input:47,2653,179,68",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:16,5,121,74",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:278,110,184,69",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:37,263,178,73",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:399,972,137,68",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:42,1329,168,68",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:42,2143,152,53",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:42,2390,168,68",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:42,341,158,69",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:42,525,105,69",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:42,893,158,68",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:47,1077,95,68",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:47,1403,153,68",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:47,1586,147,69",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:47,1770,147,69",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:47,1954,153,68",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:47,2474,258,53",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:47,2837,205,68",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:53,709,147,68",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:594,5,136,74",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:63,410,126,89",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:63,972,158,73",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:630,116,100,68",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:68,1156,174,73",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:68,1665,179,74",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:68,2217,121,73",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:68,2548,153,73",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:74,1487,168,68",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:74,1854,173,69",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:74,2742,267,53",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:74,2915,178,74",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:79,2038,163,69",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,3362",
+      "to": "text:79,798,257,53",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
+  "zOrder": [],
+  "warnings": [],
+  "source": "synthetic-html"
+}

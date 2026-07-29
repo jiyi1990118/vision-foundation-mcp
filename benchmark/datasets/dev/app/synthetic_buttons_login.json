@@ -1,0 +1,563 @@
+{
+  "image": "synthetic_buttons_login.jpg",
+  "imageSize": {
+    "width": 2400,
+    "height": 1668
+  },
+  "platform": "app",
+  "theme": "light",
+  "language": "zh",
+  "dpi": "standard",
+  "elements": [
+    {
+      "id": "page:0,0,2400,1668",
+      "type": "page",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 2400,
+        "h": 1668
+      },
+      "render": "native",
+      "children": [
+        "card:54,1050,642,132",
+        "container:60,1188,618,102",
+        "container:90,678,348,48",
+        "icon:0,1080,240,120",
+        "icon:120,1440,120,120",
+        "icon:240,180,240,300",
+        "icon:480,1080,240,120",
+        "icon:60,600,360,120",
+        "icon:60,780,180,120",
+        "icon:60,960,120,120",
+        "text:229,491,292,34",
+        "text:263,1609,213,34",
+        "text:266,413,218,52",
+        "text:281,1339,188,37",
+        "text:338,1448,71,63",
+        "text:34,26,86,38",
+        "text:53,593,135,37",
+        "text:53,776,82,49",
+        "text:53,968,146,37",
+        "text:536,971,147,38",
+        "text:585,863,79,48",
+        "text:611,26,105,38",
+        "text:94,870,172,34",
+        "text:956,1376,488,34"
+      ]
+    },
+    {
+      "id": "card:54,1050,642,132",
+      "type": "card",
+      "bbox": {
+        "x": 54,
+        "y": 1050,
+        "w": 642,
+        "h": 132
+      },
+      "render": "native",
+      "children": [
+        "text:326,1084,98,52"
+      ]
+    },
+    {
+      "id": "text:326,1084,98,52",
+      "type": "subtitle",
+      "bbox": {
+        "x": 326,
+        "y": 1084,
+        "w": 98,
+        "h": 52
+      },
+      "render": "native",
+      "text": "登录"
+    },
+    {
+      "id": "container:60,1188,618,102",
+      "type": "container",
+      "bbox": {
+        "x": 60,
+        "y": 1188,
+        "w": 618,
+        "h": 102
+      },
+      "render": "native",
+      "children": [
+        "text:285,1219,176,37"
+      ]
+    },
+    {
+      "id": "text:285,1219,176,37",
+      "type": "text",
+      "bbox": {
+        "x": 285,
+        "y": 1219,
+        "w": 176,
+        "h": 37
+      },
+      "render": "native",
+      "text": "注册新账号"
+    },
+    {
+      "id": "container:90,678,348,48",
+      "type": "subtitle",
+      "bbox": {
+        "x": 90,
+        "y": 678,
+        "w": 348,
+        "h": 48
+      },
+      "render": "native",
+      "text": "user@example.com"
+    },
+    {
+      "id": "icon:240,180,240,300",
+      "type": "icon",
+      "bbox": {
+        "x": 240,
+        "y": 180,
+        "w": 240,
+        "h": 300
+      },
+      "render": "native",
+      "children": [
+        "container:288,210,174,174"
+      ]
+    },
+    {
+      "id": "container:288,210,174,174",
+      "type": "container",
+      "bbox": {
+        "x": 288,
+        "y": 210,
+        "w": 174,
+        "h": 174
+      },
+      "render": "native",
+      "children": [
+        "text:334,263,79,67"
+      ]
+    },
+    {
+      "id": "text:334,263,79,67",
+      "type": "title",
+      "bbox": {
+        "x": 334,
+        "y": 263,
+        "w": 79,
+        "h": 67
+      },
+      "render": "native",
+      "text": "A"
+    },
+    {
+      "id": "icon:60,600,360,120",
+      "type": "icon",
+      "bbox": {
+        "x": 60,
+        "y": 600,
+        "w": 360,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:60,780,180,120",
+      "type": "icon",
+      "bbox": {
+        "x": 60,
+        "y": 780,
+        "w": 180,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:60,960,120,120",
+      "type": "icon",
+      "bbox": {
+        "x": 60,
+        "y": 960,
+        "w": 120,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:0,1080,240,120",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 1080,
+        "w": 240,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:480,1080,240,120",
+      "type": "icon",
+      "bbox": {
+        "x": 480,
+        "y": 1080,
+        "w": 240,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:120,1440,120,120",
+      "type": "icon",
+      "bbox": {
+        "x": 120,
+        "y": 1440,
+        "w": 120,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:34,26,86,38",
+      "type": "text",
+      "bbox": {
+        "x": 34,
+        "y": 26,
+        "w": 86,
+        "h": 38
+      },
+      "render": "native",
+      "text": "9:41"
+    },
+    {
+      "id": "text:611,26,105,38",
+      "type": "text",
+      "bbox": {
+        "x": 611,
+        "y": 26,
+        "w": 105,
+        "h": 38
+      },
+      "render": "native",
+      "text": "100%"
+    },
+    {
+      "id": "text:266,413,218,52",
+      "type": "subtitle",
+      "bbox": {
+        "x": 266,
+        "y": 413,
+        "w": 218,
+        "h": 52
+      },
+      "render": "native",
+      "text": "欢迎回来"
+    },
+    {
+      "id": "text:229,491,292,34",
+      "type": "text",
+      "bbox": {
+        "x": 229,
+        "y": 491,
+        "w": 292,
+        "h": 34
+      },
+      "render": "native",
+      "text": "登录你的账号继续使用"
+    },
+    {
+      "id": "text:53,593,135,37",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 593,
+        "w": 135,
+        "h": 37
+      },
+      "render": "native",
+      "text": "邮箱地址"
+    },
+    {
+      "id": "text:53,776,82,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 53,
+        "y": 776,
+        "w": 82,
+        "h": 49
+      },
+      "render": "native",
+      "text": "密码"
+    },
+    {
+      "id": "text:94,870,172,34",
+      "type": "text",
+      "bbox": {
+        "x": 94,
+        "y": 870,
+        "w": 172,
+        "h": 34
+      },
+      "render": "native",
+      "text": "…",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:585,863,79,48",
+      "type": "subtitle",
+      "bbox": {
+        "x": 585,
+        "y": 863,
+        "w": 79,
+        "h": 48
+      },
+      "render": "native",
+      "text": "显示"
+    },
+    {
+      "id": "text:53,968,146,37",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 968,
+        "w": 146,
+        "h": 37
+      },
+      "render": "native",
+      "text": "记住我",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:536,971,147,38",
+      "type": "text",
+      "bbox": {
+        "x": 536,
+        "y": 971,
+        "w": 147,
+        "h": 38
+      },
+      "render": "native",
+      "text": "忘记密码？"
+    },
+    {
+      "id": "text:281,1339,188,37",
+      "type": "text",
+      "bbox": {
+        "x": 281,
+        "y": 1339,
+        "w": 188,
+        "h": 37
+      },
+      "render": "native",
+      "text": "其他登录方式"
+    },
+    {
+      "id": "text:956,1376,488,34",
+      "type": "text",
+      "bbox": {
+        "x": 956,
+        "y": 1376,
+        "w": 488,
+        "h": 34
+      },
+      "render": "native",
+      "text": "用户协议· 隐私政策· 帮助中心"
+    },
+    {
+      "id": "text:338,1448,71,63",
+      "type": "title",
+      "bbox": {
+        "x": 338,
+        "y": 1448,
+        "w": 71,
+        "h": 63
+      },
+      "render": "native",
+      "text": "曰"
+    },
+    {
+      "id": "text:263,1609,213,34",
+      "type": "text",
+      "bbox": {
+        "x": 263,
+        "y": 1609,
+        "w": 213,
+        "h": 34
+      },
+      "render": "native",
+      "text": "游客模式浏览>"
+    }
+  ],
+  "relations": [
+    {
+      "from": "card:54,1050,642,132",
+      "to": "text:326,1084,98,52",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:288,210,174,174",
+      "to": "text:334,263,79,67",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:60,1188,618,102",
+      "to": "text:285,1219,176,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "icon:240,180,240,300",
+      "to": "container:288,210,174,174",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "card:54,1050,642,132",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "container:60,1188,618,102",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "container:90,678,348,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "icon:0,1080,240,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "icon:120,1440,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "icon:240,180,240,300",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "icon:480,1080,240,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "icon:60,600,360,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "icon:60,780,180,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "icon:60,960,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "text:229,491,292,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "text:263,1609,213,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "text:266,413,218,52",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "text:281,1339,188,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "text:338,1448,71,63",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "text:34,26,86,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "text:53,593,135,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "text:53,776,82,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "text:53,968,146,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "text:536,971,147,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "text:585,863,79,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "text:611,26,105,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "text:94,870,172,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1668",
+      "to": "text:956,1376,488,34",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
+  "zOrder": [],
+  "warnings": [],
+  "source": "synthetic-html"
+}

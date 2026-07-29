@@ -1,0 +1,581 @@
+{
+  "image": "synthetic_bottomsheet_map.jpg",
+  "imageSize": {
+    "width": 2400,
+    "height": 1488
+  },
+  "platform": "app",
+  "theme": "light",
+  "language": "zh",
+  "dpi": "standard",
+  "elements": [
+    {
+      "id": "page:0,0,2400,1488",
+      "type": "page",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 2400,
+        "h": 1488
+      },
+      "render": "native",
+      "children": [
+        "container:30,1098,132,132",
+        "container:30,1290,132,126",
+        "container:30,780,228,96",
+        "container:30,918,132,126",
+        "footer:6,1464,2388,18",
+        "icon:0,1080,120,240",
+        "icon:0,1200,120,240",
+        "icon:0,1320,120,168",
+        "icon:0,960,120,120",
+        "image:0,0,2400,840",
+        "text:161,919,300,37",
+        "text:165,1200,206,38",
+        "text:165,1290,233,38",
+        "text:165,1388,233,37",
+        "text:169,1016,247,34",
+        "text:169,1103,292,37",
+        "text:173,1343,307,33",
+        "text:173,971,288,34",
+        "text:176,1159,282,34",
+        "text:2261,795,94,64"
+      ]
+    },
+    {
+      "id": "footer:6,1464,2388,18",
+      "type": "footer",
+      "bbox": {
+        "x": 6,
+        "y": 1464,
+        "w": 2388,
+        "h": 18
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:30,780,228,96",
+      "type": "column",
+      "bbox": {
+        "x": 30,
+        "y": 780,
+        "w": 228,
+        "h": 96
+      },
+      "render": "native",
+      "children": [
+        "text:30,784,161,49",
+        "text:34,840,221,34"
+      ]
+    },
+    {
+      "id": "text:30,784,161,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 30,
+        "y": 784,
+        "w": 161,
+        "h": 49
+      },
+      "render": "native",
+      "text": "附近推荐"
+    },
+    {
+      "id": "text:34,840,221,34",
+      "type": "text",
+      "bbox": {
+        "x": 34,
+        "y": 840,
+        "w": 221,
+        "h": 34
+      },
+      "render": "native",
+      "text": "为你找到24 个地点"
+    },
+    {
+      "id": "container:30,1098,132,132",
+      "type": "container",
+      "bbox": {
+        "x": 30,
+        "y": 1098,
+        "w": 132,
+        "h": 132
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:30,918,132,126",
+      "type": "container",
+      "bbox": {
+        "x": 30,
+        "y": 918,
+        "w": 132,
+        "h": 126
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:30,1290,132,126",
+      "type": "container",
+      "bbox": {
+        "x": 30,
+        "y": 1290,
+        "w": 132,
+        "h": 126
+      },
+      "render": "native"
+    },
+    {
+      "id": "image:0,0,2400,840",
+      "type": "image",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 2400,
+        "h": 840
+      },
+      "render": "native",
+      "children": [
+        "image:0,120,540,180",
+        "table:6,78,2388,684",
+        "text:38,26,78,34",
+        "text:615,26,98,38"
+      ]
+    },
+    {
+      "id": "table:6,78,2388,684",
+      "type": "table",
+      "bbox": {
+        "x": 6,
+        "y": 78,
+        "w": 2388,
+        "h": 684
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:60,143,266,37",
+      "type": "text",
+      "bbox": {
+        "x": 60,
+        "y": 143,
+        "w": 266,
+        "h": 37
+      },
+      "render": "native",
+      "text": "Q搜索地点、地址"
+    },
+    {
+      "id": "text:38,225,90,49",
+      "type": "text",
+      "bbox": {
+        "x": 38,
+        "y": 225,
+        "w": 90,
+        "h": 49
+      },
+      "render": "native",
+      "text": "全部",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:169,233,67,33",
+      "type": "text",
+      "bbox": {
+        "x": 169,
+        "y": 233,
+        "w": 67,
+        "h": 33
+      },
+      "render": "native",
+      "text": "美食"
+    },
+    {
+      "id": "image:0,120,540,180",
+      "type": "image",
+      "bbox": {
+        "x": 0,
+        "y": 120,
+        "w": 540,
+        "h": 180
+      },
+      "render": "native",
+      "children": [
+        "text:169,233,67,33",
+        "text:38,225,90,49",
+        "text:60,143,266,37"
+      ]
+    },
+    {
+      "id": "icon:0,960,120,120",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 960,
+        "w": 120,
+        "h": 120
+      },
+      "render": "native",
+      "text": "老北京炸酱面热门"
+    },
+    {
+      "id": "icon:0,1080,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 1080,
+        "w": 120,
+        "h": 240
+      },
+      "render": "native",
+      "text": "★4.6.320m·¥58/人"
+    },
+    {
+      "id": "icon:0,1200,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 1200,
+        "w": 120,
+        "h": 240
+      },
+      "render": "native",
+      "text": "四季酒店五星"
+    },
+    {
+      "id": "icon:0,1320,120,168",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 1320,
+        "w": 120,
+        "h": 168
+      },
+      "render": "native",
+      "text": "豪华酒店/商务中心"
+    },
+    {
+      "id": "text:38,26,78,34",
+      "type": "text",
+      "bbox": {
+        "x": 38,
+        "y": 26,
+        "w": 78,
+        "h": 34
+      },
+      "render": "native",
+      "text": "9:41"
+    },
+    {
+      "id": "text:615,26,98,38",
+      "type": "text",
+      "bbox": {
+        "x": 615,
+        "y": 26,
+        "w": 98,
+        "h": 38
+      },
+      "render": "native",
+      "text": "100%"
+    },
+    {
+      "id": "text:2261,795,94,64",
+      "type": "title",
+      "bbox": {
+        "x": 2261,
+        "y": 795,
+        "w": 94,
+        "h": 64
+      },
+      "render": "native",
+      "text": "筛选"
+    },
+    {
+      "id": "text:161,919,300,37",
+      "type": "text",
+      "bbox": {
+        "x": 161,
+        "y": 919,
+        "w": 300,
+        "h": 37
+      },
+      "render": "native",
+      "text": "老北京炸酱面热门"
+    },
+    {
+      "id": "text:173,971,288,34",
+      "type": "text",
+      "bbox": {
+        "x": 173,
+        "y": 971,
+        "w": 288,
+        "h": 34
+      },
+      "render": "native",
+      "text": "★4.8·500m·¥45/人"
+    },
+    {
+      "id": "text:169,1016,247,34",
+      "type": "text",
+      "bbox": {
+        "x": 169,
+        "y": 1016,
+        "w": 247,
+        "h": 34
+      },
+      "render": "native",
+      "text": "面条/北京菜/王府井"
+    },
+    {
+      "id": "text:169,1103,292,37",
+      "type": "text",
+      "bbox": {
+        "x": 169,
+        "y": 1103,
+        "w": 292,
+        "h": 37
+      },
+      "render": "native",
+      "text": "星巴克臻选店新店"
+    },
+    {
+      "id": "text:176,1159,282,34",
+      "type": "text",
+      "bbox": {
+        "x": 176,
+        "y": 1159,
+        "w": 282,
+        "h": 34
+      },
+      "render": "native",
+      "text": "★4.6.320m·¥58/人"
+    },
+    {
+      "id": "text:165,1200,206,38",
+      "type": "text",
+      "bbox": {
+        "x": 165,
+        "y": 1200,
+        "w": 206,
+        "h": 38
+      },
+      "render": "native",
+      "text": "咖啡/甜点/国贸"
+    },
+    {
+      "id": "text:165,1290,233,38",
+      "type": "text",
+      "bbox": {
+        "x": 165,
+        "y": 1290,
+        "w": 233,
+        "h": 38
+      },
+      "render": "native",
+      "text": "四季酒店五星"
+    },
+    {
+      "id": "text:173,1343,307,33",
+      "type": "text",
+      "bbox": {
+        "x": 173,
+        "y": 1343,
+        "w": 307,
+        "h": 33
+      },
+      "render": "native",
+      "text": "☆4.9·1.2km·¥1288起"
+    },
+    {
+      "id": "text:165,1388,233,37",
+      "type": "text",
+      "bbox": {
+        "x": 165,
+        "y": 1388,
+        "w": 233,
+        "h": 37
+      },
+      "render": "native",
+      "text": "豪华酒店/商务中心"
+    }
+  ],
+  "relations": [
+    {
+      "from": "container:30,780,228,96",
+      "to": "text:30,784,161,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:30,780,228,96",
+      "to": "text:34,840,221,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "image:0,0,2400,840",
+      "to": "image:0,120,540,180",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "image:0,0,2400,840",
+      "to": "table:6,78,2388,684",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "image:0,0,2400,840",
+      "to": "text:38,26,78,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "image:0,0,2400,840",
+      "to": "text:615,26,98,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "image:0,120,540,180",
+      "to": "text:169,233,67,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "image:0,120,540,180",
+      "to": "text:38,225,90,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "image:0,120,540,180",
+      "to": "text:60,143,266,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "container:30,1098,132,132",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "container:30,1290,132,126",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "container:30,780,228,96",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "container:30,918,132,126",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "footer:6,1464,2388,18",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "icon:0,1080,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "icon:0,1200,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "icon:0,1320,120,168",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "icon:0,960,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "image:0,0,2400,840",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "text:161,919,300,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "text:165,1200,206,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "text:165,1290,233,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "text:165,1388,233,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "text:169,1016,247,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "text:169,1103,292,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "text:173,1343,307,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "text:173,971,288,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "text:176,1159,282,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1488",
+      "to": "text:2261,795,94,64",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
+  "zOrder": [],
+  "warnings": [],
+  "source": "synthetic-html"
+}

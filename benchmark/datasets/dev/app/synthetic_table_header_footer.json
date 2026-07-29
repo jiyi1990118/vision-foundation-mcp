@@ -1,0 +1,1253 @@
+{
+  "image": "synthetic_table_header_footer.jpg",
+  "imageSize": {
+    "width": 2400,
+    "height": 1962
+  },
+  "platform": "app",
+  "theme": "light",
+  "language": "zh",
+  "dpi": "standard",
+  "elements": [
+    {
+      "id": "page:0,0,2400,1962",
+      "type": "page",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 2400,
+        "h": 1962
+      },
+      "render": "native",
+      "children": [
+        "card:24,372,702,180",
+        "container:30,120,270,102",
+        "container:468,1764,228,96",
+        "container:54,1146,222,114",
+        "container:54,1302,228,114",
+        "container:54,1464,228,114",
+        "container:54,1806,288,60",
+        "container:54,672,234,114",
+        "container:54,828,222,114",
+        "container:54,990,222,114",
+        "icon:0,300,120,120",
+        "icon:0,480,240,300",
+        "icon:360,360,180,300",
+        "icon:480,1740,240,120",
+        "icon:600,360,120,240",
+        "text:146,1144,132,49",
+        "text:150,1346,139,38",
+        "text:150,716,139,34",
+        "text:180,274,109,49",
+        "text:319,281,109,38",
+        "text:34,19,86,49",
+        "text:349,1024,120,37",
+        "text:356,1185,150,34",
+        "text:360,709,105,37",
+        "text:364,866,109,38",
+        "text:368,1343,93,33",
+        "text:368,1500,101,34",
+        "text:458,281,112,38",
+        "text:53,1759,157,37",
+        "text:53,274,82,49",
+        "text:56,1631,150,34",
+        "text:581,1028,105,37",
+        "text:581,1185,105,38",
+        "text:581,1346,102,34",
+        "text:581,1504,105,34",
+        "text:581,713,105,37",
+        "text:581,870,105,38",
+        "text:615,143,83,48",
+        "text:615,26,98,34",
+        "text:615,281,83,38",
+        "text:623,593,75,37"
+      ]
+    },
+    {
+      "id": "card:24,372,702,180",
+      "type": "card",
+      "bbox": {
+        "x": 24,
+        "y": 372,
+        "w": 702,
+        "h": 180
+      },
+      "render": "native",
+      "children": [
+        "text:248,476,97,38",
+        "text:563,476,101,38",
+        "text:75,476,116,38",
+        "text:94,416,82,53"
+      ]
+    },
+    {
+      "id": "text:94,416,82,53",
+      "type": "subtitle",
+      "bbox": {
+        "x": 94,
+        "y": 416,
+        "w": 82,
+        "h": 53
+      },
+      "render": "native",
+      "text": "12"
+    },
+    {
+      "id": "text:75,476,116,38",
+      "type": "text",
+      "bbox": {
+        "x": 75,
+        "y": 476,
+        "w": 116,
+        "h": 38
+      },
+      "render": "native",
+      "text": "全部订单",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:248,476,97,38",
+      "type": "text",
+      "bbox": {
+        "x": 248,
+        "y": 476,
+        "w": 97,
+        "h": 38
+      },
+      "render": "native",
+      "text": "待付款",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:405,476,98,38",
+      "type": "text",
+      "bbox": {
+        "x": 405,
+        "y": 476,
+        "w": 98,
+        "h": 38
+      },
+      "render": "native",
+      "text": "待收货",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:563,476,101,38",
+      "type": "text",
+      "bbox": {
+        "x": 563,
+        "y": 476,
+        "w": 101,
+        "h": 38
+      },
+      "render": "native",
+      "text": "已完成"
+    },
+    {
+      "id": "container:30,120,270,102",
+      "type": "column",
+      "bbox": {
+        "x": 30,
+        "y": 120,
+        "w": 270,
+        "h": 102
+      },
+      "render": "native",
+      "children": [
+        "text:30,124,176,49",
+        "text:30,180,270,38"
+      ]
+    },
+    {
+      "id": "text:30,124,176,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 30,
+        "y": 124,
+        "w": 176,
+        "h": 49
+      },
+      "render": "native",
+      "text": "我的订单"
+    },
+    {
+      "id": "text:30,180,270,38",
+      "type": "text",
+      "bbox": {
+        "x": 30,
+        "y": 180,
+        "w": 270,
+        "h": 38
+      },
+      "render": "native",
+      "text": "2026年7月订单明细"
+    },
+    {
+      "id": "container:54,672,234,114",
+      "type": "column",
+      "bbox": {
+        "x": 54,
+        "y": 672,
+        "w": 234,
+        "h": 114
+      },
+      "render": "native",
+      "children": [
+        "text:146,675,139,38"
+      ]
+    },
+    {
+      "id": "text:146,675,139,38",
+      "type": "text",
+      "bbox": {
+        "x": 146,
+        "y": 675,
+        "w": 139,
+        "h": 38
+      },
+      "render": "native",
+      "text": "运动鞋..."
+    },
+    {
+      "id": "text:150,716,139,34",
+      "type": "text",
+      "bbox": {
+        "x": 150,
+        "y": 716,
+        "w": 139,
+        "h": 34
+      },
+      "render": "native",
+      "text": "黑白色/42"
+    },
+    {
+      "id": "container:54,1302,228,114",
+      "type": "column",
+      "bbox": {
+        "x": 54,
+        "y": 1302,
+        "w": 228,
+        "h": 114
+      },
+      "render": "native",
+      "children": [
+        "text:150,1309,131,34"
+      ]
+    },
+    {
+      "id": "text:150,1309,131,34",
+      "type": "text",
+      "bbox": {
+        "x": 150,
+        "y": 1309,
+        "w": 131,
+        "h": 34
+      },
+      "render": "native",
+      "text": "游戏手柄"
+    },
+    {
+      "id": "text:150,1346,139,38",
+      "type": "text",
+      "bbox": {
+        "x": 150,
+        "y": 1346,
+        "w": 139,
+        "h": 38
+      },
+      "render": "native",
+      "text": "黑色/无线"
+    },
+    {
+      "id": "container:54,1464,228,114",
+      "type": "column",
+      "bbox": {
+        "x": 54,
+        "y": 1464,
+        "w": 228,
+        "h": 114
+      },
+      "render": "native",
+      "children": [
+        "text:146,1466,113,38",
+        "text:154,1508,127,33"
+      ]
+    },
+    {
+      "id": "text:146,1466,113,38",
+      "type": "text",
+      "bbox": {
+        "x": 146,
+        "y": 1466,
+        "w": 113,
+        "h": 38
+      },
+      "render": "native",
+      "text": "咖啡机"
+    },
+    {
+      "id": "text:154,1508,127,33",
+      "type": "text",
+      "bbox": {
+        "x": 154,
+        "y": 1508,
+        "w": 127,
+        "h": 33
+      },
+      "render": "native",
+      "text": "白色/半自"
+    },
+    {
+      "id": "container:54,828,222,114",
+      "type": "column",
+      "bbox": {
+        "x": 54,
+        "y": 828,
+        "w": 222,
+        "h": 114
+      },
+      "render": "native",
+      "children": [
+        "text:150,836,124,34",
+        "text:154,874,101,34",
+        "text:154,908,79,33"
+      ]
+    },
+    {
+      "id": "text:150,836,124,34",
+      "type": "text",
+      "bbox": {
+        "x": 150,
+        "y": 836,
+        "w": 124,
+        "h": 34
+      },
+      "render": "native",
+      "text": "无线降..."
+    },
+    {
+      "id": "text:154,874,101,34",
+      "type": "text",
+      "bbox": {
+        "x": 154,
+        "y": 874,
+        "w": 101,
+        "h": 34
+      },
+      "render": "native",
+      "text": "星空黑/"
+    },
+    {
+      "id": "text:154,908,79,33",
+      "type": "text",
+      "bbox": {
+        "x": 154,
+        "y": 908,
+        "w": 79,
+        "h": 33
+      },
+      "render": "native",
+      "text": "Pro版"
+    },
+    {
+      "id": "container:54,990,222,114",
+      "type": "column",
+      "bbox": {
+        "x": 54,
+        "y": 990,
+        "w": 222,
+        "h": 114
+      },
+      "render": "native",
+      "children": [
+        "text:146,1031,113,38",
+        "text:150,1065,83,34",
+        "text:150,994,120,34"
+      ]
+    },
+    {
+      "id": "text:150,994,120,34",
+      "type": "text",
+      "bbox": {
+        "x": 150,
+        "y": 994,
+        "w": 120,
+        "h": 34
+      },
+      "render": "native",
+      "text": "智能手..."
+    },
+    {
+      "id": "text:146,1031,113,38",
+      "type": "text",
+      "bbox": {
+        "x": 146,
+        "y": 1031,
+        "w": 113,
+        "h": 38
+      },
+      "render": "native",
+      "text": "钛金色/"
+    },
+    {
+      "id": "text:150,1065,83,34",
+      "type": "text",
+      "bbox": {
+        "x": 150,
+        "y": 1065,
+        "w": 83,
+        "h": 34
+      },
+      "render": "native",
+      "text": "256G"
+    },
+    {
+      "id": "container:54,1146,222,114",
+      "type": "column",
+      "bbox": {
+        "x": 54,
+        "y": 1146,
+        "w": 222,
+        "h": 114
+      },
+      "render": "native",
+      "children": [
+        "text:150,1189,83,37",
+        "text:154,1223,82,33"
+      ]
+    },
+    {
+      "id": "text:146,1144,132,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 146,
+        "y": 1144,
+        "w": 132,
+        "h": 49
+      },
+      "render": "native",
+      "text": "智能手..."
+    },
+    {
+      "id": "text:150,1189,83,37",
+      "type": "text",
+      "bbox": {
+        "x": 150,
+        "y": 1189,
+        "w": 83,
+        "h": 37
+      },
+      "render": "native",
+      "text": "银色/"
+    },
+    {
+      "id": "text:154,1223,82,33",
+      "type": "text",
+      "bbox": {
+        "x": 154,
+        "y": 1223,
+        "w": 82,
+        "h": 33
+      },
+      "render": "native",
+      "text": "42mm"
+    },
+    {
+      "id": "container:468,1764,228,96",
+      "type": "container",
+      "bbox": {
+        "x": 468,
+        "y": 1764,
+        "w": 228,
+        "h": 96
+      },
+      "render": "native",
+      "children": [
+        "text:514,1793,131,37"
+      ]
+    },
+    {
+      "id": "text:514,1793,131,37",
+      "type": "text",
+      "bbox": {
+        "x": 514,
+        "y": 1793,
+        "w": 131,
+        "h": 37
+      },
+      "render": "native",
+      "text": "查看账单"
+    },
+    {
+      "id": "container:54,1806,288,60",
+      "type": "title",
+      "bbox": {
+        "x": 54,
+        "y": 1806,
+        "w": 288,
+        "h": 60
+      },
+      "render": "native",
+      "text": "¥11,654.00"
+    },
+    {
+      "id": "icon:0,300,120,120",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 300,
+        "w": 120,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:360,360,180,300",
+      "type": "icon",
+      "bbox": {
+        "x": 360,
+        "y": 360,
+        "w": 180,
+        "h": 300
+      },
+      "render": "native",
+      "text": "待付款",
+      "children": [
+        "text:386,593,135,37",
+        "text:405,476,98,38"
+      ]
+    },
+    {
+      "id": "icon:600,360,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 600,
+        "y": 360,
+        "w": 120,
+        "h": 240
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:0,480,240,300",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 480,
+        "w": 240,
+        "h": 300
+      },
+      "render": "native",
+      "text": "待付款",
+      "children": [
+        "text:53,593,120,37"
+      ]
+    },
+    {
+      "id": "icon:480,1740,240,120",
+      "type": "icon",
+      "bbox": {
+        "x": 480,
+        "y": 1740,
+        "w": 240,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:34,19,86,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 34,
+        "y": 19,
+        "w": 86,
+        "h": 49
+      },
+      "render": "native",
+      "text": "9:41"
+    },
+    {
+      "id": "text:615,26,98,34",
+      "type": "text",
+      "bbox": {
+        "x": 615,
+        "y": 26,
+        "w": 98,
+        "h": 34
+      },
+      "render": "native",
+      "text": "100%"
+    },
+    {
+      "id": "text:615,143,83,48",
+      "type": "subtitle",
+      "bbox": {
+        "x": 615,
+        "y": 143,
+        "w": 83,
+        "h": 48
+      },
+      "render": "native",
+      "text": "导出"
+    },
+    {
+      "id": "text:53,274,82,49",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 274,
+        "w": 82,
+        "h": 49
+      },
+      "render": "native",
+      "text": "全部",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:180,274,109,49",
+      "type": "text",
+      "bbox": {
+        "x": 180,
+        "y": 274,
+        "w": 109,
+        "h": 49
+      },
+      "render": "native",
+      "text": "待付款",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:319,281,109,38",
+      "type": "text",
+      "bbox": {
+        "x": 319,
+        "y": 281,
+        "w": 109,
+        "h": 38
+      },
+      "render": "native",
+      "text": "待发货",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:458,281,112,38",
+      "type": "text",
+      "bbox": {
+        "x": 458,
+        "y": 281,
+        "w": 112,
+        "h": 38
+      },
+      "render": "native",
+      "text": "已完成",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:615,281,83,38",
+      "type": "text",
+      "bbox": {
+        "x": 615,
+        "y": 281,
+        "w": 83,
+        "h": 38
+      },
+      "render": "native",
+      "text": "退款"
+    },
+    {
+      "id": "text:53,593,120,37",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 593,
+        "w": 120,
+        "h": 37
+      },
+      "render": "native",
+      "text": "商品信息",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:386,593,135,37",
+      "type": "text",
+      "bbox": {
+        "x": 386,
+        "y": 593,
+        "w": 135,
+        "h": 37
+      },
+      "render": "native",
+      "text": "单价数量",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:623,593,75,37",
+      "type": "text",
+      "bbox": {
+        "x": 623,
+        "y": 593,
+        "w": 75,
+        "h": 37
+      },
+      "render": "native",
+      "text": "状态"
+    },
+    {
+      "id": "text:360,709,105,37",
+      "type": "text",
+      "bbox": {
+        "x": 360,
+        "y": 709,
+        "w": 105,
+        "h": 37
+      },
+      "render": "native",
+      "text": "¥299",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:581,713,105,37",
+      "type": "text",
+      "bbox": {
+        "x": 581,
+        "y": 713,
+        "w": 105,
+        "h": 37
+      },
+      "render": "native",
+      "text": "待付款"
+    },
+    {
+      "id": "text:364,866,109,38",
+      "type": "text",
+      "bbox": {
+        "x": 364,
+        "y": 866,
+        "w": 109,
+        "h": 38
+      },
+      "render": "native",
+      "text": "¥599",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:581,870,105,38",
+      "type": "text",
+      "bbox": {
+        "x": 581,
+        "y": 870,
+        "w": 105,
+        "h": 38
+      },
+      "render": "native",
+      "text": "待发货"
+    },
+    {
+      "id": "text:349,1024,120,37",
+      "type": "text",
+      "bbox": {
+        "x": 349,
+        "y": 1024,
+        "w": 120,
+        "h": 37
+      },
+      "render": "native",
+      "text": "¥7999",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:581,1028,105,37",
+      "type": "text",
+      "bbox": {
+        "x": 581,
+        "y": 1028,
+        "w": 105,
+        "h": 37
+      },
+      "render": "native",
+      "text": "已完成"
+    },
+    {
+      "id": "text:356,1185,150,34",
+      "type": "text",
+      "bbox": {
+        "x": 356,
+        "y": 1185,
+        "w": 150,
+        "h": 34
+      },
+      "render": "native",
+      "text": "¥1299 2",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:581,1185,105,38",
+      "type": "text",
+      "bbox": {
+        "x": 581,
+        "y": 1185,
+        "w": 105,
+        "h": 38
+      },
+      "render": "native",
+      "text": "待收货"
+    },
+    {
+      "id": "text:368,1343,93,33",
+      "type": "text",
+      "bbox": {
+        "x": 368,
+        "y": 1343,
+        "w": 93,
+        "h": 33
+      },
+      "render": "native",
+      "text": "¥259",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:581,1346,102,34",
+      "type": "text",
+      "bbox": {
+        "x": 581,
+        "y": 1346,
+        "w": 102,
+        "h": 34
+      },
+      "render": "native",
+      "text": "已完成"
+    },
+    {
+      "id": "text:368,1500,101,34",
+      "type": "text",
+      "bbox": {
+        "x": 368,
+        "y": 1500,
+        "w": 101,
+        "h": 34
+      },
+      "render": "native",
+      "text": "¥899",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:581,1504,105,34",
+      "type": "text",
+      "bbox": {
+        "x": 581,
+        "y": 1504,
+        "w": 105,
+        "h": 34
+      },
+      "render": "native",
+      "text": "已退款"
+    },
+    {
+      "id": "text:56,1631,150,34",
+      "type": "text",
+      "bbox": {
+        "x": 56,
+        "y": 1631,
+        "w": 150,
+        "h": 34
+      },
+      "render": "native",
+      "text": "共 12 条记录"
+    },
+    {
+      "id": "text:53,1759,157,37",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 1759,
+        "w": 157,
+        "h": 37
+      },
+      "render": "native",
+      "text": "本月总支出"
+    }
+  ],
+  "relations": [
+    {
+      "from": "card:24,372,702,180",
+      "to": "text:248,476,97,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:24,372,702,180",
+      "to": "text:563,476,101,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:24,372,702,180",
+      "to": "text:75,476,116,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:24,372,702,180",
+      "to": "text:94,416,82,53",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:30,120,270,102",
+      "to": "text:30,124,176,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:30,120,270,102",
+      "to": "text:30,180,270,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:468,1764,228,96",
+      "to": "text:514,1793,131,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,1146,222,114",
+      "to": "text:150,1189,83,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,1146,222,114",
+      "to": "text:154,1223,82,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,1302,228,114",
+      "to": "text:150,1309,131,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,1464,228,114",
+      "to": "text:146,1466,113,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,1464,228,114",
+      "to": "text:154,1508,127,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,672,234,114",
+      "to": "text:146,675,139,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,828,222,114",
+      "to": "text:150,836,124,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,828,222,114",
+      "to": "text:154,874,101,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,828,222,114",
+      "to": "text:154,908,79,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,990,222,114",
+      "to": "text:146,1031,113,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,990,222,114",
+      "to": "text:150,1065,83,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:54,990,222,114",
+      "to": "text:150,994,120,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "icon:0,480,240,300",
+      "to": "text:53,593,120,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "icon:360,360,180,300",
+      "to": "text:386,593,135,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "icon:360,360,180,300",
+      "to": "text:405,476,98,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "card:24,372,702,180",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "container:30,120,270,102",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "container:468,1764,228,96",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "container:54,1146,222,114",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "container:54,1302,228,114",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "container:54,1464,228,114",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "container:54,1806,288,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "container:54,672,234,114",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "container:54,828,222,114",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "container:54,990,222,114",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "icon:0,300,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "icon:0,480,240,300",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "icon:360,360,180,300",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "icon:480,1740,240,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "icon:600,360,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:146,1144,132,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:150,1346,139,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:150,716,139,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:180,274,109,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:319,281,109,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:34,19,86,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:349,1024,120,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:356,1185,150,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:360,709,105,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:364,866,109,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:368,1343,93,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:368,1500,101,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:458,281,112,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:53,1759,157,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:53,274,82,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:56,1631,150,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:581,1028,105,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:581,1185,105,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:581,1346,102,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:581,1504,105,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:581,713,105,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:581,870,105,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:615,143,83,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:615,26,98,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:615,281,83,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1962",
+      "to": "text:623,593,75,37",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
+  "zOrder": [],
+  "warnings": [],
+  "source": "synthetic-html"
+}

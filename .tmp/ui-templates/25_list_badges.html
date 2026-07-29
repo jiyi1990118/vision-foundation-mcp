@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=375, initial-scale=1.0">
+<title>List Badges</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { width: 375px; margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .status-bar { height: 44px; }
+</style>
+</head>
+<body class="bg-gray-50">
+  <!-- Status bar -->
+  <div class="status-bar bg-white flex items-center justify-between px-6 text-sm font-semibold">
+    <span>9:41</span>
+    <span>100%</span>
+  </div>
+
+  <!-- Page Header -->
+  <div class="bg-white px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold">我</div>
+      <div>
+        <h1 class="font-bold text-lg">订单管理</h1>
+        <p class="text-xs text-gray-400">12 个进行中订单</p>
+      </div>
+    </div>
+    <div class="relative">
+      <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+      <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">8</span>
+    </div>
+  </div>
+
+  <!-- Status tabs with badges -->
+  <div class="bg-white flex border-b border-gray-100">
+    <div class="flex-1 py-3 text-center border-b-2 border-blue-500">
+      <div class="flex items-center justify-center">
+        <span class="text-sm font-semibold text-blue-600">全部</span>
+      </div>
+    </div>
+    <div class="flex-1 py-3 text-center">
+      <div class="flex items-center justify-center">
+        <span class="text-sm text-gray-500">待付款</span>
+        <span class="ml-1 px-1.5 py-0.5 text-xs font-bold bg-orange-500 text-white rounded-full">3</span>
+      </div>
+    </div>
+    <div class="flex-1 py-3 text-center">
+      <div class="flex items-center justify-center">
+        <span class="text-sm text-gray-500">待发货</span>
+        <span class="ml-1 px-1.5 py-0.5 text-xs font-bold bg-blue-500 text-white rounded-full">5</span>
+      </div>
+    </div>
+    <div class="flex-1 py-3 text-center">
+      <div class="flex items-center justify-center">
+        <span class="text-sm text-gray-500">待收货</span>
+        <span class="ml-1 px-1.5 py-0.5 text-xs font-bold bg-red-500 text-white rounded-full">4</span>
+      </div>
+    </div>
+    <div class="flex-1 py-3 text-center">
+      <span class="text-sm text-gray-500">已完成</span>
+    </div>
+  </div>
+
+  <!-- Order list -->
+  <div class="mt-2 space-y-2">
+    <!-- Order 1 -->
+    <div class="bg-white mx-4 rounded-xl p-4 shadow-sm">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-50">
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-500">订单号: 20260729001</span>
+          <span class="px-1.5 py-0.5 text-xs font-semibold bg-orange-50 text-orange-500 rounded">待付款</span>
+        </div>
+        <span class="text-xs text-gray-400">30分钟前</span>
+      </div>
+      <div class="flex items-center gap-3 py-3">
+        <div class="w-16 h-16 rounded-lg bg-gradient-to-br from-red-300 to-pink-400 flex items-center justify-center text-2xl flex-shrink-0">👟</div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium text-gray-900 line-clamp-2">Air Max 运动鞋跑步鞋透气</p>
+          <p class="text-xs text-gray-400 mt-1">颜色: 黑白 / 尺码: 42</p>
+          <div class="flex items-center justify-between mt-2">
+            <span class="text-red-500 font-bold">¥299</span>
+            <span class="text-sm text-gray-400">x1</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-end gap-2 pt-3 border-t border-gray-50">
+        <button class="px-3 py-1.5 text-sm text-gray-500 bg-gray-100 rounded-lg">取消订单</button>
+        <button class="px-4 py-1.5 text-sm font-semibold text-white bg-red-500 rounded-lg">立即付款</button>
+      </div>
+    </div>
+
+    <!-- Order 2 with badge -->
+    <div class="bg-white mx-4 rounded-xl p-4 shadow-sm">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-50">
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-500">订单号: 20260728002</span>
+          <span class="px-1.5 py-0.5 text-xs font-semibold bg-blue-50 text-blue-500 rounded">待发货</span>
+          <span class="px-1.5 py-0.5 text-xs font-semibold bg-green-50 text-green-600 rounded">包邮</span>
+        </div>
+        <span class="text-xs text-gray-400">昨天</span>
+      </div>
+      <div class="flex items-center gap-3 py-3">
+        <div class="w-16 h-16 rounded-lg bg-gradient-to-br from-blue-300 to-indigo-400 flex items-center justify-center text-2xl flex-shrink-0">🎧</div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium text-gray-900 line-clamp-2">无线降噪蓝牙耳机 Pro版</p>
+          <p class="text-xs text-gray-400 mt-1">颜色: 星空黑</p>
+          <div class="flex items-center justify-between mt-2">
+            <span class="text-red-500 font-bold">¥599</span>
+            <span class="text-sm text-gray-400">x1</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-end gap-2 pt-3 border-t border-gray-50">
+        <button class="px-3 py-1.5 text-sm text-gray-500 bg-gray-100 rounded-lg">查看物流</button>
+        <button class="px-4 py-1.5 text-sm font-semibold text-white bg-blue-500 rounded-lg">提醒发货</button>
+      </div>
+    </div>
+
+    <!-- Order 3 -->
+    <div class="bg-white mx-4 rounded-xl p-4 shadow-sm">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-50">
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-500">订单号: 20260727003</span>
+          <span class="px-1.5 py-0.5 text-xs font-semibold bg-purple-50 text-purple-500 rounded">配送中</span>
+          <span class="px-1.5 py-0.5 text-xs font-semibold bg-red-50 text-red-500 rounded">NEW</span>
+        </div>
+        <span class="text-xs text-gray-400">2天前</span>
+      </div>
+      <div class="flex items-center gap-3 py-3">
+        <div class="w-16 h-16 rounded-lg bg-gradient-to-br from-purple-300 to-pink-400 flex items-center justify-center text-2xl flex-shrink-0">⌚</div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium text-gray-900 line-clamp-2">智能手表运动版 GPS心率</p>
+          <p class="text-xs text-gray-400 mt-1">颜色: 银色 / 42mm</p>
+          <div class="flex items-center justify-between mt-2">
+            <span class="text-red-500 font-bold">¥1299</span>
+            <span class="text-sm text-gray-400">x2</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-end gap-2 pt-3 border-t border-gray-50">
+        <button class="px-3 py-1.5 text-sm text-gray-500 bg-gray-100 rounded-lg">查看物流</button>
+        <button class="px-4 py-1.5 text-sm font-semibold text-white bg-green-500 rounded-lg">确认收货</button>
+      </div>
+    </div>
+
+    <!-- Order 4 -->
+    <div class="bg-white mx-4 rounded-xl p-4 shadow-sm">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-50">
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-500">订单号: 20260726004</span>
+          <span class="px-1.5 py-0.5 text-xs font-semibold bg-green-50 text-green-600 rounded">已完成</span>
+          <span class="px-1.5 py-0.5 text-xs font-semibold bg-yellow-50 text-yellow-600 rounded">热卖</span>
+        </div>
+        <span class="text-xs text-gray-400">3天前</span>
+      </div>
+      <div class="flex items-center gap-3 py-3">
+        <div class="w-16 h-16 rounded-lg bg-gradient-to-br from-green-300 to-teal-400 flex items-center justify-center text-2xl flex-shrink-0">📱</div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium text-gray-900 line-clamp-2">手机壳透明防摔全包</p>
+          <p class="text-xs text-gray-400 mt-1">型号: iPhone 15 Pro</p>
+          <div class="flex items-center justify-between mt-2">
+            <span class="text-red-500 font-bold">¥39</span>
+            <span class="text-sm text-gray-400">x1</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-end gap-2 pt-3 border-t border-gray-50">
+        <button class="px-3 py-1.5 text-sm text-gray-500 bg-gray-100 rounded-lg">再次购买</button>
+        <button class="px-4 py-1.5 text-sm font-semibold text-white bg-orange-500 rounded-lg">评价晒单</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom space -->
+  <div class="h-8"></div>
+</body>
+</html>

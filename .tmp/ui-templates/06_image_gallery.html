@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=375, initial-scale=1.0">
+<title>Image Gallery</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { width: 375px; margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .status-bar { height: 44px; }
+</style>
+</head>
+<body class="bg-black text-white">
+  <!-- Status bar -->
+  <div class="status-bar flex items-center justify-between px-6 text-sm font-semibold">
+    <span>9:41</span>
+    <span>100%</span>
+  </div>
+
+  <!-- Header -->
+  <div class="px-5 py-4 flex items-center justify-between">
+    <h1 class="text-xl font-bold">探索</h1>
+    <div class="flex items-center gap-4">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <div class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-orange-400"></div>
+    </div>
+  </div>
+
+  <!-- Category chips -->
+  <div class="px-5 pb-3 flex gap-2 overflow-x-auto">
+    <span class="flex-shrink-0 px-4 py-1.5 text-sm font-semibold bg-white text-black rounded-full">推荐</span>
+    <span class="flex-shrink-0 px-4 py-1.5 text-sm font-medium bg-gray-800 text-gray-300 rounded-full">风景</span>
+    <span class="flex-shrink-0 px-4 py-1.5 text-sm font-medium bg-gray-800 text-gray-300 rounded-full">美食</span>
+    <span class="flex-shrink-0 px-4 py-1.5 text-sm font-medium bg-gray-800 text-gray-300 rounded-full">人像</span>
+    <span class="flex-shrink-0 px-4 py-1.5 text-sm font-medium bg-gray-800 text-gray-300 rounded-full">建筑</span>
+  </div>
+
+  <!-- Masonry image grid -->
+  <div class="px-4 pb-24">
+    <div class="grid grid-cols-2 gap-2">
+      <!-- Column 1 -->
+      <div class="space-y-2">
+        <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-orange-400 to-red-500" style="height: 180px;">
+          <div class="absolute inset-0 flex items-center justify-center text-5xl">🌅</div>
+          <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent">
+            <div class="flex items-center gap-1 text-xs">
+              <div class="w-4 h-4 rounded-full bg-white/30"></div>
+              <span class="font-medium">小明</span>
+              <span class="ml-auto">❤️ 2.3k</span>
+            </div>
+          </div>
+        </div>
+        <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-green-400 to-emerald-600" style="height: 140px;">
+          <div class="absolute inset-0 flex items-center justify-center text-5xl">🍃</div>
+          <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent">
+            <div class="flex items-center gap-1 text-xs">
+              <div class="w-4 h-4 rounded-full bg-white/30"></div>
+              <span class="font-medium">自然</span>
+              <span class="ml-auto">❤️ 892</span>
+            </div>
+          </div>
+        </div>
+        <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-purple-500 to-pink-500" style="height: 200px;">
+          <div class="absolute inset-0 flex items-center justify-center text-5xl">🌸</div>
+          <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent">
+            <div class="flex items-center gap-1 text-xs">
+              <div class="w-4 h-4 rounded-full bg-white/30"></div>
+              <span class="font-medium">花の季</span>
+              <span class="ml-auto">❤️ 5.1k</span>
+            </div>
+          </div>
+        </div>
+        <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-cyan-400 to-blue-600" style="height: 120px;">
+          <div class="absolute inset-0 flex items-center justify-center text-5xl">🌊</div>
+          <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent">
+            <div class="flex items-center gap-1 text-xs">
+              <div class="w-4 h-4 rounded-full bg-white/30"></div>
+              <span class="font-medium">海边</span>
+              <span class="ml-auto">❤️ 1.2k</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Column 2 -->
+      <div class="space-y-2">
+        <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-yellow-400 to-orange-500" style="height: 140px;">
+          <div class="absolute inset-0 flex items-center justify-center text-5xl">🍜</div>
+          <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent">
+            <div class="flex items-center gap-1 text-xs">
+              <div class="w-4 h-4 rounded-full bg-white/30"></div>
+              <span class="font-medium">美食家</span>
+              <span class="ml-auto">❤️ 3.7k</span>
+            </div>
+          </div>
+        </div>
+        <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-slate-600 to-slate-900" style="height: 200px;">
+          <div class="absolute inset-0 flex items-center justify-center text-5xl">🏙️</div>
+          <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent">
+            <div class="flex items-center gap-1 text-xs">
+              <div class="w-4 h-4 rounded-full bg-white/30"></div>
+              <span class="font-medium">城市</span>
+              <span class="ml-auto">❤️ 4.2k</span>
+            </div>
+          </div>
+        </div>
+        <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-rose-400 to-red-600" style="height: 150px;">
+          <div class="absolute inset-0 flex items-center justify-center text-5xl">☕</div>
+          <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent">
+            <div class="flex items-center gap-1 text-xs">
+              <div class="w-4 h-4 rounded-full bg-white/30"></div>
+              <span class="font-medium">咖啡</span>
+              <span class="ml-auto">❤️ 956</span>
+            </div>
+          </div>
+        </div>
+        <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-indigo-500 to-purple-700" style="height: 170px;">
+          <div class="absolute inset-0 flex items-center justify-center text-5xl">🌌</div>
+          <div class="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent">
+            <div class="flex items-center gap-1 text-xs">
+              <div class="w-4 h-4 rounded-full bg-white/30"></div>
+              <span class="font-medium">星空</span>
+              <span class="ml-auto">❤️ 6.8k</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom tab bar -->
+  <div class="fixed bottom-0 left-0 w-full bg-black/90 backdrop-blur border-t border-gray-800">
+    <div class="flex items-center py-2">
+      <div class="flex-1 flex flex-col items-center">
+        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span class="text-xs mt-1 text-white font-medium">首页</span>
+      </div>
+      <div class="flex-1 flex flex-col items-center">
+        <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <span class="text-xs mt-1 text-gray-500">发现</span>
+      </div>
+      <div class="flex-1 flex flex-col items-center">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-pink-500 to-orange-400 flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+        </div>
+      </div>
+      <div class="flex-1 flex flex-col items-center">
+        <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        <span class="text-xs mt-1 text-gray-500">喜欢</span>
+      </div>
+      <div class="flex-1 flex flex-col items-center">
+        <div class="relative">
+          <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">3</span>
+        </div>
+        <span class="text-xs mt-1 text-gray-500">消息</span>
+      </div>
+    </div>
+    <div class="h-6"></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,695 @@
+{
+  "image": "synthetic_tabs_select_badge.jpg",
+  "imageSize": {
+    "width": 2400,
+    "height": 1554
+  },
+  "platform": "app",
+  "theme": "light",
+  "language": "zh",
+  "dpi": "standard",
+  "elements": [
+    {
+      "id": "page:0,0,2400,1554",
+      "type": "page",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 2400,
+        "h": 1554
+      },
+      "render": "native",
+      "children": [
+        "container:240,1284,426,96",
+        "container:240,1386,354,42",
+        "container:240,564,432,96",
+        "container:240,924,450,96",
+        "container:36,228,330,84",
+        "container:384,228,330,84",
+        "container:60,1278,168,168",
+        "container:60,558,168,168",
+        "container:60,918,168,168",
+        "text:210,349,143,49",
+        "text:229,1328,97,52",
+        "text:233,968,93,48",
+        "text:236,1020,177,49",
+        "text:236,1080,109,49",
+        "text:236,1286,432,38",
+        "text:236,1440,124,49",
+        "text:236,566,435,38",
+        "text:236,608,150,48",
+        "text:236,664,278,37",
+        "text:236,720,109,49",
+        "text:236,926,454,38",
+        "text:26,124,184,52",
+        "text:34,19,90,49",
+        "text:394,349,146,49",
+        "text:53,356,82,49",
+        "text:56,1219,297,34",
+        "text:56,499,297,34",
+        "text:56,859,300,34",
+        "text:589,1211,112,53",
+        "text:593,491,105,49",
+        "text:593,851,105,49",
+        "text:600,356,113,49",
+        "text:611,19,105,49"
+      ]
+    },
+    {
+      "id": "container:240,924,450,96",
+      "type": "grid",
+      "bbox": {
+        "x": 240,
+        "y": 924,
+        "w": 450,
+        "h": 96
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:236,926,454,38",
+      "type": "text",
+      "bbox": {
+        "x": 236,
+        "y": 926,
+        "w": 454,
+        "h": 38
+      },
+      "render": "native",
+      "text": "无线降噪蓝牙耳机超长续航入"
+    },
+    {
+      "id": "text:233,968,93,48",
+      "type": "text",
+      "bbox": {
+        "x": 233,
+        "y": 968,
+        "w": 93,
+        "h": 48
+      },
+      "render": "native",
+      "text": "耳式"
+    },
+    {
+      "id": "container:240,564,432,96",
+      "type": "column",
+      "bbox": {
+        "x": 240,
+        "y": 564,
+        "w": 432,
+        "h": 96
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:236,566,435,38",
+      "type": "text",
+      "bbox": {
+        "x": 236,
+        "y": 566,
+        "w": 435,
+        "h": 38
+      },
+      "render": "native",
+      "text": "Air Max 运动跑步鞋 透气缓震"
+    },
+    {
+      "id": "text:236,608,150,48",
+      "type": "text",
+      "bbox": {
+        "x": 236,
+        "y": 608,
+        "w": 150,
+        "h": 48
+      },
+      "render": "native",
+      "text": "男女同款"
+    },
+    {
+      "id": "container:240,1284,426,96",
+      "type": "grid",
+      "bbox": {
+        "x": 240,
+        "y": 1284,
+        "w": 426,
+        "h": 96
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:236,1286,432,38",
+      "type": "text",
+      "bbox": {
+        "x": 236,
+        "y": 1286,
+        "w": 432,
+        "h": 38
+      },
+      "render": "native",
+      "text": "智能手机 Pro Max 256GB 钛"
+    },
+    {
+      "id": "text:229,1328,97,52",
+      "type": "text",
+      "bbox": {
+        "x": 229,
+        "y": 1328,
+        "w": 97,
+        "h": 52
+      },
+      "render": "native",
+      "text": "金属"
+    },
+    {
+      "id": "container:60,558,168,168",
+      "type": "container",
+      "bbox": {
+        "x": 60,
+        "y": 558,
+        "w": 168,
+        "h": 168
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:60,918,168,168",
+      "type": "container",
+      "bbox": {
+        "x": 60,
+        "y": 918,
+        "w": 168,
+        "h": 168
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:60,1278,168,168",
+      "type": "container",
+      "bbox": {
+        "x": 60,
+        "y": 1278,
+        "w": 168,
+        "h": 168
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:36,228,330,84",
+      "type": "container",
+      "bbox": {
+        "x": 36,
+        "y": 228,
+        "w": 330,
+        "h": 84
+      },
+      "render": "native",
+      "children": [
+        "text:53,244,135,49"
+      ]
+    },
+    {
+      "id": "text:53,244,135,49",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 244,
+        "w": 135,
+        "h": 49
+      },
+      "render": "native",
+      "text": "全部时间"
+    },
+    {
+      "id": "container:384,228,330,84",
+      "type": "container",
+      "bbox": {
+        "x": 384,
+        "y": 228,
+        "w": 330,
+        "h": 84
+      },
+      "render": "native",
+      "children": [
+        "text:398,244,138,49"
+      ]
+    },
+    {
+      "id": "text:398,244,138,49",
+      "type": "text",
+      "bbox": {
+        "x": 398,
+        "y": 244,
+        "w": 138,
+        "h": 49
+      },
+      "render": "native",
+      "text": "全部状态"
+    },
+    {
+      "id": "container:240,1386,354,42",
+      "type": "text",
+      "bbox": {
+        "x": 240,
+        "y": 1386,
+        "w": 354,
+        "h": 42
+      },
+      "render": "native",
+      "text": "颜色: 钛金色/容量:256GB"
+    },
+    {
+      "id": "text:34,19,90,49",
+      "type": "text",
+      "bbox": {
+        "x": 34,
+        "y": 19,
+        "w": 90,
+        "h": 49
+      },
+      "render": "native",
+      "text": "9:41"
+    },
+    {
+      "id": "text:611,19,105,49",
+      "type": "text",
+      "bbox": {
+        "x": 611,
+        "y": 19,
+        "w": 105,
+        "h": 49
+      },
+      "render": "native",
+      "text": "100%"
+    },
+    {
+      "id": "text:26,124,184,52",
+      "type": "text",
+      "bbox": {
+        "x": 26,
+        "y": 124,
+        "w": 184,
+        "h": 52
+      },
+      "render": "native",
+      "text": "订单中心"
+    },
+    {
+      "id": "text:53,356,82,49",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 356,
+        "w": 82,
+        "h": 49
+      },
+      "render": "native",
+      "text": "全部",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:210,349,143,49",
+      "type": "text",
+      "bbox": {
+        "x": 210,
+        "y": 349,
+        "w": 143,
+        "h": 49
+      },
+      "render": "native",
+      "text": "待付款②",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:394,349,146,49",
+      "type": "text",
+      "bbox": {
+        "x": 394,
+        "y": 349,
+        "w": 146,
+        "h": 49
+      },
+      "render": "native",
+      "text": "待收货③",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:600,356,113,49",
+      "type": "text",
+      "bbox": {
+        "x": 600,
+        "y": 356,
+        "w": 113,
+        "h": 49
+      },
+      "render": "native",
+      "text": "已完成"
+    },
+    {
+      "id": "text:56,499,297,34",
+      "type": "text",
+      "bbox": {
+        "x": 56,
+        "y": 499,
+        "w": 297,
+        "h": 34
+      },
+      "render": "native",
+      "text": "订单号: 20260729001"
+    },
+    {
+      "id": "text:593,491,105,49",
+      "type": "text",
+      "bbox": {
+        "x": 593,
+        "y": 491,
+        "w": 105,
+        "h": 49
+      },
+      "render": "native",
+      "text": "待付款"
+    },
+    {
+      "id": "text:236,664,278,37",
+      "type": "text",
+      "bbox": {
+        "x": 236,
+        "y": 664,
+        "w": 278,
+        "h": 37
+      },
+      "render": "native",
+      "text": "颜色: 黑白 / 尺码: 42"
+    },
+    {
+      "id": "text:236,720,109,49",
+      "type": "text",
+      "bbox": {
+        "x": 236,
+        "y": 720,
+        "w": 109,
+        "h": 49
+      },
+      "render": "native",
+      "text": "¥299"
+    },
+    {
+      "id": "text:56,859,300,34",
+      "type": "text",
+      "bbox": {
+        "x": 56,
+        "y": 859,
+        "w": 300,
+        "h": 34
+      },
+      "render": "native",
+      "text": "订单号: 20260728002"
+    },
+    {
+      "id": "text:593,851,105,49",
+      "type": "text",
+      "bbox": {
+        "x": 593,
+        "y": 851,
+        "w": 105,
+        "h": 49
+      },
+      "render": "native",
+      "text": "待发货"
+    },
+    {
+      "id": "text:236,1020,177,49",
+      "type": "text",
+      "bbox": {
+        "x": 236,
+        "y": 1020,
+        "w": 177,
+        "h": 49
+      },
+      "render": "native",
+      "text": "颜色: 星空黑"
+    },
+    {
+      "id": "text:236,1080,109,49",
+      "type": "text",
+      "bbox": {
+        "x": 236,
+        "y": 1080,
+        "w": 109,
+        "h": 49
+      },
+      "render": "native",
+      "text": "¥599"
+    },
+    {
+      "id": "text:56,1219,297,34",
+      "type": "text",
+      "bbox": {
+        "x": 56,
+        "y": 1219,
+        "w": 297,
+        "h": 34
+      },
+      "render": "native",
+      "text": "订单号: 20260727003"
+    },
+    {
+      "id": "text:589,1211,112,53",
+      "type": "text",
+      "bbox": {
+        "x": 589,
+        "y": 1211,
+        "w": 112,
+        "h": 53
+      },
+      "render": "native",
+      "text": "已完成"
+    },
+    {
+      "id": "text:236,1440,124,49",
+      "type": "text",
+      "bbox": {
+        "x": 236,
+        "y": 1440,
+        "w": 124,
+        "h": 49
+      },
+      "render": "native",
+      "text": "¥7999"
+    }
+  ],
+  "relations": [
+    {
+      "from": "container:36,228,330,84",
+      "to": "text:53,244,135,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:384,228,330,84",
+      "to": "text:398,244,138,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "container:240,1284,426,96",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "container:240,1386,354,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "container:240,564,432,96",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "container:240,924,450,96",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "container:36,228,330,84",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "container:384,228,330,84",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "container:60,1278,168,168",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "container:60,558,168,168",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "container:60,918,168,168",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:210,349,143,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:229,1328,97,52",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:233,968,93,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:236,1020,177,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:236,1080,109,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:236,1286,432,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:236,1440,124,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:236,566,435,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:236,608,150,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:236,664,278,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:236,720,109,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:236,926,454,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:26,124,184,52",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:34,19,90,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:394,349,146,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:53,356,82,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:56,1219,297,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:56,499,297,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:56,859,300,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:589,1211,112,53",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:593,491,105,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:593,851,105,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:600,356,113,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1554",
+      "to": "text:611,19,105,49",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
+  "zOrder": [],
+  "warnings": [],
+  "source": "synthetic-html"
+}

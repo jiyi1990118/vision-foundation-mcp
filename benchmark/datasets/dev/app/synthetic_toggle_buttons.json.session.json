@@ -1,0 +1,60 @@
+{
+  "actions": [
+    {
+      "id": "auto-50b4b834-8d15-424b-b891-37a511fc7ee9",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:54,629,186,78",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:container:54,629,186,78:54,629,186,78:column",
+      "createdAt": "2026-07-29T06:17:27.796Z"
+    },
+    {
+      "id": "auto-d0a1f53f-2beb-45cf-bc63-55ede4ad6071",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:289,120,172,53",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:289,120,172,53:289,120,172,53:subtitle",
+      "createdAt": "2026-07-29T06:17:27.796Z"
+    },
+    {
+      "id": "auto-00af6980-26c4-4c82-afdf-ef20663756b8",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:53,1418,105,37",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:53,1418,105,37:53,1418,105,37:text",
+      "createdAt": "2026-07-29T06:17:27.797Z"
+    },
+    {
+      "id": "auto-049c9a05-77ed-4557-8030-4700423fd39b",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:53,1714,262,37",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:53,1714,262,37:53,1714,262,37:text",
+      "createdAt": "2026-07-29T06:17:27.797Z"
+    },
+    {
+      "id": "auto-aa1ef381-e395-4478-8b06-f6e9c5eca9f6",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:53,1980,262,38",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:53,1980,262,38:53,1980,262,38:text",
+      "createdAt": "2026-07-29T06:17:27.798Z"
+    },
+    {
+      "id": "auto-69fa9a40-eef3-45ba-b83c-cfa0d227e0b5",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:53,938,213,37",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:53,938,213,37:53,938,213,37:text",
+      "createdAt": "2026-07-29T06:17:27.798Z"
+    },
+    {
+      "id": "auto-340b0f4b-4725-40e9-a372-abc3d5ff3a4b",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:611,26,105,38",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:611,26,105,38:611,26,105,38:text",
+      "createdAt": "2026-07-29T06:17:27.799Z"
+    }
+  ]
+}

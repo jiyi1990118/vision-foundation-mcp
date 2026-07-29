@@ -1,0 +1,801 @@
+{
+  "image": "synthetic_tabbar_nav.jpg",
+  "imageSize": {
+    "width": 2400,
+    "height": 1656
+  },
+  "platform": "app",
+  "theme": "light",
+  "language": "zh",
+  "dpi": "standard",
+  "elements": [
+    {
+      "id": "page:0,0,2400,1656",
+      "type": "page",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 2400,
+        "h": 1656
+      },
+      "render": "native",
+      "children": [
+        "card:24,516,702,336",
+        "container:30,120,240,102",
+        "container:564,300,120,120",
+        "icon:1140,1320,120,120",
+        "icon:240,840,360,120",
+        "icon:540,120,180,120",
+        "icon:60,1260,240,180",
+        "icon:600,300,120,240",
+        "image:0,600,420,300",
+        "text:154,1118,139,37",
+        "text:154,1155,142,38",
+        "text:154,1256,139,38",
+        "text:158,979,135,37",
+        "text:1639,1339,94,71",
+        "text:1643,1406,75,49",
+        "text:165,1020,131,34",
+        "text:203,1414,75,37",
+        "text:2119,1350,82,71",
+        "text:2123,1403,75,48",
+        "text:23,881,146,38",
+        "text:255,428,79,37",
+        "text:30,120,244,38",
+        "text:34,19,86,49",
+        "text:416,428,79,37",
+        "text:495,998,199,37",
+        "text:533,1136,161,38",
+        "text:555,1268,143,48",
+        "text:563,881,161,34",
+        "text:581,428,75,37",
+        "text:615,26,98,34",
+        "text:686,1410,68,38",
+        "text:94,428,79,37"
+      ]
+    },
+    {
+      "id": "card:24,516,702,336",
+      "type": "card",
+      "bbox": {
+        "x": 24,
+        "y": 516,
+        "w": 702,
+        "h": 336
+      },
+      "render": "native",
+      "children": [
+        "text:506,765,184,38",
+        "text:574,724,116,37",
+        "text:60,563,135,48"
+      ]
+    },
+    {
+      "id": "text:60,563,135,48",
+      "type": "subtitle",
+      "bbox": {
+        "x": 60,
+        "y": 563,
+        "w": 135,
+        "h": 48
+      },
+      "render": "native",
+      "text": "账户余额"
+    },
+    {
+      "id": "text:60,724,120,37",
+      "type": "text",
+      "bbox": {
+        "x": 60,
+        "y": 724,
+        "w": 120,
+        "h": 37
+      },
+      "render": "native",
+      "text": "今日收益",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:574,724,116,37",
+      "type": "text",
+      "bbox": {
+        "x": 574,
+        "y": 724,
+        "w": 116,
+        "h": 37
+      },
+      "render": "native",
+      "text": "累计收益"
+    },
+    {
+      "id": "text:60,765,146,38",
+      "type": "text",
+      "bbox": {
+        "x": 60,
+        "y": 765,
+        "w": 146,
+        "h": 38
+      },
+      "render": "native",
+      "text": "+￥ 28.50",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:506,765,184,38",
+      "type": "text",
+      "bbox": {
+        "x": 506,
+        "y": 765,
+        "w": 184,
+        "h": 38
+      },
+      "render": "native",
+      "text": "+¥ 1,234.00"
+    },
+    {
+      "id": "container:30,120,240,102",
+      "type": "column",
+      "bbox": {
+        "x": 30,
+        "y": 120,
+        "w": 240,
+        "h": 102
+      },
+      "render": "native",
+      "children": [
+        "text:30,165,176,49"
+      ]
+    },
+    {
+      "id": "text:30,120,244,38",
+      "type": "text",
+      "bbox": {
+        "x": 30,
+        "y": 120,
+        "w": 244,
+        "h": 38
+      },
+      "render": "native",
+      "text": "早上好，欢迎回来"
+    },
+    {
+      "id": "text:30,165,176,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 30,
+        "y": 165,
+        "w": 176,
+        "h": 49
+      },
+      "render": "native",
+      "text": "我的主页"
+    },
+    {
+      "id": "container:564,300,120,120",
+      "type": "container",
+      "bbox": {
+        "x": 564,
+        "y": 300,
+        "w": 120,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:540,120,180,120",
+      "type": "icon",
+      "bbox": {
+        "x": 540,
+        "y": 120,
+        "w": 180,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:600,300,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 600,
+        "y": 300,
+        "w": 120,
+        "h": 240
+      },
+      "render": "native"
+    },
+    {
+      "id": "image:0,600,420,300",
+      "type": "image",
+      "bbox": {
+        "x": 0,
+        "y": 600,
+        "w": 420,
+        "h": 300
+      },
+      "render": "native",
+      "children": [
+        "container:66,630,354,66",
+        "text:60,724,120,37",
+        "text:60,765,146,38"
+      ]
+    },
+    {
+      "id": "container:66,630,354,66",
+      "type": "title",
+      "bbox": {
+        "x": 66,
+        "y": 630,
+        "w": 354,
+        "h": 66
+      },
+      "render": "native",
+      "text": "¥12,856.32"
+    },
+    {
+      "id": "icon:240,840,360,120",
+      "type": "icon",
+      "bbox": {
+        "x": 240,
+        "y": 840,
+        "w": 360,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:60,1260,240,180",
+      "type": "icon",
+      "bbox": {
+        "x": 60,
+        "y": 1260,
+        "w": 240,
+        "h": 180
+      },
+      "render": "native",
+      "children": [
+        "text:158,1298,131,33"
+      ]
+    },
+    {
+      "id": "icon:1140,1320,120,120",
+      "type": "icon",
+      "bbox": {
+        "x": 1140,
+        "y": 1320,
+        "w": 120,
+        "h": 120
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:34,19,86,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 34,
+        "y": 19,
+        "w": 86,
+        "h": 49
+      },
+      "render": "native",
+      "text": "9:41"
+    },
+    {
+      "id": "text:615,26,98,34",
+      "type": "text",
+      "bbox": {
+        "x": 615,
+        "y": 26,
+        "w": 98,
+        "h": 34
+      },
+      "render": "native",
+      "text": "100%"
+    },
+    {
+      "id": "text:94,428,79,37",
+      "type": "text",
+      "bbox": {
+        "x": 94,
+        "y": 428,
+        "w": 79,
+        "h": 37
+      },
+      "render": "native",
+      "text": "充值",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:255,428,79,37",
+      "type": "text",
+      "bbox": {
+        "x": 255,
+        "y": 428,
+        "w": 79,
+        "h": 37
+      },
+      "render": "native",
+      "text": "提现",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:416,428,79,37",
+      "type": "text",
+      "bbox": {
+        "x": 416,
+        "y": 428,
+        "w": 79,
+        "h": 37
+      },
+      "render": "native",
+      "text": "账单",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:581,428,75,37",
+      "type": "text",
+      "bbox": {
+        "x": 581,
+        "y": 428,
+        "w": 75,
+        "h": 37
+      },
+      "render": "native",
+      "text": "活动"
+    },
+    {
+      "id": "text:23,881,146,38",
+      "type": "text",
+      "bbox": {
+        "x": 23,
+        "y": 881,
+        "w": 146,
+        "h": 38
+      },
+      "render": "native",
+      "text": "最近交易",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:563,881,161,34",
+      "type": "text",
+      "bbox": {
+        "x": 563,
+        "y": 881,
+        "w": 161,
+        "h": 34
+      },
+      "render": "native",
+      "text": "查看全部→"
+    },
+    {
+      "id": "text:158,979,135,37",
+      "type": "text",
+      "bbox": {
+        "x": 158,
+        "y": 979,
+        "w": 135,
+        "h": 37
+      },
+      "render": "native",
+      "text": "工资到账"
+    },
+    {
+      "id": "text:495,998,199,37",
+      "type": "text",
+      "bbox": {
+        "x": 495,
+        "y": 998,
+        "w": 199,
+        "h": 37
+      },
+      "render": "native",
+      "text": "+¥8,500.00"
+    },
+    {
+      "id": "text:165,1020,131,34",
+      "type": "text",
+      "bbox": {
+        "x": 165,
+        "y": 1020,
+        "w": 131,
+        "h": 34
+      },
+      "render": "native",
+      "text": "今天 09:30"
+    },
+    {
+      "id": "text:154,1118,139,37",
+      "type": "text",
+      "bbox": {
+        "x": 154,
+        "y": 1118,
+        "w": 139,
+        "h": 37
+      },
+      "render": "native",
+      "text": "购物消费",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:533,1136,161,38",
+      "type": "text",
+      "bbox": {
+        "x": 533,
+        "y": 1136,
+        "w": 161,
+        "h": 38
+      },
+      "render": "native",
+      "text": "-¥299.00"
+    },
+    {
+      "id": "text:154,1155,142,38",
+      "type": "text",
+      "bbox": {
+        "x": 154,
+        "y": 1155,
+        "w": 142,
+        "h": 38
+      },
+      "render": "native",
+      "text": "昨天 18:42",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:154,1256,139,38",
+      "type": "text",
+      "bbox": {
+        "x": 154,
+        "y": 1256,
+        "w": 139,
+        "h": 38
+      },
+      "render": "native",
+      "text": "游戏充值",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:555,1268,143,48",
+      "type": "subtitle",
+      "bbox": {
+        "x": 555,
+        "y": 1268,
+        "w": 143,
+        "h": 48
+      },
+      "render": "native",
+      "text": "-¥68.00"
+    },
+    {
+      "id": "text:158,1298,131,33",
+      "type": "text",
+      "bbox": {
+        "x": 158,
+        "y": 1298,
+        "w": 131,
+        "h": 33
+      },
+      "render": "native",
+      "text": "昨天 14:15",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:1639,1339,94,71",
+      "type": "title",
+      "bbox": {
+        "x": 1639,
+        "y": 1339,
+        "w": 94,
+        "h": 71
+      },
+      "render": "native",
+      "text": "F"
+    },
+    {
+      "id": "text:2119,1350,82,71",
+      "type": "title",
+      "bbox": {
+        "x": 2119,
+        "y": 1350,
+        "w": 82,
+        "h": 71
+      },
+      "render": "native",
+      "text": "吕"
+    },
+    {
+      "id": "text:203,1414,75,37",
+      "type": "text",
+      "bbox": {
+        "x": 203,
+        "y": 1414,
+        "w": 75,
+        "h": 37
+      },
+      "render": "native",
+      "text": "首页",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:686,1410,68,38",
+      "type": "text",
+      "bbox": {
+        "x": 686,
+        "y": 1410,
+        "w": 68,
+        "h": 38
+      },
+      "render": "native",
+      "text": "理财"
+    },
+    {
+      "id": "text:1643,1406,75,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 1643,
+        "y": 1406,
+        "w": 75,
+        "h": 49
+      },
+      "render": "native",
+      "text": "消息"
+    },
+    {
+      "id": "text:2123,1403,75,48",
+      "type": "subtitle",
+      "bbox": {
+        "x": 2123,
+        "y": 1403,
+        "w": 75,
+        "h": 48
+      },
+      "render": "native",
+      "text": "我的"
+    }
+  ],
+  "relations": [
+    {
+      "from": "card:24,516,702,336",
+      "to": "text:506,765,184,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:24,516,702,336",
+      "to": "text:574,724,116,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:24,516,702,336",
+      "to": "text:60,563,135,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:30,120,240,102",
+      "to": "text:30,165,176,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "icon:60,1260,240,180",
+      "to": "text:158,1298,131,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "image:0,600,420,300",
+      "to": "container:66,630,354,66",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "image:0,600,420,300",
+      "to": "text:60,724,120,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "image:0,600,420,300",
+      "to": "text:60,765,146,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "card:24,516,702,336",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "container:30,120,240,102",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "container:564,300,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "icon:1140,1320,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "icon:240,840,360,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "icon:540,120,180,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "icon:60,1260,240,180",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "icon:600,300,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "image:0,600,420,300",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:154,1118,139,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:154,1155,142,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:154,1256,139,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:158,979,135,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:1639,1339,94,71",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:1643,1406,75,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:165,1020,131,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:203,1414,75,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:2119,1350,82,71",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:2123,1403,75,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:23,881,146,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:255,428,79,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:30,120,244,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:34,19,86,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:416,428,79,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:495,998,199,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:533,1136,161,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:555,1268,143,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:563,881,161,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:581,428,75,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:615,26,98,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:686,1410,68,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1656",
+      "to": "text:94,428,79,37",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
+  "zOrder": [],
+  "warnings": [],
+  "source": "synthetic-html"
+}

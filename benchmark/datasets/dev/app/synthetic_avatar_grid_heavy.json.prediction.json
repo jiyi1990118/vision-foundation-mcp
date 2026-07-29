@@ -1,0 +1,1047 @@
+{
+  "image": "synthetic_avatar_grid_heavy.jpg",
+  "imageSize": {
+    "width": 2400,
+    "height": 2102
+  },
+  "platform": "app",
+  "theme": "light",
+  "language": "zh",
+  "dpi": "standard",
+  "elements": [
+    {
+      "id": "page:0,0,2400,2102",
+      "type": "page",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 2400,
+        "h": 2102
+      },
+      "render": "native",
+      "children": [
+        "container:144,474,228,84",
+        "icon:0,1081,120,120",
+        "icon:0,1201,120,240",
+        "icon:0,1321,120,240",
+        "icon:0,1441,120,240",
+        "icon:0,1561,120,240",
+        "icon:0,1682,120,240",
+        "icon:0,1922,120,120",
+        "icon:0,300,240,120",
+        "icon:0,360,120,120",
+        "icon:0,480,300,120",
+        "icon:240,841,240,120",
+        "icon:600,120,120,240",
+        "text:135,1376,94,53",
+        "text:135,1523,90,37",
+        "text:139,1106,90,38",
+        "text:139,1841,139,38",
+        "text:139,1935,86,38",
+        "text:139,1980,142,38",
+        "text:139,334,116,49",
+        "text:143,1151,161,38",
+        "text:143,1245,86,38",
+        "text:143,1290,161,38",
+        "text:143,1568,131,33",
+        "text:143,1658,86,37",
+        "text:143,1793,86,48",
+        "text:143,386,165,34",
+        "text:143,473,120,48",
+        "text:146,1429,68,34",
+        "text:146,1706,154,34",
+        "text:169,784,64,34",
+        "text:169,930,67,34",
+        "text:203,1429,71,34",
+        "text:23,128,108,52",
+        "text:259,521,116,34",
+        "text:26,251,102,38",
+        "text:285,784,68,34",
+        "text:34,1020,195,34",
+        "text:34,26,86,38",
+        "text:34,619,187,34",
+        "text:398,784,67,34",
+        "text:45,926,75,38",
+        "text:514,784,67,34",
+        "text:518,926,63,34",
+        "text:53,784,67,34",
+        "text:555,124,71,52",
+        "text:604,488,86,48",
+        "text:608,356,82,38",
+        "text:615,26,98,34",
+        "text:615,926,94,38",
+        "text:626,780,75,38",
+        "text:649,615,71,38"
+      ]
+    },
+    {
+      "id": "container:144,474,228,84",
+      "type": "grid",
+      "bbox": {
+        "x": 144,
+        "y": 474.45142857142855,
+        "w": 228,
+        "h": 84.08000000000004
+      },
+      "render": "native",
+      "children": [
+        "text:150,525,124,30"
+      ]
+    },
+    {
+      "id": "text:143,473,120,48",
+      "type": "subtitle",
+      "bbox": {
+        "x": 143,
+        "y": 473,
+        "w": 120,
+        "h": 48
+      },
+      "render": "native",
+      "text": "何大海"
+    },
+    {
+      "id": "text:150,525,124,30",
+      "type": "text",
+      "bbox": {
+        "x": 150,
+        "y": 525,
+        "w": 124,
+        "h": 30
+      },
+      "render": "native",
+      "text": "来自群聊："
+    },
+    {
+      "id": "text:259,521,116,34",
+      "type": "text",
+      "bbox": {
+        "x": 259,
+        "y": 521,
+        "w": 116,
+        "h": 34
+      },
+      "render": "native",
+      "text": "技术分享"
+    },
+    {
+      "id": "icon:600,120,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 600,
+        "y": 120.1142857142857,
+        "w": 120,
+        "h": 240.2285714285714
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:0,300,240,120",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 300.2857142857143,
+        "w": 240,
+        "h": 120.1142857142857
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:0,360,120,120",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 360.3428571428571,
+        "w": 120,
+        "h": 120.1142857142857
+      },
+      "render": "native",
+      "text": "林小雨"
+    },
+    {
+      "id": "icon:0,480,300,120",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 480.4571428571428,
+        "w": 300,
+        "h": 120.11428571428564
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:240,841,240,120",
+      "type": "icon",
+      "bbox": {
+        "x": 240,
+        "y": 840.8,
+        "w": 240,
+        "h": 120.11428571428564
+      },
+      "render": "native",
+      "text": "周杰"
+    },
+    {
+      "id": "icon:0,1081,120,120",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 1081.0285714285715,
+        "w": 120,
+        "h": 120.11428571428564
+      },
+      "render": "native",
+      "text": "安娜"
+    },
+    {
+      "id": "icon:0,1201,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 1201.142857142857,
+        "w": 120,
+        "h": 240.2285714285715
+      },
+      "render": "native",
+      "text": "白宇"
+    },
+    {
+      "id": "icon:0,1321,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 1321.2571428571428,
+        "w": 120,
+        "h": 240.22857142857129
+      },
+      "render": "native",
+      "text": "蔡徐"
+    },
+    {
+      "id": "icon:0,1441,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 1441.3714285714284,
+        "w": 120,
+        "h": 240.2285714285715
+      },
+      "render": "native",
+      "text": "邓超"
+    },
+    {
+      "id": "icon:0,1561,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 1561.4857142857143,
+        "w": 120,
+        "h": 240.2285714285715
+      },
+      "render": "native",
+      "text": "董卿"
+    },
+    {
+      "id": "icon:0,1682,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 1681.6,
+        "w": 120,
+        "h": 240.22857142857129
+      },
+      "render": "native",
+      "text": "杜江"
+    },
+    {
+      "id": "icon:0,1922,120,120",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 1921.8285714285712,
+        "w": 120,
+        "h": 120.11428571428564
+      },
+      "render": "native",
+      "text": "武侠·大理"
+    },
+    {
+      "id": "text:34,26,86,38",
+      "type": "text",
+      "bbox": {
+        "x": 34,
+        "y": 26,
+        "w": 86,
+        "h": 38
+      },
+      "render": "native",
+      "text": "9:41"
+    },
+    {
+      "id": "text:615,26,98,34",
+      "type": "text",
+      "bbox": {
+        "x": 615,
+        "y": 26,
+        "w": 98,
+        "h": 34
+      },
+      "render": "native",
+      "text": "100%"
+    },
+    {
+      "id": "text:23,128,108,52",
+      "type": "subtitle",
+      "bbox": {
+        "x": 23,
+        "y": 128,
+        "w": 108,
+        "h": 52
+      },
+      "render": "native",
+      "text": "好友"
+    },
+    {
+      "id": "text:555,124,71,52",
+      "type": "subtitle",
+      "bbox": {
+        "x": 555,
+        "y": 124,
+        "w": 71,
+        "h": 52
+      },
+      "render": "native",
+      "text": "Q"
+    },
+    {
+      "id": "text:26,251,102,38",
+      "type": "text",
+      "bbox": {
+        "x": 26,
+        "y": 251,
+        "w": 102,
+        "h": 38
+      },
+      "render": "native",
+      "text": "新朋友"
+    },
+    {
+      "id": "text:139,334,116,49",
+      "type": "text",
+      "bbox": {
+        "x": 139,
+        "y": 334,
+        "w": 116,
+        "h": 49
+      },
+      "render": "native",
+      "text": "林小雨",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:608,356,82,38",
+      "type": "text",
+      "bbox": {
+        "x": 608,
+        "y": 356,
+        "w": 82,
+        "h": 38
+      },
+      "render": "native",
+      "text": "接受"
+    },
+    {
+      "id": "text:143,386,165,34",
+      "type": "text",
+      "bbox": {
+        "x": 143,
+        "y": 386,
+        "w": 165,
+        "h": 34
+      },
+      "render": "native",
+      "text": "共同好友5 人"
+    },
+    {
+      "id": "text:604,488,86,48",
+      "type": "subtitle",
+      "bbox": {
+        "x": 604,
+        "y": 488,
+        "w": 86,
+        "h": 48
+      },
+      "render": "native",
+      "text": "接受"
+    },
+    {
+      "id": "text:34,619,187,34",
+      "type": "text",
+      "bbox": {
+        "x": 34,
+        "y": 619,
+        "w": 187,
+        "h": 34
+      },
+      "render": "native",
+      "text": "在线好友·24人",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:649,615,71,38",
+      "type": "text",
+      "bbox": {
+        "x": 649,
+        "y": 615,
+        "w": 71,
+        "h": 38
+      },
+      "render": "native",
+      "text": "全部"
+    },
+    {
+      "id": "text:53,784,67,34",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 784,
+        "w": 67,
+        "h": 34
+      },
+      "render": "native",
+      "text": "李明",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:169,784,64,34",
+      "type": "text",
+      "bbox": {
+        "x": 169,
+        "y": 784,
+        "w": 64,
+        "h": 34
+      },
+      "render": "native",
+      "text": "王芳",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:285,784,68,34",
+      "type": "text",
+      "bbox": {
+        "x": 285,
+        "y": 784,
+        "w": 68,
+        "h": 34
+      },
+      "render": "native",
+      "text": "张伟",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:398,784,67,34",
+      "type": "text",
+      "bbox": {
+        "x": 398,
+        "y": 784,
+        "w": 67,
+        "h": 34
+      },
+      "render": "native",
+      "text": "刘洋",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:514,784,67,34",
+      "type": "text",
+      "bbox": {
+        "x": 514,
+        "y": 784,
+        "w": 67,
+        "h": 34
+      },
+      "render": "native",
+      "text": "陈静",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:626,780,75,38",
+      "type": "text",
+      "bbox": {
+        "x": 626,
+        "y": 780,
+        "w": 75,
+        "h": 38
+      },
+      "render": "native",
+      "text": "赵磊"
+    },
+    {
+      "id": "text:45,926,75,38",
+      "type": "text",
+      "bbox": {
+        "x": 45,
+        "y": 926,
+        "w": 75,
+        "h": 38
+      },
+      "render": "native",
+      "text": "孙悦",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:169,930,67,34",
+      "type": "text",
+      "bbox": {
+        "x": 169,
+        "y": 930,
+        "w": 67,
+        "h": 34
+      },
+      "render": "native",
+      "text": "周杰",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:518,926,63,34",
+      "type": "text",
+      "bbox": {
+        "x": 518,
+        "y": 926,
+        "w": 63,
+        "h": 34
+      },
+      "render": "native",
+      "text": "冯巩",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:615,926,94,38",
+      "type": "text",
+      "bbox": {
+        "x": 615,
+        "y": 926,
+        "w": 94,
+        "h": 38
+      },
+      "render": "native",
+      "text": "钱多多"
+    },
+    {
+      "id": "text:34,1020,195,34",
+      "type": "text",
+      "bbox": {
+        "x": 34,
+        "y": 1020,
+        "w": 195,
+        "h": 34
+      },
+      "render": "native",
+      "text": "全部好友·128人"
+    },
+    {
+      "id": "text:139,1106,90,38",
+      "type": "text",
+      "bbox": {
+        "x": 139,
+        "y": 1106,
+        "w": 90,
+        "h": 38
+      },
+      "render": "native",
+      "text": "安娜"
+    },
+    {
+      "id": "text:143,1151,161,38",
+      "type": "text",
+      "bbox": {
+        "x": 143,
+        "y": 1151,
+        "w": 161,
+        "h": 38
+      },
+      "render": "native",
+      "text": "设计师·上海"
+    },
+    {
+      "id": "text:143,1245,86,38",
+      "type": "text",
+      "bbox": {
+        "x": 143,
+        "y": 1245,
+        "w": 86,
+        "h": 38
+      },
+      "render": "native",
+      "text": "白宇"
+    },
+    {
+      "id": "text:143,1290,161,38",
+      "type": "text",
+      "bbox": {
+        "x": 143,
+        "y": 1290,
+        "w": 161,
+        "h": 38
+      },
+      "render": "native",
+      "text": "程序员·北京"
+    },
+    {
+      "id": "text:135,1376,94,53",
+      "type": "subtitle",
+      "bbox": {
+        "x": 135,
+        "y": 1376,
+        "w": 94,
+        "h": 53
+      },
+      "render": "native",
+      "text": "蔡徐"
+    },
+    {
+      "id": "text:146,1429,68,34",
+      "type": "text",
+      "bbox": {
+        "x": 146,
+        "y": 1429,
+        "w": 68,
+        "h": 34
+      },
+      "render": "native",
+      "text": "歌手·"
+    },
+    {
+      "id": "text:203,1429,71,34",
+      "type": "text",
+      "bbox": {
+        "x": 203,
+        "y": 1429,
+        "w": 71,
+        "h": 34
+      },
+      "render": "native",
+      "text": "·深圳"
+    },
+    {
+      "id": "text:135,1523,90,37",
+      "type": "text",
+      "bbox": {
+        "x": 135,
+        "y": 1523,
+        "w": 90,
+        "h": 37
+      },
+      "render": "native",
+      "text": "邓超"
+    },
+    {
+      "id": "text:143,1568,131,33",
+      "type": "text",
+      "bbox": {
+        "x": 143,
+        "y": 1568,
+        "w": 131,
+        "h": 33
+      },
+      "render": "native",
+      "text": "演员·北京"
+    },
+    {
+      "id": "text:143,1658,86,37",
+      "type": "text",
+      "bbox": {
+        "x": 143,
+        "y": 1658,
+        "w": 86,
+        "h": 37
+      },
+      "render": "native",
+      "text": "董卿"
+    },
+    {
+      "id": "text:146,1706,154,34",
+      "type": "text",
+      "bbox": {
+        "x": 146,
+        "y": 1706,
+        "w": 154,
+        "h": 34
+      },
+      "render": "native",
+      "text": "主持人·上海"
+    },
+    {
+      "id": "text:143,1793,86,48",
+      "type": "subtitle",
+      "bbox": {
+        "x": 143,
+        "y": 1793,
+        "w": 86,
+        "h": 48
+      },
+      "render": "native",
+      "text": "杜江"
+    },
+    {
+      "id": "text:139,1841,139,38",
+      "type": "text",
+      "bbox": {
+        "x": 139,
+        "y": 1841,
+        "w": 139,
+        "h": 38
+      },
+      "render": "native",
+      "text": "演员·北京"
+    },
+    {
+      "id": "text:139,1935,86,38",
+      "type": "text",
+      "bbox": {
+        "x": 139,
+        "y": 1935,
+        "w": 86,
+        "h": 38
+      },
+      "render": "native",
+      "text": "段誉"
+    },
+    {
+      "id": "text:139,1980,142,38",
+      "type": "text",
+      "bbox": {
+        "x": 139,
+        "y": 1980,
+        "w": 142,
+        "h": 38
+      },
+      "render": "native",
+      "text": "武侠·大理"
+    }
+  ],
+  "relations": [
+    {
+      "from": "container:144,474,228,84",
+      "to": "text:150,525,124,30",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "container:144,474,228,84",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "icon:0,1081,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "icon:0,1201,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "icon:0,1321,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "icon:0,1441,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "icon:0,1561,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "icon:0,1682,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "icon:0,1922,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "icon:0,300,240,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "icon:0,360,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "icon:0,480,300,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "icon:240,841,240,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "icon:600,120,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:135,1376,94,53",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:135,1523,90,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:139,1106,90,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:139,1841,139,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:139,1935,86,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:139,1980,142,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:139,334,116,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:143,1151,161,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:143,1245,86,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:143,1290,161,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:143,1568,131,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:143,1658,86,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:143,1793,86,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:143,386,165,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:143,473,120,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:146,1429,68,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:146,1706,154,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:169,784,64,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:169,930,67,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:203,1429,71,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:23,128,108,52",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:259,521,116,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:26,251,102,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:285,784,68,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:34,1020,195,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:34,26,86,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:34,619,187,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:398,784,67,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:45,926,75,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:514,784,67,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:518,926,63,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:53,784,67,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:555,124,71,52",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:604,488,86,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:608,356,82,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:615,26,98,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:615,926,94,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:626,780,75,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2102",
+      "to": "text:649,615,71,38",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
+  "zOrder": [],
+  "warnings": [
+    "pipeline-generated draft annotation - not human verified"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "actions": [
+    {
+      "id": "auto-42490b17-1f2c-4186-9df2-730c95c24173",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:90,678,348,48",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:container:90,678,348,48:90,678,348,48:subtitle",
+      "createdAt": "2026-07-29T06:17:27.716Z"
+    },
+    {
+      "id": "auto-943a082e-07ac-4486-85a6-e652ea65ee6b",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:53,776,82,49",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:53,776,82,49:53,776,82,49:subtitle",
+      "createdAt": "2026-07-29T06:17:27.717Z"
+    },
+    {
+      "id": "auto-5991494a-b878-4708-b723-5dd1c4cc05ea",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:585,863,79,48",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:585,863,79,48:585,863,79,48:subtitle",
+      "createdAt": "2026-07-29T06:17:27.718Z"
+    },
+    {
+      "id": "auto-33b14e3a-23c5-4347-82c3-6b835ee34c8a",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:240,180,240,300",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:icon:240,180,240,300:240,180,240,300:icon",
+      "createdAt": "2026-07-29T06:17:27.718Z"
+    },
+    {
+      "id": "auto-aa683128-d3d2-428f-9a5e-3dd6e6720400",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:229,491,292,34",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:229,491,292,34:229,491,292,34:text",
+      "createdAt": "2026-07-29T06:17:27.719Z"
+    },
+    {
+      "id": "auto-edab1e2c-ca09-4d25-bec6-c4b4b46b27c9",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:956,1376,488,34",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:956,1376,488,34:956,1376,488,34:text",
+      "createdAt": "2026-07-29T06:17:27.720Z"
+    }
+  ]
+}

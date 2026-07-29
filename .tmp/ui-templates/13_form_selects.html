@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=375, initial-scale=1.0">
+<title>Form Selects</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { width: 375px; margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .status-bar { height: 44px; }
+  select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+</style>
+</head>
+<body class="bg-gray-50">
+  <!-- Status bar -->
+  <div class="status-bar bg-white flex items-center justify-between px-6 text-sm font-semibold">
+    <span>9:41</span>
+    <span>100%</span>
+  </div>
+
+  <!-- Header -->
+  <div class="bg-white px-5 py-4 flex items-center justify-between border-b border-gray-100">
+    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    <h1 class="text-lg font-semibold">填写资料</h1>
+    <button class="text-blue-500 font-medium text-sm">保存</button>
+  </div>
+
+  <!-- Form content -->
+  <div class="px-4 py-4 space-y-4 pb-24">
+    <!-- Basic info card -->
+    <div class="bg-white rounded-2xl p-4 shadow-sm">
+      <h3 class="font-semibold text-gray-900 mb-4">基本信息</h3>
+
+      <div class="space-y-4">
+        <div>
+          <label class="text-sm text-gray-500 mb-1.5 block">真实姓名</label>
+          <div class="border border-gray-200 rounded-xl px-4 py-3">
+            <input type="text" value="张三" class="w-full outline-none text-gray-900" />
+          </div>
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-500 mb-1.5 block">性别</label>
+          <select class="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900">
+            <option>男</option>
+            <option>女</option>
+            <option>保密</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-500 mb-1.5 block">出生日期</label>
+          <select class="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900">
+            <option>1995年6月15日</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-500 mb-1.5 block">所在地区</label>
+          <div class="grid grid-cols-2 gap-3">
+            <select class="px-4 py-3 border border-gray-200 rounded-xl text-gray-900">
+              <option>广东省</option>
+            </select>
+            <select class="px-4 py-3 border border-gray-200 rounded-xl text-gray-900">
+              <option>深圳市</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-500 mb-1.5 block">职业</label>
+          <select class="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900">
+            <option>互联网/IT</option>
+            <option>金融/投资</option>
+            <option>教育/培训</option>
+            <option>医疗/健康</option>
+            <option>制造业</option>
+            <option>其他</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preferences card -->
+    <div class="bg-white rounded-2xl p-4 shadow-sm">
+      <h3 class="font-semibold text-gray-900 mb-4">偏好设置</h3>
+
+      <div class="space-y-4">
+        <div>
+          <label class="text-sm text-gray-500 mb-1.5 block">兴趣标签</label>
+          <select class="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900">
+            <option>科技数码</option>
+            <option>音乐电影</option>
+            <option>运动健身</option>
+            <option>美食旅行</option>
+            <option>阅读写作</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-500 mb-1.5 block">语言偏好</label>
+          <select class="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900">
+            <option>简体中文</option>
+            <option>繁體中文</option>
+            <option>English</option>
+            <option>日本語</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-500 mb-1.5 block">主题模式</label>
+          <select class="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900">
+            <option>跟随系统</option>
+            <option>浅色模式</option>
+            <option>深色模式</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-500 mb-1.5 block">通知声音</label>
+          <select class="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900">
+            <option>默认铃声</option>
+            <option>叮咚</option>
+            <option>风铃</option>
+            <option>海浪</option>
+            <option>静音</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-500 mb-1.5 block">字体大小</label>
+          <select class="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900">
+            <option>标准</option>
+            <option>小号</option>
+            <option>大号</option>
+            <option>超大号</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Privacy card -->
+    <div class="bg-white rounded-2xl p-4 shadow-sm">
+      <h3 class="font-semibold text-gray-900 mb-4">隐私设置</h3>
+
+      <div class="space-y-4">
+        <div>
+          <label class="text-sm text-gray-500 mb-1.5 block">谁可以看我的资料</label>
+          <select class="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900">
+            <option>所有人</option>
+            <option>仅好友</option>
+            <option>仅自己</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-500 mb-1.5 block">搜索可见性</label>
+          <select class="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900">
+            <option>通过手机号搜索</option>
+            <option>通过昵称搜索</option>
+            <option>完全不可见</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-sm text-gray-500 mb-1.5 block">数据保存位置</label>
+          <select class="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900">
+            <option>中国大陆</option>
+            <option>中国香港</option>
+            <option>新加坡</option>
+            <option>美国</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="flex gap-3">
+      <button class="flex-1 py-3.5 bg-gray-200 text-gray-700 font-semibold rounded-xl">
+        取消
+      </button>
+      <button class="flex-1 py-3.5 bg-blue-500 text-white font-semibold rounded-xl">
+        提交
+      </button>
+    </div>
+  </div>
+</body>
+</html>

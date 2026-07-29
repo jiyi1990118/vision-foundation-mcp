@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=375, initial-scale=1.0">
+<title>Badges Notifications</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { width: 375px; margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .status-bar { height: 44px; }
+</style>
+</head>
+<body class="bg-gray-50">
+  <!-- Status bar -->
+  <div class="status-bar bg-white flex items-center justify-between px-6 text-sm font-semibold">
+    <span>9:41</span>
+    <span>100%</span>
+  </div>
+
+  <!-- Header with badges -->
+  <div class="bg-white px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+    <h1 class="text-xl font-bold">消息中心</h1>
+    <div class="relative">
+      <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
+      <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">12</span>
+    </div>
+  </div>
+
+  <!-- Category tabs with badges -->
+  <div class="bg-white flex border-b border-gray-100">
+    <div class="flex-1 py-3 text-center border-b-2 border-blue-500">
+      <div class="flex items-center justify-center">
+        <span class="text-sm font-semibold text-blue-600">全部</span>
+        <span class="ml-1.5 px-1.5 py-0.5 text-xs font-bold bg-red-500 text-white rounded-full">99+</span>
+      </div>
+    </div>
+    <div class="flex-1 py-3 text-center">
+      <div class="flex items-center justify-center">
+        <span class="text-sm text-gray-500">评论</span>
+        <span class="ml-1.5 px-1.5 py-0.5 text-xs font-bold bg-orange-500 text-white rounded-full">28</span>
+      </div>
+    </div>
+    <div class="flex-1 py-3 text-center">
+      <div class="flex items-center justify-center">
+        <span class="text-sm text-gray-500">点赞</span>
+        <span class="ml-1.5 px-1.5 py-0.5 text-xs font-bold bg-green-500 text-white rounded-full">56</span>
+      </div>
+    </div>
+    <div class="flex-1 py-3 text-center">
+      <div class="flex items-center justify-center">
+        <span class="text-sm text-gray-500">关注</span>
+        <span class="ml-1.5 px-1.5 py-0.5 text-xs font-bold bg-blue-500 text-white rounded-full">12</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification list with badges -->
+  <div class="bg-white mt-2">
+    <!-- Item 1 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50 bg-blue-50/30">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-red-400 to-pink-500 flex items-center justify-center text-white font-bold text-lg">系</div>
+        <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">3</span>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-semibold text-gray-900">系统通知</span>
+          <span class="text-xs text-gray-400">刚刚</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">您的账号安全等级已提升</div>
+      </div>
+    </div>
+
+    <!-- Item 2 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold text-lg">评</div>
+        <span class="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 text-white text-xs font-bold rounded-full flex items-center justify-center">8</span>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">评论回复</span>
+          <span class="text-xs text-gray-400">5分钟前</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">小王回复了你的评论：说得太对了！</div>
+      </div>
+    </div>
+
+    <!-- Item 3 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-pink-400 to-red-500 flex items-center justify-center text-white font-bold text-lg">点</div>
+        <span class="absolute -top-1 -right-1 px-1.5 py-0.5 text-xs font-bold bg-red-500 text-white rounded-full">99+</span>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">获赞与收藏</span>
+          <span class="text-xs text-gray-400">10分钟前</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">小李等 56 人赞了你的作品</div>
+      </div>
+    </div>
+
+    <!-- Item 4 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-teal-500 flex items-center justify-center text-white font-bold text-lg">关</div>
+        <span class="absolute -top-1 -right-1 w-5 h-5 bg-blue-500 text-white text-xs font-bold rounded-full flex items-center justify-center">5</span>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">新增关注</span>
+          <span class="text-xs text-gray-400">30分钟前</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">小张和其他4人关注了你</div>
+      </div>
+    </div>
+
+    <!-- Item 5 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-white font-bold text-lg">私</div>
+        <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">2</span>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">私信</span>
+          <span class="text-xs text-gray-400">1小时前</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">小陈：在吗？想跟你聊一下</div>
+      </div>
+    </div>
+
+    <!-- Item 6 -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-white font-bold text-lg">活</div>
+        <span class="absolute -top-1 -right-1 px-1.5 py-0.5 text-xs font-bold bg-green-500 text-white rounded-full">NEW</span>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">活动通知</span>
+          <span class="text-xs text-gray-400">2小时前</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">夏日创作大赛开始啦！快来参加赢大奖</div>
+      </div>
+    </div>
+
+    <!-- Item 7 with badge on right -->
+    <div class="flex items-center px-5 py-3.5 border-b border-gray-50">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center text-white font-bold text-lg">订</div>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">订单助手</span>
+          <span class="text-xs text-gray-400">昨天</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">您的订单已发货，预计明天送达</div>
+      </div>
+      <span class="ml-2 px-2 py-0.5 text-xs font-semibold bg-blue-50 text-blue-500 rounded-full">查看</span>
+    </div>
+
+    <!-- Item 8 -->
+    <div class="flex items-center px-5 py-3.5">
+      <div class="relative flex-shrink-0">
+        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-white font-bold text-lg">会</div>
+        <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white"></span>
+      </div>
+      <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-900">会员中心</span>
+          <span class="text-xs text-gray-400">2天前</span>
+        </div>
+        <div class="text-sm text-gray-500 truncate mt-0.5">您的会员即将到期，续费享优惠</div>
+      </div>
+      <span class="ml-2 px-2 py-0.5 text-xs font-semibold bg-orange-50 text-orange-500 rounded-full">续费</span>
+    </div>
+  </div>
+
+  <!-- Bottom nav with badges -->
+  <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 pb-6">
+    <div class="flex items-center pt-2">
+      <div class="flex-1 flex flex-col items-center">
+        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span class="text-xs mt-1 text-gray-400">首页</span>
+      </div>
+      <div class="flex-1 flex flex-col items-center">
+        <div class="relative">
+          <svg class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+          <span class="absolute -top-1 -right-2 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">99+</span>
+        </div>
+        <span class="text-xs mt-1 text-blue-500 font-medium">消息</span>
+      </div>
+      <div class="flex-1 flex flex-col items-center">
+        <div class="w-10 h-10 -mt-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center shadow-lg">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+        </div>
+      </div>
+      <div class="flex-1 flex flex-col items-center">
+        <div class="relative">
+          <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          <span class="absolute -top-1 -right-2 w-4 h-4 bg-red-500 rounded-full"></span>
+        </div>
+        <span class="text-xs mt-1 text-gray-400">发现</span>
+      </div>
+      <div class="flex-1 flex flex-col items-center">
+        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        <span class="text-xs mt-1 text-gray-400">我的</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

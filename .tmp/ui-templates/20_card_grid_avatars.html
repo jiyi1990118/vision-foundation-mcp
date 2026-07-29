@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=375, initial-scale=1.0">
+<title>Card Grid Avatars</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { width: 375px; margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .status-bar { height: 44px; }
+</style>
+</head>
+<body class="bg-gray-50 pb-20">
+  <!-- Status bar -->
+  <div class="status-bar bg-white flex items-center justify-between px-6 text-sm font-semibold">
+    <span>9:41</span>
+    <span>100%</span>
+  </div>
+
+  <!-- Header -->
+  <div class="bg-white px-5 py-4 border-b border-gray-100">
+    <div class="flex items-center justify-between">
+      <h1 class="text-xl font-bold">发现</h1>
+      <div class="flex items-center gap-3">
+        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold text-sm">我</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category tabs -->
+  <div class="bg-white flex border-b border-gray-100 px-3">
+    <button class="flex-1 py-3 text-sm font-semibold text-blue-600 border-b-2 border-blue-500">推荐</button>
+    <button class="flex-1 py-3 text-sm text-gray-500">关注</button>
+    <button class="flex-1 py-3 text-sm text-gray-500">热门</button>
+    <button class="flex-1 py-3 text-sm text-gray-500">同城</button>
+    <button class="flex-1 py-3 text-sm text-gray-500">最新</button>
+  </div>
+
+  <!-- Quick actions card -->
+  <div class="mx-4 mt-4 bg-white rounded-2xl p-4 shadow-sm">
+    <div class="grid grid-cols-4 gap-3">
+      <div class="flex flex-col items-center">
+        <div class="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center text-2xl">📷</div>
+        <span class="text-xs text-gray-600 mt-2">拍照</span>
+      </div>
+      <div class="flex flex-col items-center">
+        <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-2xl">🎥</div>
+        <span class="text-xs text-gray-600 mt-2">视频</span>
+      </div>
+      <div class="flex flex-col items-center">
+        <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center text-2xl">🎵</div>
+        <span class="text-xs text-gray-600 mt-2">音乐</span>
+      </div>
+      <div class="flex flex-col items-center">
+        <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center text-2xl">✍️</div>
+        <span class="text-xs text-gray-600 mt-2">文字</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trending creators section -->
+  <div class="mx-4 mt-4">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="font-bold text-gray-900">热门创作者</h2>
+      <button class="text-sm text-blue-500 font-medium">查看全部</button>
+    </div>
+    <div class="flex gap-3 overflow-x-auto">
+      <!-- Creator 1 -->
+      <div class="flex-shrink-0 w-28 bg-white rounded-2xl p-3 shadow-sm flex flex-col items-center">
+        <div class="relative">
+          <div class="w-14 h-14 rounded-full bg-gradient-to-br from-pink-400 to-red-500 flex items-center justify-center text-white font-bold text-xl">李</div>
+          <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-yellow-400 text-white text-xs rounded-full flex items-center justify-center border-2 border-white">👑</div>
+        </div>
+        <span class="text-sm font-semibold text-gray-900 mt-2">小李的日记</span>
+        <span class="text-xs text-gray-400 mt-0.5">12.5万粉丝</span>
+        <button class="w-full mt-2 py-1.5 bg-red-500 text-white text-xs font-semibold rounded-lg">关注</button>
+      </div>
+      <!-- Creator 2 -->
+      <div class="flex-shrink-0 w-28 bg-white rounded-2xl p-3 shadow-sm flex flex-col items-center">
+        <div class="relative">
+          <div class="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold text-xl">王</div>
+        </div>
+        <span class="text-sm font-semibold text-gray-900 mt-2">小王说科技</span>
+        <span class="text-xs text-gray-400 mt-0.5">8.2万粉丝</span>
+        <button class="w-full mt-2 py-1.5 bg-gray-100 text-gray-700 text-xs font-semibold rounded-lg">已关注</button>
+      </div>
+      <!-- Creator 3 -->
+      <div class="flex-shrink-0 w-28 bg-white rounded-2xl p-3 shadow-sm flex flex-col items-center">
+        <div class="relative">
+          <div class="w-14 h-14 rounded-full bg-gradient-to-br from-green-400 to-teal-500 flex items-center justify-center text-white font-bold text-xl">张</div>
+        </div>
+        <span class="text-sm font-semibold text-gray-900 mt-2">小张爱旅行</span>
+        <span class="text-xs text-gray-400 mt-0.5">6.8万粉丝</span>
+        <button class="w-full mt-2 py-1.5 bg-red-500 text-white text-xs font-semibold rounded-lg">关注</button>
+      </div>
+      <!-- Creator 4 -->
+      <div class="flex-shrink-0 w-28 bg-white rounded-2xl p-3 shadow-sm flex flex-col items-center">
+        <div class="relative">
+          <div class="w-14 h-14 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-white font-bold text-xl">陈</div>
+        </div>
+        <span class="text-sm font-semibold text-gray-900 mt-2">小陈美食</span>
+        <span class="text-xs text-gray-400 mt-0.5">5.1万粉丝</span>
+        <button class="w-full mt-2 py-1.5 bg-red-500 text-white text-xs font-semibold rounded-lg">关注</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured card grid -->
+  <div class="mx-4 mt-5">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="font-bold text-gray-900">精选内容</h2>
+      <button class="text-sm text-blue-500 font-medium">更多</button>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <!-- Card 1 -->
+      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
+        <div class="relative aspect-[4/3] bg-gradient-to-br from-orange-300 to-red-400">
+          <div class="absolute inset-0 flex items-center justify-center text-4xl">🌅</div>
+          <div class="absolute top-2 left-2 px-2 py-0.5 bg-black/40 text-white text-xs rounded-full">图文</div>
+          <div class="absolute bottom-2 right-2 flex items-center gap-1 text-white text-xs">
+            <span>❤️</span>
+            <span>2.3k</span>
+          </div>
+        </div>
+        <div class="p-2.5">
+          <p class="text-sm font-medium text-gray-900 line-clamp-2 leading-snug">今天的日落太美了，拍了一组照片分享给大家</p>
+          <div class="flex items-center mt-2">
+            <div class="w-5 h-5 rounded-full bg-gradient-to-br from-pink-400 to-red-500"></div>
+            <span class="text-xs text-gray-500 ml-1.5">小李的日记</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
+        <div class="relative aspect-[4/3] bg-gradient-to-br from-blue-300 to-indigo-400">
+          <div class="absolute inset-0 flex items-center justify-center text-4xl">💻</div>
+          <div class="absolute top-2 left-2 px-2 py-0.5 bg-black/40 text-white text-xs rounded-full">视频</div>
+          <div class="absolute bottom-2 right-2 flex items-center gap-1 text-white text-xs">
+            <span>❤️</span>
+            <span>1.8k</span>
+          </div>
+        </div>
+        <div class="p-2.5">
+          <p class="text-sm font-medium text-gray-900 line-clamp-2 leading-snug">新入手的机械键盘开箱评测，打字手感绝了</p>
+          <div class="flex items-center mt-2">
+            <div class="w-5 h-5 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500"></div>
+            <span class="text-xs text-gray-500 ml-1.5">小王说科技</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
+        <div class="relative aspect-[4/3] bg-gradient-to-br from-green-300 to-teal-400">
+          <div class="absolute inset-0 flex items-center justify-center text-4xl">🏔️</div>
+          <div class="absolute top-2 left-2 px-2 py-0.5 bg-black/40 text-white text-xs rounded-full">图文</div>
+          <div class="absolute bottom-2 right-2 flex items-center gap-1 text-white text-xs">
+            <span>❤️</span>
+            <span>956</span>
+          </div>
+        </div>
+        <div class="p-2.5">
+          <p class="text-sm font-medium text-gray-900 line-clamp-2 leading-snug">周末去爬山了，风景真的超棒</p>
+          <div class="flex items-center mt-2">
+            <div class="w-5 h-5 rounded-full bg-gradient-to-br from-green-400 to-teal-500"></div>
+            <span class="text-xs text-gray-500 ml-1.5">小张爱旅行</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
+        <div class="relative aspect-[4/3] bg-gradient-to-br from-yellow-300 to-orange-400">
+          <div class="absolute inset-0 flex items-center justify-center text-4xl">🍜</div>
+          <div class="absolute top-2 left-2 px-2 py-0.5 bg-black/40 text-white text-xs rounded-full">视频</div>
+          <div class="absolute bottom-2 right-2 flex items-center gap-1 text-white text-xs">
+            <span>❤️</span>
+            <span>3.1k</span>
+          </div>
+        </div>
+        <div class="p-2.5">
+          <p class="text-sm font-medium text-gray-900 line-clamp-2 leading-snug">发现一家超好吃的面馆，推荐给大家</p>
+          <div class="flex items-center mt-2">
+            <div class="w-5 h-5 rounded-full bg-gradient-to-br from-purple-400 to-pink-500"></div>
+            <span class="text-xs text-gray-500 ml-1.5">小陈美食</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

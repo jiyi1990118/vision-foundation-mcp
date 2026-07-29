@@ -1,0 +1,728 @@
+{
+  "image": "synthetic_bottomsheet_list.jpg",
+  "imageSize": {
+    "width": 2400,
+    "height": 1476
+  },
+  "platform": "app",
+  "theme": "light",
+  "language": "zh",
+  "dpi": "standard",
+  "elements": [
+    {
+      "id": "page:0,0,2400,1476",
+      "type": "page",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 2400,
+        "h": 1476
+      },
+      "render": "native",
+      "children": [
+        "container:162,1002,264,90",
+        "container:162,1158,180,90",
+        "container:162,1314,234,90",
+        "container:162,540,240,90",
+        "container:162,696,240,90",
+        "container:162,852,240,90",
+        "icon:0,1080,120,240",
+        "icon:0,1320,120,120",
+        "icon:0,480,120,240",
+        "icon:0,600,120,240",
+        "icon:0,720,120,240",
+        "icon:0,840,120,240",
+        "icon:0,960,120,240",
+        "navbar:6,348,2388,42",
+        "navbar:6,6,750,84",
+        "navbar:6,810,2388,12",
+        "text:154,1005,154,49",
+        "text:154,1054,274,37",
+        "text:154,1159,154,49",
+        "text:154,548,150,37",
+        "text:154,701,154,38",
+        "text:154,851,154,49",
+        "text:154,900,247,38",
+        "text:158,1208,187,37",
+        "text:158,1316,150,49",
+        "text:158,593,240,33",
+        "text:158,746,243,38",
+        "text:161,1365,237,34",
+        "text:2265,1339,101,37",
+        "text:2265,563,101,48",
+        "text:2269,716,97,49",
+        "text:2280,870,86,49",
+        "text:2284,1024,90,52",
+        "text:2291,439,79,37",
+        "text:30,431,161,49"
+      ]
+    },
+    {
+      "id": "navbar:6,348,2388,42",
+      "type": "navbar",
+      "bbox": {
+        "x": 6,
+        "y": 348,
+        "w": 2388,
+        "h": 42
+      },
+      "render": "native"
+    },
+    {
+      "id": "navbar:6,6,750,84",
+      "type": "navbar",
+      "bbox": {
+        "x": 6,
+        "y": 6,
+        "w": 750,
+        "h": 84
+      },
+      "render": "native",
+      "children": [
+        "text:34,19,86,49",
+        "text:578,26,135,34"
+      ]
+    },
+    {
+      "id": "text:34,19,86,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 34,
+        "y": 19,
+        "w": 86,
+        "h": 49
+      },
+      "render": "native",
+      "text": "9:41"
+    },
+    {
+      "id": "text:578,26,135,34",
+      "type": "text",
+      "bbox": {
+        "x": 578,
+        "y": 26,
+        "w": 135,
+        "h": 34
+      },
+      "render": "native",
+      "text": "100%"
+    },
+    {
+      "id": "navbar:6,810,2388,12",
+      "type": "navbar",
+      "bbox": {
+        "x": 6,
+        "y": 810,
+        "w": 2388,
+        "h": 12
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:162,1002,264,90",
+      "type": "column",
+      "bbox": {
+        "x": 162,
+        "y": 1002,
+        "w": 264,
+        "h": 90
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:154,1005,154,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 154,
+        "y": 1005,
+        "w": 154,
+        "h": 49
+      },
+      "render": "native",
+      "text": "职场学习"
+    },
+    {
+      "id": "text:154,1054,274,37",
+      "type": "text",
+      "bbox": {
+        "x": 154,
+        "y": 1054,
+        "w": 274,
+        "h": 37
+      },
+      "render": "native",
+      "text": "职业发展与技能提升"
+    },
+    {
+      "id": "container:162,540,240,90",
+      "type": "column",
+      "bbox": {
+        "x": 162,
+        "y": 540,
+        "w": 240,
+        "h": 90
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:154,548,150,37",
+      "type": "text",
+      "bbox": {
+        "x": 154,
+        "y": 548,
+        "w": 150,
+        "h": 37
+      },
+      "render": "native",
+      "text": "热门推荐"
+    },
+    {
+      "id": "text:158,593,240,33",
+      "type": "text",
+      "bbox": {
+        "x": 158,
+        "y": 593,
+        "w": 240,
+        "h": 33
+      },
+      "render": "native",
+      "text": "每日精选优质内容"
+    },
+    {
+      "id": "container:162,696,240,90",
+      "type": "column",
+      "bbox": {
+        "x": 162,
+        "y": 696,
+        "w": 240,
+        "h": 90
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:154,701,154,38",
+      "type": "text",
+      "bbox": {
+        "x": 154,
+        "y": 701,
+        "w": 154,
+        "h": 38
+      },
+      "render": "native",
+      "text": "科技数码"
+    },
+    {
+      "id": "text:158,746,243,38",
+      "type": "text",
+      "bbox": {
+        "x": 158,
+        "y": 746,
+        "w": 243,
+        "h": 38
+      },
+      "render": "native",
+      "text": "前沿科技产品评测"
+    },
+    {
+      "id": "container:162,852,240,90",
+      "type": "column",
+      "bbox": {
+        "x": 162,
+        "y": 852,
+        "w": 240,
+        "h": 90
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:154,851,154,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 154,
+        "y": 851,
+        "w": 154,
+        "h": 49
+      },
+      "render": "native",
+      "text": "游戏娱乐"
+    },
+    {
+      "id": "text:154,900,247,38",
+      "type": "text",
+      "bbox": {
+        "x": 154,
+        "y": 900,
+        "w": 247,
+        "h": 38
+      },
+      "render": "native",
+      "text": "最新游戏资讯攻略"
+    },
+    {
+      "id": "container:162,1314,234,90",
+      "type": "column",
+      "bbox": {
+        "x": 162,
+        "y": 1314,
+        "w": 234,
+        "h": 90
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:158,1316,150,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 158,
+        "y": 1316,
+        "w": 150,
+        "h": 49
+      },
+      "render": "native",
+      "text": "旅行游记"
+    },
+    {
+      "id": "text:161,1365,237,34",
+      "type": "text",
+      "bbox": {
+        "x": 161,
+        "y": 1365,
+        "w": 237,
+        "h": 34
+      },
+      "render": "native",
+      "text": "全球旅行攻略分享"
+    },
+    {
+      "id": "container:162,1158,180,90",
+      "type": "column",
+      "bbox": {
+        "x": 162,
+        "y": 1158,
+        "w": 180,
+        "h": 90
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:154,1159,154,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 154,
+        "y": 1159,
+        "w": 154,
+        "h": 49
+      },
+      "render": "native",
+      "text": "美食探店"
+    },
+    {
+      "id": "text:158,1208,187,37",
+      "type": "text",
+      "bbox": {
+        "x": 158,
+        "y": 1208,
+        "w": 187,
+        "h": 37
+      },
+      "render": "native",
+      "text": "城市美食地图"
+    },
+    {
+      "id": "icon:0,480,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 480,
+        "w": 120,
+        "h": 240
+      },
+      "render": "native",
+      "text": "热门推荐"
+    },
+    {
+      "id": "icon:0,600,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 600,
+        "w": 120,
+        "h": 240
+      },
+      "render": "native",
+      "text": "科技数码"
+    },
+    {
+      "id": "icon:0,720,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 720,
+        "w": 120,
+        "h": 240
+      },
+      "render": "native",
+      "text": "游戏娱乐"
+    },
+    {
+      "id": "icon:0,840,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 840,
+        "w": 120,
+        "h": 240
+      },
+      "render": "native",
+      "text": "最新游戏资讯攻略"
+    },
+    {
+      "id": "icon:0,960,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 960,
+        "w": 120,
+        "h": 240
+      },
+      "render": "native",
+      "text": "职场学习"
+    },
+    {
+      "id": "icon:0,1080,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 1080,
+        "w": 120,
+        "h": 240
+      },
+      "render": "native",
+      "text": "美食探店"
+    },
+    {
+      "id": "icon:0,1320,120,120",
+      "type": "icon",
+      "bbox": {
+        "x": 0,
+        "y": 1320,
+        "w": 120,
+        "h": 120
+      },
+      "render": "native",
+      "text": "全球旅行攻略分享"
+    },
+    {
+      "id": "text:30,431,161,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 30,
+        "y": 431,
+        "w": 161,
+        "h": 49
+      },
+      "render": "native",
+      "text": "选择分类"
+    },
+    {
+      "id": "text:2291,439,79,37",
+      "type": "text",
+      "bbox": {
+        "x": 2291,
+        "y": 439,
+        "w": 79,
+        "h": 37
+      },
+      "render": "native",
+      "text": "完成"
+    },
+    {
+      "id": "text:2265,563,101,48",
+      "type": "subtitle",
+      "bbox": {
+        "x": 2265,
+        "y": 563,
+        "w": 101,
+        "h": 48
+      },
+      "render": "native",
+      "text": "NEW"
+    },
+    {
+      "id": "text:2269,716,97,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 2269,
+        "y": 716,
+        "w": 97,
+        "h": 49
+      },
+      "render": "native",
+      "text": "HOT"
+    },
+    {
+      "id": "text:2280,870,86,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 2280,
+        "y": 870,
+        "w": 86,
+        "h": 49
+      },
+      "render": "native",
+      "text": "128"
+    },
+    {
+      "id": "text:2284,1024,90,52",
+      "type": "subtitle",
+      "bbox": {
+        "x": 2284,
+        "y": 1024,
+        "w": 90,
+        "h": 52
+      },
+      "render": "native",
+      "text": "56"
+    },
+    {
+      "id": "text:2265,1339,101,37",
+      "type": "text",
+      "bbox": {
+        "x": 2265,
+        "y": 1339,
+        "w": 101,
+        "h": 37
+      },
+      "render": "native",
+      "text": "NEW"
+    }
+  ],
+  "relations": [
+    {
+      "from": "navbar:6,6,750,84",
+      "to": "text:34,19,86,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "navbar:6,6,750,84",
+      "to": "text:578,26,135,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "container:162,1002,264,90",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "container:162,1158,180,90",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "container:162,1314,234,90",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "container:162,540,240,90",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "container:162,696,240,90",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "container:162,852,240,90",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "icon:0,1080,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "icon:0,1320,120,120",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "icon:0,480,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "icon:0,600,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "icon:0,720,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "icon:0,840,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "icon:0,960,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "navbar:6,348,2388,42",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "navbar:6,6,750,84",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "navbar:6,810,2388,12",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:154,1005,154,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:154,1054,274,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:154,1159,154,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:154,548,150,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:154,701,154,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:154,851,154,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:154,900,247,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:158,1208,187,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:158,1316,150,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:158,593,240,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:158,746,243,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:161,1365,237,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:2265,1339,101,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:2265,563,101,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:2269,716,97,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:2280,870,86,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:2284,1024,90,52",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:2291,439,79,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:30,431,161,49",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
+  "zOrder": [],
+  "warnings": [
+    "pipeline-generated draft annotation - not human verified"
+  ]
+}

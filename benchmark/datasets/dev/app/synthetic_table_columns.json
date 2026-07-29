@@ -1,0 +1,853 @@
+{
+  "image": "synthetic_table_columns.jpg",
+  "imageSize": {
+    "width": 2400,
+    "height": 1476
+  },
+  "platform": "app",
+  "theme": "light",
+  "language": "zh",
+  "dpi": "standard",
+  "elements": [
+    {
+      "id": "page:0,0,2400,1476",
+      "type": "page",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 2400,
+        "h": 1476
+      },
+      "render": "native",
+      "children": [
+        "text:105,701,255,38",
+        "text:109,623,127,37",
+        "text:109,881,214,38",
+        "text:113,1058,165,48",
+        "text:113,1245,206,38",
+        "text:113,791,180,38",
+        "text:113,975,202,38",
+        "text:116,1151,218,38",
+        "text:26,124,188,52",
+        "text:274,300,101,38",
+        "text:274,341,127,53",
+        "text:278,394,112,49",
+        "text:30,180,270,38",
+        "text:34,19,86,49",
+        "text:41,394,124,49",
+        "text:45,300,120,38",
+        "text:45,345,135,49",
+        "text:458,698,82,48",
+        "text:458,788,86,48",
+        "text:465,1058,75,48",
+        "text:465,619,75,49",
+        "text:465,878,75,48",
+        "text:465,968,79,48",
+        "text:473,1148,75,52",
+        "text:473,1238,75,52",
+        "text:49,536,214,38",
+        "text:503,1324,195,37",
+        "text:510,300,105,38",
+        "text:510,345,124,49",
+        "text:510,394,113,49",
+        "text:53,1324,165,37",
+        "text:578,698,123,48",
+        "text:578,788,123,48",
+        "text:581,878,120,48",
+        "text:593,1058,108,48",
+        "text:593,1155,108,38",
+        "text:593,1245,108,38",
+        "text:593,536,108,38",
+        "text:596,968,105,48",
+        "text:600,619,101,49",
+        "text:611,143,98,52",
+        "text:611,19,105,49"
+      ]
+    },
+    {
+      "id": "text:34,19,86,49",
+      "type": "text",
+      "bbox": {
+        "x": 34,
+        "y": 19,
+        "w": 86,
+        "h": 49
+      },
+      "render": "native",
+      "text": "9:41"
+    },
+    {
+      "id": "text:611,19,105,49",
+      "type": "text",
+      "bbox": {
+        "x": 611,
+        "y": 19,
+        "w": 105,
+        "h": 49
+      },
+      "render": "native",
+      "text": "100%"
+    },
+    {
+      "id": "text:26,124,188,52",
+      "type": "text",
+      "bbox": {
+        "x": 26,
+        "y": 124,
+        "w": 188,
+        "h": 52
+      },
+      "render": "native",
+      "text": "数据报表"
+    },
+    {
+      "id": "text:611,143,98,52",
+      "type": "text",
+      "bbox": {
+        "x": 611,
+        "y": 143,
+        "w": 98,
+        "h": 52
+      },
+      "render": "native",
+      "text": "导出"
+    },
+    {
+      "id": "text:30,180,270,38",
+      "type": "text",
+      "bbox": {
+        "x": 30,
+        "y": 180,
+        "w": 270,
+        "h": 38
+      },
+      "render": "native",
+      "text": "2026年7月销售数据"
+    },
+    {
+      "id": "text:45,300,120,38",
+      "type": "text",
+      "bbox": {
+        "x": 45,
+        "y": 300,
+        "w": 120,
+        "h": 38
+      },
+      "render": "native",
+      "text": "总销售额",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:274,300,101,38",
+      "type": "text",
+      "bbox": {
+        "x": 274,
+        "y": 300,
+        "w": 101,
+        "h": 38
+      },
+      "render": "native",
+      "text": "订单数",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:510,300,105,38",
+      "type": "text",
+      "bbox": {
+        "x": 510,
+        "y": 300,
+        "w": 105,
+        "h": 38
+      },
+      "render": "native",
+      "text": "客单价"
+    },
+    {
+      "id": "text:45,345,135,49",
+      "type": "text",
+      "bbox": {
+        "x": 45,
+        "y": 345,
+        "w": 135,
+        "h": 49
+      },
+      "render": "native",
+      "text": "¥128K",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:274,341,127,53",
+      "type": "text",
+      "bbox": {
+        "x": 274,
+        "y": 341,
+        "w": 127,
+        "h": 53
+      },
+      "render": "native",
+      "text": "1,284",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:510,345,124,49",
+      "type": "text",
+      "bbox": {
+        "x": 510,
+        "y": 345,
+        "w": 124,
+        "h": 49
+      },
+      "render": "native",
+      "text": "¥99.7"
+    },
+    {
+      "id": "text:41,394,124,49",
+      "type": "text",
+      "bbox": {
+        "x": 41,
+        "y": 394,
+        "w": 124,
+        "h": 49
+      },
+      "render": "native",
+      "text": "↑ 12.5%",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:278,394,112,49",
+      "type": "text",
+      "bbox": {
+        "x": 278,
+        "y": 394,
+        "w": 112,
+        "h": 49
+      },
+      "render": "native",
+      "text": "↑ 8.3%",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:510,394,113,49",
+      "type": "text",
+      "bbox": {
+        "x": 510,
+        "y": 394,
+        "w": 113,
+        "h": 49
+      },
+      "render": "native",
+      "text": "↓2.1%"
+    },
+    {
+      "id": "text:49,536,214,38",
+      "type": "text",
+      "bbox": {
+        "x": 49,
+        "y": 536,
+        "w": 214,
+        "h": 38
+      },
+      "render": "native",
+      "text": "热销商品排行",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:593,536,108,38",
+      "type": "text",
+      "bbox": {
+        "x": 593,
+        "y": 536,
+        "w": 108,
+        "h": 38
+      },
+      "render": "native",
+      "text": "TOP 10"
+    },
+    {
+      "id": "text:109,623,127,37",
+      "type": "text",
+      "bbox": {
+        "x": 109,
+        "y": 623,
+        "w": 127,
+        "h": 37
+      },
+      "render": "native",
+      "text": "商品名称",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:465,619,75,49",
+      "type": "text",
+      "bbox": {
+        "x": 465,
+        "y": 619,
+        "w": 75,
+        "h": 49
+      },
+      "render": "native",
+      "text": "销量",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:600,619,101,49",
+      "type": "text",
+      "bbox": {
+        "x": 600,
+        "y": 619,
+        "w": 101,
+        "h": 49
+      },
+      "render": "native",
+      "text": "销售额"
+    },
+    {
+      "id": "text:105,701,255,38",
+      "type": "text",
+      "bbox": {
+        "x": 105,
+        "y": 701,
+        "w": 255,
+        "h": 38
+      },
+      "render": "native",
+      "text": "无线蓝牙耳机 Pro",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:458,698,82,48",
+      "type": "text",
+      "bbox": {
+        "x": 458,
+        "y": 698,
+        "w": 82,
+        "h": 48
+      },
+      "render": "native",
+      "text": "328",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:578,698,123,48",
+      "type": "text",
+      "bbox": {
+        "x": 578,
+        "y": 698,
+        "w": 123,
+        "h": 48
+      },
+      "render": "native",
+      "text": "¥19.6K"
+    },
+    {
+      "id": "text:113,791,180,38",
+      "type": "text",
+      "bbox": {
+        "x": 113,
+        "y": 791,
+        "w": 180,
+        "h": 38
+      },
+      "render": "native",
+      "text": "智能手表 S8",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:458,788,86,48",
+      "type": "text",
+      "bbox": {
+        "x": 458,
+        "y": 788,
+        "w": 86,
+        "h": 48
+      },
+      "render": "native",
+      "text": "256",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:578,788,123,48",
+      "type": "text",
+      "bbox": {
+        "x": 578,
+        "y": 788,
+        "w": 123,
+        "h": 48
+      },
+      "render": "native",
+      "text": "¥18.0K"
+    },
+    {
+      "id": "text:109,881,214,38",
+      "type": "text",
+      "bbox": {
+        "x": 109,
+        "y": 881,
+        "w": 214,
+        "h": 38
+      },
+      "render": "native",
+      "text": "运动跑步鞋 Air",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:465,878,75,48",
+      "type": "text",
+      "bbox": {
+        "x": 465,
+        "y": 878,
+        "w": 75,
+        "h": 48
+      },
+      "render": "native",
+      "text": "194",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:581,878,120,48",
+      "type": "text",
+      "bbox": {
+        "x": 581,
+        "y": 878,
+        "w": 120,
+        "h": 48
+      },
+      "render": "native",
+      "text": "¥15.5K"
+    },
+    {
+      "id": "text:113,975,202,38",
+      "type": "text",
+      "bbox": {
+        "x": 113,
+        "y": 975,
+        "w": 202,
+        "h": 38
+      },
+      "render": "native",
+      "text": "保温杯 500ml",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:465,968,79,48",
+      "type": "text",
+      "bbox": {
+        "x": 465,
+        "y": 968,
+        "w": 79,
+        "h": 48
+      },
+      "render": "native",
+      "text": "156",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:596,968,105,48",
+      "type": "text",
+      "bbox": {
+        "x": 596,
+        "y": 968,
+        "w": 105,
+        "h": 48
+      },
+      "render": "native",
+      "text": "¥7.8K"
+    },
+    {
+      "id": "text:113,1058,165,48",
+      "type": "text",
+      "bbox": {
+        "x": 113,
+        "y": 1058,
+        "w": 165,
+        "h": 48
+      },
+      "render": "native",
+      "text": "无线充电器",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:465,1058,75,48",
+      "type": "text",
+      "bbox": {
+        "x": 465,
+        "y": 1058,
+        "w": 75,
+        "h": 48
+      },
+      "render": "native",
+      "text": "142",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:593,1058,108,48",
+      "type": "text",
+      "bbox": {
+        "x": 593,
+        "y": 1058,
+        "w": 108,
+        "h": 48
+      },
+      "render": "native",
+      "text": "¥4.2K"
+    },
+    {
+      "id": "text:116,1151,218,38",
+      "type": "text",
+      "bbox": {
+        "x": 116,
+        "y": 1151,
+        "w": 218,
+        "h": 38
+      },
+      "render": "native",
+      "text": "笔记本电脑支架",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:473,1148,75,52",
+      "type": "text",
+      "bbox": {
+        "x": 473,
+        "y": 1148,
+        "w": 75,
+        "h": 52
+      },
+      "render": "native",
+      "text": "98",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:593,1155,108,38",
+      "type": "text",
+      "bbox": {
+        "x": 593,
+        "y": 1155,
+        "w": 108,
+        "h": 38
+      },
+      "render": "native",
+      "text": "¥2.9K"
+    },
+    {
+      "id": "text:113,1245,206,38",
+      "type": "text",
+      "bbox": {
+        "x": 113,
+        "y": 1245,
+        "w": 206,
+        "h": 38
+      },
+      "render": "native",
+      "text": "机械键盘 87键",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:473,1238,75,52",
+      "type": "text",
+      "bbox": {
+        "x": 473,
+        "y": 1238,
+        "w": 75,
+        "h": 52
+      },
+      "render": "native",
+      "text": "86",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:593,1245,108,38",
+      "type": "text",
+      "bbox": {
+        "x": 593,
+        "y": 1245,
+        "w": 108,
+        "h": 38
+      },
+      "render": "native",
+      "text": "¥4.3K"
+    },
+    {
+      "id": "text:53,1324,165,37",
+      "type": "text",
+      "bbox": {
+        "x": 53,
+        "y": 1324,
+        "w": 165,
+        "h": 37
+      },
+      "render": "native",
+      "text": "共 36 个商品",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:503,1324,195,37",
+      "type": "text",
+      "bbox": {
+        "x": 503,
+        "y": 1324,
+        "w": 195,
+        "h": 37
+      },
+      "render": "native",
+      "text": "点击查看全部 →"
+    }
+  ],
+  "relations": [
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:105,701,255,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:109,623,127,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:109,881,214,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:113,1058,165,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:113,1245,206,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:113,791,180,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:113,975,202,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:116,1151,218,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:26,124,188,52",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:274,300,101,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:274,341,127,53",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:278,394,112,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:30,180,270,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:34,19,86,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:41,394,124,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:45,300,120,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:45,345,135,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:458,698,82,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:458,788,86,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:465,1058,75,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:465,619,75,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:465,878,75,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:465,968,79,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:473,1148,75,52",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:473,1238,75,52",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:49,536,214,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:503,1324,195,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:510,300,105,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:510,345,124,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:510,394,113,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:53,1324,165,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:578,698,123,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:578,788,123,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:581,878,120,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:593,1058,108,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:593,1155,108,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:593,1245,108,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:593,536,108,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:596,968,105,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:600,619,101,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:611,143,98,52",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,1476",
+      "to": "text:611,19,105,49",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
+  "zOrder": [],
+  "warnings": [],
+  "source": "synthetic-html"
+}

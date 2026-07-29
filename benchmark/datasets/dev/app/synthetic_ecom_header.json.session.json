@@ -1,0 +1,52 @@
+{
+  "actions": [
+    {
+      "id": "auto-f32ea76c-ebcb-4884-8db8-61de1eed57f2",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:36,1201,570,42",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:container:36,1201,570,42:36,1201,570,42:text",
+      "createdAt": "2026-07-29T06:02:53.173Z"
+    },
+    {
+      "id": "auto-230aedf5-7eae-4554-a18b-33de2085affa",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:26,1609,79,49",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:26,1609,79,49:26,1609,79,49:text",
+      "createdAt": "2026-07-29T06:02:53.174Z"
+    },
+    {
+      "id": "auto-8ec749dc-aa77-4b22-b481-79f9a8c45168",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:38,1271,573,34",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:38,1271,573,34:38,1271,573,34:text",
+      "createdAt": "2026-07-29T06:02:53.174Z"
+    },
+    {
+      "id": "auto-3588f637-418d-4f96-a244-c99e987dba5e",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:1260,1321,120,120",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:icon:1260,1321,120,120:1260,1321,120,120:icon",
+      "createdAt": "2026-07-29T06:02:53.175Z"
+    },
+    {
+      "id": "auto-704a30b3-b72a-40ae-9c84-aaee15d5a61c",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:188,1016,225,49",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:188,1016,225,49:188,1016,225,49:subtitle",
+      "createdAt": "2026-07-29T06:02:53.175Z"
+    },
+    {
+      "id": "auto-f331466f-6552-4214-a822-9ccb2fb2ef4d",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:26,1343,64,48",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:26,1343,64,48:26,1343,64,48:subtitle",
+      "createdAt": "2026-07-29T06:02:53.176Z"
+    }
+  ]
+}

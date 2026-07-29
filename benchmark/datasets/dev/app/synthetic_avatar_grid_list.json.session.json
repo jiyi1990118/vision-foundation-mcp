@@ -1,0 +1,52 @@
+{
+  "actions": [
+    {
+      "id": "auto-93a478b0-a090-405f-a91a-51bb7b5ecc44",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:container:36,240,678,84",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:container:36,240,678,84:36,240,678,84:container",
+      "createdAt": "2026-07-29T06:32:04.604Z"
+    },
+    {
+      "id": "auto-767b5ad4-22b1-46a3-8057-b7651abb09bf",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:600,120,120,360",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:icon:600,120,120,360:600,120,120,360:icon",
+      "createdAt": "2026-07-29T06:32:04.608Z"
+    },
+    {
+      "id": "auto-440d4b72-60d8-43dd-b9b8-899964a85c9f",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:26,128,147,52",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:26,128,147,52:26,128,147,52:subtitle",
+      "createdAt": "2026-07-29T06:32:04.609Z"
+    },
+    {
+      "id": "auto-592c3e04-37f5-4fa9-b034-e85831e2d32d",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:0,1020,240,120",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:icon:0,1020,240,120:0,1020,240,120:icon",
+      "createdAt": "2026-07-29T06:32:04.612Z"
+    },
+    {
+      "id": "auto-028cda70-692c-4df9-965c-8dd3bbc70046",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:0,1860,240,240",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:icon:0,1860,240,240:0,1860,240,240:icon",
+      "createdAt": "2026-07-29T06:32:04.613Z"
+    },
+    {
+      "id": "auto-1cc67410-d7da-42f1-9181-7dd5c3fb1140",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:135,889,184,37",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:135,889,184,37:135,889,184,37:text",
+      "createdAt": "2026-07-29T06:32:04.613Z"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "actions": [
+    {
+      "id": "auto-5a70944b-47ae-465d-8a5c-491f6747b930",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:card:30,932,690,493",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:card:30,932,690,493:30,932,690,493:card",
+      "createdAt": "2026-07-29T06:02:53.182Z"
+    },
+    {
+      "id": "auto-f6b9e65b-16cd-4cfc-ba7e-d99f043911bc",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:34,885,135,34",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:34,885,135,34:34,885,135,34:text",
+      "createdAt": "2026-07-29T06:02:53.182Z"
+    },
+    {
+      "id": "auto-7179a63e-b0be-475a-a921-14f141d27c67",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:274,1103,94,33",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:274,1103,94,33:274,1103,94,33:text",
+      "createdAt": "2026-07-29T06:02:53.183Z"
+    },
+    {
+      "id": "auto-44c756b5-f93f-4af1-ae2a-2a513aea3ddf",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:559,1789,97,34",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:559,1789,97,34:559,1789,97,34:text",
+      "createdAt": "2026-07-29T06:02:53.183Z"
+    }
+  ]
+}

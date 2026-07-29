@@ -225,14 +225,19 @@ delivered via `active-learning.ts`. Automated structure rule calibration
 delivered via `scripts/ui-auto-calibrate.ts`.
 
 Current threshold status:
-- 22 reviewed images (met, need 20+).
-- 7/20 element types have 30+ confirmed samples (text, container, icon,
-  subtitle, navbar, title, card). 13 types need more screenshots.
+- 50 reviewed images (met, need 20+).
+- 9/25 element types have 30+ confirmed samples (text, icon, container, subtitle,
+  navbar, column, title, card, image). 16 types need more screenshots;
+  badge (26) is closest.
 - 1/3 structure rules calibrated: `sibling-size-inconsistent` has measured
-  precision=68.1% (317 reviewed) and is promoted to enforced.
+  precision=63.7% (620 reviewed) and is enforced.
   `isolated-content` and `child-outside-parent` remain advisory-only
   (0 findings raised, cannot calibrate).
-- 158 borderline findings (35-50% deviation) remain as auto for human review.
+- 296 borderline findings (35-50% deviation) remain as auto for human review.
+- Synthetic data: 28 HTML-rendered screenshots included as ground truth
+  (source: 'synthetic-html'). They expand type coverage but are limited by
+  the AI's visual classification accuracy — e.g. badge/button/tab/select
+  are often classified as text/icon/container rather than their semantic type.
 
 #### Phase E: Advanced Canvas UX (lowest priority, parallel after B1)
 
@@ -294,6 +299,14 @@ pnpm lint
 pnpm build
 pnpm test:unit      # 56 files, 540 tests
 ```
+
+### Synthetic Data Pipeline
+
+HTML-rendered UI screenshots are generated in `.tmp/ui-templates/` via
+Playwright and annotated with the `ui-generate-annotations.ts` script.
+Synthetic annotations are marked `source: 'synthetic-html'` and included as
+ground truth for active learning frequency analysis and structure rule
+calibration. Template count: 28 synthetic + 22 real = 50 total images.
 
 Launch the local workbench with:
 

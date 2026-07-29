@@ -1,0 +1,667 @@
+{
+  "image": "synthetic_settings_list.jpg",
+  "imageSize": {
+    "width": 2400,
+    "height": 2098
+  },
+  "platform": "app",
+  "theme": "light",
+  "language": "zh",
+  "dpi": "standard",
+  "elements": [
+    {
+      "id": "page:0,0,2400,2098",
+      "type": "page",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 2400,
+        "h": 2098
+      },
+      "render": "native",
+      "children": [
+        "card:30,1497,690,373",
+        "card:30,186,690,228",
+        "card:30,487,690,373",
+        "card:30,932,690,493",
+        "container:30,1930,690,108",
+        "icon:600,1323,120,240",
+        "text:26,1451,75,38",
+        "text:26,443,72,37",
+        "text:323,113,101,52",
+        "text:34,26,86,38",
+        "text:34,885,135,34",
+        "text:615,26,98,34"
+      ]
+    },
+    {
+      "id": "card:30,932,690,493",
+      "type": "card",
+      "bbox": {
+        "x": 30,
+        "y": 931.7765042979943,
+        "w": 690,
+        "h": 492.9398280802293
+      },
+      "render": "native",
+      "children": [
+        "text:135,975,139,38",
+        "text:139,1215,135,49",
+        "text:139,1335,139,49",
+        "text:143,1103,135,33",
+        "text:274,1103,94,33"
+      ]
+    },
+    {
+      "id": "text:135,975,139,38",
+      "type": "text",
+      "bbox": {
+        "x": 135,
+        "y": 975,
+        "w": 139,
+        "h": 38
+      },
+      "render": "native",
+      "text": "消息通知"
+    },
+    {
+      "id": "text:143,1103,135,33",
+      "type": "text",
+      "bbox": {
+        "x": 143,
+        "y": 1103,
+        "w": 135,
+        "h": 33
+      },
+      "render": "native",
+      "text": "推送提醒"
+    },
+    {
+      "id": "text:274,1103,94,33",
+      "type": "text",
+      "bbox": {
+        "x": 274,
+        "y": 1103,
+        "w": 94,
+        "h": 33
+      },
+      "render": "native",
+      "text": "NEW"
+    },
+    {
+      "id": "text:139,1215,135,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 139,
+        "y": 1215,
+        "w": 135,
+        "h": 49
+      },
+      "render": "native",
+      "text": "隐私设置"
+    },
+    {
+      "id": "text:139,1335,139,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 139,
+        "y": 1335,
+        "w": 139,
+        "h": 49
+      },
+      "render": "native",
+      "text": "勿扰模式"
+    },
+    {
+      "id": "card:30,487,690,373",
+      "type": "card",
+      "bbox": {
+        "x": 30,
+        "y": 486.92836676217763,
+        "w": 690,
+        "h": 372.71060171919765
+      },
+      "render": "native",
+      "children": [
+        "text:139,653,165,37",
+        "text:139,776,135,38",
+        "text:143,533,131,37",
+        "text:506,776,143,34",
+        "text:533,649,112,49",
+        "text:544,533,109,37"
+      ]
+    },
+    {
+      "id": "text:143,533,131,37",
+      "type": "text",
+      "bbox": {
+        "x": 143,
+        "y": 533,
+        "w": 131,
+        "h": 37
+      },
+      "render": "native",
+      "text": "个人资料",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:544,533,109,37",
+      "type": "text",
+      "bbox": {
+        "x": 544,
+        "y": 533,
+        "w": 109,
+        "h": 37
+      },
+      "render": "native",
+      "text": "已完善"
+    },
+    {
+      "id": "text:139,653,165,37",
+      "type": "text",
+      "bbox": {
+        "x": 139,
+        "y": 653,
+        "w": 165,
+        "h": 37
+      },
+      "render": "native",
+      "text": "账号与安全",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:533,649,112,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 533,
+        "y": 649,
+        "w": 112,
+        "h": 49
+      },
+      "render": "native",
+      "text": "待验证"
+    },
+    {
+      "id": "text:139,776,135,38",
+      "type": "text",
+      "bbox": {
+        "x": 139,
+        "y": 776,
+        "w": 135,
+        "h": 38
+      },
+      "render": "native",
+      "text": "我的钱包",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:506,776,143,34",
+      "type": "text",
+      "bbox": {
+        "x": 506,
+        "y": 776,
+        "w": 143,
+        "h": 34
+      },
+      "render": "native",
+      "text": "￥258.00"
+    },
+    {
+      "id": "card:30,1497,690,373",
+      "type": "card",
+      "bbox": {
+        "x": 30,
+        "y": 1496.8538681948423,
+        "w": 690,
+        "h": 372.7106017191977
+      },
+      "render": "native",
+      "children": [
+        "text:135,1541,139,38",
+        "text:139,1785,135,38",
+        "text:143,1665,127,38",
+        "text:559,1789,97,34"
+      ]
+    },
+    {
+      "id": "text:135,1541,139,38",
+      "type": "text",
+      "bbox": {
+        "x": 135,
+        "y": 1541,
+        "w": 139,
+        "h": 38
+      },
+      "render": "native",
+      "text": "通用设置"
+    },
+    {
+      "id": "text:143,1665,127,38",
+      "type": "text",
+      "bbox": {
+        "x": 143,
+        "y": 1665,
+        "w": 127,
+        "h": 38
+      },
+      "render": "native",
+      "text": "帮助中心"
+    },
+    {
+      "id": "text:139,1785,135,38",
+      "type": "text",
+      "bbox": {
+        "x": 139,
+        "y": 1785,
+        "w": 135,
+        "h": 38
+      },
+      "render": "native",
+      "text": "关于我们",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:559,1789,97,34",
+      "type": "text",
+      "bbox": {
+        "x": 559,
+        "y": 1789,
+        "w": 97,
+        "h": 34
+      },
+      "render": "native",
+      "text": "v2.5.0"
+    },
+    {
+      "id": "card:30,186,690,228",
+      "type": "card",
+      "bbox": {
+        "x": 30,
+        "y": 186.35530085959886,
+        "w": 690,
+        "h": 228.4355300859599
+      },
+      "render": "native",
+      "children": [
+        "container:66,228,144,144",
+        "text:221,236,207,49",
+        "text:225,293,188,33",
+        "text:229,341,229,30"
+      ]
+    },
+    {
+      "id": "container:66,228,144,144",
+      "type": "container",
+      "bbox": {
+        "x": 66,
+        "y": 228.4355300859599,
+        "w": 144,
+        "h": 144.27507163323781
+      },
+      "render": "native",
+      "children": [
+        "text:94,270,82,64"
+      ]
+    },
+    {
+      "id": "text:94,270,82,64",
+      "type": "title",
+      "bbox": {
+        "x": 94,
+        "y": 270,
+        "w": 82,
+        "h": 64
+      },
+      "render": "native",
+      "text": "张"
+    },
+    {
+      "id": "text:221,236,207,49",
+      "type": "subtitle",
+      "bbox": {
+        "x": 221,
+        "y": 236,
+        "w": 207,
+        "h": 49
+      },
+      "render": "native",
+      "text": "张小凡 E"
+    },
+    {
+      "id": "text:225,293,188,33",
+      "type": "text",
+      "bbox": {
+        "x": 225,
+        "y": 293,
+        "w": 188,
+        "h": 33
+      },
+      "render": "native",
+      "text": "ID: 10086520"
+    },
+    {
+      "id": "text:229,341,229,30",
+      "type": "text",
+      "bbox": {
+        "x": 229,
+        "y": 341,
+        "w": 229,
+        "h": 30
+      },
+      "render": "native",
+      "text": "点击编辑个人资料→"
+    },
+    {
+      "id": "container:30,1930,690,108",
+      "type": "container",
+      "bbox": {
+        "x": 30,
+        "y": 1929.6790830945558,
+        "w": 690,
+        "h": 108.20630372492838
+      },
+      "render": "native",
+      "children": [
+        "text:296,1961,154,38"
+      ]
+    },
+    {
+      "id": "text:296,1961,154,38",
+      "type": "text",
+      "bbox": {
+        "x": 296,
+        "y": 1961,
+        "w": 154,
+        "h": 38
+      },
+      "render": "native",
+      "text": "退出登录"
+    },
+    {
+      "id": "icon:600,1323,120,240",
+      "type": "icon",
+      "bbox": {
+        "x": 600,
+        "y": 1322.5214899713467,
+        "w": 120,
+        "h": 240.45845272206293
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:34,26,86,38",
+      "type": "text",
+      "bbox": {
+        "x": 34,
+        "y": 26,
+        "w": 86,
+        "h": 38
+      },
+      "render": "native",
+      "text": "9:41"
+    },
+    {
+      "id": "text:615,26,98,34",
+      "type": "text",
+      "bbox": {
+        "x": 615,
+        "y": 26,
+        "w": 98,
+        "h": 34
+      },
+      "render": "native",
+      "text": "100%"
+    },
+    {
+      "id": "text:323,113,101,52",
+      "type": "subtitle",
+      "bbox": {
+        "x": 323,
+        "y": 113,
+        "w": 101,
+        "h": 52
+      },
+      "render": "native",
+      "text": "设置"
+    },
+    {
+      "id": "text:26,443,72,37",
+      "type": "text",
+      "bbox": {
+        "x": 26,
+        "y": 443,
+        "w": 72,
+        "h": 37
+      },
+      "render": "native",
+      "text": "账户"
+    },
+    {
+      "id": "text:34,885,135,34",
+      "type": "text",
+      "bbox": {
+        "x": 34,
+        "y": 885,
+        "w": 135,
+        "h": 34
+      },
+      "render": "native",
+      "text": "通知与隐私"
+    },
+    {
+      "id": "text:26,1451,75,38",
+      "type": "text",
+      "bbox": {
+        "x": 26,
+        "y": 1451,
+        "w": 75,
+        "h": 38
+      },
+      "render": "native",
+      "text": "通用"
+    }
+  ],
+  "relations": [
+    {
+      "from": "card:30,1497,690,373",
+      "to": "text:135,1541,139,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,1497,690,373",
+      "to": "text:139,1785,135,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,1497,690,373",
+      "to": "text:143,1665,127,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,1497,690,373",
+      "to": "text:559,1789,97,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,186,690,228",
+      "to": "container:66,228,144,144",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,186,690,228",
+      "to": "text:221,236,207,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,186,690,228",
+      "to": "text:225,293,188,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,186,690,228",
+      "to": "text:229,341,229,30",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,487,690,373",
+      "to": "text:139,653,165,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,487,690,373",
+      "to": "text:139,776,135,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,487,690,373",
+      "to": "text:143,533,131,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,487,690,373",
+      "to": "text:506,776,143,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,487,690,373",
+      "to": "text:533,649,112,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,487,690,373",
+      "to": "text:544,533,109,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,932,690,493",
+      "to": "text:135,975,139,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,932,690,493",
+      "to": "text:139,1215,135,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,932,690,493",
+      "to": "text:139,1335,139,49",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,932,690,493",
+      "to": "text:143,1103,135,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:30,932,690,493",
+      "to": "text:274,1103,94,33",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:30,1930,690,108",
+      "to": "text:296,1961,154,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "container:66,228,144,144",
+      "to": "text:94,270,82,64",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2098",
+      "to": "card:30,1497,690,373",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2098",
+      "to": "card:30,186,690,228",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2098",
+      "to": "card:30,487,690,373",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2098",
+      "to": "card:30,932,690,493",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2098",
+      "to": "container:30,1930,690,108",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2098",
+      "to": "icon:600,1323,120,240",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2098",
+      "to": "text:26,1451,75,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2098",
+      "to": "text:26,443,72,37",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2098",
+      "to": "text:323,113,101,52",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2098",
+      "to": "text:34,26,86,38",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2098",
+      "to": "text:34,885,135,34",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,2400,2098",
+      "to": "text:615,26,98,34",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
+  "zOrder": [],
+  "warnings": [],
+  "source": "synthetic-html"
+}

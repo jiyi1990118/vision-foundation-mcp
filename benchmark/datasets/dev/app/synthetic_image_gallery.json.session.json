@@ -1,0 +1,20 @@
+{
+  "actions": [
+    {
+      "id": "auto-2b9bd80b-7982-4866-b4db-eb930c6c39db",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:300,1438,240,240",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:icon:300,1438,240,240:300,1438,240,240:icon",
+      "createdAt": "2026-07-29T06:02:53.181Z"
+    },
+    {
+      "id": "auto-6840393e-27f6-4e02-9ecd-c44c04620a1b",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:icon:360,360,360,120",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:icon:360,360,360,120:360,360,360,120:icon",
+      "createdAt": "2026-07-29T06:02:53.181Z"
+    }
+  ]
+}

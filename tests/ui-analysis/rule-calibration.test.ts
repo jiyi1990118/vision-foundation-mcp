@@ -23,7 +23,7 @@ function annotation(): AnnotationFile {
       { id: 'icon', type: 'icon', bbox: { x: 55, y: 20, w: 12, h: 12 }, render: 'native' },
       { id: 'row-a', type: 'row', bbox: { x: 10, y: 82, w: 70, h: 8 }, render: 'native' },
       { id: 'row-b', type: 'row', bbox: { x: 10, y: 91, w: 45, h: 5 }, render: 'native' },
-      { id: 'orphan-text', type: 'text', bbox: { x: 101, y: 5, w: 10, h: 5 }, render: 'native', text: 'Outside' },
+      { id: 'floating-text', type: 'text', bbox: { x: 5, y: 85, w: 20, h: 10 }, render: 'native', text: 'Floating' },
     ], relations: [], zOrder: [], warnings: [],
   };
 }

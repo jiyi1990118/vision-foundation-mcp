@@ -122,12 +122,6 @@ function isContent(element: AnnotationElement): boolean {
   return ['text', 'title', 'subtitle', 'icon', 'image', 'avatar', 'button', 'input', 'textarea', 'select', 'checkbox', 'radio', 'switch'].includes(element.type);
 }
 
-function outside(parent: AnnotationElement, child: AnnotationElement): boolean {
-  const a = parent.bbox;
-  const b = child.bbox;
-  return b.x < a.x || b.y < a.y || b.x + b.w > a.x + a.w || b.y + b.h > a.y + a.h;
-}
-
 function buildParentMap(annotation: AnnotationFile): { parentByChild: Map<string, string>; byId: Map<string, AnnotationElement> } {
   const byId = new Map(annotation.elements.map((element) => [element.id, element]));
   const parentByChild = new Map<string, string>();
@@ -142,41 +136,64 @@ function buildParentMap(annotation: AnnotationFile): { parentByChild: Map<string
   return { parentByChild, byId };
 }
 
+const PAGE_LEVEL_TYPES = new Set([
+  'navbar', 'header', 'footer', 'tabbar', 'toolbar', 'title', 'subtitle',
+]);
+
 const RULE_ISOLATED_CONTENT: StructureRule = {
   code: 'isolated-content',
-  version: 1,
+  version: 2,
   severity: 'medium',
   confidence: 0.7,
-  description: '内容元素缺少 contains 父节点，可能未被正确归入容器层级',
+  description: '内容元素直接挂载在 page 根下，缺少中间容器层级',
   advisoryOnly: true,
   evaluate(annotation: AnnotationFile): StructureIssue[] {
-    const { parentByChild } = buildParentMap(annotation);
+    const { parentByChild, byId } = buildParentMap(annotation);
     const issues: StructureIssue[] = [];
     for (const element of annotation.elements) {
       if (!isContent(element) || element.type === 'page') continue;
-      if (parentByChild.has(element.id)) continue;
+      if (PAGE_LEVEL_TYPES.has(element.type)) continue;
+      const parentId = parentByChild.get(element.id);
+      if (!parentId) continue;
+      const parent = byId.get(parentId);
+      if (!parent || parent.type !== 'page') continue;
       issues.push({
         code: 'isolated-content',
         elementId: element.id,
+        parentId: parent.id,
         severity: 'medium',
-        message: `${element.type} 没有容器父节点`,
-        version: 1,
+        message: `${element.type} 直接挂载在 page 下，缺少容器层级`,
+        version: 2,
         confidence: 0.7,
         bboxHash: bboxHash(element.bbox),
         type: element.type,
-        evidence: `元素 ${element.id} (${element.type}) 在 contains 关系和 children 列表中均未找到父节点`,
+        evidence: `元素 ${element.id} (${element.type}) 的父节点是 page 根，应归入 navbar/card/section 等容器`,
       });
     }
     return issues;
   },
 };
 
+function overlapRatio(parent: AnnotationElement, child: AnnotationElement): number {
+  const a = parent.bbox;
+  const b = child.bbox;
+  const x0 = Math.max(a.x, b.x);
+  const y0 = Math.max(a.y, b.y);
+  const x1 = Math.min(a.x + a.w, b.x + b.w);
+  const y1 = Math.min(a.y + a.h, b.y + b.h);
+  const intersection = Math.max(0, x1 - x0) * Math.max(0, y1 - y0);
+  const childArea = b.w * b.h;
+  return childArea > 0 ? intersection / childArea : 1;
+}
+
+const CHILD_OVERLAP_THRESHOLD = 0.5;
+
 const RULE_CHILD_OUTSIDE_PARENT: StructureRule = {
   code: 'child-outside-parent',
-  version: 1,
+  version: 2,
   severity: 'medium',
   confidence: 0.8,
-  description: '子元素 bbox 超出非 page 父容器的边界',
+  description: '子元素与父容器的重叠比例低于 50%，可能是归属错误',
   advisoryOnly: true,
   evaluate(annotation: AnnotationFile): StructureIssue[] {
     const { parentByChild, byId } = buildParentMap(annotation);
@@ -186,18 +203,19 @@ const RULE_CHILD_OUTSIDE_PARENT: StructureRule = {
       if (!parentId) continue;
       const parent = byId.get(parentId);
       if (!parent || parent.type === 'page') continue;
-      if (!outside(parent, element)) continue;
+      const ratio = overlapRatio(parent, element);
+      if (ratio >= CHILD_OVERLAP_THRESHOLD) continue;
       issues.push({
         code: 'child-outside-parent',
         elementId: element.id,
         parentId: parent.id,
         severity: 'medium',
-        message: `${element.type} 超出父容器 ${parent.type}`,
-        version: 1,
+        message: `${element.type} 与父容器 ${parent.type} 重叠仅 ${Math.round(ratio * 100)}%`,
+        version: 2,
         confidence: 0.8,
         bboxHash: bboxHash(element.bbox),
         type: element.type,
-        evidence: `元素 ${element.id} (${element.type}) 超出父元素 ${parent.id} (${parent.type}) 的 bbox`,
+        evidence: `元素 ${element.id} (${element.type}) 与父元素 ${parent.id} (${parent.type}) 重叠比例 ${Math.round(ratio * 100)}%，低于 50% 阈值`,
       });
     }
     return issues;

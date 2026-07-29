@@ -103,6 +103,54 @@
       "action": "confirmed",
       "signature": "1:sibling-size-inconsistent:text:96,355,167,58:96,355,167,58:text",
       "createdAt": "2026-07-29T05:30:19.837Z"
+    },
+    {
+      "id": "auto-e638c555-1932-4486-9693-94a4bad861f1",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:480,180,60,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:480,180,60,120:480,180,60,120:icon",
+      "createdAt": "2026-07-29T07:07:15.933Z"
+    },
+    {
+      "id": "auto-192ec067-d84c-461a-99e0-c357d44dad2b",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:660,180,60,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:660,180,60,120:660,180,60,120:icon",
+      "createdAt": "2026-07-29T07:07:15.933Z"
+    },
+    {
+      "id": "auto-4dac1301-5409-4303-a56b-513d50f360d5",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:840,240,60,60",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:840,240,60,60:840,240,60,60:icon",
+      "createdAt": "2026-07-29T07:07:15.934Z"
+    },
+    {
+      "id": "auto-81212f23-55d4-4a1f-93ed-ad5f0f117724",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:60,840,60,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:60,840,60,120:60,840,60,120:icon",
+      "createdAt": "2026-07-29T07:07:15.934Z"
+    },
+    {
+      "id": "auto-353fac82-decd-4b66-b220-f0435c38f0c6",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:1080,2460,60,180",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:1080,2460,60,180:1080,2460,60,180:icon",
+      "createdAt": "2026-07-29T07:07:15.935Z"
+    },
+    {
+      "id": "auto-204fe1c3-f551-4873-8e58-264b91f0d5e3",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:60,2520,60,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:60,2520,60,120:60,2520,60,120:icon",
+      "createdAt": "2026-07-29T07:07:15.935Z"
     }
   ]
 }

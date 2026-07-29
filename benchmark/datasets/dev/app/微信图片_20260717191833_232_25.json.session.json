@@ -151,6 +151,22 @@
       "action": "suppressed",
       "signature": "1:sibling-size-inconsistent:text:117,1389,200,54:117,1389,200,54:text",
       "createdAt": "2026-07-29T05:30:19.852Z"
+    },
+    {
+      "id": "auto-3566a4e4-4260-4a3b-9fd6-73a0d79c5f67",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:0,300,60,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:0,300,60,120:0,300,60,120:icon",
+      "createdAt": "2026-07-29T07:07:15.936Z"
+    },
+    {
+      "id": "auto-3649f8af-b871-4ca0-b117-c2e08d84b96f",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:0,1380,60,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:0,1380,60,120:0,1380,60,120:icon",
+      "createdAt": "2026-07-29T07:07:15.937Z"
     }
   ]
 }

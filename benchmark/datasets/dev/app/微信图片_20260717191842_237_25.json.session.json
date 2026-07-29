@@ -87,6 +87,22 @@
       "action": "confirmed",
       "signature": "1:sibling-size-inconsistent:text:63,42,116,58:63,42,116,58:subtitle",
       "createdAt": "2026-07-29T05:30:19.917Z"
+    },
+    {
+      "id": "auto-475b9091-a812-4d58-aa82-c57302155ea1",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:360,720,60,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:360,720,60,120:360,720,60,120:icon",
+      "createdAt": "2026-07-29T07:07:15.962Z"
+    },
+    {
+      "id": "auto-b5befa26-ce4e-46b5-a04d-f6de71bc88a3",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:360,960,60,60",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:360,960,60,60:360,960,60,60:icon",
+      "createdAt": "2026-07-29T07:07:15.963Z"
     }
   ]
 }

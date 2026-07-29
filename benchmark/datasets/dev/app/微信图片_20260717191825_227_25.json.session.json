@@ -39,6 +39,14 @@
       "action": "confirmed",
       "signature": "1:sibling-size-inconsistent:footer:3,2619,1194,6:3,2619,1194,6:footer",
       "createdAt": "2026-07-29T05:30:19.791Z"
+    },
+    {
+      "id": "auto-02a0a9c9-7c4c-4278-99fa-623f8c6df9c3",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:0,540,120,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:0,540,120,120:0,540,120,120:icon",
+      "createdAt": "2026-07-29T07:07:15.921Z"
     }
   ]
 }

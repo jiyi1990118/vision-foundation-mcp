@@ -47,6 +47,14 @@
       "action": "confirmed",
       "signature": "1:sibling-size-inconsistent:navbar:369,429,477,48:369,429,477,48:text",
       "createdAt": "2026-07-29T05:30:19.778Z"
+    },
+    {
+      "id": "auto-63d3676b-b3a5-479c-9729-c0d3a1f13f7b",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:270,1020,90,90",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:270,1020,90,90:270,1020,90,90:icon",
+      "createdAt": "2026-07-29T07:07:15.920Z"
     }
   ]
 }

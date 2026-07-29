@@ -54,6 +54,30 @@
       "action": "confirmed",
       "signature": "1:sibling-size-inconsistent:container:984,1461,162,189:984,1461,162,189:container",
       "createdAt": "2026-07-29T05:30:19.812Z"
+    },
+    {
+      "id": "auto-a35d4f25-0e9e-42f9-b961-5abc51d20725",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:780,120,60,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:780,120,60,120:780,120,60,120:icon",
+      "createdAt": "2026-07-29T07:07:15.923Z"
+    },
+    {
+      "id": "auto-7197111a-dd41-497b-bf53-09718314747b",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:0,540,120,60",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:0,540,120,60:0,540,120,60:icon",
+      "createdAt": "2026-07-29T07:07:15.925Z"
+    },
+    {
+      "id": "auto-563aa5d8-d13d-4504-a7e3-c6c11fa8eb85",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:0,1500,120,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:0,1500,120,120:0,1500,120,120:icon",
+      "createdAt": "2026-07-29T07:07:15.927Z"
     }
   ]
 }

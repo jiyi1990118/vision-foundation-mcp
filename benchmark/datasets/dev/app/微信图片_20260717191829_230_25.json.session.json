@@ -95,6 +95,30 @@
       "action": "confirmed",
       "signature": "1:sibling-size-inconsistent:text:33,1460,939,54:33,1460,939,54:text",
       "createdAt": "2026-07-29T05:30:19.827Z"
+    },
+    {
+      "id": "auto-fde72477-d2c8-489d-9b3c-e43b1cdac250",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:480,180,60,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:480,180,60,120:480,180,60,120:icon",
+      "createdAt": "2026-07-29T07:07:15.928Z"
+    },
+    {
+      "id": "auto-ad7e6f57-6f33-49e4-8f72-be4752e95978",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:660,180,60,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:660,180,60,120:660,180,60,120:icon",
+      "createdAt": "2026-07-29T07:07:15.930Z"
+    },
+    {
+      "id": "auto-191d61da-64c9-429e-9625-ff5ebe45b66d",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:840,240,60,60",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:840,240,60,60:840,240,60,60:icon",
+      "createdAt": "2026-07-29T07:07:15.931Z"
     }
   ]
 }

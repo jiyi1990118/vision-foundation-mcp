@@ -111,6 +111,30 @@
       "action": "confirmed",
       "signature": "1:sibling-size-inconsistent:icon:0,2340,240,120:0,2340,240,120:icon",
       "createdAt": "2026-07-29T05:30:19.926Z"
+    },
+    {
+      "id": "auto-6e23f911-81a2-4235-8e06-db5e0d1f37b4",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:1080,1560,120,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:1080,1560,120,120:1080,1560,120,120:icon",
+      "createdAt": "2026-07-29T07:07:15.965Z"
+    },
+    {
+      "id": "auto-3d2dc7bb-2682-4c31-a264-b3d40051b066",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:1080,2040,120,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:1080,2040,120,120:1080,2040,120,120:icon",
+      "createdAt": "2026-07-29T07:07:15.966Z"
+    },
+    {
+      "id": "auto-75bdd79e-de82-447e-a696-4bed31aec321",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:0,2340,240,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:0,2340,240,120:0,2340,240,120:icon",
+      "createdAt": "2026-07-29T07:07:15.966Z"
     }
   ]
 }

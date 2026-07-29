@@ -167,6 +167,62 @@
       "action": "suppressed",
       "signature": "1:sibling-size-inconsistent:text:210,1380,214,34:210,1380,214,34:text",
       "createdAt": "2026-07-29T06:32:04.711Z"
+    },
+    {
+      "id": "auto-190c8171-35cf-4015-b2af-101fed2913a9",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:0,120,120,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:0,120,120,120:0,120,120,120:icon",
+      "createdAt": "2026-07-29T07:07:15.851Z"
+    },
+    {
+      "id": "auto-c1ae72e3-967e-4c4b-b862-8c7b2684746a",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:360,659,360,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:360,659,360,120:360,659,360,120:icon",
+      "createdAt": "2026-07-29T07:07:15.852Z"
+    },
+    {
+      "id": "auto-e8a3d5b0-03f2-419c-aa25-58f2be6e99c4",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:60,899,480,180",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:60,899,480,180:60,899,480,180:icon",
+      "createdAt": "2026-07-29T07:07:15.852Z"
+    },
+    {
+      "id": "auto-d4e64758-437d-46df-9434-1319edbe783a",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:360,1079,360,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:360,1079,360,120:360,1079,360,120:icon",
+      "createdAt": "2026-07-29T07:07:15.853Z"
+    },
+    {
+      "id": "auto-00e60024-e145-4b45-b10d-1ab6974bcd96",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:600,1439,120,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:600,1439,120,120:600,1439,120,120:icon",
+      "createdAt": "2026-07-29T07:07:15.853Z"
+    },
+    {
+      "id": "auto-81e97d12-897f-4d8a-a529-0b2dc3d903f5",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:360,1499,360,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:360,1499,360,120:360,1499,360,120:icon",
+      "createdAt": "2026-07-29T07:07:15.854Z"
+    },
+    {
+      "id": "auto-5d057b11-8b36-4156-b5bb-0dc5cdfa67e8",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:360,1918,360,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:360,1918,360,120:360,1918,360,120:icon",
+      "createdAt": "2026-07-29T07:07:15.855Z"
     }
   ]
 }

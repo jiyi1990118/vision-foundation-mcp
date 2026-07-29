@@ -63,6 +63,30 @@
       "action": "confirmed",
       "signature": "1:sibling-size-inconsistent:icon:0,602,120,241:0,602,120,241:icon",
       "createdAt": "2026-07-29T06:02:53.148Z"
+    },
+    {
+      "id": "auto-1c360d73-87d7-490a-81a6-e29af99acae8",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:0,1083,120,241",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:0,1083,120,241:0,1083,120,241:icon",
+      "createdAt": "2026-07-29T07:07:15.785Z"
+    },
+    {
+      "id": "auto-466f6145-dbf4-4398-bc0e-ecd98cd15136",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:0,1203,120,241",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:0,1203,120,241:0,1203,120,241:icon",
+      "createdAt": "2026-07-29T07:07:15.787Z"
+    },
+    {
+      "id": "auto-5d3ccae9-f33b-46eb-ab66-8593835ea7ab",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:0,1323,120,211",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:0,1323,120,211:0,1323,120,211:icon",
+      "createdAt": "2026-07-29T07:07:15.789Z"
     }
   ]
 }

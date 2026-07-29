@@ -76,23 +76,23 @@ describe('buildContainmentCandidates', () => {
 });
 
 describe('analyzeAnnotationStructure', () => {
-  it('reports isolated content and inconsistent sibling rows', () => {
+  it('reports isolated content directly under page and inconsistent sibling rows', () => {
     const input = annotation();
     input.elements.push(
       { id: 'row-a', type: 'row', bbox: { x: 10, y: 82, w: 70, h: 8 }, render: 'native' },
       { id: 'row-b', type: 'row', bbox: { x: 10, y: 91, w: 45, h: 5 }, render: 'native' },
-      { id: 'orphan-text', type: 'text', bbox: { x: 101, y: 5, w: 10, h: 5 }, render: 'native', text: 'Outside' },
+      { id: 'floating-text', type: 'text', bbox: { x: 5, y: 85, w: 20, h: 10 }, render: 'native', text: 'Floating' },
     );
 
     const issues = analyzeAnnotationStructure(normalizeAnnotationTree(input));
 
     expect(issues).toEqual(expect.arrayContaining([
-      expect.objectContaining({ code: 'isolated-content', elementId: 'orphan-text' }),
+      expect.objectContaining({ code: 'isolated-content', elementId: 'floating-text' }),
       expect.objectContaining({ code: 'sibling-size-inconsistent', elementId: 'row-b' }),
     ]));
   });
 
-  it('reports children that extend outside a non-page parent', () => {
+  it('reports children whose overlap with parent is below threshold', () => {
     const input = annotation();
     input.elements[2]!.bbox = { x: 85, y: 20, w: 20, h: 10 };
     input.elements[1]!.children = ['text'];
@@ -135,13 +135,13 @@ describe('finding signature helpers', () => {
   });
 
   it('findingSubjectId is stable across bbox changes', () => {
-    const base = { code: 'isolated-content', elementId: 'text', version: 1, severity: 'medium', confidence: 0.7, message: '', bboxHash: '10,20,30,10', type: 'text' } as const;
+    const base = { code: 'isolated-content', elementId: 'text', version: 2, severity: 'medium', confidence: 0.7, message: '', bboxHash: '10,20,30,10', type: 'text' } as const;
     const moved = { ...base, bboxHash: '50,60,30,10' };
     expect(findingSubjectId(base)).toBe(findingSubjectId(moved));
   });
 
   it('findingSignature changes when bbox or type changes', () => {
-    const base = { code: 'isolated-content', elementId: 'text', version: 1, severity: 'medium', confidence: 0.7, message: '', bboxHash: '10,20,30,10', type: 'text' } as const;
+    const base = { code: 'isolated-content', elementId: 'text', version: 2, severity: 'medium', confidence: 0.7, message: '', bboxHash: '10,20,30,10', type: 'text' } as const;
     const moved = { ...base, bboxHash: '50,60,30,10' };
     const retyped = { ...base, type: 'button' };
     expect(findingSignature(base)).not.toBe(findingSignature(moved));
@@ -157,17 +157,17 @@ describe('finding signature helpers', () => {
   it('analyzeAnnotationStructure populates version, confidence, bboxHash, type, and evidence', () => {
     const input = annotation();
     input.elements.push(
-      { id: 'orphan-text', type: 'text', bbox: { x: 101, y: 5, w: 10, h: 5 }, render: 'native', text: 'Outside' },
+      { id: 'floating-text', type: 'text', bbox: { x: 5, y: 85, w: 20, h: 10 }, render: 'native', text: 'Floating' },
     );
 
     const issues = analyzeAnnotationStructure(normalizeAnnotationTree(input));
-    const orphan = issues.find((issue) => issue.code === 'isolated-content' && issue.elementId === 'orphan-text');
+    const floating = issues.find((issue) => issue.code === 'isolated-content' && issue.elementId === 'floating-text');
 
-    expect(orphan).toBeDefined();
-    expect(orphan!.version).toBeGreaterThanOrEqual(1);
-    expect(orphan!.confidence).toBeGreaterThan(0);
-    expect(orphan!.bboxHash).toBe('101,5,10,5');
-    expect(orphan!.type).toBe('text');
-    expect(orphan!.evidence).toBeTruthy();
+    expect(floating).toBeDefined();
+    expect(floating!.version).toBeGreaterThanOrEqual(1);
+    expect(floating!.confidence).toBeGreaterThan(0);
+    expect(floating!.bboxHash).toBe('5,85,20,10');
+    expect(floating!.type).toBe('text');
+    expect(floating!.evidence).toBeTruthy();
   });
 });

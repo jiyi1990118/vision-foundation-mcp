@@ -159,6 +159,30 @@
       "action": "confirmed",
       "signature": "1:sibling-size-inconsistent:text:734,2332,125,42:734,2332,125,42:text",
       "createdAt": "2026-07-29T05:30:19.869Z"
+    },
+    {
+      "id": "auto-0a319e78-3fdb-46ff-878b-1d77d6259ff7",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:810,270,240,240",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:810,270,240,240:810,270,240,240:icon",
+      "createdAt": "2026-07-29T07:07:15.938Z"
+    },
+    {
+      "id": "auto-f353ae3d-04ba-4d6b-a926-1f9976292231",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:0,360,60,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:0,360,60,120:0,360,60,120:icon",
+      "createdAt": "2026-07-29T07:07:15.939Z"
+    },
+    {
+      "id": "auto-31e2ff0d-ed38-47b5-b259-ab4b778cca55",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:0,2220,60,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:0,2220,60,120:0,2220,60,120:icon",
+      "createdAt": "2026-07-29T07:07:15.939Z"
     }
   ]
 }

@@ -31,6 +31,14 @@
       "action": "suppressed",
       "signature": "1:sibling-size-inconsistent:text:559,1789,97,34:559,1789,97,34:text",
       "createdAt": "2026-07-29T06:02:53.183Z"
+    },
+    {
+      "id": "auto-9b25a323-2baa-491f-8a04-c78f929afd32",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:600,1323,120,240",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:600,1323,120,240:600,1323,120,240:icon",
+      "createdAt": "2026-07-29T07:07:15.864Z"
     }
   ]
 }

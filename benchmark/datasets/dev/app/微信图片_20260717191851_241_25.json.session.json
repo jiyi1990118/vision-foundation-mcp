@@ -143,6 +143,110 @@
       "action": "suppressed",
       "signature": "1:sibling-size-inconsistent:icon:540,1080,120,60:540,1080,120,60:icon",
       "createdAt": "2026-07-29T05:30:19.973Z"
+    },
+    {
+      "id": "auto-4e080acd-6193-435f-84f5-93ef64275f02",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:660,120,180,60",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:660,120,180,60:660,120,180,60:icon",
+      "createdAt": "2026-07-29T07:07:15.981Z"
+    },
+    {
+      "id": "auto-44c847cc-8309-4506-8307-edd7a308797f",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:930,150,90,90",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:930,150,90,90:930,150,90,90:icon",
+      "createdAt": "2026-07-29T07:07:15.983Z"
+    },
+    {
+      "id": "auto-fe33939a-8040-4a76-86fe-d01952b31bab",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:1050,150,120,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:1050,150,120,120:1050,150,120,120:icon",
+      "createdAt": "2026-07-29T07:07:15.985Z"
+    },
+    {
+      "id": "auto-6c380976-d089-40e2-b09e-20e8b819f076",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:660,240,180,60",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:660,240,180,60:660,240,180,60:icon",
+      "createdAt": "2026-07-29T07:07:15.986Z"
+    },
+    {
+      "id": "auto-de019888-bc7d-46a4-96cf-137fd2b4debb",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:840,360,60,60",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:840,360,60,60:840,360,60,60:icon",
+      "createdAt": "2026-07-29T07:07:15.987Z"
+    },
+    {
+      "id": "auto-7766a870-2cac-4c36-a084-52c12ba29a1e",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:300,1080,120,60",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:300,1080,120,60:300,1080,120,60:icon",
+      "createdAt": "2026-07-29T07:07:15.987Z"
+    },
+    {
+      "id": "auto-2a49ab6f-9e9c-45b6-ada3-ab21dd0330fa",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:540,1080,120,60",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:540,1080,120,60:540,1080,120,60:icon",
+      "createdAt": "2026-07-29T07:07:15.989Z"
+    },
+    {
+      "id": "auto-8e542982-9a68-4720-9363-6a19a9b14353",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:120,1260,60,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:120,1260,60,120:120,1260,60,120:icon",
+      "createdAt": "2026-07-29T07:07:15.989Z"
+    },
+    {
+      "id": "auto-bab47f1a-86b8-4cdf-8c66-1740bd9afb8a",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:1080,1260,60,60",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:1080,1260,60,60:1080,1260,60,60:icon",
+      "createdAt": "2026-07-29T07:07:15.990Z"
+    },
+    {
+      "id": "auto-e16868bf-4513-4f93-b60a-e5eb140b7a74",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:120,1320,60,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:120,1320,60,120:120,1320,60,120:icon",
+      "createdAt": "2026-07-29T07:07:15.992Z"
+    },
+    {
+      "id": "auto-e3bbc861-7a8a-4fdb-b425-d45dd072bd19",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:0,1470,210,90",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:0,1470,210,90:0,1470,210,90:icon",
+      "createdAt": "2026-07-29T07:07:15.993Z"
+    },
+    {
+      "id": "auto-8969908f-3b96-4550-9a51-57308ffe4609",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:60,1560,60,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:60,1560,60,120:60,1560,60,120:icon",
+      "createdAt": "2026-07-29T07:07:15.994Z"
+    },
+    {
+      "id": "auto-0b620648-a484-4e52-8867-9b6e457691ce",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:540,2550,120,90",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:540,2550,120,90:540,2550,120,90:icon",
+      "createdAt": "2026-07-29T07:07:15.995Z"
     }
   ]
 }

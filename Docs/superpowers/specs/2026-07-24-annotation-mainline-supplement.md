@@ -230,13 +230,18 @@ Current threshold status:
   navbar, column, title, card, image). 16 types need more screenshots;
   badge (26) is closest.
 - 1/3 structure rules calibrated: `sibling-size-inconsistent` has measured
-  precision=63.7% (620 reviewed) and is enforced.
-  `isolated-content` and `child-outside-parent` remain advisory-only
-  (0 findings raised, cannot calibrate).
-- 296 borderline findings (35-50% deviation) remain as auto for human review.
+  precision=64.4% (606 reviewed) and is enforced.
+  `isolated-content` v2 has 1004 findings (266 auto-suppressed, 738 pending
+  human review) and remains advisory-only (precision=0% on auto-suppressed
+  set; true precision requires human review of the 738 pending findings).
+  `child-outside-parent` v2 has 0 findings because the normalizer
+  structurally guarantees 100% parent-child overlap for derived containment;
+  it will only fire on human-edited containment overrides.
+- 288 borderline sibling-size findings (35-50% deviation) remain as auto for
+  human review.
 - Synthetic data: 28 HTML-rendered screenshots included as ground truth
   (source: 'synthetic-html'). They expand type coverage but are limited by
-  the AI's visual classification accuracy — e.g. badge/button/tab/select
+  the AI's visual classification accuracy - e.g. badge/button/tab/select
   are often classified as text/icon/container rather than their semantic type.
 
 #### Phase E: Advanced Canvas UX (lowest priority, parallel after B1)
@@ -384,11 +389,21 @@ and gesture start; a hidden layer is excluded from rendering and hit testing.
 
 ## Structural Findings
 
-Current rules are advisory only:
+Rules v2 (redesigned for real-world utility):
 
-- content element without a container parent;
-- child extending outside a non-page parent;
-- repeated same-type siblings with substantial size variation.
+- `isolated-content` v2: content element (text/icon/image/button/etc.)
+  whose direct parent is `page` (should be in a container like
+  navbar/card/section/column). Excludes page-level types (navbar, header,
+  footer, tabbar, toolbar, title, subtitle). 1004 findings across 49
+  eligible annotations; 266 auto-suppressed (icons + container-less images),
+  738 pending human review.
+- `child-outside-parent` v2: child whose overlap with parent is <50% of
+  child area. Fires on human-edited containment overrides; structurally
+  prevented from firing on auto-derived containment (normalizer guarantees
+  100% overlap).
+- `sibling-size-inconsistent` v1: same-type siblings with >25% size
+  deviation from median. 894 findings, 606 reviewed, precision=64.4%,
+  enforced.
 
 They must not auto-edit annotations, influence active-learning priority, or
 become regression failures until calibrated against a human-reviewed holdout.

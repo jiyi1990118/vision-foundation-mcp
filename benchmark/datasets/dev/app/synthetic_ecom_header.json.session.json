@@ -47,6 +47,22 @@
       "action": "suppressed",
       "signature": "1:sibling-size-inconsistent:text:26,1343,64,48:26,1343,64,48:subtitle",
       "createdAt": "2026-07-29T06:02:53.176Z"
+    },
+    {
+      "id": "auto-78ffcbda-efb5-4a37-84b3-6cc9a1210ebb",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:660,1321,180,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:660,1321,180,120:660,1321,180,120:icon",
+      "createdAt": "2026-07-29T07:07:15.836Z"
+    },
+    {
+      "id": "auto-3c49d1d9-60b0-4e11-92c8-4d7269d32642",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:icon:1260,1321,120,120",
+      "action": "suppressed",
+      "signature": "2:isolated-content:icon:1260,1321,120,120:1260,1321,120,120:icon",
+      "createdAt": "2026-07-29T07:07:15.837Z"
     }
   ]
 }

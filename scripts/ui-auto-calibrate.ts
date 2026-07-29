@@ -39,11 +39,28 @@ function parseDeviation(evidence: string): number {
   return Math.max(...match.map(m => parseInt(m)));
 }
 
-function heuristicAction(finding: StructureIssue): 'confirmed' | 'suppressed' | null {
-  if (finding.code !== 'sibling-size-inconsistent') return null;
-  const dev = parseDeviation(finding.evidence);
-  if (dev > CONFIRM_THRESHOLD) return 'confirmed';
-  if (dev <= SUPPRESS_THRESHOLD) return 'suppressed';
+const CONTAINER_TYPES = new Set([
+  'card', 'section', 'column', 'navbar', 'header', 'footer',
+  'tabbar', 'toolbar', 'container', 'row', 'grid', 'list', 'table',
+  'dialog', 'bottomSheet', 'drawer',
+]);
+
+function hasContainers(annotation: { elements: Array<{ type: string }> }): boolean {
+  return annotation.elements.some((e) => CONTAINER_TYPES.has(e.type));
+}
+
+function heuristicAction(finding: StructureIssue, annotation: { elements: Array<{ type: string }> }): 'confirmed' | 'suppressed' | null {
+  if (finding.code === 'sibling-size-inconsistent') {
+    const dev = parseDeviation(finding.evidence);
+    if (dev > CONFIRM_THRESHOLD) return 'confirmed';
+    if (dev <= SUPPRESS_THRESHOLD) return 'suppressed';
+    return null;
+  }
+  if (finding.code === 'isolated-content') {
+    if (!hasContainers(annotation)) return 'suppressed';
+    if (finding.type === 'icon') return 'suppressed';
+    return null;
+  }
   return null;
 }
 
@@ -92,7 +109,7 @@ async function main(): Promise<void> {
       const subjectId = findingSubjectId(finding);
       if (existingActions.has(subjectId)) continue;
 
-      const action = heuristicAction(finding);
+      const action = heuristicAction(finding, annotation);
       if (!action) {
         totalAuto++;
         continue;

@@ -95,6 +95,30 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:930,690,60,60:930,690,60,60:icon",
       "createdAt": "2026-07-29T07:07:16.006Z"
+    },
+    {
+      "id": "auto-48ef5c81-1daf-4214-8bc7-b3dcdc13552e",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:88,2591,200,41",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:88,2591,200,41:88,2591,200,41:text",
+      "createdAt": "2026-07-29T07:38:24.777Z"
+    },
+    {
+      "id": "auto-ccda7c7c-bddd-42b1-973f-9dcdba520737",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:501,2587,204,41",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:501,2587,204,41:501,2587,204,41:text",
+      "createdAt": "2026-07-29T07:38:24.780Z"
+    },
+    {
+      "id": "auto-2ff6f648-c047-4e26-9154-98fe09e7a1a6",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:809,42,326,54",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:809,42,326,54:809,42,326,54:text",
+      "createdAt": "2026-07-29T07:38:24.783Z"
     }
   ]
 }

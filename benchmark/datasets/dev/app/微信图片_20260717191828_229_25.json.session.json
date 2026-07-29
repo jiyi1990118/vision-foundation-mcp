@@ -78,6 +78,22 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:0,1500,120,120:0,1500,120,120:icon",
       "createdAt": "2026-07-29T07:07:15.927Z"
+    },
+    {
+      "id": "auto-133c0e0f-5cce-4bc2-9251-f28a9f0861f9",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:image:780,420,420,2220",
+      "action": "suppressed",
+      "signature": "2:isolated-content:image:780,420,420,2220:780,420,420,2220:image",
+      "createdAt": "2026-07-29T07:38:24.599Z"
+    },
+    {
+      "id": "auto-28650c27-0115-40e7-bf5e-48ec5bc34535",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:63,50,104,42",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:63,50,104,42:63,50,104,42:text",
+      "createdAt": "2026-07-29T07:38:24.606Z"
     }
   ]
 }

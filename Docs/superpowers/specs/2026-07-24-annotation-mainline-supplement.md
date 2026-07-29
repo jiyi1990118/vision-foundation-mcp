@@ -231,12 +231,11 @@ Current threshold status:
   badge (26) is closest.
 - 1/3 structure rules calibrated: `sibling-size-inconsistent` has measured
   precision=64.4% (606 reviewed) and is enforced.
-  `isolated-content` v2 has 1004 findings (266 auto-suppressed, 738 pending
+  `isolated-content` v2 has 1036 findings (355 auto-suppressed, 649 pending
   human review) and remains advisory-only (precision=0% on auto-suppressed
-  set; true precision requires human review of the 738 pending findings).
-  `child-outside-parent` v2 has 0 findings because the normalizer
-  structurally guarantees 100% parent-child overlap for derived containment;
-  it will only fire on human-edited containment overrides.
+  set; true precision requires human review of the 649 pending findings).
+  `sibling-overlap` v1 has 24 findings across 11 images and remains
+  advisory-only (uncalibrated).
 - 288 borderline sibling-size findings (35-50% deviation) remain as auto for
   human review.
 - Synthetic data: 28 HTML-rendered screenshots included as ground truth
@@ -389,21 +388,24 @@ and gesture start; a hidden layer is excluded from rendering and hit testing.
 
 ## Structural Findings
 
-Rules v2 (redesigned for real-world utility):
+Rules (current versions):
 
 - `isolated-content` v2: content element (text/icon/image/button/etc.)
   whose direct parent is `page` (should be in a container like
   navbar/card/section/column). Excludes page-level types (navbar, header,
-  footer, tabbar, toolbar, title, subtitle). 1004 findings across 49
-  eligible annotations; 266 auto-suppressed (icons + container-less images),
-  738 pending human review.
-- `child-outside-parent` v2: child whose overlap with parent is <50% of
-  child area. Fires on human-edited containment overrides; structurally
-  prevented from firing on auto-derived containment (normalizer guarantees
-  100% overlap).
+  footer, tabbar, toolbar, title, subtitle). 1036 findings across 50
+  annotations; 355 auto-suppressed (icons, container-less images, status
+  bar text, header titles, tab-bar labels, full-width banners, background
+  images), 649 pending human review.
+- `sibling-overlap` v1: same-parent, same-type siblings with >30% IoU.
+  Detects potential duplicate detections. 24 findings across 11
+  annotations. Advisory-only (uncalibrated).
 - `sibling-size-inconsistent` v1: same-type siblings with >25% size
-  deviation from median. 894 findings, 606 reviewed, precision=64.4%,
+  deviation from median. 916 findings, 606 reviewed, precision=64.4%,
   enforced.
+
+Replaced `child-outside-parent` (v2 had 0 findings because the normalizer
+structurally guarantees 100% parent-child overlap for derived containment).
 
 They must not auto-edit annotations, influence active-learning priority, or
 become regression failures until calibrated against a human-reviewed holdout.
@@ -429,7 +431,9 @@ only when all conditions hold:
    and `contains` representations.
 4. Every graph relation references existing IDs.
 5. High-severity prediction and structure findings are confirmed, overridden,
-   or suppressed.
+   or suppressed. **Enforced** via `hasOpenHighSeverityFindings()` in
+   `annotation-loader.ts`; annotations with open medium-severity structure
+   findings are excluded with reason `'open-high-severity-findings'`.
 6. The example manifest records image hash, annotation hash, prediction hash,
    AI-review hash when present, review state, and split assignment.
 

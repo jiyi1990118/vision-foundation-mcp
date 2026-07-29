@@ -1,7 +1,7 @@
 import type { AnnotationElement, AnnotationFile, AnnotationRelation } from '../benchmark/annotation-loader.js';
 import type { RelationSource } from '../benchmark/annotation-loader.js';
 
-export type StructureIssueCode = 'isolated-content' | 'child-outside-parent' | 'sibling-size-inconsistent';
+export type StructureIssueCode = 'isolated-content' | 'sibling-overlap' | 'sibling-size-inconsistent';
 
 export interface StructureIssue {
   code: StructureIssueCode;
@@ -174,49 +174,62 @@ const RULE_ISOLATED_CONTENT: StructureRule = {
   },
 };
 
-function overlapRatio(parent: AnnotationElement, child: AnnotationElement): number {
-  const a = parent.bbox;
-  const b = child.bbox;
+function bboxIoU(a: { x: number; y: number; w: number; h: number }, b: { x: number; y: number; w: number; h: number }): number {
   const x0 = Math.max(a.x, b.x);
   const y0 = Math.max(a.y, b.y);
   const x1 = Math.min(a.x + a.w, b.x + b.w);
   const y1 = Math.min(a.y + a.h, b.y + b.h);
   const intersection = Math.max(0, x1 - x0) * Math.max(0, y1 - y0);
-  const childArea = b.w * b.h;
-  return childArea > 0 ? intersection / childArea : 1;
+  const areaA = a.w * a.h;
+  const areaB = b.w * b.h;
+  const union = areaA + areaB - intersection;
+  return union > 0 ? intersection / union : 0;
 }
 
-const CHILD_OVERLAP_THRESHOLD = 0.5;
+const SIBLING_OVERLAP_THRESHOLD = 0.3;
 
-const RULE_CHILD_OUTSIDE_PARENT: StructureRule = {
-  code: 'child-outside-parent',
-  version: 2,
+const RULE_SIBLING_OVERLAP: StructureRule = {
+  code: 'sibling-overlap',
+  version: 1,
   severity: 'medium',
-  confidence: 0.8,
-  description: '子元素与父容器的重叠比例低于 50%，可能是归属错误',
+  confidence: 0.6,
+  description: '同级同类型兄弟元素 bbox 显著重叠，可能是重复检测',
   advisoryOnly: true,
   evaluate(annotation: AnnotationFile): StructureIssue[] {
-    const { parentByChild, byId } = buildParentMap(annotation);
+    const { byId } = buildParentMap(annotation);
     const issues: StructureIssue[] = [];
-    for (const element of annotation.elements) {
-      const parentId = parentByChild.get(element.id);
-      if (!parentId) continue;
-      const parent = byId.get(parentId);
-      if (!parent || parent.type === 'page') continue;
-      const ratio = overlapRatio(parent, element);
-      if (ratio >= CHILD_OVERLAP_THRESHOLD) continue;
-      issues.push({
-        code: 'child-outside-parent',
-        elementId: element.id,
-        parentId: parent.id,
-        severity: 'medium',
-        message: `${element.type} 与父容器 ${parent.type} 重叠仅 ${Math.round(ratio * 100)}%`,
-        version: 2,
-        confidence: 0.8,
-        bboxHash: bboxHash(element.bbox),
-        type: element.type,
-        evidence: `元素 ${element.id} (${element.type}) 与父元素 ${parent.id} (${parent.type}) 重叠比例 ${Math.round(ratio * 100)}%，低于 50% 阈值`,
-      });
+    for (const parent of annotation.elements) {
+      if (parent.type === 'page') continue;
+      const children = (parent.children ?? []).map((id) => byId.get(id)).filter((element): element is AnnotationElement => Boolean(element));
+      const groups = new Map<string, AnnotationElement[]>();
+      for (const child of children) groups.set(child.type, [...(groups.get(child.type) ?? []), child]);
+      for (const siblings of groups.values()) {
+        if (siblings.length < 2) continue;
+        const flagged = new Set<string>();
+        for (let i = 0; i < siblings.length; i++) {
+          for (let j = i + 1; j < siblings.length; j++) {
+            const a = siblings[i]!;
+            const b = siblings[j]!;
+            const iou = bboxIoU(a.bbox, b.bbox);
+            if (iou <= SIBLING_OVERLAP_THRESHOLD) continue;
+            const smaller = area(a) <= area(b) ? a : b;
+            if (flagged.has(smaller.id)) continue;
+            flagged.add(smaller.id);
+            issues.push({
+              code: 'sibling-overlap',
+              elementId: smaller.id,
+              parentId: parent.id,
+              severity: 'medium',
+              message: `${smaller.type} 与同级元素重叠 ${Math.round(iou * 100)}%，可能是重复检测`,
+              version: 1,
+              confidence: 0.6,
+              bboxHash: bboxHash(smaller.bbox),
+              type: smaller.type,
+              evidence: `元素 ${smaller.id} (${smaller.type}) 与同级同类型兄弟元素 IoU ${Math.round(iou * 100)}%，超过 30% 阈值`,
+            });
+          }
+        }
+      }
     }
     return issues;
   },
@@ -269,7 +282,7 @@ const RULE_SIBLING_SIZE_INCONSISTENT: StructureRule = {
 
 export const STRUCTURE_RULES: StructureRule[] = [
   RULE_ISOLATED_CONTENT,
-  RULE_CHILD_OUTSIDE_PARENT,
+  RULE_SIBLING_OVERLAP,
   RULE_SIBLING_SIZE_INCONSISTENT,
 ];
 

@@ -119,6 +119,14 @@
       "action": "confirmed",
       "signature": "1:sibling-size-inconsistent:icon:360,1320,120,240:360,1320,120,240:icon",
       "createdAt": "2026-07-29T06:17:27.757Z"
+    },
+    {
+      "id": "auto-3aace2d1-be5b-4242-a288-433d8d242876",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:611,26,105,38",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:611,26,105,38:611,26,105,38:text",
+      "createdAt": "2026-07-29T07:38:24.538Z"
     }
   ]
 }

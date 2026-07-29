@@ -231,6 +231,22 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:0,1922,120,120:0,1922,120,120:icon",
       "createdAt": "2026-07-29T07:07:15.776Z"
+    },
+    {
+      "id": "auto-f0d35f98-8f82-40f2-8dca-3fca4fd85da8",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:34,26,86,38",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:34,26,86,38:34,26,86,38:text",
+      "createdAt": "2026-07-29T07:38:24.426Z"
+    },
+    {
+      "id": "auto-92bb510d-74b3-49ce-a1f2-65660ac395d7",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:615,26,98,34",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:615,26,98,34:615,26,98,34:text",
+      "createdAt": "2026-07-29T07:38:24.465Z"
     }
   ]
 }

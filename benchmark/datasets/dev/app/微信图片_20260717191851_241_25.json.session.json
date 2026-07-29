@@ -247,6 +247,30 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:540,2550,120,90:540,2550,120,90:icon",
       "createdAt": "2026-07-29T07:07:15.995Z"
+    },
+    {
+      "id": "auto-c1251c9d-1d7c-48bc-a344-1bbd5ca2fdef",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:container:63,2562,102,57",
+      "action": "suppressed",
+      "signature": "2:isolated-content:container:63,2562,102,57:63,2562,102,57:text",
+      "createdAt": "2026-07-29T07:38:24.682Z"
+    },
+    {
+      "id": "auto-86abc886-0e7d-4e3d-a614-a41eb9700f8a",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:63,42,116,58",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:63,42,116,58:63,42,116,58:text",
+      "createdAt": "2026-07-29T07:38:24.687Z"
+    },
+    {
+      "id": "auto-cc42d2a9-3168-451e-8d66-1b9a6fa7f728",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:797,42,371,54",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:797,42,371,54:797,42,371,54:text",
+      "createdAt": "2026-07-29T07:38:24.690Z"
     }
   ]
 }

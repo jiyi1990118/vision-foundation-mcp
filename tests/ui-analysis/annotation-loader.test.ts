@@ -121,6 +121,65 @@ describe('annotation-loader', () => {
       const result = loadDatasetWithExclusions(dir);
       expect(result.entries).toHaveLength(1);
       expect(result.excluded).toContainEqual({ file: 'invalid.json', reason: 'invalid: annotation imageSize must have numeric width and height' });
+      expect(result.counts.total).toBe(1);
+      expect(result.counts.invalid).toBe(1);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  // A button mounted directly under the page root triggers the medium-severity
+  // `isolated-content` finding -> gate #5 excludes it until reviewed.
+  const ANNO_WITH_FINDING = {
+    ...SAMPLE_ANNOTATION,
+    image: 'screen.png',
+    elements: [
+      { id: 'page', type: 'page', bbox: { x: 0, y: 0, w: 100, h: 100 }, render: 'native', children: ['btn'] },
+      { id: 'btn', type: 'button', bbox: { x: 10, y: 10, w: 20, h: 10 }, render: 'native', text: 'OK' },
+    ],
+    relations: [{ from: 'page', to: 'btn', type: 'contains', source: 'human' }],
+    warnings: ['human-reviewed: local-workbench'],
+  };
+  const SUPPRESSED_SESSION = {
+    actions: [{
+      id: 'a1',
+      subjectKind: 'structure-finding',
+      subjectId: 'isolated-content:btn',
+      action: 'suppressed',
+      signature: '2:isolated-content:btn:10,10,20,10:button',
+      createdAt: '2026-07-29T00:00:00.000Z',
+    }],
+  };
+
+  it('loadDatasetWithExclusions excludes unreviewed high-severity findings and tallies counts', () => {
+    const dir = join(tmpdir(), `ds-test-${Date.now()}`);
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, 'open.json'), JSON.stringify(ANNO_WITH_FINDING));
+    writeFileSync(join(dir, 'screen.png'), Buffer.alloc(8));
+    try {
+      const result = loadDatasetWithExclusions(dir);
+      expect(result.entries).toHaveLength(0);
+      expect(result.excluded).toContainEqual({ file: 'open.json', reason: 'open-high-severity-findings' });
+      expect(result.counts.openHighSeverityExcluded).toBe(1);
+      expect(result.counts.total).toBe(1);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('loadDatasetWithExclusions admits annotations whose findings are suppressed in the session file', () => {
+    const dir = join(tmpdir(), `ds-test-${Date.now()}`);
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, 'reviewed.json'), JSON.stringify(ANNO_WITH_FINDING));
+    writeFileSync(join(dir, 'reviewed.json.session.json'), JSON.stringify(SUPPRESSED_SESSION));
+    writeFileSync(join(dir, 'screen.png'), Buffer.alloc(8));
+    try {
+      const result = loadDatasetWithExclusions(dir);
+      expect(result.entries).toHaveLength(1);
+      expect(result.excluded).toHaveLength(1);
+      expect(result.excluded[0].reason).toBe('sidecar');
+      expect(result.counts.openHighSeverityExcluded).toBe(0);
+      expect(result.counts.sidecar).toBe(1);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }

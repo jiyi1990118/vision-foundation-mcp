@@ -140,12 +140,12 @@ describe('aggregateCalibration', () => {
 
   it('marks high-precision rules as non-advisory', () => {
     const counts: RuleCalibrationCounts[] = [
-      { code: 'child-outside-parent', version: 1, raised: 10, confirmed: 8, overridden: 1, suppressed: 1, rejected: 0, unreviewed: 0 },
+      { code: 'sibling-overlap', version: 1, raised: 10, confirmed: 8, overridden: 1, suppressed: 1, rejected: 0, unreviewed: 0 },
     ];
     const result = aggregateCalibration(counts, { precisionThreshold: 0.5 });
-    expect(result['child-outside-parent']!.calibrated).toBe(true);
-    expect(result['child-outside-parent']!.advisoryOnly).toBe(false);
-    expect(result['child-outside-parent']!.precision).toBeCloseTo(0.9, 3);
+    expect(result['sibling-overlap']!.calibrated).toBe(true);
+    expect(result['sibling-overlap']!.advisoryOnly).toBe(false);
+    expect(result['sibling-overlap']!.precision).toBeCloseTo(0.9, 3);
   });
 });
 

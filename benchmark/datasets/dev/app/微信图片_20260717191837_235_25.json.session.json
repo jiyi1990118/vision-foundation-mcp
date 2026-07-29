@@ -127,6 +127,22 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:840,2460,60,180:840,2460,60,180:icon",
       "createdAt": "2026-07-29T07:07:15.950Z"
+    },
+    {
+      "id": "auto-94aebf9b-73ff-4335-968b-4b44eb1915c8",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:63,42,104,54",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:63,42,104,54:63,42,104,54:text",
+      "createdAt": "2026-07-29T07:38:24.621Z"
+    },
+    {
+      "id": "auto-afd386c4-8492-47ab-b64d-8485b0b180c2",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:830,42,301,58",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:830,42,301,58:830,42,301,58:text",
+      "createdAt": "2026-07-29T07:38:24.622Z"
     }
   ]
 }

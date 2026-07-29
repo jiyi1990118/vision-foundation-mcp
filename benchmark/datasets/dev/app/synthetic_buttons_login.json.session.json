@@ -103,6 +103,22 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:120,1440,120,120:120,1440,120,120:icon",
       "createdAt": "2026-07-29T07:07:15.822Z"
+    },
+    {
+      "id": "auto-c0fa6df6-71f9-48ab-bad5-5a8518a5a2ce",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:34,26,86,38",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:34,26,86,38:34,26,86,38:text",
+      "createdAt": "2026-07-29T07:38:24.517Z"
+    },
+    {
+      "id": "auto-89c08e6e-b0db-49ac-a70d-5952c3ade40e",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:611,26,105,38",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:611,26,105,38:611,26,105,38:text",
+      "createdAt": "2026-07-29T07:38:24.522Z"
     }
   ]
 }

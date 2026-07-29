@@ -127,6 +127,22 @@
       "action": "confirmed",
       "signature": "1:sibling-size-inconsistent:container:384,228,330,84:384,228,330,84:container",
       "createdAt": "2026-07-29T06:02:53.212Z"
+    },
+    {
+      "id": "auto-9e0bd2cc-6077-4544-a733-15849fc57733",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:34,19,90,49",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:34,19,90,49:34,19,90,49:text",
+      "createdAt": "2026-07-29T07:38:24.558Z"
+    },
+    {
+      "id": "auto-2c26302d-004e-46ee-b630-8697da4b63a4",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:611,19,105,49",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:611,19,105,49:611,19,105,49:text",
+      "createdAt": "2026-07-29T07:38:24.559Z"
     }
   ]
 }

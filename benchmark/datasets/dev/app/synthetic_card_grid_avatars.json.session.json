@@ -167,6 +167,22 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:60,1682,300,300:60,1682,300,300:icon",
       "createdAt": "2026-07-29T07:07:15.829Z"
+    },
+    {
+      "id": "auto-7d2e74d0-f2d4-4d7c-86ea-0cba3b1e658e",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:34,26,86,38",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:34,26,86,38:34,26,86,38:text",
+      "createdAt": "2026-07-29T07:38:24.525Z"
+    },
+    {
+      "id": "auto-53f18927-9676-4b29-9aee-37376624764a",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:615,26,98,34",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:615,26,98,34:615,26,98,34:text",
+      "createdAt": "2026-07-29T07:38:24.526Z"
     }
   ]
 }

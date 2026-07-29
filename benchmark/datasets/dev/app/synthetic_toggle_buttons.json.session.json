@@ -63,6 +63,14 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:360,1918,360,240:360,1918,360,240:icon",
       "createdAt": "2026-07-29T07:07:15.919Z"
+    },
+    {
+      "id": "auto-af249514-a4aa-487f-90b5-5d353ad2de6b",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:611,26,105,38",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:611,26,105,38:611,26,105,38:text",
+      "createdAt": "2026-07-29T07:38:24.561Z"
     }
   ]
 }

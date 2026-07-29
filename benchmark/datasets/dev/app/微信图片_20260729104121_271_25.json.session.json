@@ -223,6 +223,30 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:960,2580,150,60:960,2580,150,60:icon",
       "createdAt": "2026-07-29T07:07:16.014Z"
+    },
+    {
+      "id": "auto-f15efa08-c5db-40a4-af58-d9de6e5564de",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:container:915,2565,237,63",
+      "action": "suppressed",
+      "signature": "2:isolated-content:container:915,2565,237,63:915,2565,237,63:text",
+      "createdAt": "2026-07-29T07:38:24.793Z"
+    },
+    {
+      "id": "auto-148e5d34-ef07-4626-b28d-cb8f1af7a12b",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:63,42,146,58",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:63,42,146,58:63,42,146,58:text",
+      "createdAt": "2026-07-29T07:38:24.795Z"
+    },
+    {
+      "id": "auto-ce9652d6-943a-4f47-8178-35b729f3a88d",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:805,42,330,54",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:805,42,330,54:805,42,330,54:text",
+      "createdAt": "2026-07-29T07:38:24.797Z"
     }
   ]
 }

@@ -92,15 +92,17 @@ describe('analyzeAnnotationStructure', () => {
     ]));
   });
 
-  it('reports children whose overlap with parent is below threshold', () => {
+  it('reports same-type siblings whose bbox overlap exceeds threshold', () => {
     const input = annotation();
-    input.elements[2]!.bbox = { x: 85, y: 20, w: 20, h: 10 };
-    input.elements[1]!.children = ['text'];
+    input.elements.push(
+      { id: 'button-a', type: 'button', bbox: { x: 20, y: 40, w: 30, h: 24 }, render: 'native' },
+      { id: 'button-b', type: 'button', bbox: { x: 22, y: 42, w: 30, h: 18 }, render: 'native' },
+    );
 
-    const issues = analyzeAnnotationStructure(input);
+    const issues = analyzeAnnotationStructure(normalizeAnnotationTree(input));
 
     expect(issues).toEqual(expect.arrayContaining([
-      expect.objectContaining({ code: 'child-outside-parent', elementId: 'text', parentId: 'card' }),
+      expect.objectContaining({ code: 'sibling-overlap', elementId: 'button-b', parentId: 'card' }),
     ]));
   });
 });
@@ -108,7 +110,7 @@ describe('analyzeAnnotationStructure', () => {
 describe('STRUCTURE_RULES registry', () => {
   it('registers exactly three rules with version and confidence', () => {
     const codes = STRUCTURE_RULES.map((rule) => rule.code);
-    expect(codes).toEqual(['isolated-content', 'child-outside-parent', 'sibling-size-inconsistent']);
+    expect(codes).toEqual(['isolated-content', 'sibling-overlap', 'sibling-size-inconsistent']);
     for (const rule of STRUCTURE_RULES) {
       expect(rule.version).toBeGreaterThanOrEqual(1);
       expect(rule.confidence).toBeGreaterThan(0);

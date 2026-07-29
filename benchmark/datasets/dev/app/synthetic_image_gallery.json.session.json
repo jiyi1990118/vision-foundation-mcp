@@ -31,6 +31,30 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:1140,1319,120,120:1140,1319,120,120:icon",
       "createdAt": "2026-07-29T07:07:15.850Z"
+    },
+    {
+      "id": "auto-49058f1f-6205-4c54-adad-d7bf9ffb8961",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:image:0,360,840,1319",
+      "action": "suppressed",
+      "signature": "2:isolated-content:image:0,360,840,1319:0,360,840,1319:image",
+      "createdAt": "2026-07-29T07:38:24.544Z"
+    },
+    {
+      "id": "auto-3206cbd9-11d5-4d59-85d4-36d20e72f319",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:41,26,75,34",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:41,26,75,34:41,26,75,34:text",
+      "createdAt": "2026-07-29T07:38:24.545Z"
+    },
+    {
+      "id": "auto-be8f2cb3-5b8d-4fce-a52b-17f8497ee91c",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:619,26,94,34",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:619,26,94,34:619,26,94,34:text",
+      "createdAt": "2026-07-29T07:38:24.547Z"
     }
   ]
 }

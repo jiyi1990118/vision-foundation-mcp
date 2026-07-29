@@ -167,6 +167,54 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:360,1199,240,120:360,1199,240,120:icon",
       "createdAt": "2026-07-29T07:07:15.844Z"
+    },
+    {
+      "id": "auto-6f78cf1b-6466-43b8-a730-0846ef70f9d6",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:34,26,86,38",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:34,26,86,38:34,26,86,38:text",
+      "createdAt": "2026-07-29T07:38:24.531Z"
+    },
+    {
+      "id": "auto-89d98a41-922b-4872-af9f-9f7902a70e8c",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:611,26,105,38",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:611,26,105,38:611,26,105,38:text",
+      "createdAt": "2026-07-29T07:38:24.532Z"
+    },
+    {
+      "id": "auto-f7e01a78-ef0b-4919-ac0b-1c5bfdb64cf7",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:30,1819,83,37",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:30,1819,83,37:30,1819,83,37:text",
+      "createdAt": "2026-07-29T07:38:24.532Z"
+    },
+    {
+      "id": "auto-de3f7397-8734-4022-9d5c-3253358b6c03",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:274,1823,79,33",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:274,1823,79,33:274,1823,79,33:text",
+      "createdAt": "2026-07-29T07:38:24.533Z"
+    },
+    {
+      "id": "auto-918aac4d-55b5-4425-80c4-f833a78854fe",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:394,1815,94,49",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:394,1815,94,49:394,1815,94,49:text",
+      "createdAt": "2026-07-29T07:38:24.534Z"
+    },
+    {
+      "id": "auto-a59680ff-af15-4e30-9ee2-ea736d09bc12",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:634,1823,82,33",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:634,1823,82,33:634,1823,82,33:text",
+      "createdAt": "2026-07-29T07:38:24.536Z"
     }
   ]
 }

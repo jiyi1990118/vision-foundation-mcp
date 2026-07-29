@@ -135,6 +135,22 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:0,2340,240,120:0,2340,240,120:icon",
       "createdAt": "2026-07-29T07:07:15.966Z"
+    },
+    {
+      "id": "auto-d0385ca3-ab16-42d9-8cf1-4db5757d222b",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:63,42,116,58",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:63,42,116,58:63,42,116,58:text",
+      "createdAt": "2026-07-29T07:38:24.637Z"
+    },
+    {
+      "id": "auto-2831a1c2-501e-4d01-93dc-5399dc6249a3",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:834,42,292,54",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:834,42,292,54:834,42,292,54:text",
+      "createdAt": "2026-07-29T07:38:24.639Z"
     }
   ]
 }

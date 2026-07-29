@@ -39,12 +39,16 @@ export type {
   AnnotationFile,
   DatasetEntry,
   DatasetLoadResult,
+  ExcludedEntry,
+  ExclusionCounts,
 } from './annotation-loader.js';
 export {
   loadAnnotation,
   loadDataset,
   loadDatasetWithExclusions,
   annotationToGroundTruth,
+  isBenchmarkEligible,
+  hasOpenHighSeverityFindings,
 } from './annotation-loader.js';
 export { astToPredictions } from './ast-to-predictions.js';
 export type {

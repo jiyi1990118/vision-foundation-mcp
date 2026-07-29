@@ -8,6 +8,8 @@
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, dirname, extname } from 'node:path';
 import type { BBox } from '../ir/types.js';
+import { analyzeAnnotationStructure, findingSubjectId, findingSignature } from '../annotation-workbench/tree.js';
+import { reviewStatusFor, type ReviewSession } from '../annotation-workbench/review-types.js';
 
 export interface AnnotationElement {
   id: string;
@@ -126,16 +128,106 @@ export interface BenchmarkEligibility {
   reason?: string;
 }
 
-export function isBenchmarkEligible(annotation: AnnotationFile): BenchmarkEligibility {
+const OPEN_HIGH_SEVERITY_REASON = 'open-high-severity-findings';
+
+/**
+ * Gate #5: high-severity (medium) structure findings must be confirmed,
+ * overridden, or suppressed in the review session before the annotation is
+ * benchmark-eligible.
+ *
+ * A finding is "open" when the session has no matching action for its
+ * subject id, or the stored action's signature no longer matches the current
+ * finding (stale suppression - the element's bbox/type changed or the rule
+ * version bumped). Returns true if ANY medium-severity finding is open.
+ */
+export function hasOpenHighSeverityFindings(
+  annotation: AnnotationFile,
+  session?: ReviewSession,
+): boolean {
+  const findings = analyzeAnnotationStructure(annotation).filter(
+    (finding) => finding.severity === 'medium',
+  );
+  if (findings.length === 0) return false;
+  for (const finding of findings) {
+    const status = session
+      ? reviewStatusFor(
+          session,
+          'structure-finding',
+          findingSubjectId(finding),
+          findingSignature(finding),
+        )
+      : undefined;
+    const resolved =
+      status === 'confirmed' || status === 'overridden' || status === 'suppressed';
+    if (!resolved) return true;
+  }
+  return false;
+}
+
+export function isBenchmarkEligible(
+  annotation: AnnotationFile,
+  session?: ReviewSession,
+): BenchmarkEligibility {
   if (annotation.warnings.includes(DRAFT_WARNING)) {
     return { eligible: false, reason: 'draft: annotation not human-reviewed' };
+  }
+  if (hasOpenHighSeverityFindings(annotation, session)) {
+    return { eligible: false, reason: OPEN_HIGH_SEVERITY_REASON };
   }
   return { eligible: true };
 }
 
+export interface ExcludedEntry {
+  file: string;
+  reason: string;
+}
+
+export interface ExclusionCounts {
+  total: number;
+  sidecar: number;
+  invalid: number;
+  draft: number;
+  openHighSeverityExcluded: number;
+  other: number;
+}
+
 export interface DatasetLoadResult {
   entries: DatasetEntry[];
-  excluded: Array<{ file: string; reason: string }>;
+  excluded: ExcludedEntry[];
+  counts: ExclusionCounts;
+}
+
+function readReviewSession(annotationPath: string): ReviewSession | undefined {
+  const sessionPath = `${annotationPath}.session.json`;
+  if (!existsSync(sessionPath)) return undefined;
+  try {
+    const parsed = JSON.parse(readFileSync(sessionPath, 'utf-8'));
+    if (parsed && typeof parsed === 'object' && Array.isArray((parsed as ReviewSession).actions)) {
+      return parsed as ReviewSession;
+    }
+    return undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function tallyExclusions(excluded: ExcludedEntry[]): ExclusionCounts {
+  const counts: ExclusionCounts = {
+    total: excluded.length,
+    sidecar: 0,
+    invalid: 0,
+    draft: 0,
+    openHighSeverityExcluded: 0,
+    other: 0,
+  };
+  for (const entry of excluded) {
+    if (entry.reason === 'sidecar') counts.sidecar += 1;
+    else if (entry.reason.startsWith('invalid')) counts.invalid += 1;
+    else if (entry.reason.startsWith('draft')) counts.draft += 1;
+    else if (entry.reason === OPEN_HIGH_SEVERITY_REASON) counts.openHighSeverityExcluded += 1;
+    else counts.other += 1;
+  }
+  return counts;
 }
 
 /**
@@ -162,7 +254,7 @@ export function loadDatasetWithExclusions(dir: string): DatasetLoadResult {
     throw new Error(`dataset directory does not exist: ${dir}`);
   }
   const entries: DatasetEntry[] = [];
-  const excluded: Array<{ file: string; reason: string }> = [];
+  const excluded: ExcludedEntry[] = [];
 
   const scanDir = (d: string): void => {
     const items = readdirSync(d);
@@ -187,7 +279,8 @@ export function loadDatasetWithExclusions(dir: string): DatasetLoadResult {
         excluded.push({ file: item, reason: `invalid: ${message}` });
         continue;
       }
-      const eligibility = isBenchmarkEligible(annotation);
+      const session = readReviewSession(fullPath);
+      const eligibility = isBenchmarkEligible(annotation, session);
       if (!eligibility.eligible) {
         excluded.push({ file: item, reason: eligibility.reason ?? 'ineligible' });
         continue;
@@ -204,7 +297,7 @@ export function loadDatasetWithExclusions(dir: string): DatasetLoadResult {
   };
 
   scanDir(dir);
-  return { entries, excluded };
+  return { entries, excluded, counts: tallyExclusions(excluded) };
 }
 
 /**

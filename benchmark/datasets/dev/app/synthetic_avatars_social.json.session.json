@@ -175,6 +175,14 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:0,1799,120,120:0,1799,120,120:icon",
       "createdAt": "2026-07-29T07:07:15.799Z"
+    },
+    {
+      "id": "auto-508c99d8-0620-46f8-97d2-15c7bdea0176",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:610,21,109,42",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:610,21,109,42:610,21,109,42:text",
+      "createdAt": "2026-07-29T07:38:24.494Z"
     }
   ]
 }

@@ -39,6 +39,22 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:600,1323,120,240:600,1323,120,240:icon",
       "createdAt": "2026-07-29T07:07:15.864Z"
+    },
+    {
+      "id": "auto-9e52c4ac-81bb-4672-bbd4-134c92ee609b",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:34,26,86,38",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:34,26,86,38:34,26,86,38:text",
+      "createdAt": "2026-07-29T07:38:24.549Z"
+    },
+    {
+      "id": "auto-052fb9ee-636c-448b-a2cb-c91df9867beb",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:615,26,98,34",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:615,26,98,34:615,26,98,34:text",
+      "createdAt": "2026-07-29T07:38:24.550Z"
     }
   ]
 }

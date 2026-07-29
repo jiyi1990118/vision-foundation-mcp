@@ -199,6 +199,14 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:60,1680,60,60:60,1680,60,60:icon",
       "createdAt": "2026-07-29T07:07:15.942Z"
+    },
+    {
+      "id": "auto-15190ba1-5404-4ac1-926b-75ad411a097e",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:58,42,113,58",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:58,42,113,58:58,42,113,58:text",
+      "createdAt": "2026-07-29T07:38:24.618Z"
     }
   ]
 }

@@ -55,6 +55,14 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:270,1020,90,90:270,1020,90,90:icon",
       "createdAt": "2026-07-29T07:07:15.920Z"
+    },
+    {
+      "id": "auto-dd677591-5421-4c19-9b8d-5b690b3f7a4a",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:58,38,113,58",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:58,38,113,58:58,38,113,58:text",
+      "createdAt": "2026-07-29T07:38:24.572Z"
     }
   ]
 }

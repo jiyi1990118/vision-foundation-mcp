@@ -175,6 +175,22 @@
       "action": "confirmed",
       "signature": "1:sibling-size-inconsistent:text:747,772,396,42:747,772,396,42:text",
       "createdAt": "2026-07-29T05:30:20.020Z"
+    },
+    {
+      "id": "auto-304c63b4-cde4-44d5-ba85-8eec091ef80c",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:63,42,146,58",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:63,42,146,58:63,42,146,58:text",
+      "createdAt": "2026-07-29T07:38:24.785Z"
+    },
+    {
+      "id": "auto-979ba915-be9b-4b7c-85f1-e2414a590f59",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:805,42,330,54",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:805,42,330,54:805,42,330,54:text",
+      "createdAt": "2026-07-29T07:38:24.786Z"
     }
   ]
 }

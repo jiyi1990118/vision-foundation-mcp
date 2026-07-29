@@ -191,6 +191,22 @@
       "action": "suppressed",
       "signature": "2:isolated-content:icon:1050,2430,90,60:1050,2430,90,60:icon",
       "createdAt": "2026-07-29T07:07:15.961Z"
+    },
+    {
+      "id": "auto-e6333175-d42b-4e9f-a4d4-2631e518354a",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:58,42,117,58",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:58,42,117,58:58,42,117,58:text",
+      "createdAt": "2026-07-29T07:38:24.624Z"
+    },
+    {
+      "id": "auto-5df65f66-1ee2-431c-b289-8adcf31c85b5",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:834,42,292,54",
+      "action": "suppressed",
+      "signature": "2:isolated-content:text:834,42,292,54:834,42,292,54:text",
+      "createdAt": "2026-07-29T07:38:24.625Z"
     }
   ]
 }

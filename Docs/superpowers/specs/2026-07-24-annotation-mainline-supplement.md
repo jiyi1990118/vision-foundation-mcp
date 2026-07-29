@@ -151,9 +151,11 @@ images. Fixed: benchmark now matches generator configuration.
 **Phase B3 is complete.** Delivered:
 
 - `StructureRule` interface and `STRUCTURE_RULES` registry in `tree.ts`.
-  Three rules registered: `isolated-content` (v1, medium, 0.7),
-  `child-outside-parent` (v1, medium, 0.8), `sibling-size-inconsistent`
+  Three rules registered: `isolated-content` (v2, medium, 0.7),
+  `sibling-overlap` (v1, medium, 0.6), `sibling-size-inconsistent`
   (v1, low, 0.5). Each rule has `description` and `evidence` renderer.
+  (`child-outside-parent` was replaced by `sibling-overlap` after
+  redesign - see Structural Findings section.)
 - `StructureIssue` extended with `version`, `confidence`, `bboxHash`, `type`,
   and `evidence` fields. `analyzeAnnotationStructure()` now iterates over
   registered rules via `STRUCTURE_RULES.flatMap()`.

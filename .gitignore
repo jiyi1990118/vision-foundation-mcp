@@ -22,3 +22,4 @@ skills-lock.json
 # local tool state
 .claude/
 .playwright-mcp/
+.tmp/

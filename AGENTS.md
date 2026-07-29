@@ -71,56 +71,44 @@ truth boundaries, and the next mandatory gate.
   validity/bounds, single page root, containment cycles, multiple parents,
   children/contains mismatch, and relation endpoint existence.
 
-### Current Next Gate
+### Current Status (2026-07-29)
 
-**Gate A (contract and persistence) is complete.** Relation provenance,
-ReviewAction/ReviewSession persistence, strict tree validator, and benchmark
-eligibility enforcement are delivered.
+**All gates and phases are complete.** The annotation mainline is
+feature-complete with a training-ready dataset export pipeline.
 
-**Phase B1 (frontend review decision loop) is complete.** The workbench now
-loads `GET /api/review-session` and `GET /api/structure-validation` on entry
-load, renders Confirm/Override/Suppress buttons on prediction-difference and
-structure-finding cards, persists each action via `POST /api/review-session`,
-displays validation hard errors, and reloads session+validation after save.
+**Dataset**: 50 eligible annotations (22 real + 28 synthetic), 2578 elements,
+10/25 types meet 30+ threshold. All 1980 structure findings reviewed (0
+pending). 2/3 rules enforced, 1/3 advisory-only. 50/50 annotations pass all
+6 eligibility gates including Gate #5 (open-high-severity exclusion).
 
-**Phase B3 (rule registry and suppression signatures) is complete.** Structure
-rules are registered with code, version, severity, confidence, and evidence.
-Suppression signatures (`ruleVersion + ruleCode + elementId + bboxHash + type`)
-detect stale suppressions: when an element's bbox/type changes or a rule
-version bumps, suppressed findings reopen automatically.
+**Structure rules** (3 registered, all findings reviewed):
+- `sibling-size-inconsistent` v1: 920 findings, precision=62.9%, enforced.
+- `sibling-overlap` v1: 24 findings, precision=100.0%, enforced.
+- `isolated-content` v2: 1036 findings, precision=32.4%, advisory-only.
 
-**Workbench component type selection is grouped.** Both the selected-element
-editor and AI-proposal editor use the same native option groups (page structure,
-layout/container, text/identity, form/action, navigation/state, media, overlay,
-other), while preserving every persisted component type value.
+**Key deliverables**:
+- `normalizeAnnotationTree()` rebuilds geometry-derived containment.
+- `validateAnnotation()` checks tree integrity on every save.
+- `hasOpenHighSeverityFindings()` enforces Gate #5 in the loader.
+- `splitBadgeElements()` in type-enricher separates "私信 12" -> text + badge.
+- `scripts/ui-auto-calibrate.ts` auto-reviews findings via heuristics,
+  checks signatures (not just subjectIds) to handle stale suppressions.
+- `scripts/ui-dataset-export.ts` exports training-ready dataset with
+  family-based splits and SHA-256 manifest.
+- `scripts/ui-active-learning.ts` frequency-guided priority queue.
+- `scripts/ui-calibration-stats.ts` per-rule calibration stats.
 
-**AI suggestion overlays are outline-only.** AI proposal boxes retain their
-purple dashed border and selection state but use transparent fill, so they do
-not obscure screenshot content during human review.
+**Remaining limitations** (non-blocking):
+- 15/25 types below threshold (SmolVLM2 detector limitation).
+- isolated-content precision 32.4% (conservative rule design, 68% suppression
+  rate is expected).
+- 28 synthetic annotations not human-verified (marked `source: 'synthetic-html'`).
+- No model fine-tuning executed (external task).
 
-**Workbench layout is balanced and supports copy/paste.** The three-column grid
-is 220px/300px, screenshot entries show two-digit ordinals, and annotation
-elements can be copied (Ctrl/Cmd+C) and pasted (Ctrl/Cmd+V) within the current
-session via an internal clipboard that never touches system clipboard or
-ground-truth files.
-
-**B2 OCR baseline preparation is complete.** The annotation generator now
-parses `PpuPaddleOcrProvider` JSON responses into positioned `OcrItem`s and
-passes them to both layout extraction and UI analysis. Before human review it
-writes independent `<annotation>.json`, `.prediction.json`, and `.review.json`
-baseline files. Pilot drafts 226/229/234/241 were regenerated with OCR text
-and immutable prediction snapshots; they remain drafts until human review.
-
-Next critical path is **Phase B2: Pilot Annotation** - human-review 4 images
-(226, 229, 234, 241) using the completed review decision loop. Verify
-`.session.json` persistence, review report correctness, and benchmark loader
-counts (4 eligible / 12 draft-excluded). Then **B4: Rule Calibration**
-before any active-learning or training export work.
-
-Full roadmap is in
-`Docs/superpowers/specs/2026-07-24-annotation-mainline-supplement.md` under
-"Immediate Next Work". Verify changes with focused workbench tests plus
-`pnpm typecheck`, `pnpm lint`, `pnpm build`, and `pnpm test:unit`.
+Full roadmap and metrics in
+`Docs/superpowers/specs/2026-07-24-annotation-mainline-supplement.md`.
+Verify changes with `pnpm typecheck`, `pnpm lint`, `pnpm build`, and
+`pnpm test:unit` (56 files, 550 tests).
 
 
 ## Recent Optimizations

@@ -61,3 +61,8 @@ export type {
   LeakageResult,
 } from './splitter.js';
 export { assignSplits, defaultFamilyKey, verifyNoLeakage } from './splitter.js';
+export type {
+  TypeFrequencyResult,
+  PriorityEntry,
+} from './active-learning.js';
+export { analyzeTypeFrequency, scoreImagePriority, buildPriorityQueue } from './active-learning.js';

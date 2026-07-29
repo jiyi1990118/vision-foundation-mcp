@@ -220,6 +220,20 @@ assigned to train.
   calibrated structure rules.
 - Before threshold: frequency-guided priority only.
 
+**Phase D infrastructure is complete.** Frequency-guided priority queue
+delivered via `active-learning.ts`. Automated structure rule calibration
+delivered via `scripts/ui-auto-calibrate.ts`.
+
+Current threshold status:
+- 22 reviewed images (met, need 20+).
+- 7/20 element types have 30+ confirmed samples (text, container, icon,
+  subtitle, navbar, title, card). 13 types need more screenshots.
+- 1/3 structure rules calibrated: `sibling-size-inconsistent` has measured
+  precision=68.1% (317 reviewed) and is promoted to enforced.
+  `isolated-content` and `child-outside-parent` remain advisory-only
+  (0 findings raised, cannot calibrate).
+- 158 borderline findings (35-50% deviation) remain as auto for human review.
+
 #### Phase E: Advanced Canvas UX (lowest priority, parallel after B1)
 
 **Phase E is complete.** All five items delivered:
@@ -278,7 +292,7 @@ The latest verified commands for the current workbench baseline are:
 pnpm typecheck
 pnpm lint
 pnpm build
-pnpm test:unit      # 55 files, 531 tests
+pnpm test:unit      # 56 files, 540 tests
 ```
 
 Launch the local workbench with:

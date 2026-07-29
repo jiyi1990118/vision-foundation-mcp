@@ -65,14 +65,6 @@
       "createdAt": "2026-07-29T06:32:04.625Z"
     },
     {
-      "id": "auto-2ddd21ba-bd76-40cd-b8b7-549bf4410942",
-      "subjectKind": "structure-finding",
-      "subjectId": "sibling-size-inconsistent:text:23,244,135,49",
-      "action": "suppressed",
-      "signature": "1:sibling-size-inconsistent:text:23,244,135,49:23,244,135,49:text",
-      "createdAt": "2026-07-29T06:32:04.625Z"
-    },
-    {
       "id": "auto-df1265a2-4394-4f52-8ffb-e659b2af1d3d",
       "subjectKind": "structure-finding",
       "subjectId": "sibling-size-inconsistent:text:645,356,79,38",
@@ -471,6 +463,14 @@
       "action": "confirmed",
       "signature": "1:sibling-size-inconsistent:text:150,506,176,38:150,506,176,38:text",
       "createdAt": "2026-07-29T09:00:02.031Z"
+    },
+    {
+      "id": "auto-d77a94f0-c958-41e1-8ea6-b55d3b4d5d61",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:23,244,135,49",
+      "action": "suppressed",
+      "signature": "1:sibling-size-inconsistent:text:23,244,135,49:23,244,68,49:text",
+      "createdAt": "2026-07-29T09:09:47.973Z"
     }
   ]
 }

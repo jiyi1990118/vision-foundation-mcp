@@ -240,9 +240,9 @@ Current threshold status:
   - `isolated-content` v2: 1031 findings, 1031 reviewed, precision=32.3%.
     Below 50% enforcement threshold. Advisory-only.
 - 0 findings remain as auto (all reviewed).
-- **Dataset export validated end-to-end**: 47 eligible samples exported
-  with family-based train/val/test splits, 0 leakage, 200 SHA-256 hashes
-  verified. Pipeline is training-ready.
+- **Dataset export validated end-to-end**: 50 eligible samples exported
+  with family-based train/val/test splits, 0 leakage, SHA-256 hashes
+  verified. Pipeline is training-ready. All 50 annotations pass Gate #5.
 - Synthetic data: 28 HTML-rendered screenshots included as ground truth
   (source: 'synthetic-html'). They expand type coverage but are limited by
   the AI's visual classification accuracy - e.g. badge/button/tab/select

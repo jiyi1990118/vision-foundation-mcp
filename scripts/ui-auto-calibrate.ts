@@ -259,11 +259,17 @@ async function main(): Promise<void> {
     totalFindings += findings.length;
 
     const session = await readSession(annotationPath);
-    const existingActions = new Set(session.actions.map(a => a.subjectId));
+    // Check by signature, not just subjectId - a stale signature (changed
+    // bbox/type) means the old review action no longer applies and the
+    // finding must be re-evaluated.
+    const existingSignatures = new Set(
+      session.actions.filter(a => a.signature).map(a => a.signature),
+    );
 
     for (const finding of findings) {
       const subjectId = findingSubjectId(finding);
-      if (existingActions.has(subjectId)) continue;
+      const signature = findingSignature(finding);
+      if (existingSignatures.has(signature)) continue;
 
       const action = heuristicAction(finding, annotation);
       if (!action) {
@@ -271,7 +277,6 @@ async function main(): Promise<void> {
         continue;
       }
 
-      const signature = findingSignature(finding);
       const reviewAction: ReviewAction = {
         id: `auto-${crypto.randomUUID()}`,
         subjectKind: 'structure-finding',

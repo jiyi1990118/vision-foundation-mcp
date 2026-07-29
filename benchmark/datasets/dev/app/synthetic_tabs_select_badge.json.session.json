@@ -41,14 +41,6 @@
       "createdAt": "2026-07-29T06:02:53.204Z"
     },
     {
-      "id": "auto-f8f0f404-ee41-44dc-81f4-8a389a066594",
-      "subjectKind": "structure-finding",
-      "subjectId": "sibling-size-inconsistent:text:236,664,278,37",
-      "action": "confirmed",
-      "signature": "1:sibling-size-inconsistent:text:236,664,278,37:236,664,278,37:text",
-      "createdAt": "2026-07-29T06:02:53.206Z"
-    },
-    {
       "id": "auto-a57d7378-b3af-4d1d-ab3a-24364d36a961",
       "subjectKind": "structure-finding",
       "subjectId": "sibling-size-inconsistent:text:236,926,454,38",
@@ -257,14 +249,6 @@
       "createdAt": "2026-07-29T07:52:32.146Z"
     },
     {
-      "id": "auto-d0b2941c-8ff7-473b-ac51-f2f3332cf20d",
-      "subjectKind": "structure-finding",
-      "subjectId": "isolated-content:text:236,664,278,37",
-      "action": "confirmed",
-      "signature": "2:isolated-content:text:236,664,278,37:236,664,278,37:text",
-      "createdAt": "2026-07-29T07:52:32.146Z"
-    },
-    {
       "id": "auto-50fa6892-2580-4216-98f4-b608a87fbf14",
       "subjectKind": "structure-finding",
       "subjectId": "isolated-content:text:236,720,109,49",
@@ -343,6 +327,22 @@
       "action": "confirmed",
       "signature": "1:sibling-size-inconsistent:text:53,356,82,49:53,356,82,49:text",
       "createdAt": "2026-07-29T07:52:32.153Z"
+    },
+    {
+      "id": "auto-ff27415c-f1b9-474a-a66b-3bf27655b601",
+      "subjectKind": "structure-finding",
+      "subjectId": "isolated-content:text:236,664,278,37",
+      "action": "confirmed",
+      "signature": "2:isolated-content:text:236,664,278,37:236,664,238,37:text",
+      "createdAt": "2026-07-29T09:09:48.038Z"
+    },
+    {
+      "id": "auto-97bfbdcd-c213-4112-ba35-51cf31c1f6b7",
+      "subjectKind": "structure-finding",
+      "subjectId": "sibling-size-inconsistent:text:236,664,278,37",
+      "action": "confirmed",
+      "signature": "1:sibling-size-inconsistent:text:236,664,278,37:236,664,238,37:text",
+      "createdAt": "2026-07-29T09:09:48.044Z"
     }
   ]
 }

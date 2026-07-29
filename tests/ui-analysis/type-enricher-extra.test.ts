@@ -125,6 +125,56 @@ describe('type-enricher / extra rules (Stream S26)', () => {
       enrichNodeTypes(tiny);
       expect(tiny.root.children[0]!.type).toBe('badge');
     });
+
+    it('promotes a small numeric text node to badge', () => {
+      const page = ast(
+        container('root', 'page', box(0, 0, 375, 812), [
+          leaf('t', 'text', box(50, 50, 24, 20), '12'),
+        ]),
+      );
+      enrichNodeTypes(page);
+      expect(page.root.children[0]!.type).toBe('badge');
+    });
+
+    it('promotes a small keyword text node to badge', () => {
+      const page = ast(
+        container('root', 'page', box(0, 0, 375, 812), [
+          leaf('t', 'text', box(50, 50, 40, 20), 'HOT'),
+        ]),
+      );
+      enrichNodeTypes(page);
+      expect(page.root.children[0]!.type).toBe('badge');
+    });
+
+    it('promotes a Chinese keyword subtitle to badge', () => {
+      const page = ast(
+        container('root', 'page', box(0, 0, 375, 812), [
+          leaf('t', 'subtitle', box(50, 50, 60, 24), '限时特惠'),
+        ]),
+      );
+      enrichNodeTypes(page);
+      expect(page.root.children[0]!.type).toBe('badge');
+    });
+
+    it('does not promote a large text node to badge', () => {
+      const page = ast(
+        container('root', 'page', box(0, 0, 375, 812), [
+          leaf('t', 'text', box(50, 400, 200, 40), '12'),
+        ]),
+      );
+      enrichNodeTypes(page);
+      expect(page.root.children[0]!.type).toBe('text');
+    });
+
+    it('does not promote a long text node to badge', () => {
+      const page = ast(
+        container('root', 'page', box(0, 0, 375, 812), [
+          leaf('t', 'text', box(50, 400, 40, 20), '这是一个很长的文本'),
+        ]),
+      );
+      enrichNodeTypes(page);
+      expect(page.root.children[0]!.type).toBe('text');
+    });
   });
 
   describe('select (dropdown input)', () => {

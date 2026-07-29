@@ -61,6 +61,11 @@ const LIST_ITEM_TYPES: ReadonlySet<ComponentType> = new Set([
 
 const BADGE_SMALL_W = 32;
 const BADGE_SMALL_H = 24;
+const BADGE_TEXT_MAX_LEN = 8;
+const BADGE_TEXT_MAX_W = 80;
+const BADGE_TEXT_MAX_H = 28;
+const BADGE_TEXT_KEYWORDS = /^(?:new|hot|vip|pro|plus|live|beta|sale|top|up|3d|hd|4k|8k|限时特惠|限时|特惠|推荐|热门|精选|新品|爆款|首发|独家|官方|认证|已认证|未认证|未读消息|未读|已读|在线|离线|忙碌|勿扰|隐身|满减|直降|包邮|即将售罄|售罄|缺货|预售|预约|会员|免费|优惠|折扣)$/i;
+const BADGE_NUMERIC = /^\d+(?:\.\d+)?(?:\+)?$/;
 const SELECT_NEARBY_PX = 20;
 const SELECT_SIBLING_MAX = 48;
 const LAYOUT_MIN_CHILDREN = 2;
@@ -278,14 +283,26 @@ function promoteLayout(node: ASTNode): void {
 }
 
 function promoteBadge(node: ASTNode): void {
-  if (node.type !== 'tag') return;
-  const text = node.text;
-  if (text !== undefined && /^\d/.test(text.trim())) {
-    node.type = 'badge';
+  if (node.type === 'tag') {
+    const text = node.text;
+    if (text !== undefined && /^\d/.test(text.trim())) {
+      node.type = 'badge';
+      return;
+    }
+    if (node.bbox.w < BADGE_SMALL_W && node.bbox.h < BADGE_SMALL_H) {
+      node.type = 'badge';
+    }
     return;
   }
-  if (node.bbox.w < BADGE_SMALL_W && node.bbox.h < BADGE_SMALL_H) {
-    node.type = 'badge';
+  if (node.type === 'text' || node.type === 'subtitle') {
+    const text = node.text;
+    if (text === undefined) return;
+    const trimmed = text.trim();
+    if (trimmed.length === 0 || trimmed.length > BADGE_TEXT_MAX_LEN) return;
+    if (node.bbox.w > BADGE_TEXT_MAX_W || node.bbox.h > BADGE_TEXT_MAX_H) return;
+    if (BADGE_NUMERIC.test(trimmed) || BADGE_TEXT_KEYWORDS.test(trimmed)) {
+      node.type = 'badge';
+    }
   }
 }
 

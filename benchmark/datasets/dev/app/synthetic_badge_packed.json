@@ -1150,6 +1150,7 @@
     }
   ],
   "zOrder": [],
-  "warnings": [],
-  "source": "synthetic-html"
+  "warnings": [
+    "pipeline-generated draft annotation - not human verified"
+  ]
 }

@@ -1,0 +1,1026 @@
+{
+  "image": "微信图片_20260729104118_269_25.jpg",
+  "imageSize": {
+    "width": 1200,
+    "height": 2670
+  },
+  "platform": "app",
+  "theme": "light",
+  "language": "zh",
+  "dpi": "standard",
+  "elements": [
+    {
+      "id": "page:0,0,1200,2670",
+      "type": "page",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 2670
+      },
+      "render": "native",
+      "children": [
+        "card:33,906,1134,372",
+        "container:210,360,84,90",
+        "container:294,357,87,93",
+        "container:36,357,171,90",
+        "container:381,360,258,90",
+        "container:498,183,156,57",
+        "container:78,687,171,48",
+        "footer:3,2019,1194,606",
+        "icon:930,690,60,60",
+        "navbar:33,540,459,54",
+        "navbar:33,891,1134,12",
+        "table:33,1281,1134,735",
+        "text:25,171,192,75",
+        "text:38,363,780,75",
+        "text:430,179,342,59",
+        "text:501,2587,204,41",
+        "text:58,33,151,71",
+        "text:809,42,326,54",
+        "text:88,2591,200,41"
+      ]
+    },
+    {
+      "id": "table:33,1281,1134,735",
+      "type": "table",
+      "bbox": {
+        "x": 33,
+        "y": 1281,
+        "w": 1134,
+        "h": 735
+      },
+      "render": "native",
+      "children": [
+        "container:507,1839,186,51",
+        "container:510,1464,183,51",
+        "container:510,1539,321,51",
+        "container:510,1917,321,51",
+        "container:93,1473,186,51",
+        "container:93,1851,186,48",
+        "container:96,1392,183,51",
+        "container:96,1770,183,51",
+        "text:496,1306,167,58",
+        "text:496,1677,167,71",
+        "text:496,1752,167,71",
+        "text:505,1385,334,54",
+        "text:79,1302,125,71",
+        "text:79,1677,125,71"
+      ]
+    },
+    {
+      "id": "container:510,1539,321,51",
+      "type": "text",
+      "bbox": {
+        "x": 510,
+        "y": 1539,
+        "w": 321,
+        "h": 51
+      },
+      "render": "native",
+      "text": "食品经营许可证"
+    },
+    {
+      "id": "container:510,1917,321,51",
+      "type": "text",
+      "bbox": {
+        "x": 510,
+        "y": 1917,
+        "w": 321,
+        "h": 51
+      },
+      "render": "native",
+      "text": "食品经营许可证"
+    },
+    {
+      "id": "container:93,1473,186,51",
+      "type": "text",
+      "bbox": {
+        "x": 93,
+        "y": 1473,
+        "w": 186,
+        "h": 51
+      },
+      "render": "native",
+      "text": "信息公示",
+      "semanticRole": "label"
+    },
+    {
+      "id": "container:507,1839,186,51",
+      "type": "text",
+      "bbox": {
+        "x": 507,
+        "y": 1839,
+        "w": 186,
+        "h": 51
+      },
+      "render": "native",
+      "text": "营业执照"
+    },
+    {
+      "id": "container:96,1392,183,51",
+      "type": "text",
+      "bbox": {
+        "x": 96,
+        "y": 1392,
+        "w": 183,
+        "h": 51
+      },
+      "render": "native",
+      "text": "门店名称"
+    },
+    {
+      "id": "container:510,1464,183,51",
+      "type": "text",
+      "bbox": {
+        "x": 510,
+        "y": 1464,
+        "w": 183,
+        "h": 51
+      },
+      "render": "native",
+      "text": "营业执照"
+    },
+    {
+      "id": "container:96,1770,183,51",
+      "type": "text",
+      "bbox": {
+        "x": 96,
+        "y": 1770,
+        "w": 183,
+        "h": 51
+      },
+      "render": "native",
+      "text": "门店名称",
+      "semanticRole": "label"
+    },
+    {
+      "id": "container:93,1851,186,48",
+      "type": "text",
+      "bbox": {
+        "x": 93,
+        "y": 1851,
+        "w": 186,
+        "h": 48
+      },
+      "render": "native",
+      "text": "信息公示",
+      "semanticRole": "label"
+    },
+    {
+      "id": "container:510,1389,183,48",
+      "type": "container",
+      "bbox": {
+        "x": 510,
+        "y": 1389,
+        "w": 183,
+        "h": 48
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:505,1385,334,54",
+      "type": "text",
+      "bbox": {
+        "x": 505,
+        "y": 1385,
+        "w": 334,
+        "h": 54
+      },
+      "render": "native",
+      "text": "公园一号广场店",
+      "children": [
+        "container:510,1389,183,48"
+      ]
+    },
+    {
+      "id": "text:79,1302,125,71",
+      "type": "subtitle",
+      "bbox": {
+        "x": 79,
+        "y": 1302,
+        "w": 125,
+        "h": 71
+      },
+      "render": "native",
+      "text": "城市"
+    },
+    {
+      "id": "text:496,1306,167,58",
+      "type": "text",
+      "bbox": {
+        "x": 496,
+        "y": 1306,
+        "w": 167,
+        "h": 58
+      },
+      "render": "native",
+      "text": "深圳市"
+    },
+    {
+      "id": "text:79,1677,125,71",
+      "type": "subtitle",
+      "bbox": {
+        "x": 79,
+        "y": 1677,
+        "w": 125,
+        "h": 71
+      },
+      "render": "native",
+      "text": "城市"
+    },
+    {
+      "id": "text:496,1677,167,71",
+      "type": "subtitle",
+      "bbox": {
+        "x": 496,
+        "y": 1677,
+        "w": 167,
+        "h": 71
+      },
+      "render": "native",
+      "text": "北京市"
+    },
+    {
+      "id": "text:496,1752,167,71",
+      "type": "subtitle",
+      "bbox": {
+        "x": 496,
+        "y": 1752,
+        "w": 167,
+        "h": 71
+      },
+      "render": "native",
+      "text": "双安店"
+    },
+    {
+      "id": "footer:3,2019,1194,606",
+      "type": "footer",
+      "bbox": {
+        "x": 3,
+        "y": 2019,
+        "w": 1194,
+        "h": 606
+      },
+      "render": "native",
+      "children": [
+        "container:510,2139,138,54",
+        "container:510,2217,183,51",
+        "container:510,2292,321,51",
+        "container:93,2226,186,51",
+        "container:96,2145,183,51",
+        "container:96,2523,183,48",
+        "text:496,2061,167,58",
+        "text:496,2436,167,59",
+        "text:496,2511,167,59",
+        "text:75,2428,134,75",
+        "text:79,2053,125,70"
+      ]
+    },
+    {
+      "id": "container:510,2292,321,51",
+      "type": "text",
+      "bbox": {
+        "x": 510,
+        "y": 2292,
+        "w": 321,
+        "h": 51
+      },
+      "render": "native",
+      "text": "食品经营许可证"
+    },
+    {
+      "id": "container:93,2226,186,51",
+      "type": "text",
+      "bbox": {
+        "x": 93,
+        "y": 2226,
+        "w": 186,
+        "h": 51
+      },
+      "render": "native",
+      "text": "信息公示",
+      "semanticRole": "label"
+    },
+    {
+      "id": "container:96,2145,183,51",
+      "type": "text",
+      "bbox": {
+        "x": 96,
+        "y": 2145,
+        "w": 183,
+        "h": 51
+      },
+      "render": "native",
+      "text": "门店名称",
+      "semanticRole": "label"
+    },
+    {
+      "id": "container:510,2217,183,51",
+      "type": "text",
+      "bbox": {
+        "x": 510,
+        "y": 2217,
+        "w": 183,
+        "h": 51
+      },
+      "render": "native",
+      "text": "营业执照"
+    },
+    {
+      "id": "container:96,2523,183,48",
+      "type": "text",
+      "bbox": {
+        "x": 96,
+        "y": 2523,
+        "w": 183,
+        "h": 48
+      },
+      "render": "native",
+      "text": "门店名称",
+      "semanticRole": "label"
+    },
+    {
+      "id": "container:510,2139,138,54",
+      "type": "text",
+      "bbox": {
+        "x": 510,
+        "y": 2139,
+        "w": 138,
+        "h": 54
+      },
+      "render": "native",
+      "text": "天竺店"
+    },
+    {
+      "id": "text:79,2053,125,70",
+      "type": "subtitle",
+      "bbox": {
+        "x": 79,
+        "y": 2053,
+        "w": 125,
+        "h": 70
+      },
+      "render": "native",
+      "text": "城市"
+    },
+    {
+      "id": "text:496,2061,167,58",
+      "type": "text",
+      "bbox": {
+        "x": 496,
+        "y": 2061,
+        "w": 167,
+        "h": 58
+      },
+      "render": "native",
+      "text": "北京市"
+    },
+    {
+      "id": "text:75,2428,134,75",
+      "type": "subtitle",
+      "bbox": {
+        "x": 75,
+        "y": 2428,
+        "w": 134,
+        "h": 75
+      },
+      "render": "native",
+      "text": "城市"
+    },
+    {
+      "id": "text:496,2436,167,59",
+      "type": "text",
+      "bbox": {
+        "x": 496,
+        "y": 2436,
+        "w": 167,
+        "h": 59
+      },
+      "render": "native",
+      "text": "北京市"
+    },
+    {
+      "id": "text:496,2511,167,59",
+      "type": "text",
+      "bbox": {
+        "x": 496,
+        "y": 2511,
+        "w": 167,
+        "h": 59
+      },
+      "render": "native",
+      "text": "经开店"
+    },
+    {
+      "id": "text:88,2591,200,41",
+      "type": "text",
+      "bbox": {
+        "x": 88,
+        "y": 2591,
+        "w": 200,
+        "h": 41
+      },
+      "render": "native",
+      "text": "片白ハ二",
+      "semanticRole": "label"
+    },
+    {
+      "id": "text:501,2587,204,41",
+      "type": "text",
+      "bbox": {
+        "x": 501,
+        "y": 2587,
+        "w": 204,
+        "h": 41
+      },
+      "render": "native",
+      "text": "营业地昭"
+    },
+    {
+      "id": "card:33,906,1134,372",
+      "type": "card",
+      "bbox": {
+        "x": 33,
+        "y": 906,
+        "w": 1134,
+        "h": 372
+      },
+      "render": "native",
+      "children": [
+        "container:507,1089,186,48",
+        "container:510,1164,321,51",
+        "container:93,1098,186,51",
+        "container:96,1017,183,51",
+        "text:496,1001,167,71",
+        "text:496,922,167,71",
+        "text:75,922,134,75"
+      ]
+    },
+    {
+      "id": "container:510,1164,321,51",
+      "type": "text",
+      "bbox": {
+        "x": 510,
+        "y": 1164,
+        "w": 321,
+        "h": 51
+      },
+      "render": "native",
+      "text": "食品经营许可证"
+    },
+    {
+      "id": "container:93,1098,186,51",
+      "type": "text",
+      "bbox": {
+        "x": 93,
+        "y": 1098,
+        "w": 186,
+        "h": 51
+      },
+      "render": "native",
+      "text": "信息公示",
+      "semanticRole": "label"
+    },
+    {
+      "id": "container:96,1017,183,51",
+      "type": "text",
+      "bbox": {
+        "x": 96,
+        "y": 1017,
+        "w": 183,
+        "h": 51
+      },
+      "render": "native",
+      "text": "门店名称",
+      "semanticRole": "label"
+    },
+    {
+      "id": "container:507,1089,186,48",
+      "type": "text",
+      "bbox": {
+        "x": 507,
+        "y": 1089,
+        "w": 186,
+        "h": 48
+      },
+      "render": "native",
+      "text": "营业执照"
+    },
+    {
+      "id": "text:75,922,134,75",
+      "type": "subtitle",
+      "bbox": {
+        "x": 75,
+        "y": 922,
+        "w": 134,
+        "h": 75
+      },
+      "render": "native",
+      "text": "城市"
+    },
+    {
+      "id": "text:496,922,167,71",
+      "type": "subtitle",
+      "bbox": {
+        "x": 496,
+        "y": 922,
+        "w": 167,
+        "h": 71
+      },
+      "render": "native",
+      "text": "上海市"
+    },
+    {
+      "id": "text:496,1001,167,71",
+      "type": "subtitle",
+      "bbox": {
+        "x": 496,
+        "y": 1001,
+        "w": 167,
+        "h": 71
+      },
+      "render": "native",
+      "text": "梅川店"
+    },
+    {
+      "id": "navbar:33,540,459,54",
+      "type": "text",
+      "bbox": {
+        "x": 33,
+        "y": 540,
+        "w": 459,
+        "h": 54
+      },
+      "render": "native",
+      "text": "请您选择城市进行查看"
+    },
+    {
+      "id": "container:381,360,258,90",
+      "type": "container",
+      "bbox": {
+        "x": 381,
+        "y": 360,
+        "w": 258,
+        "h": 90
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:38,363,780,75",
+      "type": "subtitle",
+      "bbox": {
+        "x": 38,
+        "y": 363,
+        "w": 780,
+        "h": 75
+      },
+      "render": "native",
+      "text": "达美乐餐厅信息公示"
+    },
+    {
+      "id": "container:36,357,171,90",
+      "type": "container",
+      "bbox": {
+        "x": 36,
+        "y": 357,
+        "w": 171,
+        "h": 90
+      },
+      "render": "native"
+    },
+    {
+      "id": "navbar:33,891,1134,12",
+      "type": "navbar",
+      "bbox": {
+        "x": 33,
+        "y": 891,
+        "w": 1134,
+        "h": 12
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:498,183,156,57",
+      "type": "container",
+      "bbox": {
+        "x": 498,
+        "y": 183,
+        "w": 156,
+        "h": 57
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:430,179,342,59",
+      "type": "title",
+      "bbox": {
+        "x": 430,
+        "y": 179,
+        "w": 342,
+        "h": 59
+      },
+      "render": "native",
+      "text": "餐厅信息公示"
+    },
+    {
+      "id": "container:78,687,171,48",
+      "type": "text",
+      "bbox": {
+        "x": 78,
+        "y": 687,
+        "w": 171,
+        "h": 48
+      },
+      "render": "native",
+      "text": "全部城市"
+    },
+    {
+      "id": "container:294,357,87,93",
+      "type": "container",
+      "bbox": {
+        "x": 294,
+        "y": 357,
+        "w": 87,
+        "h": 93
+      },
+      "render": "native"
+    },
+    {
+      "id": "container:210,360,84,90",
+      "type": "container",
+      "bbox": {
+        "x": 210,
+        "y": 360,
+        "w": 84,
+        "h": 90
+      },
+      "render": "native"
+    },
+    {
+      "id": "icon:930,690,60,60",
+      "type": "icon",
+      "bbox": {
+        "x": 930,
+        "y": 690,
+        "w": 60,
+        "h": 60
+      },
+      "render": "native"
+    },
+    {
+      "id": "text:58,33,151,71",
+      "type": "subtitle",
+      "bbox": {
+        "x": 58,
+        "y": 33,
+        "w": 151,
+        "h": 71
+      },
+      "render": "native",
+      "text": "10:40"
+    },
+    {
+      "id": "text:809,42,326,54",
+      "type": "text",
+      "bbox": {
+        "x": 809,
+        "y": 42,
+        "w": 326,
+        "h": 54
+      },
+      "render": "native",
+      "text": "5G5 100"
+    },
+    {
+      "id": "text:25,171,192,75",
+      "type": "subtitle",
+      "bbox": {
+        "x": 25,
+        "y": 171,
+        "w": 192,
+        "h": 75
+      },
+      "render": "native",
+      "text": "く 返回"
+    }
+  ],
+  "relations": [
+    {
+      "from": "card:33,906,1134,372",
+      "to": "container:507,1089,186,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:33,906,1134,372",
+      "to": "container:510,1164,321,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:33,906,1134,372",
+      "to": "container:93,1098,186,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:33,906,1134,372",
+      "to": "container:96,1017,183,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:33,906,1134,372",
+      "to": "text:496,1001,167,71",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:33,906,1134,372",
+      "to": "text:496,922,167,71",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "card:33,906,1134,372",
+      "to": "text:75,922,134,75",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2019,1194,606",
+      "to": "container:510,2139,138,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2019,1194,606",
+      "to": "container:510,2217,183,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2019,1194,606",
+      "to": "container:510,2292,321,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2019,1194,606",
+      "to": "container:93,2226,186,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2019,1194,606",
+      "to": "container:96,2145,183,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2019,1194,606",
+      "to": "container:96,2523,183,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2019,1194,606",
+      "to": "text:496,2061,167,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2019,1194,606",
+      "to": "text:496,2436,167,59",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2019,1194,606",
+      "to": "text:496,2511,167,59",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2019,1194,606",
+      "to": "text:75,2428,134,75",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "footer:3,2019,1194,606",
+      "to": "text:79,2053,125,70",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "card:33,906,1134,372",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:210,360,84,90",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:294,357,87,93",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:36,357,171,90",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:381,360,258,90",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:498,183,156,57",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "container:78,687,171,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "footer:3,2019,1194,606",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "icon:930,690,60,60",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:33,540,459,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "navbar:33,891,1134,12",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "table:33,1281,1134,735",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:25,171,192,75",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:38,363,780,75",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:430,179,342,59",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:501,2587,204,41",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:58,33,151,71",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:809,42,326,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "page:0,0,1200,2670",
+      "to": "text:88,2591,200,41",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "table:33,1281,1134,735",
+      "to": "container:507,1839,186,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "table:33,1281,1134,735",
+      "to": "container:510,1464,183,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "table:33,1281,1134,735",
+      "to": "container:510,1539,321,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "table:33,1281,1134,735",
+      "to": "container:510,1917,321,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "table:33,1281,1134,735",
+      "to": "container:93,1473,186,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "table:33,1281,1134,735",
+      "to": "container:93,1851,186,48",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "table:33,1281,1134,735",
+      "to": "container:96,1392,183,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "table:33,1281,1134,735",
+      "to": "container:96,1770,183,51",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "table:33,1281,1134,735",
+      "to": "text:496,1306,167,58",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "table:33,1281,1134,735",
+      "to": "text:496,1677,167,71",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "table:33,1281,1134,735",
+      "to": "text:496,1752,167,71",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "table:33,1281,1134,735",
+      "to": "text:505,1385,334,54",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "table:33,1281,1134,735",
+      "to": "text:79,1302,125,71",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "table:33,1281,1134,735",
+      "to": "text:79,1677,125,71",
+      "type": "contains",
+      "source": "derived"
+    },
+    {
+      "from": "text:505,1385,334,54",
+      "to": "container:510,1389,183,48",
+      "type": "contains",
+      "source": "derived"
+    }
+  ],
+  "zOrder": [],
+  "warnings": [
+    "human-reviewed: local-workbench"
+  ]
+}

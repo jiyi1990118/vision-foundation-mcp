@@ -30,8 +30,12 @@ English | [简体中文](./README.zh-CN.md)
 - Runs image understanding locally without sending images to a cloud vision API.
 - Supports local file paths, base64 strings, data URIs, and HTTP(S) image URLs.
 - Provides 8 data-driven skills: `classify`, `summary`, `ocr`, `table`, `document`, `poster`, `moderation`, and `layout`.
+- Universal Vision Parser: cross-scene structured output with scene detection, entity extraction, VLM reasoning (insights/risks/next_actions).
+- UI screenshot reconstruction: component tree, design tokens, layout constraints, codegen/Figma/Markdown export.
+- Annotated-screenshot target extraction: detects colored annotation boxes (red/blue/green/yellow/magenta) and extracts content within.
 - Uses SmolVLM2 by default for balanced local quality; optional SmolVLM fast mode and MiniCPM-V high-quality mode are available.
 - Auto-prepares `llama-server` and model files on first use when possible.
+- Provider-level inference cache (TTL 1h, LRU 100) for repeated requests.
 - Keeps MCP stdio clean: JSON-RPC stays on stdout, logs go to stderr.
 
 ## Quick Start
@@ -100,15 +104,22 @@ vision.analyze
 
 | Field | Required | Description |
 |------|----------|-------------|
-| `image` | yes | Image source. Supports local file path, base64, data URI, or HTTP(S) URL. |
-| `intent` | no | Natural-language intent, such as `describe`, `ocr`, `table`, `document`, or `auto`. Defaults to `auto`. |
-| `scene` | no | Scene hint to guide parsing, e.g. `requirement`, `ui`, `code`, `chart`. Guides but does not override image evidence. |
-| `skills` | no | Explicit skills to run. Overrides intent inference. Example: `["classify", "summary", "ocr"]`. |
-| `options.quality` | no | `fast` uses the default provider. `high` can route to MiniCPM-V when `VISION_HIGH_QUALITY=1` is set. |
-| `options.provider` | no | Optional provider override. Supported provider names depend on registered providers. |
-| `options.cache` | no | Enable/disable provider-level inference result cache (default: enabled for GGUF providers with TTL+LRU). Set `false` to force fresh inference. |
-| `options.maxTokens` | no | Optional generation token limit passed through the request pipeline. |
-| `options.target` | no | Optional target-region hint for annotated screenshots, such as `{ "color": "red", "position": "right", "description": "dashed box content" }`. |
+| `image` | yes | Image source. Supports local file path, base64, data URI, or HTTP(S) URL. Formats: PNG, JPEG, WebP, GIF, BMP. Max 10 MB. |
+| `intent` | no | Natural-language intent. Examples: `auto` (default), `describe`, `extract text`, `analyze this UI`, `read this table`, `check safety`. Keywords like "text"/"OCR" trigger OCR; "table" triggers table extraction; "UI"/"screenshot" triggers UI layout. |
+| `scene` | no | Scene hint to guide parsing. Valid: `requirement`, `ui`, `prototype`, `code`, `chart`, `flowchart`, `mindmap`, `ppt`, `chat`, `document`, `photo`, `table`, `error`, `other`. Guides but does not override image evidence. |
+| `skills` | no | Explicit skills to run. Overrides intent inference. Available: `classify`, `ocr`, `summary`, `table`, `document`, `poster`, `moderation`, `layout`. Example: `["classify", "summary", "ocr"]`. |
+| `options.quality` | no | `fast` (default) uses the lightweight local provider (~500M model). `high` routes to a larger model (~2B) when `VISION_HIGH_QUALITY=1` is set and sufficient GPU memory is available. |
+| `options.provider` | no | Override provider. Valid: `smolvlm2` (default), `gguf` (legacy), `minicpm` (high-quality), `onnx` (deprecated). Leave unset for auto-routing. |
+| `options.cache` | no | Enable/disable provider-level inference cache (TTL 1h, LRU 100). Default: enabled. Set `false` to force fresh inference. |
+| `options.maxTokens` | no | Maximum tokens per skill inference. Default: 256. Increase for longer descriptions (e.g. 512). |
+| `options.target` | no | Target-region hint for annotated screenshots: `{ "color": "red", "position": "right", "description": "dashed box with price table" }`. |
+| `options.reconstruction_mode` | no | UI analysis depth: `fast` (CV+OCR only, default), `balanced` (+UI detector), `high_fidelity` (+OmniParser/icon caption). |
+| `options.build_tree` | no | Build hierarchical SemanticAST for UI scenes (default true when scene=ui). |
+| `options.export_codegen` | no | Export CodegenIR from the UI AST. |
+| `options.export_figma` | no | Export Figma REST-API shaped JSON from the UI AST. |
+| `options.export_markdown` | no | Export human-readable Markdown from the UI AST. |
+| `options.summary_only` | no | Trim UI reconstruction to root-only tree + stats to cap output size. |
+| `options.strict_mode` | no | Validate output structure; fail on missing required fields instead of degrading silently. |
 
 ### Structured Output
 
@@ -174,6 +185,19 @@ Annotation detection (`result.annotations`) recognizes five color presets - `red
   }
 }
 ```
+
+### Skills Reference
+
+| Skill | Description | Output Fields |
+|-------|-------------|---------------|
+| `classify` | Classify image into one category using medium-first taxonomy (photo/screenshot/illustration, then subject). | `category`, `confidence`, `subcategory`, `reasoning` |
+| `ocr` | Extract all visible text as structured boxes with positions and confidence. Supports Chinese/English. Detects colored annotation boxes. | `texts`, `language` |
+| `summary` | Generate detailed natural-language description. Preserves page structure for UI/requirement screenshots. | `description`, `tags` |
+| `table` | Reconstruct table structure: row/column counts, headers, cell data. Handles bordered and borderless tables. | `rowCount`, `columnCount`, `headers`, `rows` |
+| `document` | Identify document type (invoice/receipt/form/letter/report/article/contract/ID) and extract key info. | `description`, `documentType` |
+| `poster` | Analyze designed poster: theme, visual style, colors, typography, composition, embedded text. | `description`, `theme` |
+| `moderation` | Check content safety: flags violence, nudity, illegal goods, political sensitivity. Low latency (10s). | `description`, `safe` |
+| `layout` | Analyze visual layout structure: grid, columns, rows, sidebars, sections. | `description`, `layoutType` |
 
 ### Skill Routing
 

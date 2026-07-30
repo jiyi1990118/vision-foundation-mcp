@@ -1,6 +1,6 @@
 {
   "name": "@npm_xiyuan/vision-foundation-mcp",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Vision understanding MCP service powered by local SmolVLM / SmolVLM2 / MiniCPM-V via llama.cpp",
   "type": "module",
   "main": "dist/index.js",

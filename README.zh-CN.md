@@ -30,8 +30,12 @@
 - 本地图片理解，不依赖云端视觉 API。
 - 支持本地文件路径、base64、data URI、HTTP(S) 图片 URL。
 - 内置 8 个数据驱动 Skill：`classify`、`summary`、`ocr`、`table`、`document`、`poster`、`moderation`、`layout`。
+- 通用视觉解析器：跨场景结构化输出，含场景检测、实体提取、VLM 推理（洞察/风险/下一步行动）。
+- UI 截图重建：组件树、设计令牌、布局约束、Codegen/Figma/Markdown 导出。
+- 标注截图目标提取：检测彩色标注框（红/蓝/绿/黄/品红），提取框内内容。
 - 默认使用 SmolVLM2，兼顾本地推理质量和资源占用；可切换 SmolVLM fast 模式，也可启用 MiniCPM-V high-quality 模式。
 - 首次运行可自动准备 `llama-server` 与模型文件。
+- Provider 级推理缓存（TTL 1 小时，LRU 100 条），重复请求秒级返回。
 - 遵守 MCP stdio 约束：stdout 只输出 JSON-RPC，日志写 stderr。
 
 ## 快速开始
@@ -100,15 +104,22 @@ vision.analyze
 
 | 字段 | 必填 | 说明 |
 |------|------|------|
-| `image` | 是 | 图片来源。支持本地文件路径、base64、data URI、HTTP(S) URL。 |
-| `intent` | 否 | 自然语言意图，如 `describe`、`ocr`、`table`、`document`、`auto`。默认 `auto`。 |
-| `scene` | 否 | 场景提示，用于引导解析，如 `requirement`、`ui`、`code`、`chart`。仅作引导，不会覆盖图片证据。 |
-| `skills` | 否 | 显式指定要执行的 Skill，会覆盖 intent 推断。例如 `["classify", "summary", "ocr"]`。 |
-| `options.quality` | 否 | `fast` 使用默认 provider；`high` 在设置 `VISION_HIGH_QUALITY=1` 后可路由到 MiniCPM-V。 |
-| `options.provider` | 否 | 可选 provider 覆盖，具体名称取决于当前注册的 provider。 |
-| `options.cache` | 否 | 启用/禁用 provider 级推理结果缓存（默认：GGUF provider 启用 TTL+LRU 缓存）。设为 `false` 强制重新推理。 |
-| `options.maxTokens` | 否 | 可选生成 token 限制，会沿请求链路传递。 |
-| `options.target` | 否 | 可选目标区域提示，用于带标注截图，例如 `{ "color": "red", "position": "right", "description": "虚线框内容" }`。 |
+| `image` | 是 | 图片来源。支持本地文件路径、base64、data URI、HTTP(S) URL。格式：PNG、JPEG、WebP、GIF、BMP。最大 10 MB。 |
+| `intent` | 否 | 自然语言意图。示例：`auto`（默认）、`describe`、`extract text`、`analyze this UI`、`read this table`、`check safety`。关键词 "text"/"OCR" 触发 OCR；"table" 触发表格提取；"UI"/"screenshot" 触发 UI 布局。 |
+| `scene` | 否 | 场景提示。有效值：`requirement`、`ui`、`prototype`、`code`、`chart`、`flowchart`、`mindmap`、`ppt`、`chat`、`document`、`photo`、`table`、`error`、`other`。仅作引导，不覆盖图片证据。 |
+| `skills` | 否 | 显式指定 Skill，覆盖 intent 推断。可用：`classify`、`ocr`、`summary`、`table`、`document`、`poster`、`moderation`、`layout`。示例：`["classify", "summary", "ocr"]`。 |
+| `options.quality` | 否 | `fast`（默认）使用轻量本地模型（~500M）。`high` 在 `VISION_HIGH_QUALITY=1` 且 GPU 内存充足时路由到更大模型（~2B）。 |
+| `options.provider` | 否 | 覆盖 provider。有效值：`smolvlm2`（默认）、`gguf`（legacy）、`minicpm`（高质量）、`onnx`（已弃用）。不设置则自动路由。 |
+| `options.cache` | 否 | 启用/禁用 provider 级推理缓存（TTL 1 小时，LRU 100 条）。默认启用。设为 `false` 强制重新推理。 |
+| `options.maxTokens` | 否 | 每次 Skill 推理的最大 token 数。默认 256。需更长描述时增大（如 512）。 |
+| `options.target` | 否 | 标注截图目标区域提示：`{ "color": "red", "position": "right", "description": "虚线框价格表" }`。 |
+| `options.reconstruction_mode` | 否 | UI 分析深度：`fast`（CV+OCR，默认）、`balanced`（+UI 检测器）、`high_fidelity`（+OmniParser/图标描述）。 |
+| `options.build_tree` | 否 | 为 UI 场景构建层次化 SemanticAST（scene=ui 时默认 true）。 |
+| `options.export_codegen` | 否 | 从 UI AST 导出 CodegenIR。 |
+| `options.export_figma` | 否 | 从 UI AST 导出 Figma REST-API 格式 JSON。 |
+| `options.export_markdown` | 否 | 从 UI AST 导出人类可读 Markdown。 |
+| `options.summary_only` | 否 | 将 UI 重建裁剪为仅根节点树+统计，控制大 UI 输出大小。 |
+| `options.strict_mode` | 否 | 校验输出结构；缺失必填字段时直接失败而非静默降级。 |
 
 ### 结构化输出
 
@@ -174,6 +185,19 @@ vision.analyze
   }
 }
 ```
+
+### Skill 参考
+
+| Skill | 说明 | 输出字段 |
+|-------|------|----------|
+| `classify` | 媒介优先分类法：先区分照片/截图/插画，再识别主体。 | `category`, `confidence`, `subcategory`, `reasoning` |
+| `ocr` | 提取全部可见文本为结构化文本框，含位置和置信度。支持中英文。检测彩色标注框。 | `texts`, `language` |
+| `summary` | 生成详细自然语言描述。UI/需求截图保留页面结构。 | `description`, `tags` |
+| `table` | 重建表格结构：行列数、表头、单元格数据。支持有框/无框表格。 | `rowCount`, `columnCount`, `headers`, `rows` |
+| `document` | 识别文档类型（发票/收据/表单/信件/报告/文章/合同/证件）并提取关键信息。 | `description`, `documentType` |
+| `poster` | 分析设计海报：主题、视觉风格、配色、字体、构图、嵌入文本。 | `description`, `theme` |
+| `moderation` | 内容安全检查：暴力、色情、违禁品、政治敏感。低延迟（10s）。 | `description`, `safe` |
+| `layout` | 分析视觉布局结构：网格、列、行、侧边栏、分区。 | `description`, `layoutType` |
 
 ### Skill 路由
 

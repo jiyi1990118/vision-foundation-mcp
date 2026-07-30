@@ -1,13 +1,30 @@
 {
   "name": "classify",
-  "description": "Classify an image into exactly one category (medium-first: photo/screenshot vs illustration, then subject within that medium)",
+  "description": "Classify an image into exactly one category using a medium-first taxonomy: first distinguishes photo vs screenshot vs illustration, then identifies the subject within that medium. Returns category, confidence (0-1), subcategory, and reasoning.",
   "version": "1.1.0",
   "inputs": {
-    "required": ["image"],
-    "optional": ["focus"]
+    "required": [
+      "image"
+    ],
+    "optional": [
+      "focus"
+    ]
   },
-  "outputs": ["category", "confidence", "subcategory", "reasoning"],
-  "supportedProviders": ["smolvlm", "gguf-smolvlm", "gguf-smolvlm2", "minicpm-v"],
+  "outputs": [
+    "category",
+    "confidence",
+    "subcategory",
+    "reasoning"
+  ],
+  "supportedProviders": [
+    "smolvlm",
+    "gguf-smolvlm",
+    "gguf-smolvlm2",
+    "minicpm-v"
+  ],
   "defaultTimeout": 30000,
-  "defaultRetry": { "max": 1, "strategy": "reprompt" }
+  "defaultRetry": {
+    "max": 1,
+    "strategy": "reprompt"
+  }
 }

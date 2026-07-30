@@ -1,10 +1,25 @@
 {
   "name": "poster",
-  "description": "Analyze a designed poster: main theme, visual elements, colors, and text content",
+  "description": "Analyze a designed poster or marketing visual: identifies main theme, visual style, dominant colors, typography, layout composition, and embedded text content. Returns description and theme.",
   "version": "1.0.0",
-  "inputs": { "required": ["image"], "optional": [] },
-  "outputs": ["description", "theme"],
-  "supportedProviders": ["gguf-smolvlm", "gguf-smolvlm2", "minicpm-v"],
+  "inputs": {
+    "required": [
+      "image"
+    ],
+    "optional": []
+  },
+  "outputs": [
+    "description",
+    "theme"
+  ],
+  "supportedProviders": [
+    "gguf-smolvlm",
+    "gguf-smolvlm2",
+    "minicpm-v"
+  ],
   "defaultTimeout": 30000,
-  "defaultRetry": { "max": 1, "strategy": "reprompt" }
+  "defaultRetry": {
+    "max": 1,
+    "strategy": "reprompt"
+  }
 }

@@ -1,10 +1,25 @@
 {
   "name": "document",
-  "description": "Identify document type (invoice/receipt/form/letter/report/article) and extract key information",
+  "description": "Identify document type from an image (invoice, receipt, form, letter, report, article, contract, ID card) and extract key structured information such as dates, amounts, parties, and item lists.",
   "version": "1.0.0",
-  "inputs": { "required": ["image"], "optional": [] },
-  "outputs": ["description", "documentType"],
-  "supportedProviders": ["gguf-smolvlm", "gguf-smolvlm2", "minicpm-v"],
+  "inputs": {
+    "required": [
+      "image"
+    ],
+    "optional": []
+  },
+  "outputs": [
+    "description",
+    "documentType"
+  ],
+  "supportedProviders": [
+    "gguf-smolvlm",
+    "gguf-smolvlm2",
+    "minicpm-v"
+  ],
   "defaultTimeout": 30000,
-  "defaultRetry": { "max": 1, "strategy": "reprompt" }
+  "defaultRetry": {
+    "max": 1,
+    "strategy": "reprompt"
+  }
 }

@@ -48,30 +48,94 @@ const inputSchema = z.object({
   image: z
     .string()
     .min(1)
-    .describe('Image to analyze: file path, base64, data URI, or http(s) URL'),
+    .describe(
+      'Image to analyze. Accepted: local file path (/abs/path/img.png), ' +
+      'base64 string, data URI (data:image/png;base64,...), or http(s) URL. ' +
+      'Formats: PNG, JPEG, WebP, GIF, BMP. Max 10 MB.',
+    ),
   intent: z
     .string()
     .optional()
-    .describe('Natural language intent. Empty or "auto" for automatic analysis.'),
+    .describe(
+      'Natural-language analysis intent. Controls which skills run. ' +
+      'Examples: "auto" (default, auto-selects skills), "describe this image", ' +
+      '"extract text", "analyze this UI screenshot", "read this table", ' +
+      '"check content safety". Keywords like "text"/"OCR" trigger OCR; ' +
+      '"table" triggers table extraction; "UI"/"screenshot" triggers UI layout.',
+    ),
   scene: z
     .string()
     .optional()
-    .describe('Scene hint to guide parsing (e.g. requirement, ui, code, chart). Guides but does not override image evidence.'),
+    .describe(
+      'Scene hint to guide parsing. Valid values: "requirement", "ui", ' +
+      '"prototype", "code", "chart", "flowchart", "mindmap", "ppt", "chat", ' +
+      '"document", "photo", "table", "error", "other". Guides but does not ' +
+      'override image evidence.',
+    ),
   skills: z
     .array(z.string())
     .optional()
-    .describe('Explicitly specify skills to run. Overrides intent inference.'),
+    .describe(
+      'Explicitly specify skills to run. Overrides intent inference. ' +
+      'Available skills: "classify" (image category), "ocr" (text extraction), ' +
+      '"summary" (natural-language description), "table" (table structure), ' +
+      '"document" (document type + key info), "poster" (poster analysis), ' +
+      '"moderation" (content safety), "layout" (visual layout structure). ' +
+      'Example: ["classify", "summary"].',
+    ),
   options: z
     .object({
-      quality: z.enum(['fast', 'high']).optional(),
-      provider: z.string().optional(),
-      cache: z.boolean().optional(),
-      maxTokens: z.number().optional(),
-      target: z.object({
-        color: z.string().optional(),
-        position: z.string().optional(),
-        description: z.string().optional(),
-      }).optional(),
+      quality: z
+        .enum(['fast', 'high'])
+        .optional()
+        .describe(
+          '"fast" (default) uses the lightweight local provider (~500M model). ' +
+          '"high" routes to a larger model (~2B) when VISION_HIGH_QUALITY=1 is set ' +
+          'and sufficient GPU memory is available.',
+        ),
+      provider: z
+        .string()
+        .optional()
+        .describe(
+          'Override the provider. Valid: "smolvlm2" (default, fast), "gguf" ' +
+          '(legacy fast), "minicpm" (high-quality, needs VISION_HIGH_QUALITY=1), ' +
+          '"onnx" (deprecated legacy). Leave unset for auto-routing.',
+        ),
+      cache: z
+        .boolean()
+        .optional()
+        .describe(
+          'Enable/disable provider-level inference result cache (TTL 1h, LRU 100). ' +
+          'Default: enabled. Set false to force fresh inference.',
+        ),
+      maxTokens: z
+        .number()
+        .optional()
+        .describe(
+          'Maximum tokens to generate per skill inference. Default: 256. ' +
+          'Increase for longer descriptions (e.g. 512 for detailed summaries).',
+        ),
+      target: z
+        .object({
+          color: z
+            .string()
+            .optional()
+            .describe('Annotation color to locate, e.g. "red", "blue", "green", "yellow", "magenta".'),
+          position: z
+            .string()
+            .optional()
+            .describe('Rough position of the target area, e.g. "top", "bottom", "left", "right", "center".'),
+          description: z
+            .string()
+            .optional()
+            .describe('Natural-language description of the target area, e.g. "dashed box with price table".'),
+        })
+        .optional()
+        .describe(
+          'Target-region hint for annotated screenshots. When provided with OCR, ' +
+          'the tool locates colored annotation boxes and extracts text/content ' +
+          'within the specified region only.',
+        ),
       build_tree: z.boolean().optional().describe('Build hierarchical SemanticAST for UI scenes (default true when scene=ui).'),
       export_codegen: z.boolean().optional().describe('Export CodegenIR from the UI AST.'),
       export_figma: z.boolean().optional().describe('Export Figma REST-API shaped JSON from the UI AST.'),
@@ -87,7 +151,8 @@ const inputSchema = z.object({
       summary_only: z.boolean().optional().describe('Trim uiReconstruction to a root-only tree + stats (omit deep children/constraints/images) to cap output size for large UIs.'),
       reconstruction_mode: z.enum(['fast', 'balanced', 'high_fidelity']).optional().describe('UI analysis depth: fast (CV+OCR only), balanced (+UI detector), high_fidelity (+OmniParser/icon caption). Default fast.'),
     })
-    .optional(),
+    .optional()
+    .describe('Optional analysis controls: quality, provider, cache, token limit, target region, and UI reconstruction options.'),
 });
 
 export interface SelectProviderInput {
@@ -229,8 +294,22 @@ export function registerVisionAnalyzeTool(
     {
       title: 'Vision Analyze',
       description:
-        'Analyze an image and return structured vision understanding result. ' +
-        'Supports file paths, base64, data URIs, and HTTP URLs as input.',
+        'Analyze an image using local vision models and return a structured understanding result.\n\n' +
+        'Capabilities:\n' +
+        '- Image classification (photo, screenshot, illustration, document, chart, etc.)\n' +
+        '- OCR text extraction with positions and confidence\n' +
+        '- Natural-language image description/summary\n' +
+        '- Table structure reconstruction (rows, columns, headers, cells)\n' +
+        '- Document type identification and key-info extraction\n' +
+        '- Poster/design analysis (theme, colors, layout)\n' +
+        '- Content safety moderation\n' +
+        '- Visual layout structure analysis\n' +
+        '- UI screenshot reconstruction (component tree, design tokens, codegen export)\n' +
+        '- Annotated-screenshot target extraction (colored boxes, red/blue/green markers)\n\n' +
+        'The tool auto-selects skills based on the intent. Use the `skills` parameter for explicit control.\n' +
+        'Runs fully locally — no data leaves the machine. Default model: SmolVLM2-500M (~500M params).\n\n' +
+        'Returns structuredContent with: category, confidence, summary, per-skill results, ' +
+        'and metadata (provider, runtime, duration, cached).',
       inputSchema,
     },
     async (args) => {

@@ -1,10 +1,26 @@
 {
   "name": "table",
-  "description": "Reconstruct table structure from an image: row/column counts, headers, and cell data row by row",
+  "description": "Reconstruct table structure from an image: detects row and column counts, extracts header labels, and returns cell data row by row. Handles bordered and borderless tables. Returns rowCount, columnCount, headers array, and rows array.",
   "version": "1.0.0",
-  "inputs": { "required": ["image"], "optional": [] },
-  "outputs": ["description", "rowCount", "columnCount"],
-  "supportedProviders": ["gguf-smolvlm", "gguf-smolvlm2", "minicpm-v"],
+  "inputs": {
+    "required": [
+      "image"
+    ],
+    "optional": []
+  },
+  "outputs": [
+    "description",
+    "rowCount",
+    "columnCount"
+  ],
+  "supportedProviders": [
+    "gguf-smolvlm",
+    "gguf-smolvlm2",
+    "minicpm-v"
+  ],
   "defaultTimeout": 30000,
-  "defaultRetry": { "max": 1, "strategy": "reprompt" }
+  "defaultRetry": {
+    "max": 1,
+    "strategy": "reprompt"
+  }
 }

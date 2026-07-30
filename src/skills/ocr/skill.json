@@ -1,13 +1,29 @@
 {
   "name": "ocr",
-  "description": "Extract all visible text from an image, grouped by region with positions and per-box confidence",
+  "description": "Extract all visible text from an image as structured text boxes, each with position (bbox), text content, and confidence score (0-1). Supports Chinese and English. Also detects and reports colored annotation boxes (red/blue/green/yellow/magenta) when present.",
   "version": "1.0.0",
   "inputs": {
-    "required": ["image"],
-    "optional": ["focus"]
+    "required": [
+      "image"
+    ],
+    "optional": [
+      "focus"
+    ]
   },
-  "outputs": ["texts", "language"],
-  "supportedProviders": ["smolvlm", "gguf-smolvlm", "gguf-smolvlm2", "minicpm-v", "ppu-paddle-ocr"],
+  "outputs": [
+    "texts",
+    "language"
+  ],
+  "supportedProviders": [
+    "smolvlm",
+    "gguf-smolvlm",
+    "gguf-smolvlm2",
+    "minicpm-v",
+    "ppu-paddle-ocr"
+  ],
   "defaultTimeout": 30000,
-  "defaultRetry": { "max": 2, "strategy": "reprompt" }
+  "defaultRetry": {
+    "max": 2,
+    "strategy": "reprompt"
+  }
 }

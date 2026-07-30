@@ -1,10 +1,26 @@
 {
   "name": "moderation",
-  "description": "Check image content safety: flag violence, nudity, illegal, or harmful material",
+  "description": "Check image content safety. Flags violence, nudity, illegal goods, political sensitivity, and harmful material. Returns a boolean `safe` flag and a description of any flagged content. Low latency (10s timeout, no retry).",
   "version": "1.0.0",
-  "inputs": { "required": ["image"], "optional": [] },
-  "outputs": ["description", "safe"],
-  "supportedProviders": ["smolvlm", "gguf-smolvlm", "gguf-smolvlm2", "minicpm-v"],
+  "inputs": {
+    "required": [
+      "image"
+    ],
+    "optional": []
+  },
+  "outputs": [
+    "description",
+    "safe"
+  ],
+  "supportedProviders": [
+    "smolvlm",
+    "gguf-smolvlm",
+    "gguf-smolvlm2",
+    "minicpm-v"
+  ],
   "defaultTimeout": 10000,
-  "defaultRetry": { "max": 0, "strategy": "none" }
+  "defaultRetry": {
+    "max": 0,
+    "strategy": "none"
+  }
 }

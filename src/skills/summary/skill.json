@@ -1,13 +1,28 @@
 {
   "name": "summary",
-  "description": "Generate a detailed natural-language description of an image, preserving page structure for UI/requirement screenshots",
+  "description": "Generate a detailed natural-language description of an image. For UI/requirement screenshots, preserves page structure (navbar, cards, buttons, lists). For photos, describes scene, objects, and context. Returns description text and content tags.",
   "version": "1.0.0",
   "inputs": {
-    "required": ["image"],
-    "optional": ["focus"]
+    "required": [
+      "image"
+    ],
+    "optional": [
+      "focus"
+    ]
   },
-  "outputs": ["description", "tags"],
-  "supportedProviders": ["smolvlm", "gguf-smolvlm", "gguf-smolvlm2", "minicpm-v"],
+  "outputs": [
+    "description",
+    "tags"
+  ],
+  "supportedProviders": [
+    "smolvlm",
+    "gguf-smolvlm",
+    "gguf-smolvlm2",
+    "minicpm-v"
+  ],
   "defaultTimeout": 30000,
-  "defaultRetry": { "max": 1, "strategy": "reprompt" }
+  "defaultRetry": {
+    "max": 1,
+    "strategy": "reprompt"
+  }
 }

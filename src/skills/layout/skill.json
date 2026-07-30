@@ -1,10 +1,25 @@
 {
   "name": "layout",
-  "description": "Analyze the visual layout structure of an image (grid/columns/rows/sidebar/sections)",
+  "description": "Analyze the visual layout structure of an image: detects grid patterns, columns, rows, sidebars, headers, footers, and content sections. Returns a description of the layout type and structural arrangement.",
   "version": "1.0.0",
-  "inputs": { "required": ["image"], "optional": [] },
-  "outputs": ["description", "layoutType"],
-  "supportedProviders": ["gguf-smolvlm", "gguf-smolvlm2", "minicpm-v"],
+  "inputs": {
+    "required": [
+      "image"
+    ],
+    "optional": []
+  },
+  "outputs": [
+    "description",
+    "layoutType"
+  ],
+  "supportedProviders": [
+    "gguf-smolvlm",
+    "gguf-smolvlm2",
+    "minicpm-v"
+  ],
   "defaultTimeout": 30000,
-  "defaultRetry": { "max": 1, "strategy": "reprompt" }
+  "defaultRetry": {
+    "max": 1,
+    "strategy": "reprompt"
+  }
 }

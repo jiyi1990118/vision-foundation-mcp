@@ -10,11 +10,9 @@ import type {
   ExecutionPlan,
   SkillTask,
 } from '../types/skills.js';
-import type { ImageInput } from '../types/domain.js';
 import { getSkill } from '../skills/registry.js';
 import { compilePrompt } from './prompt-compiler.js';
 import { logger } from '../utils/logger.js';
-import { createHash } from 'node:crypto';
 
 // ── Intent → Skill mapping ──────────────────────────────
 
@@ -98,7 +96,7 @@ export function resolveSkillNames(
  * Does NOT execute — just decides strategy.
  */
 export async function planExecution(input: PlannerInput): Promise<ExecutionPlan> {
-  const { image, metadata, intent, requestedSkills, options, activeProvider, activeRuntime } = input;
+  const { metadata, intent, requestedSkills, options, activeProvider, activeRuntime } = input;
   // `resources` is consulted upstream by the provider-router; the planner
   // trusts the router-selected provider and does not re-evaluate resources.
   void input.resources;
@@ -153,10 +151,7 @@ export async function planExecution(input: PlannerInput): Promise<ExecutionPlan>
     preprocess.push('resize');
   }
 
-  // 5. Cache key
-  const cacheKey = buildCacheKey(image, intent, skillNames, options);
-
-  // 6. Timeout and retry (use first skill's defaults)
+  // 5. Timeout and retry (use first skill's defaults)
   const firstSkill = getSkill(skillNames[0] ?? 'classify');
   const timeout = firstSkill?.defaultTimeout ?? 30000;
   const retry = firstSkill?.defaultRetry ?? { max: 1, strategy: 'reprompt' as const };
@@ -167,7 +162,6 @@ export async function planExecution(input: PlannerInput): Promise<ExecutionPlan>
     preprocess,
     skills,
     postprocess: ['merge'],
-    cacheKey,
     timeout,
     retry,
     maxTokens: options.maxTokens,
@@ -273,20 +267,4 @@ function shouldIncludeOcrForTarget(intent: string, options?: PlannerInput['optio
     'invoice', 'receipt', '票据', '发票',
     'code', '代码', 'form', '表单',
   ].some((keyword) => lower.includes(keyword));
-}
-
-function buildCacheKey(
-  image: ImageInput,
-  intent: string,
-  skills: string[],
-  options: PlannerInput['options'],
-): string {
-  const imageHash = createHash('sha256').update(image.buffer).digest('hex').slice(0, 16);
-  const configStr = JSON.stringify({
-    intent,
-    skills: [...skills].sort(),
-    quality: options.quality ?? 'fast',
-  });
-  const configHash = createHash('sha256').update(configStr).digest('hex').slice(0, 8);
-  return `${imageHash}:${configHash}`;
 }

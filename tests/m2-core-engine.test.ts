@@ -104,7 +104,6 @@ describe('M2 — Core Engine', () => {
     expect(plan.provider).toBe('smolvlm');
     expect(plan.skills.length).toBeGreaterThanOrEqual(2);
     expect(plan.skills.some((s) => s.skill === 'classify')).toBe(true);
-    expect(plan.cacheKey).toBeTruthy();
     expect(plan.retry.max).toBeGreaterThanOrEqual(1);
   });
 

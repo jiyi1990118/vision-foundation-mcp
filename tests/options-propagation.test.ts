@@ -48,7 +48,6 @@ function makePlan(overrides: Partial<ExecutionPlan> = {}): ExecutionPlan {
       },
     ],
     postprocess: ['merge'],
-    cacheKey: 'test',
     timeout: 30000,
     retry: { max: 0, strategy: 'none' },
     ...overrides,

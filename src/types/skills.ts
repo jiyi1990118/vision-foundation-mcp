@@ -38,6 +38,7 @@ export interface SkillResult {
   error?: string | undefined;
   duration: number;
   partial?: boolean | undefined;
+  cached?: boolean | undefined;
 }
 
 /** Collection of Skill results from a pipeline run. */
@@ -80,7 +81,6 @@ export interface ExecutionPlan {
   preprocess: string[];
   skills: SkillTask[];
   postprocess: string[];
-  cacheKey: string;
   timeout: number;
   retry: { max: number; strategy: 'none' | 'reprompt' | 'fallback' };
   maxTokens?: number | undefined;

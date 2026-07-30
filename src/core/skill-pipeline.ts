@@ -167,16 +167,19 @@ export class SkillPipeline {
         const parsed = this.parseAndValidate(response.text, task.schema, task.skill);
 
         if (parsed.valid) {
+          const cached = response.duration === 0;
           logger.info('Skill completed', {
             skill: task.skill,
             attempt,
             duration: Date.now() - start,
+            cached,
           });
           return {
             skill: task.skill,
             success: true,
             data: parsed.data,
             duration: Date.now() - start,
+            cached,
           };
         }
 
@@ -609,6 +612,7 @@ export function composeResult(
 ): VisionResult {
   const skillsRan = Object.keys(results);
   const skillsSucceeded = skillsRan.filter((s) => results[s]!.success);
+  const anyCached = skillsSucceeded.some((s) => results[s]!.cached === true);
 
   // Get summary text
   let summary = '';
@@ -720,7 +724,7 @@ export function composeResult(
       provider,
       runtime,
       duration: durationMs,
-      cached: false,
+      cached: anyCached,
     },
   };
 

@@ -16,14 +16,26 @@ describe('vision error classification', () => {
     });
   });
 
-  it('maps file-not-found normalization errors to invalid input', () => {
+  it('preserves file-not-found normalization errors with their own code', () => {
     const classified = classifyVisionError(
       new NormalizeError('NORMALIZE_FILE_NOT_FOUND', 'File not found: missing.png'),
     );
 
     expect(classified).toEqual({
-      code: 'NORMALIZE_INVALID_INPUT',
+      code: 'NORMALIZE_FILE_NOT_FOUND',
       message: 'File not found: missing.png',
+      retryable: false,
+    });
+  });
+
+  it('preserves too-large normalization errors with their own code', () => {
+    const classified = classifyVisionError(
+      new NormalizeError('NORMALIZE_TOO_LARGE', 'Image size 60000000 exceeds limit 10485760'),
+    );
+
+    expect(classified).toEqual({
+      code: 'NORMALIZE_TOO_LARGE',
+      message: 'Image size 60000000 exceeds limit 10485760',
       retryable: false,
     });
   });

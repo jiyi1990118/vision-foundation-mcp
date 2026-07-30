@@ -621,7 +621,7 @@ export function classifyVisionError(errorLike: unknown): ClassifiedVisionError {
 
   if (errorLike instanceof NormalizeError) {
     return {
-      code: errorLike.code.startsWith('NORMALIZE_') ? 'NORMALIZE_INVALID_INPUT' : errorLike.code,
+      code: errorLike.code,
       message,
       retryable: false,
     };

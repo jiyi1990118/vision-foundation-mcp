@@ -1,12 +1,11 @@
 allowBuilds:
   esbuild: true
-  node-llama-cpp: true
+  node-llama-cpp: set this to true or false
   onnxruntime-node: true
   protobufjs: true
   sharp: true
 onlyBuiltDependencies:
   - esbuild
-  - node-llama-cpp
   - onnxruntime-node
   - protobufjs
   - sharp

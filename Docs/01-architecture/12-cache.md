@@ -1,3 +1,10 @@
+<!--
+  Implementation Status (2026-07-30 audit):
+  CacheManager NOT implemented as described. Provider-level inference cache
+  exists in BaseLlamaCppProvider (TTL+LRU, Map-based). The CacheManager
+  abstraction with disk cache, 512MB limit, and 24h TTL is a vision document.
+  options.cache controls provider-level cache, not a CacheManager.
+-->
 # 12 - 缓存设计（Cache Design）
 
 > 缓存是性能优化的第一手段。本文档定义推理结果缓存的策略、结构与一致性。

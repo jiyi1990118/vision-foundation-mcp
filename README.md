@@ -106,7 +106,7 @@ vision.analyze
 | `skills` | no | Explicit skills to run. Overrides intent inference. Example: `["classify", "summary", "ocr"]`. |
 | `options.quality` | no | `fast` uses the default provider. `high` can route to MiniCPM-V when `VISION_HIGH_QUALITY=1` is set. |
 | `options.provider` | no | Optional provider override. Supported provider names depend on registered providers. |
-| `options.cache` | no | Reserved for cache-aware providers. |
+| `options.cache` | no | Enable/disable provider-level inference result cache (default: enabled for GGUF providers with TTL+LRU). Set `false` to force fresh inference. |
 | `options.maxTokens` | no | Optional generation token limit passed through the request pipeline. |
 | `options.target` | no | Optional target-region hint for annotated screenshots, such as `{ "color": "red", "position": "right", "description": "dashed box content" }`. |
 

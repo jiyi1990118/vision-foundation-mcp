@@ -1,3 +1,9 @@
+<!--
+  Implementation Status (2026-07-30 audit):
+  VisionError class hierarchy NOT implemented. Error handling uses
+  classifyVisionError() function with string matching. 7 of 18 planned
+  error codes are implemented. This document partially reflects reality.
+-->
 # 10 - 错误处理（Error Handling）
 
 > 统一的错误码、错误结构与重试策略，是生产可用的底线。本文档定义全项目错误处理规范。

@@ -1,3 +1,11 @@
+<!--
+  Implementation Status (2026-07-30 audit):
+  PromptRegistry and SchemaRegistry NOT implemented as described. Prompts
+  and schemas are inlined in each skill directory (prompt.md, schema.json)
+  and loaded by src/skills/registry.ts. The prompts/ + schemas/ directory
+  structure, _shared/ partials, few-shot.json, version management, and
+  A/B testing described here are NOT implemented. This document is a vision.
+-->
 # 09 - Prompt Registry 与 Schema Registry（提示词与模式注册表）
 
 > 沟通记录原话：「本地模型准确率 90% 都是 Prompt」。SmolVLM-500M 作为小模型，输出不稳定的根源在于 Prompt 质量。Prompt Registry 和 Schema Registry 是决定项目成败的核心基础设施。

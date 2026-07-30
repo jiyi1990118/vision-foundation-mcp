@@ -102,8 +102,9 @@ function buildDownloadUrls(tag: string, platformFilename: string): string[] {
   const urls = [
     process.env.LLAMA_SERVER_DOWNLOAD_URL,
     githubUrl,
-    buildMirrorUrl(githubUrl, process.env.LLAMA_DOWNLOAD_MIRROR || 'https://ghproxy.com'),
-    buildMirrorUrl(githubUrl, 'https://gh.api.99988866.xyz'),
+    process.env.LLAMA_DOWNLOAD_MIRROR
+      ? buildMirrorUrl(githubUrl, process.env.LLAMA_DOWNLOAD_MIRROR)
+      : buildMirrorUrl(githubUrl, 'https://ghproxy.com'),
   ].filter(Boolean) as string[];
   
   return urls;

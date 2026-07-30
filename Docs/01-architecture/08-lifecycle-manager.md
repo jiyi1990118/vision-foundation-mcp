@@ -1,3 +1,10 @@
+<!--
+  Implementation Status (2026-07-30 audit):
+  LifecycleManager NOT implemented as an independent class. Lifecycle logic
+  is inlined in BaseLlamaCppProvider (reference counting, idle timer, memory
+  monitoring). The 6-state machine, minDwellTime, warmup, and backoff
+  features described here are NOT implemented. This document is a vision.
+-->
 # 08 - Lifecycle Manager（生命周期与资源释放管理）
 
 > GGUF-backed provider（SmolVLM2/SmolVLM/MiniCPM-V）加载后占用约 500MB-3GB 内存。Lifecycle Manager 是保证「用完即释、按需重载、不泄漏、不抖动」的核心机制。本文档是资源自动释放的完整设计。

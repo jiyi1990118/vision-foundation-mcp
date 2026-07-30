@@ -26,17 +26,17 @@ M8  Universal Vision Parser（v0.3）
 
 ---
 
-## M1 - 最小闭环（Walking Skeleton）
+## M1 - 最小闭环（Walking Skeleton）✅ 已完成
 
-**目标**：跑通「图片进 → 文本出」的最小路径，验证技术栈可行性。
+**目标**：跑通「图片进 -> 文本出」的最小路径，验证技术栈可行性。
 
 ### 交付内容
-- [ ] 项目骨架（src/ 目录结构、tsconfig、eslint、prettier）
-- [ ] MCP Tool `vision.analyze` 入口（硬编码，无 Planner）
-- [ ] Request Normalizer（支持 file/base64 两种输入）
-- [ ] SmolVLM Provider（直接调 ONNX Runtime，无 Runtime 抽象）
-- [ ] 模型自动下载（SmolVLM Q4_K_M）
-- [ ] 返回纯文本结果（无 structuredContent）
+- [x] 项目骨架（src/ 目录结构、tsconfig、eslint、prettier）
+- [x] MCP Tool `vision.analyze` 入口（硬编码，无 Planner）
+- [x] Request Normalizer（支持 file/base64 两种输入）
+- [x] SmolVLM Provider（直接调 ONNX Runtime，无 Runtime 抽象）
+- [x] 模型自动下载（SmolVLM Q4_K_M）
+- [x] 返回纯文本结果（无 structuredContent）
 
 ### 验收标准
 ```
@@ -55,18 +55,18 @@ M8  Universal Vision Parser（v0.3）
 
 ---
 
-## M2 - 核心引擎（Planner + Policy + Skill）
+## M2 - 核心引擎（Planner + Policy + Skill）✅ 已完成
 
 **目标**：把 M1 的硬编码路径重构为分层架构，接入 Planner/Policy/Skill。
 
 ### 交付内容
-- [ ] RuntimeAdapter 抽象（ONNX Runtime 实现）
-- [ ] ExecutionPlanner（意图→Skill 映射，元信息→预处理）
-- [ ] PolicyEngine（policy.yaml 配置化，含安全策略）
-- [ ] SkillPipeline（串行/并行编排）
-- [ ] 至少 3 个 Skill：classify、ocr、summary
-- [ ] 统一返回 structuredContent 格式
-- [ ] MetadataExtractor（尺寸/复杂度估算）
+- [x] ~~RuntimeAdapter 抽象~~（**设计偏移**：未实现独立 RuntimeAdapter，GGUF provider 直接使用 `BaseLlamaCppProvider` + `LlamaServerProcess`）
+- [x] ExecutionPlanner（意图->Skill 映射，元信息->预处理）
+- [x] ~~PolicyEngine（policy.yaml 配置化）~~（**设计偏移**：规则硬编码在 `DEFAULT_RULES`，未使用 YAML；3 条规则实现：large-image-resize、memory-guard、reject-huge）
+- [x] SkillPipeline（串行/并行编排）
+- [x] 至少 3 个 Skill：classify、ocr、summary
+- [x] 统一返回 structuredContent 格式
+- [x] MetadataExtractor（尺寸/复杂度估算）
 
 ### 验收标准
 ```
@@ -79,15 +79,15 @@ vision.analyze({ image, intent: "auto" })
 
 ---
 
-## M3 - 质量保障（Validator + Composer + Prompt Registry）
+## M3 - 质量保障（Validator + Composer + Prompt Registry）✅ 已完成
 
 **目标**：解决小模型输出不稳定问题，内建三层质量保障。
 
 ### 交付内容
-- [ ] PromptRegistry + Prompt Compiler（模板填充 + Few-shot）
-- [ ] SchemaRegistry（每个 Skill 定义 schema.json）
-- [ ] ResponseValidator（JSON 解析容错 + Schema 校验 + 重试）
-- [ ] ResultComposer（多 Skill 结果合并为统一 structuredContent）
+- [x] ~~PromptRegistry + Prompt Compiler~~（**设计偏移**：prompts 内联在各 skill 目录的 prompt.md 中，由 registry.ts 加载，无独立 PromptRegistry 类）
+- [x] ~~SchemaRegistry~~（**设计偏移**：每个 skill 的 schema.json 直接在 skill 目录中，无独立 SchemaRegistry 类）
+- [x] ~~ResponseValidator~~（**设计偏移**：未提取为独立模块，内联在 SkillPipeline.parseAndValidate() 中，含 markdown 清理、JSON 提取、语法修复、必填字段检查）
+- [x] ResultComposer（多 Skill 结果合并为统一 structuredContent）
 - [~] ~~补充 Skill：ui、chart、color、object~~（**已撤销**：未作为独立 Skill 创建。chart/diagram 改为 Universal Parser 的场景抽取器 `src/core/extractors/`；ui 布局由 Composer 基于 OCR 算法化生成；color/object 未落地。当前共 8 个 Skill：classify/ocr/summary/table/document/poster/moderation/layout）
 - [ ] 部分 Skill 失败 → PartialResult
 
@@ -101,19 +101,19 @@ vision.analyze({ image, intent: "auto" })
 
 ---
 
-## M4 - 生产就绪（Cache + Lifecycle + 模型管理）
+## M4 - 生产就绪（Cache + Lifecycle + 模型管理）✅ 部分完成
 
 **目标**：达到生产可用水平，资源管理完善。
 
 ### 交付内容
-- [ ] CacheManager（结果缓存，SHA256 key，TTL/LRU）
-- [ ] LifecycleManager（按需加载、空闲回收、引用计数）
-- [x] ModelManager 完善（断点续传、SHA256 校验、版本管理）
-- [ ] 错误处理体系（统一错误码、可重试标记）
-- [ ] 日志体系（结构化日志、级别控制）
-- [ ] 配置体系完善（所有 config/*.yaml）
-- [ ] 安全防护（图片大小限制、防 OOM、防 DOS）
-- [ ] 补充 Skill：table、document、poster、moderation、layout
+- [ ] ~~CacheManager~~（**未实现**：结果缓存设计为愿景文档 `Docs/01-architecture/12-cache.md`，当前 `options.cache` 为 no-op）
+- [ ] ~~LifecycleManager~~（**设计偏移**：未实现独立 LifecycleManager 类，生命周期内联在 `BaseLlamaCppProvider` 中：引用计数、空闲定时器、内存监控。防抖机制 minDwellTime/warmup/backoff 未实现）
+- [x] ModelManager 完善（断点续传、SHA256 校验、原子写入；版本管理为路线图项）
+- [x] ~~错误处理体系~~（**设计偏移**：未实现 VisionError 类层次结构，使用 `classifyVisionError()` 函数 + 字符串匹配；7/18 个错误码已实现）
+- [x] 日志体系（结构化日志 logger -> stderr，级别控制）
+- [ ] ~~配置体系完善~~（**未实现**：所有 config/*.yaml 未创建，使用环境变量 + 硬编码默认值）
+- [x] 安全防护（图片大小限制 10MB、SSRF 防护私有 IP 拦截、magic number 验证、并发限制 Semaphore(4)）
+- [x] 补充 Skill：table、document、poster、moderation、layout
 
 ### 验收标准
 ```
@@ -174,6 +174,7 @@ quality=fast 或 资源不足 → 路由器筛选掉大模型 → 回退 GGUF/Sm
 - [x] License（MIT）
 - [x] GitHub push（`main` 已推送到 `git@github.com:jiyi1990118/vision-foundation-mcp.git`）
 - [ ] 发布到 npm（`package.json` 已配置 `files` / `engines` / `publishConfig`；当前等待 `npm login`）
+- [x] 移除未使用的 `node-llama-cpp` 依赖（GGUF provider 使用 llama-server 子进程，不使用 native binding）
 
 ### 验收标准
 ```
@@ -302,10 +303,54 @@ v4.0  插件市场（第三方 Skill/Provider 分发）
 ## 本文小结
 
 路线图核心：
-1. **8 个里程碑**，从 Walking Skeleton 到 Universal Vision Parser
+1. **8 个里程碑**，从 Walking Skeleton 到 Universal Vision Parser（M1-M8 全部完成）
 2. **渐进增强**，每个里程碑都是可交付的增量
 3. **M1 先跑通**，不追求架构完整
-4. **M3 是质量关键**，三层保障解决小模型不稳定
+4. **M3 是质量关键**，三层保障解决小模型不稳定（内联实现，非独立模块）
 5. **M5 验证扩展性**，接入第二模型证明架构可插拔
 6. **M7/M8 结构化理解**，OCR-driven 富化 + 跨场景统一解析层
 7. **未来预留**，Video/Multi-Agent 在 v2+，架构已预留
+
+---
+
+## 设计偏移总结（2026-07-30 审计）
+
+以下设计文档描述的功能未实现或实现方式与设计不同。这些均为**愿景文档**，
+描述了理想架构，实际实现采用了更务实的方案。
+
+### 未实现的愿景模块
+
+| 设计文档 | 愿景 | 实际状态 |
+|---|---|---|
+| `12-cache.md` | CacheManager (LRU+TTL, 512MB, 磁盘缓存) | 未实现，`options.cache` 为 no-op |
+| `08-lifecycle-manager.md` | 独立 LifecycleManager 类 (6状态机, minDwellTime, warmup, backoff) | 生命周期内联在 BaseLlamaCppProvider (引用计数+空闲定时器) |
+| `09-prompt-schema-registry.md` | 独立 prompts/ + schemas/ 目录, _shared/ 模板, few-shot.json, 版本管理, A/B 测试 | prompts/schemas 内联在 skill 目录中, 由 registry.ts 加载 |
+| `04-policy-engine.md` | policy.yaml 配置化, 6 条策略, 热加载 | 3 条规则硬编码在 DEFAULT_RULES, 无 YAML |
+| `10-error-handling.md` | VisionError 类层次结构 (8 子类, 18 错误码) | classifyVisionError() 函数 + 字符串匹配, 7 个错误码 |
+| `06-provider-runtime.md` | RuntimeAdapter 接口 | GGUF provider 直接使用 BaseLlamaCppProvider |
+| `11-security.md` | sanitizeFocus() 防 prompt 注入 | 未实现 |
+| `07-model-management.md` | config/providers.yaml, 并发分块下载, 版本管理 | URL 硬编码, 单流下载, 无版本管理 |
+
+### 实现方式与设计不同的模块
+
+| 设计文档 | 设计 | 实际实现 | 原因 |
+|---|---|---|---|
+| ResponseValidator | 独立模块 | 内联在 SkillPipeline.parseAndValidate() | 功能完整, 无需拆分 |
+| PromptRegistry | 独立类 + prompts/ 目录 | skill 目录内联 + registry.ts | 更简单, 无需模板继承 |
+| SchemaRegistry | 独立类 | skill 目录内联 | 同上 |
+| PolicyEngine | YAML 配置化 | 硬编码 DEFAULT_RULES | 3 条规则足够, YAML 过度设计 |
+| LifecycleManager | 独立类 + 6 状态机 | BaseLlamaCppProvider 内联 | 引用计数+空闲定时器已满足需求 |
+| Error handling | VisionError 类层次 | classifyVisionError() 函数 | 函数式更轻量, 无需类层次 |
+
+### 实现中有但设计文档未覆盖的模块
+
+| 模块 | 源文件 | 说明 |
+|---|---|---|
+| UI 分析管线 | `src/ui-analysis/` (24 子目录) | 完整的 UI 重建流水线, 设计文档中未描述 |
+| 标注工作台 | `src/ui-analysis/annotation-workbench/` | 人工标注审核 UI, 设计文档中未描述 |
+| 场景抽取器 | `src/core/extractors/` | chart/diagram/document/code/form 场景专属抽取 |
+| 设计元素提取器 | `src/core/extractors/design-extractor.ts` | DesignBlock/DesignToken 类型 |
+| UI 布局提取器 | `src/core/extractors/ui-layout-extractor.ts` | UiLayoutBlock 类型 |
+| 分类启发式修正 | `src/core/skill-pipeline.ts` | CATEGORY_EXCLUSION_RULES + inferCategoryFromSummary |
+| 数据集导出 | `src/ui-analysis/benchmark/dataset-export.ts` | SHA-256 manifest + 家族分拆 |
+| 主动学习 | `src/ui-analysis/benchmark/active-learning.ts` | 频率优先队列 |

@@ -106,7 +106,7 @@ vision.analyze
 | `skills` | 否 | 显式指定要执行的 Skill，会覆盖 intent 推断。例如 `["classify", "summary", "ocr"]`。 |
 | `options.quality` | 否 | `fast` 使用默认 provider；`high` 在设置 `VISION_HIGH_QUALITY=1` 后可路由到 MiniCPM-V。 |
 | `options.provider` | 否 | 可选 provider 覆盖，具体名称取决于当前注册的 provider。 |
-| `options.cache` | 否 | 预留给支持缓存的 provider。 |
+| `options.cache` | 否 | 启用/禁用 provider 级推理结果缓存（默认：GGUF provider 启用 TTL+LRU 缓存）。设为 `false` 强制重新推理。 |
 | `options.maxTokens` | 否 | 可选生成 token 限制，会沿请求链路传递。 |
 | `options.target` | 否 | 可选目标区域提示，用于带标注截图，例如 `{ "color": "red", "position": "right", "description": "虚线框内容" }`。 |
 

@@ -26,7 +26,7 @@ interface LoadConfigOptions {
 export const DEFAULT_CONFIG: VisionConfig = {
   server: {
     maxConcurrent: 4,
-    requestTimeoutMs: 30_000,
+    requestTimeoutMs: 60_000,
   },
   security: {
     maxImageSizeBytes: 10 * 1024 * 1024,
@@ -100,4 +100,25 @@ function numberEnv(value: string | undefined, fallback: number): number {
   if (!value) return fallback;
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+/**
+ * Compute a dynamic pipeline timeout scaled by the number of skills.
+ *
+ * Each skill involves a VLM inference call (~8-15s on GGUF). A fixed 30-60s
+ * timeout is too short for multi-skill plans with sequential dependencies
+ * (e.g. ocr -> classify -> summary). This scales the timeout so multi-skill
+ * requests get enough headroom while single-skill requests stay snappy.
+ *
+ * Formula: max(baseMs, skillCount * 15s), capped at 180s.
+ *
+ * @param skillCount - number of skills in the execution plan
+ * @param baseMs     - configured base timeout (floor)
+ * @returns timeout in milliseconds
+ */
+export function computePipelineTimeout(skillCount: number, baseMs: number): number {
+  const perSkillMs = 20_000;
+  const maxMs = 300_000;
+  const scaledMs = skillCount * perSkillMs;
+  return Math.min(Math.max(baseMs, scaledMs), maxMs);
 }

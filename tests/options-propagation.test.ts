@@ -113,7 +113,7 @@ describe('request option propagation', () => {
 
   it('keeps injected OCR context short enough for small VLM context windows', async () => {
     const defaultProvider = new RecordingProvider('vlm', ['summary', 'ocr']);
-    const longOcrText = Array.from({ length: 200 }, (_, index) => `字段${index}`).join('\n');
+    const longOcrText = Array.from({ length: 600 }, (_, index) => `字段${index}`).join('\n');
     const ocrProvider = new RecordingProvider(longOcrText, ['ocr']);
     const pipeline = new SkillPipeline(defaultProvider, { ocr: ocrProvider });
 
@@ -124,7 +124,7 @@ describe('request option propagation', () => {
       ],
     }), image);
 
-    expect(defaultProvider.requests[0]?.prompt.length).toBeLessThan(1400);
-    expect(defaultProvider.requests[0]?.prompt).toContain('[truncated]');
+    expect(defaultProvider.requests[0]?.prompt.length).toBeLessThan(2400);
+    expect(defaultProvider.requests[0]?.prompt).toContain('[truncated');
   });
 });

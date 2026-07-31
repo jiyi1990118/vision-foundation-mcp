@@ -10,7 +10,7 @@ import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { NormalizeError, normalizeImageInput } from '../core/request-normalizer.js';
 import { extractMetadata } from '../core/metadata-extractor.js';
-import { planExecution, resolveSkillNames } from '../core/execution-planner.js';
+import { planExecution, resolveSkillNames, ensureOcrForSummary } from '../core/execution-planner.js';
 import { evaluatePolicy, PolicyDeniedError } from '../core/policy-engine.js';
 import { SkillPipeline, composeResult, resolveResultCategory } from '../core/skill-pipeline.js';
 import type { TargetQuery } from '../core/skill-pipeline.js';
@@ -33,7 +33,7 @@ import { chooseProvider, providerToCandidate, type RouterOptions, type RouterRes
 import type { VisionProvider } from '../providers/types.js';
 import type { PlannerInput, PolicyContext, SkillResult, SkillResultSet } from '../types/skills.js';
 import { logger } from '../utils/logger.js';
-import { DEFAULT_CONFIG, getConfig } from '../core/config.js';
+import { DEFAULT_CONFIG, getConfig, computePipelineTimeout } from '../core/config.js';
 
 // Concurrency control — limit simultaneous vision analyses
 const semaphore = new Semaphore(DEFAULT_CONFIG.server.maxConcurrent);
@@ -329,6 +329,20 @@ export function registerVisionAnalyzeTool(
       logger.debug('Concurrency slot acquired', { available: semaphore.available });
 
       try {
+        // P1-1: Compute a dynamic timeout scaled by the estimated skill count.
+        // Multi-skill plans with sequential dependencies (ocr -> summary) need
+        // more headroom than the fixed base timeout.
+        const baseSkills = ensureOcrForSummary(
+              resolveSkillNames(requestedSkills, intent, options ?? {}),
+            );
+            const estimatedSkillCount = baseSkills.length;
+        const pipelineTimeoutMs = computePipelineTimeout(estimatedSkillCount, config.server.requestTimeoutMs);
+        logger.debug('Pipeline timeout computed', {
+          skillCount: estimatedSkillCount,
+          baseMs: config.server.requestTimeoutMs,
+          timeoutMs: pipelineTimeoutMs,
+        });
+
         // Wrap entire pipeline in a timeout
         return await withAbortableTimeout(
           async (signal) => {
@@ -349,7 +363,11 @@ export function registerVisionAnalyzeTool(
             };
 
             // ── Stage 4b: Route to the best provider for this request ──
-            const skillNames = resolveSkillNames(requestedSkills, intent, options ?? {});
+            // Apply ensureOcrForSummary BEFORE routing so the dedicated OCR
+            // provider is included in overrides for mixed-skill+summary plans.
+            const skillNames = ensureOcrForSummary(
+              resolveSkillNames(requestedSkills, intent, options ?? {}),
+            );
             const provider = selectProvider(providers, {
               options: options ?? {},
               resources,
@@ -599,6 +617,7 @@ export function registerVisionAnalyzeTool(
               sceneHint,
               metadata,
               intent,
+              quality: options?.quality,
             };
             const visionResult = composeResult(skillResults, provider.name, provider.runtime, duration, composeOptions);
             scrubLegacyUiBranches(
@@ -659,13 +678,13 @@ export function registerVisionAnalyzeTool(
               content: [
                 {
                   type: 'text' as const,
-                  text: visionResult.summary || `Analysis complete: ${visionResult.category}`,
+                  text: buildResultText(visionResult),
                 },
               ],
               structuredContent: visionResult,
             };
           },
-          config.server.requestTimeoutMs,
+          pipelineTimeoutMs,
           'Vision analysis timed out',
         );
       } catch (e) {
@@ -688,6 +707,53 @@ export function registerVisionAnalyzeTool(
       }
     },
   );
+}
+
+/**
+ * Build a human-readable text rendering of the VisionResult for the MCP text
+ * content field. Guarantees the caller always sees useful content even when
+ * the VLM summary is empty or hallucinated: a category/confidence header,
+ * the summary (if any), and an OCR text excerpt as ground-truth evidence.
+ */
+function buildResultText(result: {
+  category: string;
+  confidence: number;
+  summary: string;
+  ocrText?: string;
+  skills: string[];
+  summaryGrounded?: boolean;
+  suggestion?: string;
+}): string {
+  const parts: string[] = [];
+  const confPct = Math.round(result.confidence * 100);
+  parts.push(`[${result.category} · ${confPct}%]`);
+
+  if (result.summary) {
+    parts.push('', result.summary);
+    // P1-2: Warn when the summary is not grounded in OCR text
+    if (result.summaryGrounded === false) {
+      parts.push('', '(⚠ 摘要可能与图片内容不符，请以 OCR 文本为准)');
+    }
+  }
+
+  if (result.ocrText) {
+    const maxChars = 600;
+    const excerpt = result.ocrText.length > maxChars
+      ? `${result.ocrText.slice(0, maxChars)}\n...[OCR 共 ${result.ocrText.length} 字符]`
+      : result.ocrText;
+    parts.push('', '--- OCR 文本 ---', excerpt);
+  }
+
+  // P2: Show quality upgrade suggestion for complex images
+  if (result.suggestion) {
+    parts.push('', `💡 ${result.suggestion}`);
+  }
+
+  if (result.skills.length > 0) {
+    parts.push('', `(技能: ${result.skills.join(', ')})`);
+  }
+
+  return parts.join('\n');
 }
 
 export function classifyVisionError(errorLike: unknown): ClassifiedVisionError {

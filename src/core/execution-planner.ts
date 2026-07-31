@@ -58,6 +58,23 @@ const INTENT_MAPPINGS: IntentMapping[] = [
 ];
 
 /**
+ * Ensure `summary` always has OCR ground truth (P0 fix). The summary skill's
+ * prompt instructs the model to use OCR text as ground truth, but without OCR
+ * in the plan the small VLM hallucinates. Add OCR whenever summary is
+ * requested and OCR is not already present.
+ *
+ * Exported so vision-analyze.ts can apply the same logic BEFORE provider
+ * selection and override setup, ensuring the dedicated OCR provider is
+ * routed for mixed-skill plans that include summary.
+ */
+export function ensureOcrForSummary(skillNames: string[]): string[] {
+  if (skillNames.includes('summary') && !skillNames.includes('ocr')) {
+    return [...skillNames, 'ocr'];
+  }
+  return skillNames;
+}
+
+/**
  * Map a natural-language intent to a list of Skills.
  */
 export function mapIntentToSkills(intent: string): string[] {
@@ -102,7 +119,11 @@ export async function planExecution(input: PlannerInput): Promise<ExecutionPlan>
   void input.resources;
 
   // 1. Determine Skills
-  const skillNames = resolveSkillNames(requestedSkills, intent, options);
+  let skillNames = resolveSkillNames(requestedSkills, intent, options);
+
+  // P0: Ensure `summary` always has OCR ground truth. Shared with
+  // vision-analyze.ts so provider overrides are set up correctly.
+  skillNames = ensureOcrForSummary(skillNames);
 
   logger.info('Planner decision', {
     intent,

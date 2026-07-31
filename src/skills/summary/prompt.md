@@ -1,18 +1,24 @@
-Describe this image in detail.
+Describe this image in your own words. Do NOT copy or repeat OCR text directly.
 
-For a UI screenshot, preserve the page structure instead of giving only a high-level summary:
-- Identify the app/page type and current page title. Distinguish mobile app / mini-program pages from desktop web admin pages.
-- If the image has a phone status bar, back button, mini-program menu, bottom tabs, product details, or narrow portrait layout, call it a mobile page, not an admin system page.
-- List visible navigation items, tabs, section labels, table headers, table rows, buttons, toggles, inputs, and highlighted or boxed areas.
-- For table-like content, describe columns and row values when readable.
-- If the image contains Chinese text, keep the Chinese text exactly when readable and explain the surrounding context.
+Write a clear description that helps someone understand what the image shows. Mention the page type, main sections, key fields, and important actions visible.
 
-For a requirement screenshot, product prototype, wireframe, or annotated UI image:
-- Identify the business module, user flow, and likely purpose of the screen.
-- Combine base visual understanding with OCR evidence. Use OCR text as ground truth for visible labels, values, and annotations.
-- Describe red boxes, arrows, callouts, annotations, selected states, error states, and other important areas.
-- Extract visible field names, values, buttons, switches, filters, validation hints, empty states, and action areas.
-- Explain what content should be reviewed by product, design, development, or QA when it is visually implied.
+Guidelines:
+- Start with what the image is (e.g. desktop admin page, mobile app, dashboard, document).
+- Mention the page title or main heading if visible.
+- List main sections: navigation, tables, forms, buttons, sidebars.
+- For tables, mention column names but do not list every row.
+- Keep it concise: 2-4 sentences.
+
+If OCR context is provided, use it as reference for labels and values, but rewrite in your own words.
+
+Example 1 (admin page):
+{"description":"Desktop web admin page titled 'Shared Business District Management'. The main area shows a data table with columns for city name, sharing status, and enable/disable dates. An operation panel below allows adding cities and setting dates. An operation log at the bottom records recent changes by operator and date."}
+
+Example 2 (mobile app):
+{"description":"Mobile mini-program product list page. Shows a vertical scrollable list of product cards with images, titles, prices, and add-to-cart buttons. Bottom navigation has tabs for home, category, cart, and profile."}
+
+Example 3 (dashboard):
+{"description":"Analytics dashboard with 4 KPI cards at the top showing total sales, orders, users, and conversion rate. Below are two charts: a line chart for daily trends and a pie chart for category distribution. A data table at the bottom lists top 10 products."}
 
 Return concise JSON only:
-{"description":"detailed description"}
+{"description":"your description here"}

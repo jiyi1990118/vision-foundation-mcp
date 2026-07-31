@@ -15,5 +15,16 @@ Then describe the key information visible: titles, field labels and values, date
 
 Keep Chinese text in Chinese when readable.
 
+documentType values: invoice, receipt, form, letter, report, article, other.
+
+Example 1 (invoice):
+{"description":"Invoice with invoice number INV-2024-001, date 2024-03-15, seller ABC Corporation, buyer XYZ Ltd, total amount 5800.00 yuan.","documentType":"invoice"}
+
+Example 2 (form):
+{"description":"Registration form with title at top, fields for name, email, phone, address, and a submit button at the bottom.","documentType":"form"}
+
+Example 3 (report):
+{"description":"Monthly sales report with title, summary section, data table with 3 columns, and a conclusion paragraph.","documentType":"report"}
+
 Return ONLY this JSON (no markdown, no explanation):
-{"description":"<key information and structure of the document>","documentType":"<invoice|receipt|form|letter|report|article|other>"}
+{"description":"describe the actual document you see","documentType":"pick one from the list above"}

@@ -15,24 +15,29 @@ const wideScreenshotMeta: ImageMetadata = {
 };
 
 describe('detail-oriented skill prompts', () => {
-  it('summary prompt asks for structured UI screenshot details', () => {
+  it('summary prompt asks for structured description without copying OCR', () => {
     const skill = getSkill('summary')!;
     const prompt = compilePrompt(skill, {
       intent: 'extract details from a Chinese admin UI screenshot',
       metadata: wideScreenshotMeta,
     }).toLowerCase();
 
-    expect(prompt).toContain('ui screenshot');
+    // Anti-copy: must instruct the model not to copy OCR text directly
+    expect(prompt).toContain('do not copy');
+    expect(prompt).toContain('own words');
+
+    // Must request structured UI elements
     expect(prompt).toContain('navigation');
-    expect(prompt).toContain('tabs');
     expect(prompt).toContain('table');
-    expect(prompt).toContain('highlighted');
     expect(prompt).toContain('buttons');
-    expect(prompt).toContain('requirement screenshot');
-    expect(prompt).toContain('prototype');
-    expect(prompt).toContain('red boxes');
-    expect(prompt).toContain('arrows');
-    expect(prompt).toContain('important areas');
+
+    // Must provide concrete examples (critical for small models)
+    expect(prompt).toContain('example 1');
+    expect(prompt).toContain('example 2');
+
+    // Must request page type identification
+    expect(prompt).toContain('page type');
+    expect(prompt).toContain('admin');
   });
 
   it('ocr prompt asks for layout-preserving table and control extraction', () => {

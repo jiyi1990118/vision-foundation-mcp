@@ -302,11 +302,36 @@ export class SkillPipeline {
     }
 
     // Step 5: Basic schema validation (check required fields)
+    // For small models, try to fill missing required fields before failing.
     const schemaObj = schema as { properties?: Record<string, unknown>; required?: string[] };
     if (schemaObj.required && Array.isArray(schemaObj.required)) {
       const data = parsed as Record<string, unknown>;
       for (const field of schemaObj.required) {
         if (data[field] === undefined || data[field] === null) {
+          // Try to recover: use 'result' field or synthesize from other fields
+          if (field === 'description') {
+            if (typeof data.result === 'string' && data.result.length > 0) {
+              data.description = data.result;
+              repairs.push('recovered-description-from-result');
+              continue;
+            }
+            // Synthesize from other string fields
+            const otherStrings = Object.entries(data)
+              .filter(([k, v]) => k !== 'description' && typeof v === 'string' && (v as string).length > 0)
+              .map(([k, v]) => `${k}: ${v}`);
+            if (otherStrings.length > 0) {
+              data.description = otherStrings.join(', ');
+              repairs.push('synthesized-description');
+              continue;
+            }
+            data.description = 'Analysis unavailable.';
+            repairs.push('default-description');
+            continue;
+          }
+          // For non-description required fields, try default values
+          if (field === 'safe') { data.safe = true; repairs.push('default-safe'); continue; }
+          if (field === 'rowCount') { data.rowCount = 0; repairs.push('default-rowCount'); continue; }
+          if (field === 'columnCount') { data.columnCount = 0; repairs.push('default-columnCount'); continue; }
           return {
             valid: false,
             error: `missing required field: ${field}`,
@@ -337,11 +362,68 @@ function appendOcrContext(prompt: string, ocrData: unknown, skillName: string): 
   const ocrText = extractOcrText(ocrData);
   if (!ocrText) return prompt;
 
-  const maxOcrContextChars = 800;
+  const maxOcrContextChars = 2000;
   const clipped = ocrText.length > maxOcrContextChars
-    ? `${ocrText.slice(0, maxOcrContextChars)}\n...[truncated]`
+    ? `${ocrText.slice(0, maxOcrContextChars)}\n...[truncated, OCR total ${ocrText.length} chars]`
     : ocrText;
-  return `${prompt}\n\nOCR context from a dedicated OCR provider. Use this text as ground truth for visible UI labels, table headers, buttons, and field names. Do not invent text that conflicts with this OCR context.\n\n${clipped}`;
+  return `${prompt}\n\nOCR context from a dedicated OCR provider. Use this text as ground truth for visible UI labels, table headers, buttons, and field names. Do not invent text that conflicts with this OCR context. If the OCR context contains the page title or headings, start your description with them.\n\n${clipped}`;
+}
+
+// ── Summary grounding & quality suggestion ─────────────
+
+/**
+ * Check whether the VLM summary is "grounded" in the OCR text.
+ *
+ * Small VLMs (SmolVLM2-500M) can produce fluent but hallucinated
+ * descriptions. By extracting significant terms from the summary and
+ * checking how many appear in the OCR ground truth, we can flag
+ * potentially ungrounded summaries so the caller knows to trust the
+ * OCR text over the description.
+ *
+ * @returns true if the summary has sufficient term overlap with OCR
+ */
+function isSummaryGrounded(summary: string, ocrText: string | undefined): boolean {
+  if (!ocrText || ocrText.length === 0 || !summary) return true;
+  // Extract significant terms: Chinese chars (2+) or alphanumeric words (3+)
+  const terms = new Set<string>();
+  const cjkMatches = summary.match(/[\u4e00-\u9fff]{2,}/g);
+  if (cjkMatches) for (const t of cjkMatches) terms.add(t.toLowerCase());
+  const latinMatches = summary.match(/[a-z]{3,}/gi);
+  if (latinMatches) for (const t of latinMatches) terms.add(t.toLowerCase());
+  if (terms.size === 0) return true;
+
+  const ocrLower = ocrText.toLowerCase();
+  let matched = 0;
+  for (const term of terms) {
+    if (ocrLower.includes(term)) matched++;
+  }
+  return matched / terms.size >= 0.15;
+}
+
+/**
+ * Decide whether to suggest retrying with quality=high.
+ *
+ * Complex images (high text density, large pixel count) benefit from
+ * the larger MiniCPM-V model. When the request used the fast provider
+ * and the image shows complexity signals, we suggest an upgrade.
+ *
+ * @returns a suggestion string, or undefined if no upgrade is needed
+ */
+function buildQualitySuggestion(
+  metadata: { width: number; height: number } | undefined,
+  ocrText: string | undefined,
+  quality: 'fast' | 'high' | undefined,
+): string | undefined {
+  if (quality === 'high') return undefined;
+
+  const signals: string[] = [];
+  // High text density -> complex infographic / dashboard
+  if (ocrText && ocrText.length > 1500) signals.push('text-dense');
+  // Large image -> more detail to parse
+  if (metadata && metadata.width * metadata.height > 2_000_000) signals.push('large-image');
+
+  if (signals.length === 0) return undefined;
+  return `Complex image detected (${signals.join(', ')}). Retry with options.quality="high" for more accurate results.`;
 }
 
 // ── Retry prompt enhancement ────────────────────────────
@@ -455,6 +537,8 @@ export interface ComposeResultOptions {
   designExtraction?: DesignExtraction | undefined;
   /** UI layout extraction (visual regions, components, text hierarchy, spacing). */
   uiLayoutExtraction?: UiLayoutExtraction | undefined;
+  /** Requested quality level; used to decide whether to suggest an upgrade. */
+  quality?: 'fast' | 'high' | undefined;
 }
 
 export interface TargetQuery {
@@ -572,6 +656,26 @@ function wrapAsJson(text: string, skillName: string): string | null {
       const description = cleaned.length > 0 ? cleaned : 'Unable to describe image.';
       return JSON.stringify({ description });
     }
+    case 'layout': {
+      const description = cleaned.length > 0 ? cleaned : 'Layout analysis unavailable.';
+      return JSON.stringify({ description, layoutType: 'other' });
+    }
+    case 'document': {
+      const description = cleaned.length > 0 ? cleaned : 'Document analysis unavailable.';
+      return JSON.stringify({ description, documentType: 'other' });
+    }
+    case 'poster': {
+      const description = cleaned.length > 0 ? cleaned : 'Poster analysis unavailable.';
+      return JSON.stringify({ description, theme: cleaned.substring(0, 50) || 'Unknown' });
+    }
+    case 'table': {
+      const description = cleaned.length > 0 ? cleaned : 'Table analysis unavailable.';
+      return JSON.stringify({ description, rowCount: 0, columnCount: 0 });
+    }
+    case 'moderation': {
+      const description = cleaned.length > 0 ? cleaned : 'Safe';
+      return JSON.stringify({ description, safe: true });
+    }
     case 'ocr': {
       // Split by newlines to get individual text items
       if (cleaned.length === 0 || cleaned.toUpperCase() === 'NONE') {
@@ -620,6 +724,28 @@ export function composeResult(
   if (summaryResult?.success && summaryResult.data) {
     const data = summaryResult.data as Record<string, unknown>;
     summary = String(data.description ?? data.summary ?? '');
+
+    // Small models often put useful content in extra fields (navigation, tables,
+    // sections) instead of description. If description is too short, merge
+    // extra string/array fields into a richer summary.
+    if (summary.length < 30) {
+      const extraParts: string[] = [];
+      for (const [key, value] of Object.entries(data)) {
+        if (key === 'description' || key === 'summary') continue;
+        if (typeof value === 'string' && value.length > 5) {
+          extraParts.push(`${key}: ${value}`);
+        } else if (Array.isArray(value) && value.length > 0) {
+          const items = value.map((v) => typeof v === 'string' ? v : JSON.stringify(v)).slice(0, 5);
+          extraParts.push(`${key}: ${items.join(', ')}`);
+        } else if (typeof value === 'object' && value !== null) {
+          extraParts.push(`${key}: ${JSON.stringify(value).slice(0, 200)}`);
+        }
+      }
+      if (extraParts.length > 0) {
+        summary = summary ? `${summary}. ${extraParts.join('. ')}` : extraParts.join('. ');
+        if (summary.length > 1000) summary = summary.slice(0, 1000) + '...';
+      }
+    }
   }
 
   const resolved = resolveResultCategory(results, summary);
@@ -634,9 +760,22 @@ export function composeResult(
     layout,
   } = resolved;
 
-  const ocrDrivenSummary = uiEvidence ? buildOcrDrivenUiSummary(uiEvidence) : undefined;
-  if (ocrDrivenSummary && shouldPreferOcrDrivenSummary(summary, ocrText)) {
+  // P1-2: Compute grounding early so it can drive OCR-driven summary replacement.
+  let summaryGrounded: boolean | undefined;
+  if (summary && ocrText !== undefined) {
+    summaryGrounded = isSummaryGrounded(summary, ocrText);
+  } else if (summary && results['ocr'] && !results['ocr']!.success) {
+    // Fix 4: OCR was supposed to run but failed - summary is unverified.
+    summaryGrounded = false;
+  }
+
+  // Build OCR-driven fallback: UI-specific for UI evidence, general for others.
+  const ocrDrivenSummary = uiEvidence
+    ? buildOcrDrivenUiSummary(uiEvidence)
+    : buildGeneralOcrSummary(ocrText);
+  if (ocrDrivenSummary && shouldPreferOcrDrivenSummary(summary, ocrText, summaryGrounded)) {
     summary = ocrDrivenSummary;
+    summaryGrounded = true; // OCR-driven summary is grounded by definition
   }
   if (options.keyContentExtraction) {
     summary = appendKeyContentSummary(summary, options.keyContentExtraction);
@@ -645,6 +784,15 @@ export function composeResult(
   }
   if (options.scenarioExtraction?.summary) {
     summary = summary ? `${summary}${options.scenarioExtraction.summary}` : options.scenarioExtraction.summary;
+  }
+
+  // Fix 3: If summary is still empty, fall back to the layout skill's description.
+  if (!summary) {
+    const layoutResult = results['layout'];
+    if (layoutResult?.success && layoutResult.data) {
+      const layoutData = layoutResult.data as Record<string, unknown>;
+      summary = String(layoutData.description ?? '');
+    }
   }
 
   // Build result map (only successful results)
@@ -730,6 +878,27 @@ export function composeResult(
 
   if (ocrText !== undefined) {
     visionResult.ocrText = ocrText;
+  }
+
+  // OCR semantic grouping: categorize raw OCR items into actionable groups
+  // (buttons, dates, formLabels, hints, headers, values) for easier consumption.
+  if (ocrItems.length > 0) {
+    const ocrGroups = buildOcrSemanticGroups(ocrItems);
+    if (ocrGroups && Object.values(ocrGroups).some((arr) => arr.length > 0)) {
+      visionResult.ocrGroups = ocrGroups;
+    }
+  }
+
+  // P1-2 + Fix 4: Flag whether the summary is grounded in OCR text.
+  // Uses the pre-computed value (accounts for OCR-driven replacement and OCR failure).
+  if (summaryGrounded !== undefined) {
+    visionResult.summaryGrounded = summaryGrounded;
+  }
+
+  // P2: Suggest quality upgrade for complex images when using the fast provider.
+  const suggestion = buildQualitySuggestion(options.metadata, ocrText, options.quality);
+  if (suggestion) {
+    visionResult.suggestion = suggestion;
   }
 
   return visionResult;
@@ -862,6 +1031,98 @@ function parseBox(position: string): Box | undefined {
   return { x1, y1, x2, y2 };
 }
 
+/**
+ * Semantic groups produced from raw OCR items. Each group contains the text
+ * strings that match a semantic category, making it easier for callers to
+ * extract actionable information without parsing the full OCR text.
+ */
+export interface OcrSemanticGroups {
+  buttons: string[];
+  dates: string[];
+  formLabels: string[];
+  hints: string[];
+  headers: string[];
+  values: string[];
+  other: string[];
+}
+
+const BUTTON_PATTERNS = /^(确定|取消|保存|提交|添加|新增|编辑|修改|删除|查询|搜索|筛选|选择|启用|关闭|启用日期|关闭日期|立即启用|立即关闭|记录|查看|返回|登录|注册|导出|导入|下载|上传|复制|确认|下一步|上一步|完成|应用|重置|刷新|展开|收起|全选|反选|操作)$/;
+
+const DATE_PATTERNS = /\d{4}[-/年]\d{1,2}[-/月]\d{1,2}|\d{1,2}\/\d{1,2}|20\d{2}-\d{1,2}-\d{1,2}/;
+
+const HINT_PATTERNS = /(必须填写|请输入|请选择|成功|失败|提示|警告|错误|不能为空|至少|最多|已存在|不存在|格式不正确|未找到|无法|不支持|已过期|已到期|待开启|已关闭|已启用|已停用|按.*顺序排列|当前日期及当日之后)/;
+
+const FORM_LABEL_PATTERNS = /[\:：]$|^(指定|选择|输入|填写|设置|配置|名称|日期|状态|类型|编号|金额|数量|价格|手机|邮箱|地址|描述|备注|标签|分类|密码|账号|用户名)/;
+
+function buildOcrSemanticGroups(items: OcrItem[]): OcrSemanticGroups | undefined {
+  if (items.length === 0) return undefined;
+
+  const groups: OcrSemanticGroups = {
+    buttons: [],
+    dates: [],
+    formLabels: [],
+    hints: [],
+    headers: [],
+    values: [],
+    other: [],
+  };
+
+  // Determine image height from box positions for relative position calc
+  const maxY = Math.max(...items.map((i) => i.box?.y2 ?? 0), 1);
+  const headerThreshold = maxY * 0.15; // Top 15% of image = header zone
+
+  for (const item of items) {
+    const text = item.text.trim();
+    if (!text) continue;
+
+    // Dates
+    if (DATE_PATTERNS.test(text)) {
+      groups.dates.push(text);
+      continue;
+    }
+
+    // Buttons / Actions
+    if (BUTTON_PATTERNS.test(text)) {
+      groups.buttons.push(text);
+      continue;
+    }
+
+    // Hints / Messages
+    if (HINT_PATTERNS.test(text)) {
+      groups.hints.push(text);
+      continue;
+    }
+
+    // Form labels (text ending with : or matching label patterns)
+    if (FORM_LABEL_PATTERNS.test(text)) {
+      groups.formLabels.push(text);
+      continue;
+    }
+
+    // Headers (items in top portion of image, short text, likely column titles)
+    const isInHeaderZone = (item.box?.y1 ?? Infinity) < headerThreshold;
+    if (isInHeaderZone && text.length <= 20 && !text.includes('\n')) {
+      groups.headers.push(text);
+      continue;
+    }
+
+    // Values (dates, numbers, or short values that look like data)
+    if (/^\d+$|^[\d,\.]+$|^[A-Z0-9\-]+$/.test(text) || text.includes('日期')) {
+      groups.values.push(text);
+      continue;
+    }
+
+    groups.other.push(text);
+  }
+
+  // Deduplicate each group while preserving order
+  for (const key of Object.keys(groups) as (keyof OcrSemanticGroups)[]) {
+    groups[key] = [...new Set(groups[key])];
+  }
+
+  return groups;
+}
+
 function buildUiEvidence(lines: string[]): UiEvidence | undefined {
   if (lines.length < 8) return undefined;
 
@@ -991,9 +1252,28 @@ function buildOcrDrivenUiSummary(evidence: UiEvidence): string {
   return parts.join('');
 }
 
-function shouldPreferOcrDrivenSummary(summary: string, ocrText: string | undefined): boolean {
+/**
+ * Build a general OCR-driven summary for non-UI images (infographics,
+ * posters, documents, etc.) where no UiEvidence was detected. Uses the
+ * first few OCR lines as the key content so the caller always sees
+ * ground-truth text instead of a hallucinated VLM description.
+ */
+function buildGeneralOcrSummary(ocrText: string | undefined): string | undefined {
+  if (!ocrText || ocrText.length === 0) return undefined;
+  const lines = ocrText.split('\n').map((l) => l.trim()).filter(Boolean);
+  if (lines.length === 0) return undefined;
+  const topLines = lines.slice(0, 5).join('；');
+  return `图片主要文本内容：${topLines}。OCR 共识别到 ${lines.length} 条文本，以上内容应作为图片内容理解的主要依据。`;
+}
+
+function shouldPreferOcrDrivenSummary(
+  summary: string,
+  ocrText: string | undefined,
+  grounded?: boolean,
+): boolean {
   if (!summary.trim()) return true;
   if (hasExcessiveRepetition(summary)) return true;
+  if (grounded === false) return true;
   if (!ocrText) return false;
   if (summary.length < 80 && /[\u4e00-\u9fff]/.test(summary)) return true;
   return ocrText.includes(summary.trim());

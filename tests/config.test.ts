@@ -2,14 +2,14 @@ import { mkdtemp, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { describe, expect, it } from 'vitest';
-import { loadConfig } from '../src/core/config.js';
+import { loadConfig, computePipelineTimeout } from '../src/core/config.js';
 
 describe('runtime config', () => {
   it('returns defaults when no config file exists', async () => {
     const config = await loadConfig({ configPath: join(tmpdir(), 'missing-vision-config.json'), env: {} });
 
     expect(config.server.maxConcurrent).toBe(4);
-    expect(config.server.requestTimeoutMs).toBe(30_000);
+    expect(config.server.requestTimeoutMs).toBe(60_000);
     expect(config.security.maxImageSizeBytes).toBe(10 * 1024 * 1024);
     expect(config.gguf.port).toBe(18082);
     expect(config.gguf.endpoint).toBe('https://hf-mirror.com');
@@ -26,7 +26,7 @@ describe('runtime config', () => {
     const config = await loadConfig({ configPath, env: {} });
 
     expect(config.server.maxConcurrent).toBe(2);
-    expect(config.server.requestTimeoutMs).toBe(30_000);
+    expect(config.server.requestTimeoutMs).toBe(60_000);
     expect(config.gguf.port).toBe(19090);
     expect(config.gguf.endpoint).toBe('https://example.test');
     expect(config.security.maxImageSizeBytes).toBe(10 * 1024 * 1024);
@@ -56,5 +56,21 @@ describe('runtime config', () => {
     expect(config.security.maxImageSizeBytes).toBe(2 * 1024 * 1024);
     expect(config.gguf.port).toBe(18083);
     expect(config.gguf.endpoint).toBe('https://mirror.test');
+  });
+});
+
+describe('computePipelineTimeout', () => {
+  it('uses the base timeout when skill count is low', () => {
+    expect(computePipelineTimeout(1, 60_000)).toBe(60_000);
+    expect(computePipelineTimeout(3, 60_000)).toBe(60_000);
+  });
+
+  it('scales up for multi-skill plans', () => {
+    expect(computePipelineTimeout(5, 60_000)).toBe(100_000);
+    expect(computePipelineTimeout(8, 60_000)).toBe(160_000);
+  });
+
+  it('caps at 300 seconds', () => {
+    expect(computePipelineTimeout(20, 60_000)).toBe(300_000);
   });
 });

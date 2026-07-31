@@ -783,7 +783,10 @@ export function composeResult(
     summary = appendAnnotationSummary(summary, options.annotations);
   }
   if (options.scenarioExtraction?.summary) {
-    summary = summary ? `${summary}${options.scenarioExtraction.summary}` : options.scenarioExtraction.summary;
+    // Format scenario extraction as a natural extension of the summary,
+    // stripping template artifacts like 【文档】标题：...；明细共 X 行；
+    const scenarioText = formatScenarioSummary(options.scenarioExtraction.summary);
+    summary = summary ? `${summary} ${scenarioText}` : scenarioText;
   }
 
   // Fix 3: If summary is still empty, fall back to the layout skill's description.
@@ -1129,15 +1132,24 @@ function buildUiEvidence(lines: string[]): UiEvidence | undefined {
   const mobileEvidence = buildMobileUiEvidence(lines);
   if (mobileEvidence) return mobileEvidence;
 
-  const uiSignalCount = lines.filter((line) => /菜单|首页|管理|配置|操作|编辑|详情|停用|启用|保存|取消|新增|删除|查询|筛选|分类|价格|状态|CODE|POS/i.test(line)).length;
+  // Expanded UI signal patterns to cover admin systems, requirement
+  // screenshots, and prototype/wireframe images (TAPD etc.)
+  const uiSignalRegex = /菜单|首页|管理|配置|操作|编辑|详情|停用|启用|保存|取消|新增|删除|查询|筛选|分类|价格|状态|城市|商圈|共享|日期|记录|门店|系统|模块|功能|流程|确定|关闭|选择|添加|修改|查看|返回|提交|导出|导入|下载|上传|复制|刷新|展开|全选|设置|参数|规则|权限|角色|用户|订单|商品|库存|财务|报表|统计|分析|监控|预警|通知|消息|日志|审批|流程|任务|项目|需求|迭代|版本|发布|上线|测试|验收|CODE|POS|ID|API|URL/i;
+  const uiSignalCount = lines.filter((line) => uiSignalRegex.test(line)).length;
   if (uiSignalCount < 4) return undefined;
 
-  const navigation = unique(lines.filter((line) => /菜单|首页|管理|配置|分类|POS|比萨/.test(line)).slice(0, 12));
-  const actions = unique(lines.filter((line) => /操作|编辑|详情|停用|启用|保存|取消|新增|删除|查询|配置价格/.test(line)).slice(0, 12));
-  const fields = unique(lines.filter((line) => /名称|价格|价|CODE|状态|分类|字段|尺寸|默认|半份/.test(line)).slice(0, 12));
-  const tableHeaders = unique(lines.filter((line) => /名称|价格|价|CODE|状态|分类|字段|尺寸|默认|半份|操作/.test(line)).slice(0, 12));
-  const values = unique(lines.filter((line) => /^(?:\d+(?:\.\d+)?|\d+".*|Mini)$/i.test(line)).slice(0, 12));
-  const modules = unique(lines.filter((line) => /管理|配置|中心/.test(line)).slice(0, 12));
+  // Expanded patterns for navigation, actions, fields, and modules
+  const navRegex = /菜单|首页|管理|配置|分类|中心|导航|系统|模块|商圈|共享|餐厅|门店|商品|订单|库存|财务|报表|统计|分析|监控|POS|比萨/i;
+  const actionRegex = /操作|编辑|详情|停用|启用|保存|取消|新增|删除|查询|添加|修改|查看|返回|提交|确定|关闭|选择|导出|导入|下载|上传|复制|刷新|展开|记录|全选|重置/i;
+  const fieldRegex = /名称|价格|价|CODE|状态|分类|字段|尺寸|默认|半份|城市|商圈|共享|日期|启用|关闭|门店|操作|编号|金额|数量|规格|属性|类目|关键词|评分|评论|标题|卖点|详情|描述|备注|标签|密码|账号|地址|手机|邮箱/i;
+  const moduleRegex = /管理|配置|中心|系统|模块|商圈|共享|餐厅|门店|商品|订单|库存|财务|报表|统计|分析|监控/i;
+
+  const navigation = unique(lines.filter((line) => navRegex.test(line)).slice(0, 12));
+  const actions = unique(lines.filter((line) => actionRegex.test(line)).slice(0, 12));
+  const fields = unique(lines.filter((line) => fieldRegex.test(line)).slice(0, 12));
+  const tableHeaders = unique(lines.filter((line) => fieldRegex.test(line)).slice(0, 12));
+  const values = unique(lines.filter((line) => /^(?:\d+(?:\.\d+)?|\d+".*|Mini|20\d{2})/i.test(line)).slice(0, 12));
+  const modules = unique(lines.filter((line) => moduleRegex.test(line)).slice(0, 12));
 
   return {
     likelyPageType: 'admin-ui',
@@ -1228,42 +1240,108 @@ function buildOcrDrivenUiSummary(evidence: UiEvidence): string {
     if (evidence.title) {
       parts.push(`页面标题为${evidence.title}。`);
     }
+    if (evidence.modules.length > 0) {
+      parts.push(`页面模块包括${evidence.modules.slice(0, 5).join('、')}。`);
+    }
     if (evidence.fields.length > 0) {
-      parts.push(`页面可见商品或详情内容包括${evidence.fields.join('、')}。`);
+      parts.push(`可见内容包括${evidence.fields.slice(0, 8).join('、')}。`);
     }
-    if (evidence.values.length > 0) {
-      parts.push(`可见配置或变动信息包括${evidence.values.join('、')}。`);
+    if (evidence.actions.length > 0) {
+      parts.push(`操作按钮有${evidence.actions.slice(0, 5).join('、')}。`);
     }
-    parts.push(`OCR 共识别到 ${evidence.rawTextCount} 条文本，以上中文标签应作为页面内容理解的主要依据。`);
     return parts.join('');
   }
 
   const parts = ['这是一个中文后台管理系统页面。'];
-  if (evidence.navigation.length > 0) {
-    parts.push(`左侧导航或页面模块包含${evidence.navigation.join('、')}。`);
+  if (evidence.modules.length > 0) {
+    parts.push(`系统模块包括${evidence.modules.slice(0, 5).join('、')}。`);
   }
-  if (evidence.fields.length > 0) {
-    parts.push(`主内容区域可见字段或表格列包括${evidence.fields.join('、')}。`);
+  if (evidence.navigation.length > 0) {
+    parts.push(`导航包含${evidence.navigation.slice(0, 5).join('、')}。`);
+  }
+  if (evidence.tableHeaders.length > 0) {
+    parts.push(`表格列包括${evidence.tableHeaders.slice(0, 6).join('、')}。`);
+  } else if (evidence.fields.length > 0) {
+    parts.push(`主要字段有${evidence.fields.slice(0, 6).join('、')}。`);
   }
   if (evidence.actions.length > 0) {
-    parts.push(`可见操作包括${evidence.actions.join('、')}。`);
+    parts.push(`可执行操作包括${evidence.actions.slice(0, 8).join('、')}。`);
   }
-  parts.push(`OCR 共识别到 ${evidence.rawTextCount} 条文本，以上中文标签应作为页面内容理解的主要依据。`);
   return parts.join('');
 }
 
 /**
  * Build a general OCR-driven summary for non-UI images (infographics,
- * posters, documents, etc.) where no UiEvidence was detected. Uses the
- * first few OCR lines as the key content so the caller always sees
- * ground-truth text instead of a hallucinated VLM description.
+ * posters, documents, etc.) where no UiEvidence was detected. Generates
+ * a descriptive summary from OCR content analysis instead of copying
+ * raw text, so the caller sees a coherent description.
  */
 function buildGeneralOcrSummary(ocrText: string | undefined): string | undefined {
   if (!ocrText || ocrText.length === 0) return undefined;
   const lines = ocrText.split('\n').map((l) => l.trim()).filter(Boolean);
   if (lines.length === 0) return undefined;
-  const topLines = lines.slice(0, 5).join('；');
-  return `图片主要文本内容：${topLines}。OCR 共识别到 ${lines.length} 条文本，以上内容应作为图片内容理解的主要依据。`;
+
+  const hasCJK = /[\u4e00-\u9fff]/.test(ocrText);
+  const parts: string[] = [];
+
+  // Detect content type from OCR patterns
+  const firstLine = lines[0];
+  const hasTitle = firstLine !== undefined && firstLine.length < 30;
+  const title = hasTitle && firstLine ? firstLine : undefined;
+
+  if (hasCJK) {
+    parts.push('这是一张包含中文内容的图片。');
+  } else {
+    parts.push('This image contains text content.');
+  }
+
+  if (title) {
+    parts.push(hasCJK ? `主要标题为「${title}」。` : `Main title: "${title}".`);
+  }
+
+  // Summarize key topics without copying verbatim
+  const allText = lines.join(' ');
+  const topics = extractKeyTopics(allText, hasCJK);
+  if (topics.length > 0) {
+    parts.push(hasCJK
+      ? `内容涉及${topics.join('、')}等方面。`
+      : `Topics include: ${topics.join(', ')}.`);
+  }
+
+  // Mention content scale
+  if (lines.length > 20) {
+    parts.push(hasCJK
+      ? `图片包含较多文本内容（共${lines.length}条）。`
+      : `Image contains substantial text (${lines.length} lines).`);
+  }
+
+  return parts.join('');
+}
+
+/** Extract key topics from text by finding frequent meaningful terms. */
+function extractKeyTopics(text: string, isCJK: boolean): string[] {
+  if (isCJK) {
+    // Extract 2-4 char Chinese terms that appear multiple times
+    const terms = new Map<string, number>();
+    const cjkMatches = text.match(/[\u4e00-\u9fff]{2,4}/g) ?? [];
+    for (const term of cjkMatches) {
+      terms.set(term, (terms.get(term) ?? 0) + 1);
+    }
+    return [...terms.entries()]
+      .filter(([, count]) => count >= 2)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([term]) => term);
+  }
+  // For Latin text, extract capitalized words
+  const words = text.match(/\b[A-Z][a-z]{2,}\b/g) ?? [];
+  const counts = new Map<string, number>();
+  for (const w of words) counts.set(w, (counts.get(w) ?? 0) + 1);
+  return [...counts.entries()]
+    .filter(([, c]) => c >= 2)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([w]) => w);
 }
 
 function shouldPreferOcrDrivenSummary(
@@ -1273,10 +1351,27 @@ function shouldPreferOcrDrivenSummary(
 ): boolean {
   if (!summary.trim()) return true;
   if (hasExcessiveRepetition(summary)) return true;
-  if (grounded === false) return true;
+  // Only replace when the model's summary is clearly ungrounded
+  // (e.g. English summary for a Chinese image).
+  if (grounded === false) {
+    // But don't replace if the summary is substantial and looks reasonable
+    if (summary.length > 100 && /[\u4e00-\u9fff]/.test(summary)) return false;
+    return true;
+  }
   if (!ocrText) return false;
-  if (summary.length < 80 && /[\u4e00-\u9fff]/.test(summary)) return true;
-  return ocrText.includes(summary.trim());
+  // Only replace very short summaries (<40 chars) that might be just a title
+  if (summary.length < 40) return true;
+  // Replace if the summary is a verbatim copy of OCR text (no added value)
+  if (ocrText.includes(summary.trim())) return true;
+  // Detect near-copy: if >60% of summary lines appear in OCR text, it's a copy
+  const summaryLines = summary.split('\n').map((l) => l.trim()).filter(Boolean);
+  if (summaryLines.length >= 3) {
+    const matchedLines = summaryLines.filter((line) =>
+      ocrText.includes(line) || line.length > 0 && ocrText.replace(/\s/g, '').includes(line.replace(/\s/g, ''))
+    );
+    if (matchedLines.length / summaryLines.length > 0.6) return true;
+  }
+  return false;
 }
 
 /** Detect hallucinated repetition in VLM output (e.g. same lines repeated 3+ times). */
@@ -1295,6 +1390,29 @@ function hasExcessiveRepetition(text: string): boolean {
   const block = lines.slice(0, 4).join('\n');
   if (block.length > 20 && lines.slice(4).join('\n').includes(block)) return true;
   return false;
+}
+
+/**
+ * Format scenario extraction summary into natural language, removing
+ * template artifacts like 【文档】标题：...；明细共 X 行；
+ */
+function formatScenarioSummary(raw: string): string {
+  let text = raw.trim();
+  // Remove 【...】 prefix tags
+  text = text.replace(/【[^】]*】\s*/g, '');
+  // Convert 标题：X； to "标题为X"
+  text = text.replace(/标题：([^；]*)；?/g, '标题为$1。');
+  // Convert 字段：X； to "字段包括X"
+  text = text.replace(/字段：([^；]*)；?/g, '字段包括$1。');
+  // Convert 明细共 X 行； to "共X行明细"
+  text = text.replace(/明细共\s*(\d+)\s*行；?/g, '共$1行明细。');
+  // Clean up trailing semicolons
+  text = text.replace(/；$/g, '。');
+  // Ensure ends with period
+  if (text && !text.endsWith('。') && !text.endsWith('.')) {
+    text += '。';
+  }
+  return text;
 }
 
 function hasAnnotationBoxes(annotations: unknown): boolean {

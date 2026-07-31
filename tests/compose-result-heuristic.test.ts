@@ -170,9 +170,9 @@ describe('composeResult — post-classify heuristic', () => {
     );
 
     expect(r.summary).toContain('中文后台管理系统');
-    expect(r.summary).toContain('左侧导航');
+    expect(r.summary).toContain('导航');
     expect(r.summary).toContain('比萨配料管理');
-    expect(r.summary).toContain('操作包括');
+    expect(r.summary).toContain('操作');
     expect(r.summary).toContain('保存');
     expect(r.summary).not.toBe('菜单中心\n图片：\nedonner\nA 首页');
     expect(r.result.ui).toMatchObject({
@@ -193,7 +193,7 @@ describe('composeResult — post-classify heuristic', () => {
     expect(r.summary).toContain('双拼D');
     expect(r.summary).toContain('变动配料');
     expect(r.summary).not.toContain('中文后台管理系统');
-    expect(r.summary).not.toContain('左侧导航');
+    expect(r.summary).not.toContain('导航');
     expect(r.result.ui).toMatchObject({
       likelyPageType: 'mobile-ui',
       rawTextCount: 12,

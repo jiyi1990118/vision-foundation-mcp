@@ -723,6 +723,15 @@ function buildResultText(result: {
   skills: string[];
   summaryGrounded?: boolean;
   suggestion?: string;
+  ocrGroups?: {
+    buttons: string[];
+    dates: string[];
+    formLabels: string[];
+    hints: string[];
+    headers: string[];
+    values: string[];
+    other: string[];
+  };
 }): string {
   const parts: string[] = [];
   const confPct = Math.round(result.confidence * 100);
@@ -742,6 +751,20 @@ function buildResultText(result: {
       ? `${result.ocrText.slice(0, maxChars)}\n...[OCR 共 ${result.ocrText.length} 字符]`
       : result.ocrText;
     parts.push('', '--- OCR 文本 ---', excerpt);
+  }
+
+  // OCR semantic groups: show actionable categories when available
+  if (result.ocrGroups) {
+    const g = result.ocrGroups;
+    const groupLines: string[] = [];
+    if (g.buttons.length > 0) groupLines.push(`按钮: ${g.buttons.join(', ')}`);
+    if (g.dates.length > 0) groupLines.push(`日期: ${g.dates.slice(0, 10).join(', ')}`);
+    if (g.formLabels.length > 0) groupLines.push(`表单标签: ${g.formLabels.join(', ')}`);
+    if (g.hints.length > 0) groupLines.push(`提示: ${g.hints.join(', ')}`);
+    if (g.headers.length > 0) groupLines.push(`表头: ${g.headers.join(', ')}`);
+    if (groupLines.length > 0) {
+      parts.push('', '--- 结构化信息 ---', ...groupLines);
+    }
   }
 
   // P2: Show quality upgrade suggestion for complex images
